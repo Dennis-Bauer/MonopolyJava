@@ -2,12 +2,15 @@ package sandwich.de.monopoly;
 
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
 import java.io.*;
 import java.util.List;
 
+//Don't forget: Update changes in Cloud
 public class Utilities {
 
     //Color Output
@@ -19,89 +22,136 @@ public class Utilities {
         REGULAR, BOLD, UNDERLINE, BACKGROUND, HIGH_INTENSITY, BOLD_HIGH_INTENSITY, HIGH_INTENSITY_BACKGROUNDS
     }
 
+    //JavaFX Shapes
+    public static Rectangle buildRectangle(String id, double width, double height, Paint fill, boolean isVisible, Paint borderFill, double borderWidth) {
+        Rectangle r = new Rectangle(width, height, fill);
+        r.setId(id);
+        r.setVisible(isVisible);
+        r.setStroke(borderFill);
+        r.setStrokeWidth(borderWidth);
+        return r;
+    }
+
+
     //JavaFX nodes
-    public static Button buildButton(String text, String id, double x, double y, double width, double height, double fontSize) {
+    public static Button buildButton(String id ,String text, double width, double height, double fontSize) {
         Button b = new Button();
 
         b.setText(text);
         b.setId(id);
-        b.setLayoutX(x);
-        b.setLayoutY(y);
         b.setPrefWidth(width);
         b.setPrefHeight(height);
         b.setFont(new Font(fontSize));
 
         return b;
     }
+    public static Button buildButton(String id ,String text, double width, double height, double fontSize, double x, double y) {
+        Button b = buildButton(id, text, width, height, fontSize);
+        b.setLayoutX(x);
+        b.setLayoutY(y);
+        return b;
+    }
 
-    public static Label buildLabel(String text, String id, double x, double y, double fontSize, TextAlignment textAlignment, Color textColor) {
+    public static Label buildLabel(String id ,String text, double fontSize, TextAlignment textAlignment, Color textColor) {
         Label l = new Label();
 
         l.setText(text);
         l.setId(id);
-        l.setLayoutX(x);
-        l.setLayoutY(y);
         l.setTextFill(textColor);
         l.setFont(new Font(fontSize));
         l.setTextAlignment(textAlignment);
 
         return l;
     }
+    public static Label buildLabel(String id ,String text, double fontSize, TextAlignment textAlignment, Color textColor, double x, double y) {
+        Label l = buildLabel(id, text, fontSize, textAlignment, textColor);
 
-    public static TextField buildTextField(String promptText, String id, double x, double y, double width, double height, double fontSize) {
-        TextField t = buildTextField(promptText, id, x, y, width, height);
-        t.setFont(new Font(fontSize));
-        return t;
+        l.setLayoutX(x);
+        l.setLayoutY(y);
+
+        return l;
     }
 
-    public static TextField buildTextField(String promptText, String id, double x, double y, double width, double height) {
+    public static TextField buildTextField(String id ,String promptText, double width, double height) {
         TextField t = new TextField();
 
         t.setPromptText(promptText);
         t.setId(id);
-        t.setLayoutX(x);
-        t.setLayoutY(y);
         t.setPrefWidth(width);
         t.setPrefHeight(height);
         t.setFont(new Font((height / 10) * 3));
 
         return t;
     }
+    public static TextField buildTextField(String id ,String promptText, double width, double height, double fontSize) {
+        TextField t = buildTextField(promptText, id, width, height);
+        t.setFont(new Font(fontSize));
+        return t;
+    }
+    public static TextField buildTextField(String id ,String promptText, double width, double height, double x, double y) {
+        TextField t = buildTextField(promptText, id, width, height);
+        t.setScaleX(x);
+        t.setScaleY(y);
+        return t;
+    }
+    public static TextField buildTextField(String id ,String promptText, double width, double height, double fontSize, double x, double y) {
+        TextField t = buildTextField(promptText, id, width, height, x, y);
+        t.setFont(new Font(fontSize));
+        return t;
+    }
 
-    public static ChoiceBox<String> buildChoiceBox(List<String> choices, String id, double x, double y, double width, double height) {
+    public static ChoiceBox<String> buildChoiceBox(String id, List<String> choices, double width, double height) {
         ChoiceBox<String> cb = new ChoiceBox<>();
 
         cb.getItems().addAll(choices);
         cb.setId(id);
-        cb.setLayoutX(x);
-        cb.setLayoutY(y);
         cb.setPrefWidth(width);
         cb.setPrefHeight(height);
 
         return cb;
     }
+    public static ChoiceBox<String> buildChoiceBox(String id, List<String> choices, double width, double height, double x, double y) {
+        ChoiceBox<String> cb = buildChoiceBox(id, choices, width, height);
 
-    public static ComboBox<String> buildComboBox(List<String> choices, String id, double x, double y, double width, double height) {
+        cb.setLayoutX(x);
+        cb.setLayoutY(y);
+
+        return cb;
+    }
+
+    public static ComboBox<String> buildComboBox(String id, List<String> choices, double width, double height) {
         ComboBox<String> cb = new ComboBox<>();
 
         cb.getItems().addAll(choices);
         cb.setId(id);
-        cb.setLayoutX(x);
-        cb.setLayoutY(y);
         cb.setPrefWidth(width);
         cb.setPrefHeight(height);
 
         return cb;
     }
+    public static ComboBox<String> buildComboBox(String id, List<String> choices, double width, double height, double x, double y) {
+        ComboBox<String> cb = buildComboBox(id, choices, width, height);
 
-    public static ColorPicker buildColorPicker(String id, double x, double y, double width, double height, Color startColor) {
+        cb.setLayoutX(x);
+        cb.setLayoutY(y);
+
+        return cb;
+    }
+
+    public static ColorPicker buildColorPicker(String id, double width, double height, Color startColor) {
         ColorPicker cp = new ColorPicker(startColor);
 
         cp.setId(id);
-        cp.setLayoutX(x);
-        cp.setLayoutY(y);
         cp.setPrefWidth(width);
         cp.setPrefHeight(height);
+
+        return cp;
+    }
+    public static ColorPicker buildColorPicker(String id, double width, double height, Color startColor, double x, double y) {
+        ColorPicker cp = buildColorPicker(id, width, height, startColor);
+
+        cp.setLayoutX(x);
+        cp.setLayoutY(y);
 
         return cp;
     }
