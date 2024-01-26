@@ -1,22 +1,16 @@
 package sandwich.de.monopoly;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-
-import java.io.IOException;
+import sandwich.de.monopoly.GUI.Spielfeld;
 
 public class Main extends Application {
     @Override
-    public void start(Stage stage) throws IOException {
-
-        Pane root = new Pane();
-
-
-        Scene scene = new Scene(root, 320, 240);
-        stage.setTitle("Hello!");
+    public void start(Stage stage) {
+        Scene scene = new Scene(Spielfeld.buildGameBoard(900, Color.YELLOWGREEN), 1400, 950);
+        stage.setTitle("-M---o-----n----o---p----o---l----y");
         stage.setScene(scene);
         stage.show();
     }
