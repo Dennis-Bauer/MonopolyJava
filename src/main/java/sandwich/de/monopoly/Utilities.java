@@ -1,6 +1,8 @@
 package sandwich.de.monopoly;
 
+import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
@@ -32,45 +34,56 @@ public class Utilities {
         return r;
     }
 
+    public static Rectangle buildRectangle(String id, double width, double height, Paint fill, boolean isVisible, Paint borderFill, double borderWidth, double x, double y) {
+        Rectangle r = buildRectangle(id, width, height, fill, isVisible, borderFill, borderWidth);
+        r.setX(x);
+        r.setY(y);
+        return r;
+    }
+
 
     //JavaFX nodes
-    public static Button buildButton(String id ,String text, double width, double height, double fontSize) {
+    public static Button buildButton(String id ,String text, double width, double height, Font font) {
         Button b = new Button();
 
         b.setText(text);
         b.setId(id);
         b.setPrefWidth(width);
         b.setPrefHeight(height);
-        b.setFont(new Font(fontSize));
+        b.setFont(font);
 
         return b;
     }
-    public static Button buildButton(String id ,String text, double width, double height, double fontSize, double x, double y) {
-        Button b = buildButton(id, text, width, height, fontSize);
+
+    public static Button buildButton(String id ,String text, double width, double height, Font font, double x, double y) {
+        Button b = buildButton(id, text, width, height, font);
         b.setLayoutX(x);
         b.setLayoutY(y);
         return b;
     }
 
-    public static Label buildLabel(String id ,String text, double fontSize, TextAlignment textAlignment, Color textColor) {
+
+    public static Label buildLabel(String id ,String text, Font font, TextAlignment textAlignment, Color textColor) {
         Label l = new Label();
 
         l.setText(text);
         l.setId(id);
         l.setTextFill(textColor);
-        l.setFont(new Font(fontSize));
+        l.setFont(font);
         l.setTextAlignment(textAlignment);
 
         return l;
     }
-    public static Label buildLabel(String id ,String text, double fontSize, TextAlignment textAlignment, Color textColor, double x, double y) {
-        Label l = buildLabel(id, text, fontSize, textAlignment, textColor);
+
+    public static Label buildLabel(String id ,String text, Font font, TextAlignment textAlignment, Color textColor, double x, double y) {
+        Label l = buildLabel(id, text, font, textAlignment, textColor);
 
         l.setLayoutX(x);
         l.setLayoutY(y);
 
         return l;
-    }
+    } // ERKLÄRUNG HINZUFÜGEN (Nicht realtiv vom Fenster, heißt 0, 0 ist nicht oben Links)
+
 
     public static TextField buildTextField(String id ,String promptText, double width, double height) {
         TextField t = new TextField();
@@ -83,22 +96,26 @@ public class Utilities {
 
         return t;
     }
-    public static TextField buildTextField(String id ,String promptText, double width, double height, double fontSize) {
+
+    public static TextField buildTextField(String id ,String promptText, double width, double height, Font font) {
         TextField t = buildTextField(promptText, id, width, height);
-        t.setFont(new Font(fontSize));
+        t.setFont(font);
         return t;
     }
+
     public static TextField buildTextField(String id ,String promptText, double width, double height, double x, double y) {
         TextField t = buildTextField(promptText, id, width, height);
         t.setScaleX(x);
         t.setScaleY(y);
         return t;
     }
-    public static TextField buildTextField(String id ,String promptText, double width, double height, double fontSize, double x, double y) {
+
+    public static TextField buildTextField(String id ,String promptText, double width, double height, Font font, double x, double y) {
         TextField t = buildTextField(promptText, id, width, height, x, y);
-        t.setFont(new Font(fontSize));
+        t.setFont(font);
         return t;
     }
+
 
     public static ChoiceBox<String> buildChoiceBox(String id, List<String> choices, double width, double height) {
         ChoiceBox<String> cb = new ChoiceBox<>();
@@ -110,6 +127,7 @@ public class Utilities {
 
         return cb;
     }
+
     public static ChoiceBox<String> buildChoiceBox(String id, List<String> choices, double width, double height, double x, double y) {
         ChoiceBox<String> cb = buildChoiceBox(id, choices, width, height);
 
@@ -118,6 +136,7 @@ public class Utilities {
 
         return cb;
     }
+
 
     public static ComboBox<String> buildComboBox(String id, List<String> choices, double width, double height) {
         ComboBox<String> cb = new ComboBox<>();
@@ -129,6 +148,7 @@ public class Utilities {
 
         return cb;
     }
+
     public static ComboBox<String> buildComboBox(String id, List<String> choices, double width, double height, double x, double y) {
         ComboBox<String> cb = buildComboBox(id, choices, width, height);
 
@@ -137,6 +157,7 @@ public class Utilities {
 
         return cb;
     }
+
 
     public static ColorPicker buildColorPicker(String id, double width, double height, Color startColor) {
         ColorPicker cp = new ColorPicker(startColor);
@@ -147,6 +168,7 @@ public class Utilities {
 
         return cp;
     }
+
     public static ColorPicker buildColorPicker(String id, double width, double height, Color startColor, double x, double y) {
         ColorPicker cp = buildColorPicker(id, width, height, startColor);
 
@@ -156,9 +178,15 @@ public class Utilities {
         return cp;
     }
 
+    //Java FX Utilities
+    public static void centeringChildInPane(Control child, Pane pane) {
+        child.layoutXProperty().bind(pane.widthProperty().subtract(child.widthProperty()).divide(2));
+    } //(KEIN OFFICIALESE KOMMENTAR) Achtung, klappt nicht bei Formen oder anderes was nicht der Control Klasse erbt, vielleicht ändern
+
     //Java Utilities
-    public static String buildLongText(List<String> strings) {
+    public static String buildLongText(String... text) {
         StringBuilder s = new StringBuilder();
+        String[] strings = text;
         for (String string : strings) {
             s.append(string);
             s.append("\n");
