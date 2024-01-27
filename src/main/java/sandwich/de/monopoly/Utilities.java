@@ -1,7 +1,8 @@
 package sandwich.de.monopoly;
 
-import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -11,6 +12,7 @@ import javafx.scene.text.TextAlignment;
 
 import java.io.*;
 import java.util.List;
+import java.util.Objects;
 
 //Don't forget: Update changes in Cloud
 public class Utilities {
@@ -182,6 +184,26 @@ public class Utilities {
     public static void centeringChildInPane(Control child, Pane pane) {
         child.layoutXProperty().bind(pane.widthProperty().subtract(child.widthProperty()).divide(2));
     } //(KEIN OFFICIALESE KOMMENTAR) Achtung, klappt nicht bei Formen oder anderes was nicht der Control Klasse erbt, vielleicht ändern
+
+    //Java FX Images
+    private static ImageView createImageView(String sourcePath, double postionX, double postionY) {
+        if(Main.class.getResourceAsStream(sourcePath) != null) {
+            ImageView iv = new ImageView(new Image(Objects.requireNonNull(Main.class.getResourceAsStream(sourcePath))));
+            iv.setX(postionX);
+            iv.setY(postionY);
+            iv.toBack();
+            return iv;
+        } else return null;
+    }
+
+    private static ImageView createImageView(String sourcePath, double imageWidth, double imageHeight, double postionX, double postionY) {
+        ImageView iv = createImageView(sourcePath, postionX, postionY);
+        if (iv != null) {
+            iv.setFitWidth(imageWidth);
+            iv.setFitHeight(imageHeight);
+        }
+        return iv;
+    }
 
     //Java Utilities
     public static String buildLongText(String... text) {
