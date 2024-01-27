@@ -185,10 +185,11 @@ public class Utilities {
         child.layoutXProperty().bind(pane.widthProperty().subtract(child.widthProperty()).divide(2));
     } //(KEIN OFFICIALESE KOMMENTAR) Achtung, klappt nicht bei Formen oder anderes was nicht der Control Klasse erbt, vielleicht ändern
 
-    //Java FX Images
-    private static ImageView createImageView(String sourcePath, double postionX, double postionY) {
+    //Java FX Images (sourcePath start's add the Resources direction. Example: /pictures/menu/heading.png)
+    public static ImageView createImageView(String id ,String sourcePath, double postionX, double postionY) {
         if(Main.class.getResourceAsStream(sourcePath) != null) {
             ImageView iv = new ImageView(new Image(Objects.requireNonNull(Main.class.getResourceAsStream(sourcePath))));
+            iv.setId(id);
             iv.setX(postionX);
             iv.setY(postionY);
             iv.toBack();
@@ -196,8 +197,8 @@ public class Utilities {
         } else return null;
     }
 
-    private static ImageView createImageView(String sourcePath, double imageWidth, double imageHeight, double postionX, double postionY) {
-        ImageView iv = createImageView(sourcePath, postionX, postionY);
+    public static ImageView createImageView(String id ,String sourcePath, double imageWidth, double imageHeight, double postionX, double postionY) {
+        ImageView iv = createImageView(id ,sourcePath, postionX, postionY);
         if (iv != null) {
             iv.setFitWidth(imageWidth);
             iv.setFitHeight(imageHeight);
