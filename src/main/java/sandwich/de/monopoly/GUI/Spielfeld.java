@@ -42,38 +42,38 @@ public class Spielfeld {
         fields[0] = buildStreet(Color.ORANGE, Utilities.buildLongText("Bank", "Straße 00"), 200, boardColor, width, height);
         fields[1] = buildStreet(Color.ORANGE, Utilities.buildLongText("Bank", "Straße 01"), 200, boardColor, width, height);
         fields[2] = buildStreet(Color.ORANGE, Utilities.buildLongText("Bank", "Straße 02"), 200, boardColor, width, height);
-        fields[3] = buildStreet(Color.ORANGE, Utilities.buildLongText("Bank", "Straße 03"), 200, boardColor, width, height);
-        fields[4] = buildStation("HBF 1", 200, boardColor, width, height);
+        fields[3] = buildGetChanceCard(boardColor, width, height);
+        fields[4] = buildStation(Utilities.buildLongText("Nord-", "Bahnhof"), 200, boardColor, width, height);
         fields[5] = buildStreet(Color.ORANGE, Utilities.buildLongText("Bank", "Straße 05"), 200, boardColor, width, height);
-        fields[6] = buildStreet(Color.ORANGE, Utilities.buildLongText("Bank", "Straße 06"), 200, boardColor, width, height);
+        fields[6] = buildGetCommunityCard(boardColor, width, height);
         fields[7] = buildStreet(Color.ORANGE, Utilities.buildLongText("Bank", "Straße 07"), 200, boardColor, width, height);
         fields[8] = buildStreet(Color.ORANGE, Utilities.buildLongText("Bank", "Straße 08"), 200, boardColor, width, height);
         fields[9] = buildStreet(Color.ORANGE, Utilities.buildLongText("Bank", "Straße 09"), 200, boardColor, width, height);
         fields[10] = buildStreet(Color.ORANGE, Utilities.buildLongText("Bank", "Straße 10"), 200, boardColor, width, height);
         fields[11] = buildStreet(Color.ORANGE, Utilities.buildLongText("Bank", "Straße 11"), 200, boardColor, width, height);
         fields[12] = buildStreet(Color.ORANGE, Utilities.buildLongText("Bank", "Straße 12"), 200, boardColor, width, height);
-        fields[13] = buildStation("HBF 2", 200, boardColor, width, height);
+        fields[13] = buildStation(Utilities.buildLongText("West-", "Bahnhof"), 200, boardColor, width, height);
         fields[14] = buildStreet(Color.ORANGE, Utilities.buildLongText("Bank", "Straße 13"), 200, boardColor, width, height);
         fields[15] = buildStreet(Color.ORANGE, Utilities.buildLongText("Bank", "Straße 15"), 200, boardColor, width, height);
-        fields[16] = buildStreet(Color.ORANGE, Utilities.buildLongText("Bank", "Straße 16"), 200, boardColor, width, height);
+        fields[16] = buildGetChanceCard(boardColor, width, height);
         fields[17] = buildStreet(Color.ORANGE, Utilities.buildLongText("Bank", "Straße 17"), 200, boardColor, width, height);
         fields[18] = buildStreet(Color.YELLOW, Utilities.buildLongText("Bank", "Straße 18"), 200, boardColor, width, height);
         fields[19] = buildStreet(Color.ORANGE, Utilities.buildLongText("Bank", "Straße 19"), 200, boardColor, width, height);
-        fields[20] = buildStreet(Color.ORANGE, Utilities.buildLongText("Bank", "Straße 20"), 200, boardColor, width, height);
+        fields[20] = buildGetCommunityCard(boardColor, width, height);
         fields[21] = buildStreet(Color.ORANGE, Utilities.buildLongText("Bank", "Straße 21"), 200, boardColor, width, height);
-        fields[22] = buildStation("HBF 3", 200, boardColor, width, height);
+        fields[22] = buildStation(Utilities.buildLongText("Süd-", "Bahnhof"), 200, boardColor, width, height);
         fields[23] = buildStreet(Color.ORANGE, Utilities.buildLongText("Bank", "Straße 23"), 200, boardColor, width, height);
         fields[24] = buildStreet(Color.ORANGE, Utilities.buildLongText("Bank", "Straße 24"), 200, boardColor, width, height);
         fields[25] = buildStreet(Color.ORANGE, Utilities.buildLongText("Bank", "Straße 25"), 200, boardColor, width, height);
         fields[26] = buildStreet(Color.ORANGE, Utilities.buildLongText("Bank", "Straße 26"), 200, boardColor, width, height);
         fields[27] = buildStreet(Color.ORANGE, Utilities.buildLongText("Bank", "Straße 27"), 200, boardColor, width, height);
         fields[28] = buildStreet(Color.ORANGE, Utilities.buildLongText("Bank", "Straße 28"), 200, boardColor, width, height);
-        fields[29] = buildStreet(Color.ORANGE, Utilities.buildLongText("Bank", "Straße 29"), 200, boardColor, width, height);
+        fields[29] = buildGetChanceCard(boardColor, width, height);
         fields[30] = buildStreet(Color.ORANGE, Utilities.buildLongText("Bank", "Straße 30"), 200, boardColor, width, height);
-        fields[31] = buildStation("HBF 4", 200, boardColor, width, height);
+        fields[31] = buildStation(Utilities.buildLongText("Haupt-", "Bahnhof"), 200, boardColor, width, height);
         fields[32] = buildStreet(Color.ORANGE, Utilities.buildLongText("Bank", "Straße 32"), 200, boardColor, width, height);
         fields[33] = buildStreet(Color.ORANGE, Utilities.buildLongText("Bank", "Straße 33"), 200, boardColor, width, height);
-        fields[34] = buildStreet(Color.ORANGE, Utilities.buildLongText("Bank", "Straße 34"), 200, boardColor, width, height);
+        fields[34] = buildGetCommunityCard(boardColor, width, height);
         fields[35] = buildStreet(Color.ORANGE, Utilities.buildLongText("Bank", "Straße 35"), 200, boardColor, width, height);
 
         //Creating Corners
@@ -131,20 +131,20 @@ public class Spielfeld {
     }
 
     private static Pane buildStreet(Paint streetColor, String name, double price, Paint backgroundColor, double width, double height) {
-        Pane street = new Pane();
-        street.setMaxSize(width, height);
+        Pane field = new Pane();
+        field.setMaxSize(width, height);
 
         Rectangle background = Utilities.buildRectangle("street_Background" ,width, height, backgroundColor, true, Color.BLACK, borderWidth);
         Rectangle colorIndicator = Utilities.buildRectangle("street_ColorIndicator" ,width, height/4, streetColor, true, Color.BLACK, borderWidth);
         Label nameIndicator = Utilities.buildLabel("street_NameIndicator", name, Font.font(textFont, FontWeight.BOLD, fontSize), TextAlignment.CENTER, Color.BLACK, 0, height / 3);
         Label priceIndicator = Utilities.buildLabel("street_PriceIndicator", (price + "€"), Font.font(textFont, FontWeight.BOLD, fontSize), TextAlignment.CENTER, Color.BLACK, 0, 5 * (height / 6));
 
-        Utilities.centeringChildInPane(nameIndicator, street);
-        Utilities.centeringChildInPane(priceIndicator, street);
+        Utilities.centeringChildInPane(nameIndicator, field);
+        Utilities.centeringChildInPane(priceIndicator, field);
 
-        street.getChildren().addAll(background, colorIndicator, nameIndicator, priceIndicator);
+        field.getChildren().addAll(background, colorIndicator, nameIndicator, priceIndicator);
 
-        return street;
+        return field;
     }
 
     private static Pane buildStart(Paint backgroundColor, double size) {
@@ -225,9 +225,45 @@ public class Spielfeld {
         field.setMaxSize(width, height);
 
         Rectangle background = Utilities.buildRectangle("station_Background" ,width, height, backgroundColor, true, Color.BLACK, borderWidth);
+        Label header = Utilities.buildLabel("station_Header", stationName, Font.font(textFont, FontWeight.BOLD, fontSize), TextAlignment.CENTER, Color.BLACK, 0, height / 50);
+        ImageView train = Utilities.createImageView("station_Image", "/sandwich/de/monopoly/gameBoard/train.png", width / 1.15, height / 3.7,(width - width / 1.15) / 2, height / 3);
+        Label priceIndicator = Utilities.buildLabel("station_PriceIndicator", (price + "€"), Font.font(textFont, FontWeight.BOLD, fontSize), TextAlignment.CENTER, Color.BLACK, 0, 5 * (height / 6));
 
 
-        field.getChildren().addAll(background);
+        Utilities.centeringChildInPane(header, field);
+        Utilities.centeringChildInPane(priceIndicator, field);
+
+        field.getChildren().addAll(background, header, train, priceIndicator);
+        return field;
+    }
+
+    private static Pane buildGetChanceCard(Paint backgroundColor ,double width, double height) {
+        Pane field = new Pane();
+        field.setMaxSize(width, height);
+
+        Rectangle background = Utilities.buildRectangle("chance_Background" ,width, height, backgroundColor, true, Color.BLACK, borderWidth);
+        Label header = Utilities.buildLabel("chance_Header", "Chance", Font.font(textFont, FontWeight.BOLD, fontSize), TextAlignment.CENTER, Color.BLACK, 0, height / 50);
+        ImageView train = Utilities.createImageView("chance_Image", "/sandwich/de/monopoly/gameBoard/chanceSymbole.png", height / 3.7, width / 1.15,(width - width / 1.15) / 2, height / 3);
+
+        Utilities.centeringChildInPane(header, field);
+
+
+        field.getChildren().addAll(background, header, train);
+        return field;
+    }
+
+    private static Pane buildGetCommunityCard(Paint backgroundColor ,double width, double height) {
+        Pane field = new Pane();
+        field.setMaxSize(width, height);
+
+        Rectangle background = Utilities.buildRectangle("community_Background" ,width, height, backgroundColor, true, Color.BLACK, borderWidth);
+        Label header = Utilities.buildLabel("community_Header", Utilities.buildLongText("Gesellschafts", "Feld"), Font.font(textFont, FontWeight.BOLD, fontSize), TextAlignment.CENTER, Color.BLACK, 0, height / 50);
+        ImageView train = Utilities.createImageView("community_Image", "/sandwich/de/monopoly/gameBoard/chanceSymbole.png", height / 3.7, width / 1.15,(width - width / 1.15) / 2, height / 3);
+
+        Utilities.centeringChildInPane(header, field);
+
+
+        field.getChildren().addAll(background, header, train);
         return field;
     }
 
