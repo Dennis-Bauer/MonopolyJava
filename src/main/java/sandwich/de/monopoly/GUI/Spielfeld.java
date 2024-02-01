@@ -25,7 +25,9 @@ public class Spielfeld {
 
     public static Pane buildGameBoard(double size, Color boardColor) {
         Pane root = new Pane();
+        root.setId("root");
         StackPane board = new StackPane();
+        board.setId("gameBoard");
         board.setAlignment(Pos.CENTER);
         fontSize = ((size / middleRectangleRatio) / 9) / 8;
         borderWidth = ((size / middleRectangleRatio) / 9) / 25;
@@ -132,6 +134,7 @@ public class Spielfeld {
 
     private static Pane buildStreet(Paint streetColor, String name, double price, Paint backgroundColor, double width, double height) {
         Pane field = new Pane();
+        field.setId("street_field");
         field.setMaxSize(width, height);
 
         Rectangle background = Utilities.buildRectangle("street_Background" ,width, height, backgroundColor, true, Color.BLACK, borderWidth);
@@ -149,6 +152,7 @@ public class Spielfeld {
 
     private static Pane buildStart(Paint backgroundColor, double size) {
         Pane field = new Pane();
+        field.setId("start_field");
         field.setMaxSize(size, size);
 
         Rectangle background = Utilities.buildRectangle("corner_start_Background", size, size, backgroundColor, true, Color.BLACK, borderWidth);
@@ -165,6 +169,7 @@ public class Spielfeld {
 
     private static Pane buildJail(Paint backgroundColor, double size) {
         Pane field = new Pane();
+        field.setId("jail_field");
         field.setMaxSize(size, size);
 
         Rectangle background = Utilities.buildRectangle("corner_jail_Background", size, size, backgroundColor, true, Color.BLACK, borderWidth);
@@ -188,6 +193,7 @@ public class Spielfeld {
 
     private static Pane buildFreeParking(Paint backgroundColor, double size) {
         Pane field = new Pane();
+        field.setId("freeParking_field");
         field.setMaxSize(size, size);
 
         Rectangle background = Utilities.buildRectangle("corner_freeParking_Background", size, size, backgroundColor, true, Color.BLACK, borderWidth);
@@ -205,6 +211,7 @@ public class Spielfeld {
 
     private static Pane buildGoToJail(Paint backgroundColor, double size) {
         Pane field = new Pane();
+        field.setId("goToJail_field");
         field.setMaxSize(size, size);
 
         Rectangle background = Utilities.buildRectangle("corner_goToJail_Background", size, size, backgroundColor, true, Color.BLACK, borderWidth);
@@ -222,6 +229,7 @@ public class Spielfeld {
 
     private static Pane buildStation(String stationName, double price, Paint backgroundColor ,double width, double height) {
         Pane field = new Pane();
+        field.setId("station_field");
         field.setMaxSize(width, height);
 
         Rectangle background = Utilities.buildRectangle("station_Background" ,width, height, backgroundColor, true, Color.BLACK, borderWidth);
@@ -239,6 +247,7 @@ public class Spielfeld {
 
     private static Pane buildGetChanceCard(Paint backgroundColor ,double width, double height) {
         Pane field = new Pane();
+        field.setId("getChanceCard_field");
         field.setMaxSize(width, height);
 
         Rectangle background = Utilities.buildRectangle("chance_Background" ,width, height, backgroundColor, true, Color.BLACK, borderWidth);
@@ -254,6 +263,7 @@ public class Spielfeld {
 
     private static Pane buildGetCommunityCard(Paint backgroundColor ,double width, double height) {
         Pane field = new Pane();
+        field.setId("getCommunityCard_field");
         field.setMaxSize(width, height);
 
         Rectangle background = Utilities.buildRectangle("community_Background" ,width, height, backgroundColor, true, Color.BLACK, borderWidth);
@@ -268,7 +278,7 @@ public class Spielfeld {
     }
 
 	private static Pane buildExtraField(Enum Enmum, Paint backgroundColor, double width, double height) {
-		
+		return null;
 	}
 }
 
