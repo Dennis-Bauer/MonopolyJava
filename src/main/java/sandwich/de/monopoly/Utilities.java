@@ -1,5 +1,6 @@
 package sandwich.de.monopoly;
 
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -186,15 +187,30 @@ public class Utilities {
     } //(KEIN OFFICIALESE KOMMENTAR) Achtung, klappt nicht bei Formen oder anderes was nicht der Control Klasse erbt, vielleicht ändern
 
     //Java FX Images (sourcePath start's add the Resources direction. Example: /pictures/menu/heading.png)
-    public static ImageView createImageView(String id ,String sourcePath, double postionX, double postionY) {
-        if(Main.class.getResourceAsStream(sourcePath) != null) {
-            ImageView iv = new ImageView(new Image(Objects.requireNonNull(Main.class.getResourceAsStream(sourcePath))));
+    public static ImageView createImageView(String id, Image image, double postionX, double postionY) {
+        if (image != null) {
+            ImageView iv = new ImageView(image);
             iv.setId(id);
             iv.setX(postionX);
             iv.setY(postionY);
             iv.toBack();
             return iv;
         } else return null;
+    }
+
+    public static ImageView createImageView(String id ,String sourcePath, double postionX, double postionY) {
+        if(Main.class.getResourceAsStream(sourcePath) != null)
+            return createImageView(id, new Image(Objects.requireNonNull(Main.class.getResourceAsStream(sourcePath))), postionX, postionY);
+        else return null;
+    }
+
+    public static ImageView createImageView(String id ,Image image, double imageWidth, double imageHeight, double postionX, double postionY) {
+        ImageView iv = createImageView(id ,image, postionX, postionY);
+        if (iv != null) {
+            iv.setFitWidth(imageWidth);
+            iv.setFitHeight(imageHeight);
+        }
+        return iv;
     }
 
     public static ImageView createImageView(String id ,String sourcePath, double imageWidth, double imageHeight, double postionX, double postionY) {
