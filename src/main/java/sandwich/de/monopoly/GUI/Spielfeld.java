@@ -267,8 +267,16 @@ public class Spielfeld {
         return field;
     }
 
+	private static Pane buildExtraField(Enum Enmum, Paint backgroundColor, double width, double height) {
+		
+	}
 }
 
 /*
-Die höhe einer Straße wird immer Größe des Feldes / 9 (9 Felder sind an jeder Seite (ohne die Ecken))
- */
+Todo:
+1. Für die extra Fleder die Methode benutzten die oben erstellt wurde
+2. Enum ersteller für die jewaldigen arten der "Kraftwerke" (Hier auch die Enum klassen für die Karten erstellen)
+3. Issue ab arbeiten!
+
+Die höhe einer Straße wird immer Größe des Feldes / 9 (9 Felder sind an jeder Seite (ohne die Ecken)) 
+*/
