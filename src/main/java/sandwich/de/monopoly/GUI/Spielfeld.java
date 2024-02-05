@@ -286,7 +286,7 @@ public class Spielfeld {
 
         Rectangle background = Utilities.buildRectangle("community_Background" ,width, height, backgroundColor, true, Color.BLACK, borderWidth);
         Label header = Utilities.buildLabel("community_Header", Utilities.buildLongText("Gesellschafts", "Feld"), Font.font(textFont, FontWeight.BOLD, fontSize), TextAlignment.CENTER, Color.BLACK, 0, height / 50);
-        ImageView image = Utilities.createImageView("community_Image", "/sandwich/de/monopoly/gameBoard/communityChest.png", width / 1.1, height / 1.6,(width - width / 1.15) / 2, height / 3.5);
+        ImageView image = Utilities.createImageView("community_Image", "/sandwich/de/monopoly/gameBoard/communityChest.png", width / 1.1, height / 1.9,(width - width / 1.15) / 2, height / 3.5);
 
         Utilities.centeringChildInPane(header, field);
 
@@ -332,7 +332,7 @@ public class Spielfeld {
         return field;
 	}
 
-    private static enum ChanceColors {
+    private enum ChanceColors {
         RED,
         GREEN,
         BLUE;
