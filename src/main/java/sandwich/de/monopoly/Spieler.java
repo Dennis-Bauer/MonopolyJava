@@ -16,6 +16,10 @@ public class Spieler {
         this.figur = figur;
     }
 
+    public void aenderKonto(double x) {
+        konto = konto + x;
+    }
+
     public double getKonto() {
         return this.konto;
     }
@@ -25,9 +29,6 @@ public class Spieler {
     }
     public String getName() {
         return this.name;
-    }
-    public void setName(String newName) {
-        this.name = newName;
     }
     public Figuren getFigur() {
         return this.figur;
