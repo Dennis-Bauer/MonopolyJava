@@ -1,5 +1,6 @@
 package sandwich.de.monopoly;
 
+import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -7,6 +8,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
@@ -44,6 +47,41 @@ public class Utilities {
         return r;
     }
 
+    public static Circle buildCircle(String id, double radius, Paint fill, boolean isVisible, Paint borderFill, double borderWidth) {
+        Circle c = new Circle(radius, fill);
+        c.setId(id);
+        c.setVisible(isVisible);
+        c.setStroke(borderFill);
+        c.setStrokeWidth(borderWidth);
+        return c;
+    }
+
+    public static Circle buildCircle(String id, double radius, Paint fill, boolean isVisible, Paint borderFill, double borderWidth, double x, double y) {
+        Circle c = buildCircle(id, radius, fill, isVisible, borderFill, borderWidth);
+        c.setCenterX(x);
+        c.setCenterY(y);
+        return c;
+    }
+
+    public static Polygon buildTriangle(String id, Point2D p1, Point2D p2, Point2D p3, Paint fill, Paint borderFill) {
+        Polygon triangle = new Polygon();
+
+        triangle.setId(id);
+        triangle.getPoints().addAll(p1.getX(), p1.getY(), p2.getX(), p2.getY(), p3.getX(), p3.getY());
+        triangle.setFill(fill);
+        triangle.setStroke(borderFill);
+
+        return triangle;
+    }
+
+    public static Polygon buildTriangle(String id, Point2D p1, Point2D p2, Point2D p3, Paint fill, Paint borderFill, double x, double y) {
+        Polygon triangle = buildTriangle(id, p1, p2, p3, fill, borderFill);
+
+        triangle.setLayoutX(x);
+        triangle.setLayoutY(y);
+
+        return triangle;
+    }
 
     //JavaFX nodes
     public static Button buildButton(String id ,String text, double width, double height, Font font) {
