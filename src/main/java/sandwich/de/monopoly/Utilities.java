@@ -56,10 +56,10 @@ public class Utilities {
         return c;
     }
 
-    public static Circle buildCircle(String id, double radius, Paint fill, boolean isVisible, Paint borderFill, double borderWidth, double x, double y) {
+    public static Circle buildCircle(String id, double radius, Paint fill, boolean isVisible, Paint borderFill, double borderWidth, double centerX, double centerY) {
         Circle c = buildCircle(id, radius, fill, isVisible, borderFill, borderWidth);
-        c.setCenterX(x);
-        c.setCenterY(y);
+        c.setCenterX(centerX);
+        c.setCenterY(centerY);
         return c;
     }
 
@@ -139,20 +139,20 @@ public class Utilities {
     }
 
     public static TextField buildTextField(String id ,String promptText, double width, double height, Font font) {
-        TextField t = buildTextField(promptText, id, width, height);
+        TextField t = buildTextField(id, promptText, width, height);
         t.setFont(font);
         return t;
     }
 
     public static TextField buildTextField(String id ,String promptText, double width, double height, double x, double y) {
-        TextField t = buildTextField(promptText, id, width, height);
+        TextField t = buildTextField(id, promptText, width, height);
         t.setScaleX(x);
         t.setScaleY(y);
         return t;
     }
 
     public static TextField buildTextField(String id ,String promptText, double width, double height, Font font, double x, double y) {
-        TextField t = buildTextField(promptText, id, width, height, x, y);
+        TextField t = buildTextField(id, promptText, width, height);
         t.setFont(font);
         return t;
     }
