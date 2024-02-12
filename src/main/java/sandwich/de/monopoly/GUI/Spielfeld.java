@@ -18,19 +18,21 @@ import sandwich.de.monopoly.Utilities;
 
 import java.util.Objects;
 
+import static sandwich.de.monopoly.Main.textFont;
+
 
 public class Spielfeld {
 
     private static final Pane[] fields = new Pane[36];
     private static final Pane[] corners = new Pane[4];
     private static final double middleRectangleRatio = 1.4;
-    private static final String textFont = "Verdana";
     private static double fontSize;
     private static double borderWidth;
 
     public static Pane buildGameBoard(double rotate, double size, Color boardColor) {
         Pane root = new Pane();
         root.setId("root");
+        root.setStyle("-fx-background-color: black;");
         StackPane board = new StackPane();
         board.setId("gameBoard");
         board.setAlignment(Pos.CENTER);
