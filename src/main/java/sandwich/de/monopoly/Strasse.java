@@ -24,7 +24,7 @@ public class Strasse {
     }
     public void zahlenMiete(Spieler zahlenderSpieler){
         // Zahlender Spieler Zahlt miete ( ZahlenderSpieler pay mietkosten Spieler )
-       if zahlenderSpieler.aenderKonto(mietkosten);
+        //if zahlenderSpieler.aenderKonto(mietkosten);
     }
     public String getName(){ return this.name;}
     public int getKaufpreis(){ return this.kaufpreis;}
