@@ -3,7 +3,6 @@ package sandwich.de.monopoly.GUI;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -23,28 +22,31 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class StartMenu {
 
-    private final double spacing = 5;
-
     public static Pane buildMenu(double width, double height) {
         Pane root = new Pane();
-        root.setId("ROORREIOJRKWIJR");
+        root.setId("MenuPane");
         root.setStyle("-fx-background-color: black;");
         root.setMaxSize(width, height);
 
+        //Menu Background und Überschrift werden erstellt
         ImageView background = Utilities.createImageView("menu_Background", "/sandwich/de/monopoly/menu/background.png", width, height, 0, 0);
         ImageView header = Utilities.createImageView("menu_Header", "/sandwich/de/monopoly/menu/header.png", width / 2.196, (width / 2.196) * 0.18, width / 2 - (width / 2.196) / 2, 0);
 
+        //Der Los-Button wird erstellt, und die funktion werden bestimmt
         Image startButtonNormal = new Image(Objects.requireNonNull(Main.class.getResourceAsStream("/sandwich/de/monopoly/menu/start_button.png")));
         Image startButtonHover = new Image(Objects.requireNonNull(Main.class.getResourceAsStream("/sandwich/de/monopoly/menu/start_button_hover.png")));
         ImageView startButton = Utilities.createImageView("menu_StartButton", startButtonNormal, width / 3.516, (width / 3.516) * 0.230, width / 2 - (width / 3.516) / 2, height * 0.84);
-        startButton.setOnMouseEntered(event -> {startButton.setImage(startButtonHover);});
-        startButton.setOnMouseExited(event -> {startButton.setImage(startButtonNormal);});
+        startButton.setOnMouseEntered(event -> startButton.setImage(startButtonHover));
+        startButton.setOnMouseExited(event -> startButton.setImage(startButtonNormal));
+        startButton.setOnMouseClicked(event -> Main.changeScene(Main.scenes.GAME));
 
+        //Koordinaten des Spielers in der Mitte werden berechnet und extra für die weiteren Rechnungen gespeichert
         double middlePlayerWidth = width * 0.149;
         double middlePlayerHeight = height * 0.6;
         double middlePlayerX = width / 2 - (width * 0.149) / 2;
         double middlePlayerY = height * 0.184;
 
+        //Spieler Boxen werden erstellt
         Pane middlePlayer = buildPlayerSelector(middlePlayerWidth, middlePlayerHeight, Color.rgb(126, 217, 87), middlePlayerX, middlePlayerY, 2);
         middlePlayer.setLayoutX(middlePlayerX);
         middlePlayer.setLayoutY(middlePlayerY);
@@ -65,6 +67,7 @@ public class StartMenu {
         rightPlayerTwo.setLayoutX(middlePlayerX * 1.968);
         rightPlayerTwo.setLayoutY(middlePlayerY);
 
+        //Alle objekte werden der Root hinzugefügt
         root.getChildren().addAll(background, header, startButton, middlePlayer, leftPlayerOne, leftPlayerTwo, rightPlayerOne, rightPlayerTwo);
 
         return root;
@@ -98,22 +101,46 @@ public class StartMenu {
 
         //Name Input screen
         VBox nameInputBox = new VBox(height / 20);
+        nameInputBox.setId("menu_playerSelector_NameInput");
         Border nameInputborder = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(15), new BorderWidths(3)));
         Background nameInputbackground = new Background(new BackgroundFill(color, null, null));
 
+        //NameInput input Box
         TextField nameInput = Utilities.buildTextField("addPlayer_NameInput", "Name", width, height / 10, Font.font(Main.textFont, width / 10));
         nameInput.setBackground(nameInputbackground);
         nameInput.setBorder(nameInputborder);
         nameInput.setAlignment(Pos.CENTER);
 
-        Button finishButton = Utilities.buildButton("addPlayer_FinishNameInput", "Fertig", width, height / 10, Font.font(Main.textFont, width / 10));
-        Button cancelCreateButton = Utilities.buildButton("addPlayer_CancelNameInput", "Abbrechen", width, height / 10, Font.font(Main.textFont, width / 10));
-        finishButton.setBackground(nameInputbackground);
-        cancelCreateButton.setBackground(nameInputbackground);
-        finishButton.setBorder(nameInputborder);
-        cancelCreateButton.setBorder(nameInputborder);
+        //Finish Button
+        StackPane finishButtonNameInput = new StackPane();
 
-        nameInputBox.getChildren().addAll(nameInput, finishButton, cancelCreateButton);
+        Rectangle finishButtonBackground = Utilities.buildRectangle("addPlayer_finishNameInput_Background", width / 5, width / 5, Color.LIME, true, Color.BLACK, width / 120);
+        Rectangle finishButtonCheckmarkOne = Utilities.buildRectangle("addPlayer_finishNameInput_CheckmarkOne", width / 42.5, width / 14.5, Color.WHITE, true, null, 0);
+        Rectangle finishButtonCheckmarkTwo = Utilities.buildRectangle("addPlayer_finishNameInput_CheckmarkOne", width / 42.5, width / 22.5, Color.WHITE, true, null, 0);
+
+        finishButtonCheckmarkOne.setRotate(45);
+        finishButtonCheckmarkTwo.setRotate(-45);
+
+        StackPane.setMargin(finishButtonCheckmarkTwo, new Insets(0, 0, -(width / 60), -(width * 0.046)));
+
+        finishButtonNameInput.getChildren().addAll(finishButtonBackground, finishButtonCheckmarkTwo, finishButtonCheckmarkOne);
+
+        //Cancel Button
+        StackPane cancelButtonNameInput = new StackPane();
+
+        Rectangle cancelButtonBackground = Utilities.buildRectangle("addPlayer_finishNameInput_Background", width / 5, width / 5, Color.RED, true, Color.BLACK, width / 120);
+        Rectangle cancelButtonXOne = Utilities.buildRectangle("addPlayer_finishNameInput_CheckmarkOne", width / 42.5, width / 7.5, Color.WHITE, true, null, 0);
+        Rectangle cancelButtonXTwo = Utilities.buildRectangle("addPlayer_finishNameInput_CheckmarkOne", width / 42.5, width / 7.5, Color.WHITE, true, null, 0);
+
+        cancelButtonXOne.setRotate(45);
+        cancelButtonXTwo.setRotate(-45);
+
+        cancelButtonNameInput.getChildren().addAll(cancelButtonBackground, cancelButtonXTwo, cancelButtonXOne);
+
+        HBox nameInputButtons = new HBox(width / 4, cancelButtonNameInput, finishButtonNameInput);
+        nameInputButtons.setAlignment(Pos.CENTER);
+
+        nameInputBox.getChildren().addAll(nameInput, nameInputButtons);
         nameInputBox.setLayoutY(height / 18);
         nameInputBox.setVisible(false);
 
@@ -130,6 +157,7 @@ public class StartMenu {
         addButton.setLayoutX(width / 2 - buttonRadius);
         addButton.setLayoutY(height / 3 - buttonRadius);
 
+        //AddPlayer Button Aktionen
         addButton.setOnMouseEntered(event -> {
             addButtonBackground.setStrokeWidth(buttonStrokeWidth);
             addButton.setLayoutX(addButton.getLayoutX() - buttonStrokeWidth / 2);
@@ -186,6 +214,7 @@ public class StartMenu {
         selectPlayerFigur.getChildren().addAll(figurBackground, figure);
 
         ImageView arrowOne = buildArrow(arrowNumber);
+        assert arrowOne != null;
         arrowOne.setRotate(180);
         arrowOne.setFitWidth(width / 4);
         arrowOne.setFitHeight(width / 4);
@@ -193,6 +222,7 @@ public class StartMenu {
         arrowOne.setX(width / 6);
 
         ImageView arrowTwo = buildArrow(arrowNumber);
+        assert arrowTwo != null;
         arrowTwo.setFitWidth(width / 4);
         arrowTwo.setFitHeight(width / 4);
         arrowTwo.setY(height / 1.3);
@@ -215,13 +245,13 @@ public class StartMenu {
         });
 
         //Name input Listener
-        cancelCreateButton.setOnMouseClicked(event -> {
+        cancelButtonNameInput.setOnMouseClicked(event -> {
             nameInput.setText("");
             nameInputBox.setVisible(false);
             addButton.setVisible(true);
         });
 
-        finishButton.setOnMouseClicked(event -> {
+        finishButtonNameInput.setOnMouseClicked(event -> {
             if (!nameInput.getText().isEmpty()) {
                 name.setText(nameInput.getText());
                 name.setFont(new Font(calculateOptimalFontSize(name.getText(), background.getWidth())));

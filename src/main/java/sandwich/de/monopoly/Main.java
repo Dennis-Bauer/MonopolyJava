@@ -1,12 +1,9 @@
 package sandwich.de.monopoly;
 
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import sandwich.de.monopoly.Enums.Figuren;
 import sandwich.de.monopoly.GUI.Spielfeld;
@@ -19,16 +16,22 @@ public class Main extends Application {
     public static final String textFont = "Verdana";
 
     public static final Image[] playerFigures = new Image[5];
+
+    private static final double stageWidth = 1800, stageHeight = 950;
+
+    private static final Scene game = new Scene(Spielfeld.buildGameBoard(0, stageHeight, Color.BEIGE), stageWidth, stageHeight, Color.BLACK);
+
+    private static final Scene menu = new Scene(StartMenu.buildMenu(stageWidth, stageHeight), stageWidth, stageHeight, Color.BLACK);
+
+    private static Stage primaryStage;
     @Override
     public void start(Stage stage) {
 
-        Scene game = new Scene(Spielfeld.buildGameBoard(0, 950, Color.BEIGE), 1800, 950, Color.BLACK);
-
-        Scene start = new Scene(StartMenu.buildMenu(1800, 950), 1800, 950, Color.BLACK);
+        primaryStage = stage;
 
         stage.setTitle("-M---o-----n----o---p----o---l----y");
         stage.setResizable(false);
-        stage.setScene(start);
+        stage.setScene(menu);
         stage.show();
     }
 
@@ -46,5 +49,17 @@ public class Main extends Application {
         Spieler sp = new Spieler(200, 2, "Paul", Figuren.BOOT);
 
 
+    }
+
+    public static void changeScene(scenes s) {
+        switch (s) {
+            case GAME -> primaryStage.setScene(game);
+            case MENU -> primaryStage.setScene(menu);
+        }
+    }
+
+    public enum scenes {
+        MENU,
+        GAME
     }
 }
