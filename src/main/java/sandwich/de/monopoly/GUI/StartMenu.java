@@ -232,15 +232,17 @@ public class StartMenu {
 
         arrowOne.setOnMouseClicked(event -> {
             if (!name.getText().isEmpty()) {
-                figure.setImage(Main.playerFigures[imagePosition.get()]);
+                System.out.println("Postion wird gesetzt auf: " + setFigurePosition(true, imagePosition.get()));
                 imagePosition.set(setFigurePosition(true, imagePosition.get()));
+                figure.setImage(Main.playerFigures[imagePosition.get()]);
             }
         });
 
         arrowTwo.setOnMouseClicked(event -> {
             if (!name.getText().isEmpty()) {
-                figure.setImage(Main.playerFigures[imagePosition.get()]);
+                System.out.println("Postion wird gesetzt auf: " + setFigurePosition(false, imagePosition.get()));
                 imagePosition.set(setFigurePosition(false, imagePosition.get()));
+                figure.setImage(Main.playerFigures[imagePosition.get()]);
             }
         });
 

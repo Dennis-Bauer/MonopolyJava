@@ -19,7 +19,7 @@ public class Main extends Application {
 
     private static final double stageWidth = 1800, stageHeight = 950;
 
-    private static final Scene game = new Scene(Spielfeld.buildGameBoard(0, stageHeight, Color.BEIGE), stageWidth, stageHeight, Color.BLACK);
+    private static final Scene game = new Scene(Spielfeld.buildGameScene(0, stageWidth, stageHeight, Color.GRAY, Color.rgb(204, 227, 199)), stageWidth, stageHeight, Color.BLACK);
 
     private static final Scene menu = new Scene(StartMenu.buildMenu(stageWidth, stageHeight), stageWidth, stageHeight, Color.BLACK);
 
