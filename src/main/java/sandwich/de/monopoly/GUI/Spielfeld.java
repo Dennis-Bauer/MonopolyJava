@@ -6,6 +6,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
@@ -29,10 +30,33 @@ public class Spielfeld {
     private static double fontSize;
     private static double borderWidth;
 
+    public static Pane buildGameScene(double gameBoardRotate, double width, double height, Color backgroundColor, Color boardColor) {
+        Pane root = new Pane(buildGameBoard(gameBoardRotate, height, boardColor));
+        root.setId("gameScreen_Root");
+
+        Rectangle background = Utilities.buildRectangle("gameScene_Background", width - height, height, backgroundColor, true, null, 0, height, 0);
+
+        VBox displays = new VBox(height * 0.03);
+        final double displaysWidth = (width - height) / 1.1;
+        final double displaysHeight = (height / 3) / 1.3;
+        displays.getChildren().addAll(
+                SpielerAnzeige.buildPlayerDisplay(displaysWidth, displaysHeight, Color.RED),
+                AktionAnzeige.buildActionDisplay(displaysWidth, displaysHeight, Color.BLUE),
+                TradingAnzeige.buildTradingDisplay(displaysWidth, displaysHeight, Color.GREEN)
+        );
+
+        displays.setLayoutX(height + (((width - height) / 2) - ((width - height) / 1.1) / 2));
+        displays.setLayoutY(height * 0.03);
+
+        root.getChildren().addAll(background, displays);
+        background.toBack();
+
+        return root;
+    }
+
     public static Pane buildGameBoard(double rotate, double size, Color boardColor) {
         Pane root = new Pane();
-        root.setId("root");
-        root.setStyle("-fx-background-color: black;");
+        root.setId("gameBoard_Root");
         StackPane board = new StackPane();
         board.setId("gameBoard");
         board.setAlignment(Pos.CENTER);
