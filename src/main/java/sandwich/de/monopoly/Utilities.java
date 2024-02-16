@@ -1,7 +1,9 @@
 package sandwich.de.monopoly;
 
+import javafx.animation.ScaleTransition;
+import javafx.animation.TranslateTransition;
 import javafx.geometry.Point2D;
-import javafx.scene.Scene;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -13,6 +15,7 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
+import javafx.util.Duration;
 
 import java.io.*;
 import java.util.List;
@@ -20,6 +23,8 @@ import java.util.Objects;
 
 //Don't forget: Update changes in Cloud
 public class Utilities {
+
+    //KOMMENTARE NOCH ÄNDERN
 
     //Color Output
     public static final String RESET = "\033[0m";  // Text Reset
@@ -30,7 +35,14 @@ public class Utilities {
         REGULAR, BOLD, UNDERLINE, BACKGROUND, HIGH_INTENSITY, BOLD_HIGH_INTENSITY, HIGH_INTENSITY_BACKGROUNDS
     }
 
-    //JavaFX Shapes
+    /**
+     *  JavaFX Shapes:
+     *  Verbesserte Konstruktor für jegliche Formen.
+     *  Manche Formen werden auch durch Polygon erstellt
+     *  da sie gar nicht als extra Object existieren.
+     */
+
+    //Rechteck Konstruktor (Achtung, falls Rechteck nicht angezeigt wird, auf isVisible achten!)
     public static Rectangle buildRectangle(String id, double width, double height, Paint fill, boolean isVisible, Paint borderFill, double borderWidth) {
         Rectangle r = new Rectangle(width, height, fill);
         r.setId(id);
@@ -47,6 +59,7 @@ public class Utilities {
         return r;
     }
 
+    //Kreis Konstruktor (Falls man denn Konstruktor verwendet, der die x und y Koordinate mit verändert, darauf achten das dieses in der MITTE des Kreises sind!)
     public static Circle buildCircle(String id, double radius, Paint fill, boolean isVisible, Paint borderFill, double borderWidth) {
         Circle c = new Circle(radius, fill);
         c.setId(id);
@@ -63,6 +76,7 @@ public class Utilities {
         return c;
     }
 
+    //Dreieck Konstruktor (WICHTIG, das Dreieck hat kein Extra objekt, hier wird es durch die angegebenen Punkte gezeichnet
     public static Polygon buildTriangle(String id, Point2D p1, Point2D p2, Point2D p3, Paint fill, Paint borderFill) {
         Polygon triangle = new Polygon();
 
@@ -83,7 +97,14 @@ public class Utilities {
         return triangle;
     }
 
-    //JavaFX nodes
+    /**
+     *  JavaFX nodes:
+     *  Verbesserte Konstruktor für jegliche JavaFX Nodes.
+     *  Nodes können Inputs für jegliche Attribute sein, oder
+     *  auch einfach ein Button, alles Mögliche.
+     */
+
+    //Button Konstruktor
     public static Button buildButton(String id ,String text, double width, double height, Font font) {
         Button b = new Button();
 
@@ -103,7 +124,7 @@ public class Utilities {
         return b;
     }
 
-
+    //Label (Schrift, Text) Konstruktor
     public static Label buildLabel(String id ,String text, Font font, TextAlignment textAlignment, Color textColor) {
         Label l = new Label();
 
@@ -125,7 +146,7 @@ public class Utilities {
         return l;
     } // ERKLÄRUNG HINZUFÜGEN (Nicht realtiv vom Fenster, heißt 0, 0 ist nicht oben Links)
 
-
+    //TextField (Text Input) Konstruktor
     public static TextField buildTextField(String id ,String promptText, double width, double height) {
         TextField t = new TextField();
 
@@ -157,7 +178,7 @@ public class Utilities {
         return t;
     }
 
-
+    //AuswahlBox Konstruktor
     public static ChoiceBox<String> buildChoiceBox(String id, List<String> choices, double width, double height) {
         ChoiceBox<String> cb = new ChoiceBox<>();
 
@@ -178,7 +199,7 @@ public class Utilities {
         return cb;
     }
 
-
+    //Andere AuswahlBox Konstruktor
     public static ComboBox<String> buildComboBox(String id, List<String> choices, double width, double height) {
         ComboBox<String> cb = new ComboBox<>();
 
@@ -199,7 +220,7 @@ public class Utilities {
         return cb;
     }
 
-
+    //ColorPicker Konstruktor
     public static ColorPicker buildColorPicker(String id, double width, double height, Color startColor) {
         ColorPicker cp = new ColorPicker(startColor);
 
@@ -219,7 +240,14 @@ public class Utilities {
         return cp;
     }
 
-    //Java FX Utilities
+    /**
+     *  JavaFX Utilities:
+     *  Alle möglichen Methoden, die was ausführen,
+     *  was man öfters mal braucht, in JavaFX.
+     *  Zum Beispiel ein Label in einer Pane zu Centern.
+     */
+
+    //Positioniert ein Child (Achtung sehr begrenzte möglichkeiten) in die Mitte einer Pane
     public static void centeringChildInPane(Control child, Pane pane) {
         child.layoutXProperty().bind(pane.widthProperty().subtract(child.widthProperty()).divide(2));
     } //(KEIN OFFICIALESE KOMMENTAR) Achtung, klappt nicht bei Formen oder anderes was nicht der Control Klasse erbt, vielleicht ändern
@@ -260,7 +288,29 @@ public class Utilities {
         return iv;
     }
 
-    //Java Utilities
+    /**
+     *  JavaFX Animations:
+     *  Alle möglichen animation, einfach zu erstellen
+     *  einfache Methoden!
+     *  <p>Animation Typs:</p>
+     *  <p>TranslateTransition: Ändert die Position eines Nodes.</p>
+     *  <p>ScaleTransition: Ändert die Größe eines Nodes.</p>
+     *  <p>RotateTransition: Ändert die Rotation eines Nodes.</p>
+     *  <p>FadeTransition: Ändert die Transparenz eines Nodes.</p>
+     *  <p>PathTransition: Bewegt einen Node entlang eines Pfads.</p>
+     *  <p>FillTransition: Ändert die Füllfarbe eines Shapes.</p>
+     *  <p>StrokeTransition: Ändert die Randfarbe eines Shapes.</p>
+     *  <p>ParallelTransition: Ermöglicht das Ausführen mehrerer Transitionen gleichzeitig.</p>
+     *  <p>SequentialTransition: Ermöglicht das Ausführen von Transitionen nacheinander.</p>
+     */
+
+
+    /**
+     *  Java Utilities:
+     *  Alle möglichen Methoden, die was ausführen,
+     *  was man öfters mal braucht, in Java.
+     *  Zum Beispiel ein String der auch Zeilensprünge hat erstellen.
+     */
     public static String buildLongText(String... text) {
         StringBuilder s = new StringBuilder();
         String[] strings = text;
