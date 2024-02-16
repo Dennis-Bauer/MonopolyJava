@@ -1,25 +1,25 @@
 package sandwich.de.monopoly;
 
-import javafx.animation.ScaleTransition;
-import javafx.animation.TranslateTransition;
+import javafx.animation.*;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
+import javafx.scene.transform.Scale;
 import javafx.util.Duration;
 
 import java.io.*;
 import java.util.List;
 import java.util.Objects;
+import java.util.Scanner;
 
 //Don't forget: Update changes in Cloud
 public class Utilities {
@@ -303,6 +303,16 @@ public class Utilities {
      *  <p>ParallelTransition: Ermöglicht das Ausführen mehrerer Transitionen gleichzeitig.</p>
      *  <p>SequentialTransition: Ermöglicht das Ausführen von Transitionen nacheinander.</p>
      */
+
+    public static void moveObject(Node object, double durationSeconds, double toX, double toY, int cycles) {
+        ScaleTransition transition = new ScaleTransition(Duration.seconds(durationSeconds), object);
+        transition.setToX(toX); // Ziel-X-Position
+        transition.setToY(toY); // Ziel-Y-Position
+        transition.setCycleCount(cycles); // Animation X oft ausführen
+
+        transition.play();
+    }
+
 
 
     /**

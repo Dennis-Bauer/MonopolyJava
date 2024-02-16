@@ -1,5 +1,10 @@
 package sandwich.de.monopoly.GUI;
 
+import javafx.animation.Animation;
+import javafx.animation.Interpolator;
+import javafx.animation.ParallelTransition;
+import javafx.animation.TranslateTransition;
+import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
@@ -10,10 +15,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
+import javafx.util.Duration;
 import sandwich.de.monopoly.Main;
 import sandwich.de.monopoly.Utilities;
 
@@ -32,11 +39,40 @@ public class StartMenu {
         ImageView background = Utilities.createImageView("menu_Background", "/sandwich/de/monopoly/menu/background.png", width, height, 0, 0);
         ImageView header = Utilities.createImageView("menu_Header", "/sandwich/de/monopoly/menu/header.png", width / 2.196, (width / 2.196) * 0.18, width / 2 - (width / 2.196) / 2, 0);
 
+        ImageView clouds1 = Utilities.createImageView("menu_CloudAnimation", "/sandwich/de/monopoly/menu/clouds.png", 0, 0);
+        ImageView clouds2 = Utilities.createImageView("menu_CloudAnimation", "/sandwich/de/monopoly/menu/clouds.png", 0, 0);
+
+        assert clouds1 != null;
+        clouds1.setFitWidth(width * 4.167);
+        clouds1.setFitHeight(height * 0.259);
+
+        assert clouds2 != null;
+        clouds2.setFitWidth(width * 4.167);
+        clouds2.setFitHeight(height * 0.259);
+
+        clouds1.setX( -1 * (width * 4.167));
+        clouds2.setX(0);
+
+        TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(100), clouds1);
+        translateTransition.setToX((width * 4.167));
+        translateTransition.setInterpolator(Interpolator.LINEAR);
+
+        TranslateTransition translateTransition2 = new TranslateTransition(Duration.seconds(100), clouds2);
+        translateTransition2.setToX((width * 4.167));
+        translateTransition2.setInterpolator(Interpolator.LINEAR);
+
+        ParallelTransition parallelTransition = new ParallelTransition(translateTransition, translateTransition2);
+        parallelTransition.setCycleCount(Animation.INDEFINITE);
+        parallelTransition.play();
+
         //Der Los-Button wird erstellt, und die funktion werden bestimmt
         Image startButtonNormal = new Image(Objects.requireNonNull(Main.class.getResourceAsStream("/sandwich/de/monopoly/menu/start_button.png")));
-        Image startButtonHover = new Image(Objects.requireNonNull(Main.class.getResourceAsStream("/sandwich/de/monopoly/menu/start_button_hover.png")));
+        Image startButtonHover = new Image(Objects.requireNonNull(Main.class.getResourceAsStream("/sandwich/de/monopoly/menu/startButtonGif.gif")));
         ImageView startButton = Utilities.createImageView("menu_StartButton", startButtonNormal, width / 3.516, (width / 3.516) * 0.230, width / 2 - (width / 3.516) / 2, height * 0.84);
-        startButton.setOnMouseEntered(event -> startButton.setImage(startButtonHover));
+        startButton.setOnMouseEntered(event -> {
+            startButton.setImage(startButtonHover);
+
+        });
         startButton.setOnMouseExited(event -> startButton.setImage(startButtonNormal));
         startButton.setOnMouseClicked(event -> Main.changeScene(Main.scenes.GAME));
 
@@ -68,7 +104,7 @@ public class StartMenu {
         rightPlayerTwo.setLayoutY(middlePlayerY);
 
         //Alle objekte werden der Root hinzugefügt
-        root.getChildren().addAll(background, header, startButton, middlePlayer, leftPlayerOne, leftPlayerTwo, rightPlayerOne, rightPlayerTwo);
+        root.getChildren().addAll(background, clouds1, clouds2, header, startButton, middlePlayer, leftPlayerOne, leftPlayerTwo, rightPlayerOne, rightPlayerTwo);
 
         return root;
     }
@@ -81,7 +117,6 @@ public class StartMenu {
         //Background
         Rectangle background = Utilities.buildRectangle("menu_playerSelector_Background", width, height, color, true, null, 0);
         Polygon backgroundBottom = Utilities.buildTriangle("menu_playerSelector_background_Bottom", new Point2D(x, y + height), new Point2D(x + width / 2, y + height + height * 0.071), new Point2D(x + width, y + height),color, null, -x, -y - 0.5);
-
         //Name label
         Label name = Utilities.buildLabel("menu_playerSelector_Name", "", new Font(Main.textFont, 100), TextAlignment.LEFT, Color.WHITE, 0, 0);
         Utilities.centeringChildInPane(name, root);
