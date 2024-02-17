@@ -1,10 +1,6 @@
 package sandwich.de.monopoly.GUI;
 
-import javafx.animation.Animation;
-import javafx.animation.Interpolator;
-import javafx.animation.ParallelTransition;
-import javafx.animation.TranslateTransition;
-import javafx.application.Application;
+import javafx.animation.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
@@ -15,7 +11,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -68,43 +63,138 @@ public class StartMenu {
         //Der Los-Button wird erstellt, und die funktion werden bestimmt
         Image startButtonNormal = new Image(Objects.requireNonNull(Main.class.getResourceAsStream("/sandwich/de/monopoly/menu/start_button.png")));
         Image startButtonHover = new Image(Objects.requireNonNull(Main.class.getResourceAsStream("/sandwich/de/monopoly/menu/startButtonGif.gif")));
+        Image startButtonPressed = new Image(Objects.requireNonNull(Main.class.getResourceAsStream("/sandwich/de/monopoly/menu/startButtonPressed.gif")));
         ImageView startButton = Utilities.createImageView("menu_StartButton", startButtonNormal, width / 3.516, (width / 3.516) * 0.230, width / 2 - (width / 3.516) / 2, height * 0.84);
-        startButton.setOnMouseEntered(event -> {
-            startButton.setImage(startButtonHover);
-
-        });
+        startButton.setOnMouseEntered(event -> startButton.setImage(startButtonHover));
         startButton.setOnMouseExited(event -> startButton.setImage(startButtonNormal));
-        startButton.setOnMouseClicked(event -> Main.changeScene(Main.scenes.GAME));
+        startButton.setOnMousePressed(event -> startButton.setImage(startButtonPressed));
+        startButton.setOnMouseReleased(event -> startButton.setImage(startButtonHover));
 
         //Koordinaten des Spielers in der Mitte werden berechnet und extra für die weiteren Rechnungen gespeichert
-        double middlePlayerWidth = width * 0.149;
-        double middlePlayerHeight = height * 0.6;
-        double middlePlayerX = width / 2 - (width * 0.149) / 2;
-        double middlePlayerY = height * 0.184;
+        final double middlePlayerWidth = width * 0.149;
+        final double middlePlayerHeight = height * 0.6;
+        final double middlePlayerX = width / 2 - (width * 0.149) / 2;
+        final double middlePlayerY = height * 0.184;
+
+        //Transition Variables
+        final Duration startAnimationLength = Duration.seconds(2.5);
+        final Duration loopAnimationSpeed = Duration.seconds(2);
+        final double loopTransitionSize = 0.04;
 
         //Spieler Boxen werden erstellt
         Pane middlePlayer = buildPlayerSelector(middlePlayerWidth, middlePlayerHeight, Color.rgb(126, 217, 87), middlePlayerX, middlePlayerY, 2);
         middlePlayer.setLayoutX(middlePlayerX);
-        middlePlayer.setLayoutY(middlePlayerY);
+        middlePlayer.setLayoutY(-middlePlayerHeight);
+
+        //Start Transition
+        TranslateTransition middleStartTransition = new TranslateTransition(startAnimationLength, middlePlayer);
+        middleStartTransition.setToY(middlePlayerHeight + middlePlayerY);
+        middleStartTransition.setCycleCount(1);
+
+        //Loop Transition
+        ScaleTransition middleTransition = new ScaleTransition(loopAnimationSpeed, middlePlayer);
+        middleTransition.setByY(loopTransitionSize);
+        middleTransition.setByX(loopTransitionSize);
+        middleTransition.setAutoReverse(true);
+        middleTransition.setCycleCount(Animation.INDEFINITE);
 
         Pane leftPlayerOne = buildPlayerSelector(middlePlayerWidth * 0.881, middlePlayerHeight * 0.881, Color.rgb(92, 225, 230), middlePlayerX * 0.533, middlePlayerY, 1);
-        leftPlayerOne.setLayoutX(middlePlayerX * 0.533);
-        leftPlayerOne.setLayoutY(middlePlayerY);
+        leftPlayerOne.setLayoutX(middlePlayerX * 0.533 - 2 * (middlePlayerWidth * 0.881));
+        leftPlayerOne.setLayoutY(-(middlePlayerHeight * 0.881));
+
+        //Start Transition
+        TranslateTransition leftOnStartTransition = new TranslateTransition(startAnimationLength, leftPlayerOne);
+        leftOnStartTransition.setToY(middlePlayerHeight * 0.881 + middlePlayerY);
+        leftOnStartTransition.setToX(2 * (middlePlayerWidth * 0.881));
+        leftOnStartTransition.setCycleCount(1);
+
+        //Loop Transition
+        ScaleTransition leftOneTransition = new ScaleTransition(loopAnimationSpeed, leftPlayerOne);
+        leftOneTransition.setByY(loopTransitionSize);
+        leftOneTransition.setByX(loopTransitionSize);
+        leftOneTransition.setAutoReverse(true);
+        leftOneTransition.setCycleCount(Animation.INDEFINITE);
 
         Pane leftPlayerTwo = buildPlayerSelector(middlePlayerWidth * 0.756, middlePlayerHeight * 0.722, Color.rgb(217, 217, 217), middlePlayerX * 0.110, middlePlayerY, 3);
-        leftPlayerTwo.setLayoutX(middlePlayerX * 0.110);
-        leftPlayerTwo.setLayoutY(middlePlayerY);
+        leftPlayerTwo.setLayoutX(middlePlayerX * 0.110 - 2 * (middlePlayerWidth * 0.756));
+        leftPlayerTwo.setLayoutY(-(middlePlayerHeight * 0.722));
+
+        //Start Transition
+        TranslateTransition leftTwoStartTransition = new TranslateTransition(startAnimationLength, leftPlayerTwo);
+        leftTwoStartTransition.setToY(middlePlayerHeight * 0.722 + middlePlayerY);
+        leftTwoStartTransition.setToX(2 * (middlePlayerWidth * 0.756));
+        leftTwoStartTransition.setCycleCount(1);
+
+        //Loop Transition
+        ScaleTransition leftTwoTransition = new ScaleTransition(loopAnimationSpeed, leftPlayerTwo);
+        leftTwoTransition.setByY(loopTransitionSize);
+        leftTwoTransition.setByX(loopTransitionSize);
+        leftTwoTransition.setAutoReverse(true);
+        leftTwoTransition.setCycleCount(Animation.INDEFINITE);
 
         Pane rightPlayerOne = buildPlayerSelector(middlePlayerWidth * 0.881, middlePlayerHeight * 0.881, Color.rgb(92, 225, 230), middlePlayerX * 1.500, middlePlayerY, 1);
-        rightPlayerOne.setLayoutX(middlePlayerX * 1.500);
-        rightPlayerOne.setLayoutY(middlePlayerY);
+        rightPlayerOne.setLayoutX(middlePlayerX * 1.500 + 2 * (middlePlayerWidth * 0.881));
+        rightPlayerOne.setLayoutY(-(middlePlayerHeight * 0.881));
+
+        //Start Transition
+        TranslateTransition rightOneStartTransition = new TranslateTransition(startAnimationLength, rightPlayerOne);
+        rightOneStartTransition.setToY(middlePlayerHeight * 0.881 + middlePlayerY);
+        rightOneStartTransition.setToX(2 * -(middlePlayerWidth * 0.881));
+        rightOneStartTransition.setCycleCount(1);
+
+        //Loop Transition
+        ScaleTransition rightOneTransition = new ScaleTransition(loopAnimationSpeed, rightPlayerOne);
+        rightOneTransition.setByY(loopTransitionSize);
+        rightOneTransition.setByX(loopTransitionSize);
+        rightOneTransition.setAutoReverse(true);
+        rightOneTransition.setCycleCount(Animation.INDEFINITE);
 
         Pane rightPlayerTwo = buildPlayerSelector(middlePlayerWidth * 0.756, middlePlayerHeight * 0.722, Color.rgb(217, 217, 217), middlePlayerX * 1.968, middlePlayerY, 3);
-        rightPlayerTwo.setLayoutX(middlePlayerX * 1.968);
-        rightPlayerTwo.setLayoutY(middlePlayerY);
+        rightPlayerTwo.setLayoutX(middlePlayerX * 1.968 + 2 * (middlePlayerWidth * 0.756));
+        rightPlayerTwo.setLayoutY(-(middlePlayerHeight * 0.722));
+
+        //Start Transition
+        TranslateTransition rightTwoStartTransition = new TranslateTransition(startAnimationLength, rightPlayerTwo);
+        rightTwoStartTransition.setToY(middlePlayerHeight * 0.722 + middlePlayerY);
+        rightTwoStartTransition.setToX(2 * -(middlePlayerWidth * 0.756));
+        rightTwoStartTransition.setCycleCount(1);
+
+        //Loop Transition
+        ScaleTransition rightTwoTransition = new ScaleTransition(loopAnimationSpeed, rightPlayerTwo);
+        rightTwoTransition.setByY(loopTransitionSize);
+        rightTwoTransition.setByX(loopTransitionSize);
+        rightTwoTransition.setAutoReverse(true);
+        rightTwoTransition.setCycleCount(Animation.INDEFINITE);
+
+        //Start Transitions
+        middleStartTransition.play();
+        leftOnStartTransition.play();
+        leftTwoStartTransition.play();
+        rightOneStartTransition.play();
+        rightTwoStartTransition.play();
+
+        //Loop Transitions
+        middleStartTransition.setOnFinished(event -> middleTransition.play());
+        leftOnStartTransition.setOnFinished(event -> leftOneTransition.play());
+        leftTwoStartTransition.setOnFinished(event -> leftTwoTransition.play());
+        rightOneStartTransition.setOnFinished(event -> rightOneTransition.play());
+        rightTwoStartTransition.setOnFinished(event -> rightTwoTransition.play());
 
         //Alle objekte werden der Root hinzugefügt
         root.getChildren().addAll(background, clouds1, clouds2, header, startButton, middlePlayer, leftPlayerOne, leftPlayerTwo, rightPlayerOne, rightPlayerTwo);
+
+        //Start
+        startButton.setOnMouseClicked(event -> {
+
+            middleTransition.stop();
+            leftOneTransition.stop();
+            leftTwoTransition.stop();
+            rightOneTransition.stop();
+            rightTwoTransition.stop();
+
+            Main.changeScene(Main.scenes.GAME);
+        });
+
 
         return root;
     }
@@ -267,7 +357,6 @@ public class StartMenu {
 
         arrowOne.setOnMouseClicked(event -> {
             if (!name.getText().isEmpty()) {
-                System.out.println("Postion wird gesetzt auf: " + setFigurePosition(true, imagePosition.get()));
                 imagePosition.set(setFigurePosition(true, imagePosition.get()));
                 figure.setImage(Main.playerFigures[imagePosition.get()]);
             }
@@ -275,7 +364,6 @@ public class StartMenu {
 
         arrowTwo.setOnMouseClicked(event -> {
             if (!name.getText().isEmpty()) {
-                System.out.println("Postion wird gesetzt auf: " + setFigurePosition(false, imagePosition.get()));
                 imagePosition.set(setFigurePosition(false, imagePosition.get()));
                 figure.setImage(Main.playerFigures[imagePosition.get()]);
             }
