@@ -3,23 +3,19 @@ package sandwich.de.monopoly;
 import javafx.animation.*;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
-import javafx.scene.transform.Scale;
 import javafx.util.Duration;
 
 import java.io.*;
 import java.util.List;
 import java.util.Objects;
-import java.util.Scanner;
 
 //Don't forget: Update changes in Cloud
 public class Utilities {
@@ -103,7 +99,7 @@ public class Utilities {
 
         line.setId(id);
         line.setStrokeWidth(lineWidth);
-        line.setFill(fill);
+        line.setStroke(fill);
 
         return line;
     }
@@ -267,10 +263,12 @@ public class Utilities {
     public static ImageView createImageView(String id, Image image, double postionX, double postionY) {
         if (image != null) {
             ImageView iv = new ImageView(image);
+
             iv.setId(id);
             iv.setX(postionX);
             iv.setY(postionY);
             iv.toBack();
+
             return iv;
         } else return null;
     }
