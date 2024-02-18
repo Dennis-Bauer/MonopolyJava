@@ -9,19 +9,22 @@ import sandwich.de.monopoly.Enums.Figuren;
 import sandwich.de.monopoly.GUI.Spielfeld;
 import sandwich.de.monopoly.GUI.StartMenu;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 public class Main extends Application {
 
-    public static final String textFont = "Verdana";
+    public static final String textFont = "Clear Sans";
 
     public static final Image[] playerFigures = new Image[5];
 
+    public static HashMap<Integer, Color> streetColor = new HashMap<>();
+
     private static final double stageWidth = 1800, stageHeight = 950;
 
-    private static final Scene game = new Scene(Spielfeld.buildGameScene(0, stageWidth, stageHeight, Color.GRAY, Color.rgb(204, 227, 199)), stageWidth, stageHeight, Color.BLACK);
+    private static Scene game;
 
-    private static final Scene menu = new Scene(StartMenu.buildMenu(stageWidth, stageHeight), stageWidth, stageHeight, Color.BLACK);
+    private static Scene menu;
 
     private static Stage primaryStage;
     @Override
@@ -31,7 +34,7 @@ public class Main extends Application {
 
         stage.setTitle("-M---o-----n----o---p----o---l----y");
         stage.setResizable(false);
-        stage.setScene(menu);
+        stage.setScene(game);
         stage.show();
     }
 
@@ -43,7 +46,36 @@ public class Main extends Application {
         playerFigures[3] = new Image(Objects.requireNonNull(Main.class.getResourceAsStream("/sandwich/de/monopoly/figuren/pinguin.png")));
         playerFigures[4] = new Image(Objects.requireNonNull(Main.class.getResourceAsStream("/sandwich/de/monopoly/figuren/sandwich.png")));
 
+        streetColor.put(0, Color.DARKBLUE); //Straße
+        streetColor.put(1, Color.DARKBLUE); //Straße
+        streetColor.put(2, Color.AQUA);     //Straße
+        streetColor.put(3, Color.AQUA);     //Straße
+        streetColor.put(4, Color.AQUA);     //Straße
+        streetColor.put(5, Color.PURPLE);   //Straße
+        streetColor.put(6, Color.PURPLE);   //Straße
+        streetColor.put(7, Color.PURPLE);   //Straße
+        streetColor.put(8, Color.ORANGE);   //Straße
+        streetColor.put(9, Color.ORANGE);   //Straße
+        streetColor.put(10, Color.ORANGE);  //Straße
+        streetColor.put(11, Color.RED);     //Straße
+        streetColor.put(12, Color.RED);     //Straße
+        streetColor.put(13, Color.RED);     //Straße
+        streetColor.put(14, Color.YELLOW);  //Straße
+        streetColor.put(15, Color.YELLOW);  //Straße
+        streetColor.put(16, Color.YELLOW);  //Straße
+        streetColor.put(17, Color.LIME);    //Straße
+        streetColor.put(18, Color.LIME);    //Straße
+        streetColor.put(19, Color.LIME);    //Straße
+        streetColor.put(20, Color.rgb(112, 40, 0));    //Straße
+        streetColor.put(21, Color.rgb(112, 40, 0));    //Straße
+        streetColor.put(22, Color.GRAY);    //Anlagen
+        streetColor.put(23, Color.BLACK);   //Bahnhöfe
+
+        game = new Scene(Spielfeld.buildGameScene(0, stageWidth, stageHeight, Color.GRAY, Color.rgb(204, 227, 199)), stageWidth, stageHeight, Color.BLACK);;
+        menu = new Scene(StartMenu.buildMenu(stageWidth, stageHeight), stageWidth, stageHeight, Color.BLACK);
+
         launch();
+
 
 
         Spieler sp = new Spieler(200, 2, "Paul", Figuren.BOOT);
