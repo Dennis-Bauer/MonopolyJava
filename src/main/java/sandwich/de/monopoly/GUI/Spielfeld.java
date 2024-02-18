@@ -8,7 +8,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -34,19 +33,17 @@ public class Spielfeld {
         Pane root = new Pane(buildGameBoard(gameBoardRotate, height, boardColor));
         root.setId("gameScreen_Root");
 
-        Rectangle background = Utilities.buildRectangle("gameScene_Background", width - height, height, backgroundColor, true, null, 0, height, 0);
+        Rectangle background = Utilities.buildRectangle("gameScene_Background", width - height, height, boardColor, true, null, 0, height, 0);
 
-        VBox displays = new VBox(height * 0.03);
+        VBox displays = new VBox(height * 0.02);
         final double displaysWidth = (width - height) / 1.1;
-        final double displaysHeight = (height / 3) / 1.3;
         displays.getChildren().addAll(
-                SpielerAnzeige.buildPlayerDisplay(displaysWidth, displaysHeight, Color.RED),
-                AktionAnzeige.buildActionDisplay(displaysWidth, displaysHeight, Color.BLUE),
-                TradingAnzeige.buildTradingDisplay(displaysWidth, displaysHeight, Color.GREEN)
+                SpielerAnzeige.buildPlayerDisplay(displaysWidth, height * 0.60, 2, Color.rgb(97, 220, 43)),
+                AktionAnzeige.buildActionDisplay(displaysWidth, height * 0.38, Color.rgb(56, 182, 255))
         );
 
         displays.setLayoutX(height + (((width - height) / 2) - ((width - height) / 1.1) / 2));
-        displays.setLayoutY(height * 0.03);
+        displays.setLayoutY(0);
 
         root.getChildren().addAll(background, displays);
         background.toBack();
@@ -165,7 +162,7 @@ public class Spielfeld {
         return root;
     }
 
-    private static Pane buildStreet(Paint streetColor, String name, double price, Paint backgroundColor, double width, double height) {
+    private static Pane buildStreet(Color streetColor, String name, double price, Color backgroundColor, double width, double height) {
         Pane field = new Pane();
         field.setId("street_field");
         field.setMaxSize(width, height);
@@ -183,7 +180,7 @@ public class Spielfeld {
         return field;
     }
 
-    private static Pane buildStart(Paint backgroundColor, double size) {
+    private static Pane buildStart(Color backgroundColor, double size) {
         Pane field = new Pane();
         field.setId("start_field");
         field.setMaxSize(size, size);
@@ -192,15 +189,15 @@ public class Spielfeld {
         ImageView arrow = Utilities.createImageView("corner_start_Arrow" ,"/sandwich/de/monopoly/gameBoard/startArrow.png", size / 6, size / 1.25, (size -(size / 1.25)) / 2, (size -(size / 1.25)) / 2);
         Label text = Utilities.buildLabel("corner_start_Text", Utilities.buildLongText("LOS", "Bekomme 200", "beim drüber gehen"), Font.font(textFont, FontWeight.BOLD, fontSize), TextAlignment.CENTER, Color.BLACK);
 
-        text.widthProperty().addListener((obs, oldVal, newVal) -> {text.setTranslateX((size - newVal.doubleValue()) / 0.8); });
-        text.heightProperty().addListener((obs, oldVal, newVal) -> {text.setTranslateY((newVal.doubleValue()) / 1.5); });
+        text.widthProperty().addListener((obs, oldVal, newVal) -> text.setTranslateX((size - newVal.doubleValue()) / 0.8));
+        text.heightProperty().addListener((obs, oldVal, newVal) -> text.setTranslateY((newVal.doubleValue()) / 1.5));
         text.setRotate(45);
 
         field.getChildren().addAll(background, arrow, text);
         return field;
     }
 
-    private static Pane buildJail(Paint backgroundColor, double size) {
+    private static Pane buildJail(Color backgroundColor, double size) {
         Pane field = new Pane();
         field.setId("jail_field");
         field.setMaxSize(size, size);
@@ -224,7 +221,7 @@ public class Spielfeld {
         return field;
     }
 
-    private static Pane buildFreeParking(Paint backgroundColor, double size) {
+    private static Pane buildFreeParking(Color backgroundColor, double size) {
         Pane field = new Pane();
         field.setId("freeParking_field");
         field.setMaxSize(size, size);
@@ -242,7 +239,7 @@ public class Spielfeld {
         return field;
     }
 
-    private static Pane buildGoToJail(Paint backgroundColor, double size) {
+    private static Pane buildGoToJail(Color backgroundColor, double size) {
         Pane field = new Pane();
         field.setId("goToJail_field");
         field.setMaxSize(size, size);
@@ -260,7 +257,7 @@ public class Spielfeld {
         return field;
     }
 
-    private static Pane buildStation(String stationName, double price, Paint backgroundColor ,double width, double height) {
+    private static Pane buildStation(String stationName, double price, Color backgroundColor ,double width, double height) {
         Pane field = new Pane();
         field.setId("station_field");
         field.setMaxSize(width, height);
@@ -278,7 +275,7 @@ public class Spielfeld {
         return field;
     }
 
-    private static Pane buildGetChanceCard(ChanceColors c, Paint backgroundColor ,double width, double height) {
+    private static Pane buildGetChanceCard(ChanceColors c, Color backgroundColor ,double width, double height) {
         Pane field = new Pane();
         field.setId("getChanceCard_field");
         field.setMaxSize(width, height);
@@ -305,7 +302,7 @@ public class Spielfeld {
         return field;
     }
 
-    private static Pane buildGetCommunityCard(Paint backgroundColor ,double width, double height) {
+    private static Pane buildGetCommunityCard(Color backgroundColor ,double width, double height) {
         Pane field = new Pane();
         field.setId("getCommunityCard_field");
         field.setMaxSize(width, height);
@@ -321,7 +318,7 @@ public class Spielfeld {
         return field;
     }
 
-	private static Pane buildExtraPayField(ExtraFields f, int price, Paint backgroundColor, double width, double height) {
+	private static Pane buildExtraPayField(ExtraFields f, int price, Color backgroundColor, double width, double height) {
         Pane field = new Pane();
         field.setId("extraPay_field");
         field.setMaxSize(width, height);
@@ -361,7 +358,7 @@ public class Spielfeld {
     private enum ChanceColors {
         RED,
         GREEN,
-        BLUE;
+        BLUE
     }
 }
 

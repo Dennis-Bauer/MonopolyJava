@@ -9,10 +9,10 @@ public class AktionAnzeige {
 
     public static Pane buildActionDisplay(double width, double height, Color backgroundColor) {
         Pane root = new Pane();
-        root.setId("gameScene_ActionDisplay");
+        root.setId("gameScene_TradingDisplay");
         root.setMaxSize(width, height);
 
-        Rectangle background = Utilities.buildRectangle("gameScene_actionDisplay_Background", width, height, backgroundColor, true, null, 0);
+        Rectangle background = Utilities.buildRectangle("gameScene_action_Background", width, height, backgroundColor, true, Color.WHITE, width * 0.006);
 
         root.getChildren().addAll(background);
 
