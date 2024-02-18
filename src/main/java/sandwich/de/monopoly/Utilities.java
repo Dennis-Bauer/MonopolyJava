@@ -43,7 +43,7 @@ public class Utilities {
      */
 
     //Rechteck Konstruktor (Achtung, falls Rechteck nicht angezeigt wird, auf isVisible achten!)
-    public static Rectangle buildRectangle(String id, double width, double height, Paint fill, boolean isVisible, Paint borderFill, double borderWidth) {
+    public static Rectangle buildRectangle(String id, double width, double height, Color fill, boolean isVisible, Color borderFill, double borderWidth) {
         Rectangle r = new Rectangle(width, height, fill);
         r.setId(id);
         r.setVisible(isVisible);
@@ -52,7 +52,7 @@ public class Utilities {
         return r;
     }
 
-    public static Rectangle buildRectangle(String id, double width, double height, Paint fill, boolean isVisible, Paint borderFill, double borderWidth, double x, double y) {
+    public static Rectangle buildRectangle(String id, double width, double height, Color fill, boolean isVisible, Color borderFill, double borderWidth, double x, double y) {
         Rectangle r = buildRectangle(id, width, height, fill, isVisible, borderFill, borderWidth);
         r.setX(x);
         r.setY(y);
@@ -60,7 +60,7 @@ public class Utilities {
     }
 
     //Kreis Konstruktor (Falls man denn Konstruktor verwendet, der die x und y Koordinate mit verändert, darauf achten das dieses in der MITTE des Kreises sind!)
-    public static Circle buildCircle(String id, double radius, Paint fill, boolean isVisible, Paint borderFill, double borderWidth) {
+    public static Circle buildCircle(String id, double radius, Color fill, boolean isVisible, Color borderFill, double borderWidth) {
         Circle c = new Circle(radius, fill);
         c.setId(id);
         c.setVisible(isVisible);
@@ -69,7 +69,7 @@ public class Utilities {
         return c;
     }
 
-    public static Circle buildCircle(String id, double radius, Paint fill, boolean isVisible, Paint borderFill, double borderWidth, double centerX, double centerY) {
+    public static Circle buildCircle(String id, double radius, Color fill, boolean isVisible, Color borderFill, double borderWidth, double centerX, double centerY) {
         Circle c = buildCircle(id, radius, fill, isVisible, borderFill, borderWidth);
         c.setCenterX(centerX);
         c.setCenterY(centerY);
@@ -77,7 +77,7 @@ public class Utilities {
     }
 
     //Dreieck Konstruktor (WICHTIG, das Dreieck hat kein Extra objekt, hier wird es durch die angegebenen Punkte gezeichnet
-    public static Polygon buildTriangle(String id, Point2D p1, Point2D p2, Point2D p3, Paint fill, Paint borderFill) {
+    public static Polygon buildTriangle(String id, Point2D p1, Point2D p2, Point2D p3, Color fill, Color borderFill) {
         Polygon triangle = new Polygon();
 
         triangle.setId(id);
@@ -88,13 +88,24 @@ public class Utilities {
         return triangle;
     }
 
-    public static Polygon buildTriangle(String id, Point2D p1, Point2D p2, Point2D p3, Paint fill, Paint borderFill, double x, double y) {
+    public static Polygon buildTriangle(String id, Point2D p1, Point2D p2, Point2D p3, Color fill, Color borderFill, double x, double y) {
         Polygon triangle = buildTriangle(id, p1, p2, p3, fill, borderFill);
 
         triangle.setLayoutX(x);
         triangle.setLayoutY(y);
 
         return triangle;
+    }
+
+    //Strich Konstruktor
+    public static Line buildLine(String id, Point2D startPoint, Point2D endPoint, double lineWidth, Color fill) {
+        Line line = new Line(startPoint.getX(), startPoint.getY(), endPoint.getX(), endPoint.getY());
+
+        line.setId(id);
+        line.setStrokeWidth(lineWidth);
+        line.setFill(fill);
+
+        return line;
     }
 
     /**
@@ -305,7 +316,7 @@ public class Utilities {
      */
 
     public static void moveObject(Node object, double durationSeconds, double toX, double toY, int cycles) {
-        ScaleTransition transition = new ScaleTransition(Duration.seconds(durationSeconds), object);
+        TranslateTransition transition = new TranslateTransition(Duration.seconds(durationSeconds), object);
         transition.setToX(toX); // Ziel-X-Position
         transition.setToY(toY); // Ziel-Y-Position
         transition.setCycleCount(cycles); // Animation X oft ausführen
