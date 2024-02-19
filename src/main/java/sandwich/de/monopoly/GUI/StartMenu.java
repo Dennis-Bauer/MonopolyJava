@@ -22,15 +22,30 @@ import sandwich.de.monopoly.Utilities;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class StartMenu {
 
-    public static Pane buildMenu(double width, double height) {
-        Pane root = new Pane();
-        root.setId("MenuPane");
-        root.setStyle("-fx-background-color: black;");
-        root.setMaxSize(width, height);
+public class StartMenu extends Pane{
 
-        //Menu Background und Überschrift werden erstellt
+    /*
+     *  Auf jeden fall noch änderungen vor nehmen!
+     *  Vieleicht auch dierekt eine Scene raus machen?
+     *
+     */
+
+    private final double width, height;
+
+    public StartMenu(double width, double height) {
+        this.width = width;
+        this.height = height;
+
+        buildBackground();
+        createPlayerBoxes();
+
+        setMaxSize(width, height);
+        setId("MenuPane");
+        setStyle("-fx-background-color: black;");
+    }
+
+    private void buildBackground() {
         ImageView background = Utilities.createImageView("menu_Background", "/sandwich/de/monopoly/menu/background.png", width, height, 0, 0);
         ImageView header = Utilities.createImageView("menu_Header", "/sandwich/de/monopoly/menu/header.png", width / 2.196, (width / 2.196) * 0.18, width / 2 - (width / 2.196) / 2, 0);
 
@@ -70,6 +85,16 @@ public class StartMenu {
         startButton.setOnMousePressed(event -> startButton.setImage(startButtonPressed));
         startButton.setOnMouseReleased(event -> startButton.setImage(startButtonHover));
 
+        startButton.setOnMouseClicked(event -> {
+
+
+            Main.changeScene(Main.scenes.GAME);
+        });
+
+        getChildren().addAll(background, header, clouds1, clouds2, startButton);
+    }
+
+    private void createPlayerBoxes() {
         //Koordinaten des Spielers in der Mitte werden berechnet und extra für die weiteren Rechnungen gespeichert
         final double middlePlayerWidth = width * 0.149;
         final double middlePlayerHeight = height * 0.6;
@@ -81,90 +106,57 @@ public class StartMenu {
         final Duration loopAnimationSpeed = Duration.seconds(2);
         final double loopTransitionSize = 0.04;
 
-        //Spieler Boxen werden erstellt
+        //Middle Player
         Pane middlePlayer = buildPlayerSelector(middlePlayerWidth, middlePlayerHeight, Color.rgb(126, 217, 87), middlePlayerX, middlePlayerY, 2);
         middlePlayer.setLayoutX(middlePlayerX);
         middlePlayer.setLayoutY(-middlePlayerHeight);
 
         //Start Transition
-        TranslateTransition middleStartTransition = new TranslateTransition(startAnimationLength, middlePlayer);
-        middleStartTransition.setToY(middlePlayerHeight + middlePlayerY);
-        middleStartTransition.setCycleCount(1);
+        TranslateTransition middleStartTransition = Utilities.moveAnimation(middlePlayer, startAnimationLength, middlePlayerHeight + middlePlayerY, 0, 1);
 
         //Loop Transition
-        ScaleTransition middleTransition = new ScaleTransition(loopAnimationSpeed, middlePlayer);
-        middleTransition.setByY(loopTransitionSize);
-        middleTransition.setByX(loopTransitionSize);
+        ScaleTransition middleTransition = Utilities.scaleAnimation(middlePlayer, loopAnimationSpeed, loopTransitionSize, loopTransitionSize, Animation.INDEFINITE);
         middleTransition.setAutoReverse(true);
-        middleTransition.setCycleCount(Animation.INDEFINITE);
 
+        //Left Player One
         Pane leftPlayerOne = buildPlayerSelector(middlePlayerWidth * 0.881, middlePlayerHeight * 0.881, Color.rgb(92, 225, 230), middlePlayerX * 0.533, middlePlayerY, 1);
         leftPlayerOne.setLayoutX(middlePlayerX * 0.533 - 2 * (middlePlayerWidth * 0.881));
         leftPlayerOne.setLayoutY(-(middlePlayerHeight * 0.881));
 
-        //Start Transition
-        TranslateTransition leftOnStartTransition = new TranslateTransition(startAnimationLength, leftPlayerOne);
-        leftOnStartTransition.setToY(middlePlayerHeight * 0.881 + middlePlayerY);
-        leftOnStartTransition.setToX(2 * (middlePlayerWidth * 0.881));
-        leftOnStartTransition.setCycleCount(1);
+        TranslateTransition leftOnStartTransition = Utilities.moveAnimation(leftPlayerOne, startAnimationLength, middlePlayerHeight * 0.881 + middlePlayerY, 2 * (middlePlayerWidth * 0.881), 1);
 
-        //Loop Transition
-        ScaleTransition leftOneTransition = new ScaleTransition(loopAnimationSpeed, leftPlayerOne);
-        leftOneTransition.setByY(loopTransitionSize);
-        leftOneTransition.setByX(loopTransitionSize);
+        ScaleTransition leftOneTransition = Utilities.scaleAnimation(leftPlayerOne, loopAnimationSpeed, loopTransitionSize, loopTransitionSize, Animation.INDEFINITE);
         leftOneTransition.setAutoReverse(true);
-        leftOneTransition.setCycleCount(Animation.INDEFINITE);
 
+        //Left Player Two
         Pane leftPlayerTwo = buildPlayerSelector(middlePlayerWidth * 0.756, middlePlayerHeight * 0.722, Color.rgb(217, 217, 217), middlePlayerX * 0.110, middlePlayerY, 3);
         leftPlayerTwo.setLayoutX(middlePlayerX * 0.110 - 2 * (middlePlayerWidth * 0.756));
         leftPlayerTwo.setLayoutY(-(middlePlayerHeight * 0.722));
 
-        //Start Transition
-        TranslateTransition leftTwoStartTransition = new TranslateTransition(startAnimationLength, leftPlayerTwo);
-        leftTwoStartTransition.setToY(middlePlayerHeight * 0.722 + middlePlayerY);
-        leftTwoStartTransition.setToX(2 * (middlePlayerWidth * 0.756));
-        leftTwoStartTransition.setCycleCount(1);
+        TranslateTransition leftTwoStartTransition = Utilities.moveAnimation(leftPlayerTwo, startAnimationLength, middlePlayerHeight * 0.722 + middlePlayerY, 2 * (middlePlayerWidth * 0.756), 1);
 
-        //Loop Transition
-        ScaleTransition leftTwoTransition = new ScaleTransition(loopAnimationSpeed, leftPlayerTwo);
-        leftTwoTransition.setByY(loopTransitionSize);
-        leftTwoTransition.setByX(loopTransitionSize);
+        ScaleTransition leftTwoTransition = Utilities.scaleAnimation(leftPlayerTwo, loopAnimationSpeed, loopTransitionSize, loopTransitionSize, Animation.INDEFINITE);
         leftTwoTransition.setAutoReverse(true);
-        leftTwoTransition.setCycleCount(Animation.INDEFINITE);
 
+        //Right Player One
         Pane rightPlayerOne = buildPlayerSelector(middlePlayerWidth * 0.881, middlePlayerHeight * 0.881, Color.rgb(92, 225, 230), middlePlayerX * 1.500, middlePlayerY, 1);
         rightPlayerOne.setLayoutX(middlePlayerX * 1.500 + 2 * (middlePlayerWidth * 0.881));
         rightPlayerOne.setLayoutY(-(middlePlayerHeight * 0.881));
 
-        //Start Transition
-        TranslateTransition rightOneStartTransition = new TranslateTransition(startAnimationLength, rightPlayerOne);
-        rightOneStartTransition.setToY(middlePlayerHeight * 0.881 + middlePlayerY);
-        rightOneStartTransition.setToX(2 * -(middlePlayerWidth * 0.881));
-        rightOneStartTransition.setCycleCount(1);
+        TranslateTransition rightOneStartTransition = Utilities.moveAnimation(rightPlayerOne, startAnimationLength, middlePlayerHeight * 0.881 + middlePlayerY, 2 * -(middlePlayerWidth * 0.881), 1);
 
-        //Loop Transition
-        ScaleTransition rightOneTransition = new ScaleTransition(loopAnimationSpeed, rightPlayerOne);
-        rightOneTransition.setByY(loopTransitionSize);
-        rightOneTransition.setByX(loopTransitionSize);
+        ScaleTransition rightOneTransition = Utilities.scaleAnimation(rightPlayerOne, loopAnimationSpeed, loopTransitionSize, loopTransitionSize, Animation.INDEFINITE);
         rightOneTransition.setAutoReverse(true);
-        rightOneTransition.setCycleCount(Animation.INDEFINITE);
 
+        //Right Player Two
         Pane rightPlayerTwo = buildPlayerSelector(middlePlayerWidth * 0.756, middlePlayerHeight * 0.722, Color.rgb(217, 217, 217), middlePlayerX * 1.968, middlePlayerY, 3);
         rightPlayerTwo.setLayoutX(middlePlayerX * 1.968 + 2 * (middlePlayerWidth * 0.756));
         rightPlayerTwo.setLayoutY(-(middlePlayerHeight * 0.722));
 
-        //Start Transition
-        TranslateTransition rightTwoStartTransition = new TranslateTransition(startAnimationLength, rightPlayerTwo);
-        rightTwoStartTransition.setToY(middlePlayerHeight * 0.722 + middlePlayerY);
-        rightTwoStartTransition.setToX(2 * -(middlePlayerWidth * 0.756));
-        rightTwoStartTransition.setCycleCount(1);
+        TranslateTransition rightTwoStartTransition = Utilities.moveAnimation(rightPlayerTwo, startAnimationLength, middlePlayerHeight * 0.722 + middlePlayerY, 2 * -(middlePlayerWidth * 0.756), 1);
 
-        //Loop Transition
-        ScaleTransition rightTwoTransition = new ScaleTransition(loopAnimationSpeed, rightPlayerTwo);
-        rightTwoTransition.setByY(loopTransitionSize);
-        rightTwoTransition.setByX(loopTransitionSize);
+        ScaleTransition rightTwoTransition = Utilities.scaleAnimation(rightPlayerTwo, loopAnimationSpeed, loopTransitionSize, loopTransitionSize, Animation.INDEFINITE);
         rightTwoTransition.setAutoReverse(true);
-        rightTwoTransition.setCycleCount(Animation.INDEFINITE);
 
         //Start Transitions
         middleStartTransition.play();
@@ -180,36 +172,20 @@ public class StartMenu {
         rightOneStartTransition.setOnFinished(event -> rightOneTransition.play());
         rightTwoStartTransition.setOnFinished(event -> rightTwoTransition.play());
 
-        //Alle objekte werden der Root hinzugefügt
-        root.getChildren().addAll(background, clouds1, clouds2, header, startButton, middlePlayer, leftPlayerOne, leftPlayerTwo, rightPlayerOne, rightPlayerTwo);
-
-        //Start
-        startButton.setOnMouseClicked(event -> {
-
-            middleTransition.stop();
-            leftOneTransition.stop();
-            leftTwoTransition.stop();
-            rightOneTransition.stop();
-            rightTwoTransition.stop();
-
-            Main.changeScene(Main.scenes.GAME);
-        });
-
-
-        return root;
+        getChildren().addAll(middlePlayer, leftPlayerOne, leftPlayerTwo, rightPlayerOne, rightPlayerTwo);
     }
 
-    private static Pane buildPlayerSelector(double width, double height, Color color, double x, double y, int arrowNumber) {
-        Pane root = new Pane();
-        root.setMaxSize(width, height + height * 0.046);
-        root.setId("menu_PlayerSelector");
+    private Pane buildPlayerSelector(double width, double height, Color color, double x, double y, int arrowNumber) {
+        Pane playerBox = new Pane();
+        playerBox.setMaxSize(width, height + height * 0.046);
+        playerBox.setId("menu_PlayerSelector");
 
         //Background
         Rectangle background = Utilities.buildRectangle("menu_playerSelector_Background", width, height, color, true, null, 0);
         Polygon backgroundBottom = Utilities.buildTriangle("menu_playerSelector_background_Bottom", new Point2D(x, y + height), new Point2D(x + width / 2, y + height + height * 0.071), new Point2D(x + width, y + height),color, null, -x, -y - 0.5);
         //Name label
         Label name = Utilities.buildLabel("menu_playerSelector_Name", "", new Font(Main.textFont, 100), TextAlignment.LEFT, Color.WHITE, 0, 0);
-        Utilities.centeringChildInPane(name, root);
+        Utilities.centeringChildInPane(name, playerBox);
 
         //Cancel Button
         StackPane cancelButton = new StackPane();
@@ -406,12 +382,12 @@ public class StartMenu {
         selectPlayerFigur.setLayoutY(height / 1.7);
 
 
-        root.getChildren().addAll(background, backgroundBottom, name, addButton, selectPlayerFigur, nameInputBox, arrowOne, arrowTwo, playerSymbol, cancelButton);
+        playerBox.getChildren().addAll(background, backgroundBottom, name, addButton, selectPlayerFigur, nameInputBox, arrowOne, arrowTwo, playerSymbol, cancelButton);
 
-        return root;
+        return playerBox;
     }
 
-    private static double calculateOptimalFontSize(String text, double availableWidth) {
+    private double calculateOptimalFontSize(String text, double availableWidth) {
         Label label = new Label(text);
         double fontSize = 40; // Standard-Schriftgröße
         label.setFont(new Font(fontSize));
@@ -424,7 +400,7 @@ public class StartMenu {
         return fontSize;
     }
 
-    private static ImageView buildArrow(int arrowNumber) {
+    private ImageView buildArrow(int arrowNumber) {
         switch (arrowNumber) {
             case 1 -> {
                 return Utilities.createImageView("selectFigureArrow", "/sandwich/de/monopoly/menu/blue_arrow.png", 0, 0);
@@ -441,7 +417,7 @@ public class StartMenu {
         }
     }
 
-    private static int setFigurePosition(boolean plus, int position) {
+    private int setFigurePosition(boolean plus, int position) {
         if (plus) {
             if (position + 1 < Main.playerFigures.length)
                 return position + 1;

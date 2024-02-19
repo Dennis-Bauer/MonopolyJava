@@ -71,14 +71,12 @@ public class Main extends Application {
         streetColor.put(22, Color.GRAY);    //Anlagen
         streetColor.put(23, Color.BLACK);   //Bahnhöfe
 
-        game = new Scene(Spielfeld.buildGameScene(0, stageWidth, stageHeight, Color.GRAY, Color.rgb(204, 227, 199)), stageWidth, stageHeight, Color.BLACK);;
-        menu = new Scene(StartMenu.buildMenu(stageWidth, stageHeight), stageWidth, stageHeight, Color.BLACK);
+        Spielfeld gameRoot = new Spielfeld(0, stageWidth, stageHeight, Color.rgb(204, 227, 199));
+        game = new Scene(gameRoot, stageWidth, stageHeight, Color.BLACK);
+        StartMenu menuRoot = new StartMenu(stageWidth, stageHeight);
+        menu = new Scene(menuRoot, stageWidth, stageHeight, Color.BLACK);
 
         launch();
-
-
-
-        Spieler sp = new Spieler(200, 2, "Paul", Figuren.BOOT);
 
 
     }

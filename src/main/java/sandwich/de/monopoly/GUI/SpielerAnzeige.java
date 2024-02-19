@@ -3,6 +3,7 @@ package sandwich.de.monopoly.GUI;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
@@ -20,22 +21,21 @@ import sandwich.de.monopoly.Utilities;
  */
 
 
-public class SpielerAnzeige {
+public class SpielerAnzeige extends Pane{
 
-    private static double borderWidth;
+    private final double borderWidth;
 
-    public static Pane buildPlayerDisplay(double width, double height, int playerAmount, Color backgroundColor) {
-        Pane root = new Pane();
-        root.setId("gameScene_PlayerDisplay");
-        root.setMaxSize(width, height);
+    public SpielerAnzeige(double width, double height, int playerAmount, Color backgroundColor) {
+        setId("gameScene_PlayerDisplay");
+        setMaxSize(width, height);
         borderWidth = width * 0.005;
 
         Rectangle background = Utilities.buildRectangle("gameScene_playerDisplay_Background", width, height, backgroundColor, true, Color.WHITE, borderWidth);
         Label header = Utilities.buildLabel("gameScene_playerDisplay_Header", "Spieler", Font.font(Main.textFont, FontWeight.BOLD, width / 15), TextAlignment.CENTER, Color.WHITE);
 
-        Utilities.centeringChildInPane(header, root);
+        Utilities.centeringChildInPane(header, this);
 
-        root.getChildren().addAll(background, header);
+        getChildren().addAll(background, header);
 
         final double playerBoxWidth = width * 0.225;
         final double playerBoxHeight = height * 0.40;
@@ -62,7 +62,7 @@ public class SpielerAnzeige {
                 playerFive.setLayoutX((width / 2) + width * 0.025);
                 playerFive.setLayoutY(width * 0.10 + playerBoxHeight + height * 0.025);
 
-                root.getChildren().addAll(playerOne, playerTwo, playerThree, playerFour, playerFive);
+                getChildren().addAll(playerOne, playerTwo, playerThree, playerFour, playerFive);
             } else if (playerAmount == 4) {
                 Pane playerOne = buildPlayer(playerBoxWidth, playerBoxHeight, Color.rgb(33, 203, 85), "Sandwich898", 2000);
                 playerOne.setLayoutX((width / 2 - playerBoxWidth) - width * 0.0125);
@@ -80,7 +80,7 @@ public class SpielerAnzeige {
                 playerFour.setLayoutX((width / 2) + width * 0.0125);
                 playerFour.setLayoutY(width * 0.10 + playerBoxHeight +  width * 0.025);
 
-                root.getChildren().addAll(playerOne, playerTwo, playerThree, playerFour);
+                getChildren().addAll(playerOne, playerTwo, playerThree, playerFour);
             } else if (playerAmount == 3) {
                 final double bigger = 1.3;
                 Pane playerOne = buildPlayer(playerBoxWidth * bigger, playerBoxHeight * bigger, Color.rgb(33, 203, 85), "Sandwich898", 2000);
@@ -95,7 +95,7 @@ public class SpielerAnzeige {
                 playerThree.setLayoutX(((width / 2) - ((playerBoxWidth * bigger) / 2)) + (playerBoxWidth * bigger) + width * 0.025);
                 playerThree.setLayoutY(height * 0.03);
 
-                root.getChildren().addAll(playerOne, playerTwo, playerThree);
+                getChildren().addAll(playerOne, playerTwo, playerThree);
             } else if (playerAmount == 2) {
                 final double bigger = 1.7;
                 Pane playerOne = buildPlayer(playerBoxWidth * bigger, playerBoxHeight * bigger, Color.rgb(33, 203, 85), "Sandwich898", 2000);
@@ -103,7 +103,7 @@ public class SpielerAnzeige {
                 playerOne.setLayoutY(height * 0.20);
 
                 Label vs = Utilities.buildLabel("gameScene_playerDisplay_playerBoxes_VS", "VS", Font.font(Main.textFont, FontWeight.BOLD, width / 10), TextAlignment.CENTER, Color.WHITE);
-                Utilities.centeringChildInPane(vs, root);
+                Utilities.centeringChildInPane(vs, this);
                 vs.setLayoutY(height * 0.375);
 
                 Pane playerTwo = buildPlayer(playerBoxWidth * bigger, playerBoxHeight * bigger, Color.rgb(255, 49, 49), "NAME", 1730);
@@ -111,14 +111,13 @@ public class SpielerAnzeige {
                 playerTwo.setLayoutY(height * 0.20);
 
 
-                root.getChildren().addAll(playerOne, vs, playerTwo);
+                getChildren().addAll(playerOne, vs, playerTwo);
             } else throw new RuntimeException("Too many/little Players");
         } else throw new RuntimeException("Too many Players");
 
-        return root;
     }
 
-    private static Pane buildPlayer(double width, double height, Color backgroundColor, String playerName, int playerKontoStand) {
+    private Pane buildPlayer(double width, double height, Color backgroundColor, String playerName, int playerKontoStand) {
         Pane playerShowBox = new Pane();
         playerShowBox.setId("gameScene_playerDisplay_PlayerBox");
         playerShowBox.setMaxSize(width, height);
@@ -135,23 +134,35 @@ public class SpielerAnzeige {
 
         Line accountBalanceSeparatingline = Utilities.buildLine("gameScene_playerDisplay_playerBox_AccountBalanceSeparatingLine", new Point2D(0, height * 0.30), new Point2D(width, height * 0.30), borderWidth, Color.WHITE);
 
+        StackPane tradingButton = new StackPane();
+
+        Rectangle tradingButtonBackground = Utilities.buildRectangle("gameScene_playerDisplay_tradingStartButton_Background", width * 0.36, height * 0.09, backgroundColor.desaturate(), true, Color.WHITE, width * 0.015);
+        tradingButtonBackground.setArcHeight(width * 0.12);
+        tradingButtonBackground.setArcWidth(width * 0.12);
+
+        Label tradingButtonLabel = Utilities.buildLabel("gameScene_playerDisplay_tradingStartButton_Label", "Trading", Font.font(Main.textFont,  FontWeight.BOLD, width * 0.08), TextAlignment.CENTER, Color.WHITE);
+
+        tradingButton.getChildren().setAll(tradingButtonBackground, tradingButtonLabel);
+        tradingButton.setLayoutY(height * 0.40);
+        tradingButton.setLayoutX(width * 0.32);
+
         Rectangle[] streets = buildStreetInventar(width, height);
 
-        playerShowBox.getChildren().addAll( background, headerName, headerSeparatingline, displayAccountBalance, accountBalanceSeparatingline);
+        playerShowBox.getChildren().addAll( background, headerName, headerSeparatingline, displayAccountBalance, accountBalanceSeparatingline, tradingButton);
 
         for (Rectangle street : streets) {playerShowBox.getChildren().addAll(street);}
 
         return playerShowBox;
     }
 
-    private static Rectangle[] buildStreetInventar(double w, double h) {
+    private Rectangle[] buildStreetInventar(double w, double h) {
         Rectangle[] streets = new Rectangle[28];
 
 
         final double space = w * 0.04;
         final double width = w * 0.08;
         final double height = h * 0.10;
-        final double startY = h * 0.4;
+        final double startY = h * 0.40;
         final double startX = w * 0.04;
         for (int i = 0; i < streets.length; i++) {
             streets[i] = Utilities.buildRectangle("gameScene_playerDisplay_playerBox_playerInventar_Street" + i, width, height, Color.LIGHTGRAY, true, Color.WHITE, borderWidth / 2);
@@ -214,5 +225,8 @@ public class SpielerAnzeige {
         return streets;
     }
 
+    private Pane buildTradingMenu(double width, double height) {
+         return null;
+    }
 
 }

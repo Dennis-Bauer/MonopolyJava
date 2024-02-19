@@ -21,96 +21,107 @@ import java.util.Objects;
 import static sandwich.de.monopoly.Main.textFont;
 
 
-public class Spielfeld {
+public class Spielfeld extends Pane{
 
-    private static final Pane[] fields = new Pane[36];
-    private static final Pane[] corners = new Pane[4];
-    private static final double middleRectangleRatio = 1.4;
-    private static double fontSize;
-    private static double borderWidth;
+    private final Pane[] fields = new Pane[36];
+    private final Pane[] corners = new Pane[4];
+    private final Pane board;
+    private final double middleRectangleRatio = 1.4;
+    private final double fontSize, borderWidth;
+    private final Color color;
 
-    public static Pane buildGameScene(double gameBoardRotate, double width, double height, Color backgroundColor, Color boardColor) {
-        Pane root = new Pane(buildGameBoard(gameBoardRotate, height, boardColor));
-        root.setId("gameScreen_Root");
+    public Spielfeld(double gameBoardRotate, double width, double height, Color backgroundColor) {
 
-        Rectangle background = Utilities.buildRectangle("gameScene_Background", width - height, height, boardColor, true, null, 0, height, 0);
+        this.color = backgroundColor;
+
+        fontSize = ((height / middleRectangleRatio) / 9) / 8;
+        borderWidth = ((height / middleRectangleRatio) / 9) / 25;
+
+        setId("gameScreen_Root");
+
+        board = buildGameBoard(height, gameBoardRotate);
+        getChildren().add(board);
+
+        Rectangle background = Utilities.buildRectangle("gameScene_Background", width - height, height, backgroundColor, true, null, 0, height, 0);
 
         VBox displays = new VBox(height * 0.02);
-        final double displaysWidth = (width - height) / 1.1;
-        displays.getChildren().addAll(
-                SpielerAnzeige.buildPlayerDisplay(displaysWidth, height * 0.60, 2, Color.rgb(97, 220, 43)),
-                AktionAnzeige.buildActionDisplay(displaysWidth, height * 0.38, Color.rgb(56, 182, 255))
-        );
 
+        final double displaysWidth = (width - height) / 1.1;
+        SpielerAnzeige playerDisplay = new SpielerAnzeige(displaysWidth, height * 0.60, 5, Color.rgb(97, 220, 43));
+        AktionAnzeige actionDisplay = new AktionAnzeige(displaysWidth, height * 0.38, Color.rgb(56, 182, 255));
+
+        displays.getChildren().addAll(playerDisplay, actionDisplay);
         displays.setLayoutX(height + (((width - height) / 2) - ((width - height) / 1.1) / 2));
         displays.setLayoutY(0);
 
-        root.getChildren().addAll(background, displays);
+        getChildren().addAll(background, displays);
         background.toBack();
-
-        return root;
+        board.toFront();
     }
 
-    public static Pane buildGameBoard(double rotate, double size, Color boardColor) {
+
+    public void rotateGameBoard(double rotate) {
+        board.setRotate(rotate);
+    }
+
+    private Pane buildGameBoard(double size, double rotate) {
         Pane root = new Pane();
         root.setId("gameBoard_Root");
         StackPane board = new StackPane();
         board.setId("gameBoard");
         board.setAlignment(Pos.CENTER);
-        fontSize = ((size / middleRectangleRatio) / 9) / 8;
-        borderWidth = ((size / middleRectangleRatio) / 9) / 25;
 
         //Black Field
         Rectangle f = Utilities.buildRectangle("Test" ,size, size, Color.BLACK, true, Color.BLACK, 0);
-        Rectangle v = Utilities.buildRectangle("Test" ,size / middleRectangleRatio, size/ middleRectangleRatio, boardColor, true, Color.BLACK, 0);
+        Rectangle v = Utilities.buildRectangle("Test" ,size / middleRectangleRatio, size/ middleRectangleRatio, color, true, Color.BLACK, 0);
 
         board.getChildren().addAll(f, v);
 
         //Creating Fields
         double width = (size / middleRectangleRatio) / 9;
         double height = (size - size / middleRectangleRatio) / 2;
-        fields[0] = buildStreet(Main.streetColor.get(0).brighter(), Utilities.buildLongText("Bank", "Straße 00"), 200, boardColor, width, height);
-        fields[1] = buildExtraPayField(ExtraFields.SPOTIFY_PREMIUM, 200, boardColor, width, height);
-        fields[2] = buildStreet(Main.streetColor.get(1), Utilities.buildLongText("Bank", "Straße 02"), 200, boardColor, width, height);
-        fields[3] = buildGetChanceCard(ChanceColors.RED ,boardColor, width, height);
-        fields[4] = buildStation(Utilities.buildLongText("Nord-", "Bahnhof"), 200, boardColor, width, height);
-        fields[5] = buildStreet(Main.streetColor.get(2), Utilities.buildLongText("Bank", "Straße 05"), 200, boardColor, width, height);
-        fields[6] = buildGetCommunityCard(boardColor, width, height);
-        fields[7] = buildStreet(Main.streetColor.get(3), Utilities.buildLongText("Bank", "Straße 07"), 200, boardColor, width, height);
-        fields[8] = buildStreet(Main.streetColor.get(4), Utilities.buildLongText("Bank", "Straße 08"), 200, boardColor, width, height);
-        fields[9] = buildStreet(Main.streetColor.get(5), Utilities.buildLongText("Bank", "Straße 09"), 200, boardColor, width, height);
-        fields[10] = buildExtraPayField(ExtraFields.HESSLER_SCHULDEN, 200, boardColor, width, height);
-        fields[11] = buildStreet(Main.streetColor.get(6), Utilities.buildLongText("Bank", "Straße 11"), 200, boardColor, width, height);
-        fields[12] = buildStreet(Main.streetColor.get(7), Utilities.buildLongText("Bank", "Straße 12"), 200, boardColor, width, height);
-        fields[13] = buildStation(Utilities.buildLongText("West-", "Bahnhof"), 200, boardColor, width, height);
-        fields[14] = buildStreet(Main.streetColor.get(8), Utilities.buildLongText("Bank", "Straße 13"), 200, boardColor, width, height);
-        fields[15] = buildStreet(Main.streetColor.get(9), Utilities.buildLongText("Bank", "Straße 15"), 200, boardColor, width, height);
-        fields[16] = buildGetChanceCard(ChanceColors.BLUE, boardColor, width, height);
-        fields[17] = buildStreet(Main.streetColor.get(10), Utilities.buildLongText("Bank", "Straße 17"), 200, boardColor, width, height);
-        fields[18] = buildStreet(Main.streetColor.get(11), Utilities.buildLongText("Bank", "Straße 18"), 200, boardColor, width, height);
-        fields[19] = buildStreet(Main.streetColor.get(12), Utilities.buildLongText("Bank", "Straße 19"), 200, boardColor, width, height);
-        fields[20] = buildGetCommunityCard(boardColor, width, height);
-        fields[21] = buildStreet(Main.streetColor.get(13), Utilities.buildLongText("Bank", "Straße 21"), 200, boardColor, width, height);
-        fields[22] = buildStation(Utilities.buildLongText("Süd-", "Bahnhof"), 200, boardColor, width, height);
-        fields[23] = buildStreet(Main.streetColor.get(14), Utilities.buildLongText("Bank", "Straße 23"), 200, boardColor, width, height);
-        fields[24] = buildStreet(Main.streetColor.get(15), Utilities.buildLongText("Bank", "Straße 24"), 200, boardColor, width, height);
-        fields[25] = buildExtraPayField(ExtraFields.NAME_THREE, 200, boardColor, width, height);
-        fields[26] = buildStreet(Main.streetColor.get(16), Utilities.buildLongText("Bank", "Straße 26"), 200, boardColor, width, height);
-        fields[27] = buildStreet(Main.streetColor.get(17), Utilities.buildLongText("Bank", "Straße 27"), 200, boardColor, width, height);
-        fields[28] = buildStreet(Main.streetColor.get(18), Utilities.buildLongText("Bank", "Straße 28"), 200, boardColor, width, height);
-        fields[29] = buildGetChanceCard(ChanceColors.GREEN, boardColor, width, height);
-        fields[30] = buildStreet(Main.streetColor.get(19), Utilities.buildLongText("Bank", "Straße 30"), 200, boardColor, width, height);
-        fields[31] = buildStation(Utilities.buildLongText("Haupt-", "Bahnhof"), 200, boardColor, width, height);
-        fields[32] = buildExtraPayField(ExtraFields.NAME_FOUR, 200, boardColor, width, height);
-        fields[33] = buildStreet(Main.streetColor.get(20), Utilities.buildLongText("Bank", "Straße 33"), 200, boardColor, width, height);
-        fields[34] = buildGetCommunityCard(boardColor, width, height);
-        fields[35] = buildStreet(Main.streetColor.get(21), Utilities.buildLongText("Bank", "Straße 35"), 200, boardColor, width, height);
+        fields[0] = buildStreet(Main.streetColor.get(0).brighter(), Utilities.buildLongText("Bank", "Straße 00"), 200, color, width, height);
+        fields[1] = buildExtraPayField(ExtraFields.SPOTIFY_PREMIUM, 200, color, width, height);
+        fields[2] = buildStreet(Main.streetColor.get(1), Utilities.buildLongText("Bank", "Straße 02"), 200, color, width, height);
+        fields[3] = buildGetChanceCard(ChanceColors.RED ,color, width, height);
+        fields[4] = buildStation(Utilities.buildLongText("Nord-", "Bahnhof"), 200, color, width, height);
+        fields[5] = buildStreet(Main.streetColor.get(2), Utilities.buildLongText("Bank", "Straße 05"), 200, color, width, height);
+        fields[6] = buildGetCommunityCard(color, width, height);
+        fields[7] = buildStreet(Main.streetColor.get(3), Utilities.buildLongText("Bank", "Straße 07"), 200, color, width, height);
+        fields[8] = buildStreet(Main.streetColor.get(4), Utilities.buildLongText("Bank", "Straße 08"), 200, color, width, height);
+        fields[9] = buildStreet(Main.streetColor.get(5), Utilities.buildLongText("Bank", "Straße 09"), 200, color, width, height);
+        fields[10] = buildExtraPayField(ExtraFields.HESSLER_SCHULDEN, 200, color, width, height);
+        fields[11] = buildStreet(Main.streetColor.get(6), Utilities.buildLongText("Bank", "Straße 11"), 200, color, width, height);
+        fields[12] = buildStreet(Main.streetColor.get(7), Utilities.buildLongText("Bank", "Straße 12"), 200, color, width, height);
+        fields[13] = buildStation(Utilities.buildLongText("West-", "Bahnhof"), 200, color, width, height);
+        fields[14] = buildStreet(Main.streetColor.get(8), Utilities.buildLongText("Bank", "Straße 13"), 200, color, width, height);
+        fields[15] = buildStreet(Main.streetColor.get(9), Utilities.buildLongText("Bank", "Straße 15"), 200, color, width, height);
+        fields[16] = buildGetChanceCard(ChanceColors.BLUE, color, width, height);
+        fields[17] = buildStreet(Main.streetColor.get(10), Utilities.buildLongText("Bank", "Straße 17"), 200, color, width, height);
+        fields[18] = buildStreet(Main.streetColor.get(11), Utilities.buildLongText("Bank", "Straße 18"), 200, color, width, height);
+        fields[19] = buildStreet(Main.streetColor.get(12), Utilities.buildLongText("Bank", "Straße 19"), 200, color, width, height);
+        fields[20] = buildGetCommunityCard(color, width, height);
+        fields[21] = buildStreet(Main.streetColor.get(13), Utilities.buildLongText("Bank", "Straße 21"), 200, color, width, height);
+        fields[22] = buildStation(Utilities.buildLongText("Süd-", "Bahnhof"), 200, color, width, height);
+        fields[23] = buildStreet(Main.streetColor.get(14), Utilities.buildLongText("Bank", "Straße 23"), 200, color, width, height);
+        fields[24] = buildStreet(Main.streetColor.get(15), Utilities.buildLongText("Bank", "Straße 24"), 200, color, width, height);
+        fields[25] = buildExtraPayField(ExtraFields.NAME_THREE, 200, color, width, height);
+        fields[26] = buildStreet(Main.streetColor.get(16), Utilities.buildLongText("Bank", "Straße 26"), 200, color, width, height);
+        fields[27] = buildStreet(Main.streetColor.get(17), Utilities.buildLongText("Bank", "Straße 27"), 200, color, width, height);
+        fields[28] = buildStreet(Main.streetColor.get(18), Utilities.buildLongText("Bank", "Straße 28"), 200, color, width, height);
+        fields[29] = buildGetChanceCard(ChanceColors.GREEN, color, width, height);
+        fields[30] = buildStreet(Main.streetColor.get(19), Utilities.buildLongText("Bank", "Straße 30"), 200, color, width, height);
+        fields[31] = buildStation(Utilities.buildLongText("Haupt-", "Bahnhof"), 200, color, width, height);
+        fields[32] = buildExtraPayField(ExtraFields.NAME_FOUR, 200, color, width, height);
+        fields[33] = buildStreet(Main.streetColor.get(20), Utilities.buildLongText("Bank", "Straße 33"), 200, color, width, height);
+        fields[34] = buildGetCommunityCard(color, width, height);
+        fields[35] = buildStreet(Main.streetColor.get(21), Utilities.buildLongText("Bank", "Straße 35"), 200, color, width, height);
 
         //Creating Corners
-        corners[0] = buildStart(boardColor, height);
-        corners[1] = buildJail(boardColor, height);
-        corners[2] = buildFreeParking(boardColor, height);
-        corners[3] = buildGoToJail(boardColor, height);
+        corners[0] = buildStart(color, height);
+        corners[1] = buildJail(color, height);
+        corners[2] = buildFreeParking(color, height);
+        corners[3] = buildGoToJail(color, height);
 
 
         //Position fields
@@ -162,7 +173,7 @@ public class Spielfeld {
         return root;
     }
 
-    private static Pane buildStreet(Color streetColor, String name, double price, Color backgroundColor, double width, double height) {
+    private Pane buildStreet(Color streetColor, String name, double price, Color backgroundColor, double width, double height) {
         Pane field = new Pane();
         field.setId("street_field");
         field.setMaxSize(width, height);
@@ -180,7 +191,7 @@ public class Spielfeld {
         return field;
     }
 
-    private static Pane buildStart(Color backgroundColor, double size) {
+    private Pane buildStart(Color backgroundColor, double size) {
         Pane field = new Pane();
         field.setId("start_field");
         field.setMaxSize(size, size);
@@ -197,7 +208,7 @@ public class Spielfeld {
         return field;
     }
 
-    private static Pane buildJail(Color backgroundColor, double size) {
+    private Pane buildJail(Color backgroundColor, double size) {
         Pane field = new Pane();
         field.setId("jail_field");
         field.setMaxSize(size, size);
@@ -221,7 +232,7 @@ public class Spielfeld {
         return field;
     }
 
-    private static Pane buildFreeParking(Color backgroundColor, double size) {
+    private Pane buildFreeParking(Color backgroundColor, double size) {
         Pane field = new Pane();
         field.setId("freeParking_field");
         field.setMaxSize(size, size);
@@ -239,7 +250,7 @@ public class Spielfeld {
         return field;
     }
 
-    private static Pane buildGoToJail(Color backgroundColor, double size) {
+    private Pane buildGoToJail(Color backgroundColor, double size) {
         Pane field = new Pane();
         field.setId("goToJail_field");
         field.setMaxSize(size, size);
@@ -257,7 +268,7 @@ public class Spielfeld {
         return field;
     }
 
-    private static Pane buildStation(String stationName, double price, Color backgroundColor ,double width, double height) {
+    private Pane buildStation(String stationName, double price, Color backgroundColor ,double width, double height) {
         Pane field = new Pane();
         field.setId("station_field");
         field.setMaxSize(width, height);
@@ -275,7 +286,7 @@ public class Spielfeld {
         return field;
     }
 
-    private static Pane buildGetChanceCard(ChanceColors c, Color backgroundColor ,double width, double height) {
+    private Pane buildGetChanceCard(ChanceColors c, Color backgroundColor ,double width, double height) {
         Pane field = new Pane();
         field.setId("getChanceCard_field");
         field.setMaxSize(width, height);
@@ -302,7 +313,7 @@ public class Spielfeld {
         return field;
     }
 
-    private static Pane buildGetCommunityCard(Color backgroundColor ,double width, double height) {
+    private Pane buildGetCommunityCard(Color backgroundColor ,double width, double height) {
         Pane field = new Pane();
         field.setId("getCommunityCard_field");
         field.setMaxSize(width, height);
@@ -318,7 +329,7 @@ public class Spielfeld {
         return field;
     }
 
-	private static Pane buildExtraPayField(ExtraFields f, int price, Color backgroundColor, double width, double height) {
+	private Pane buildExtraPayField(ExtraFields f, int price, Color backgroundColor, double width, double height) {
         Pane field = new Pane();
         field.setId("extraPay_field");
         field.setMaxSize(width, height);
