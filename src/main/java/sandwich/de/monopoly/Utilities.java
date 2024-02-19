@@ -261,6 +261,30 @@ public class Utilities {
         child.layoutXProperty().bind(pane.widthProperty().subtract(child.widthProperty()).divide(2));
     } //(KEIN OFFICIALESE KOMMENTAR) Achtung, klappt nicht bei Formen oder anderes was nicht der Control Klasse erbt, vielleicht ändern
 
+    //Achtung änderung: Man sollte auch mit geben was für ein Typ das Object hat mit <>
+    public static Object getNodeOutAPane(String id, Pane root) {
+
+        Stack<Pane> panes = new Stack<>();
+        panes.push(root);
+
+        while (!panes.isEmpty()) {
+            Pane p = panes.pop();
+            for (Object c: p.getChildren().toArray()) {
+                if (c instanceof Node) {
+                    if(((Node) c).getId() != null) {
+                        if (((Node) c).getId().equals(id))
+                            return c;
+                    }
+                    if (c instanceof Pane) {
+                        panes.push((Pane) c);
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
     //Java FX Images (sourcePath start's add the Resources direction. Example: /pictures/menu/heading.png)
     public static ImageView createImageView(String id, Image image, double postionX, double postionY) {
         if (image != null) {
