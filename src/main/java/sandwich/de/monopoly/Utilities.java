@@ -14,8 +14,10 @@ import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Stack;
 
 //Don't forget: Update changes in Cloud
 public class Utilities {
@@ -313,13 +315,24 @@ public class Utilities {
      *  <p>SequentialTransition: Ermöglicht das Ausführen von Transitionen nacheinander.</p>
      */
 
-    public static void moveObject(Node object, double durationSeconds, double toX, double toY, int cycles) {
-        TranslateTransition transition = new TranslateTransition(Duration.seconds(durationSeconds), object);
-        transition.setToX(toX); // Ziel-X-Position
-        transition.setToY(toY); // Ziel-Y-Position
-        transition.setCycleCount(cycles); // Animation X oft ausführen
 
-        transition.play();
+    public static TranslateTransition moveAnimation(Node object, Duration length, double toY, double toX, int cycleCount) {
+        TranslateTransition transition = new TranslateTransition(length, object);
+
+        transition.setToY(toY);
+        transition.setToX(toX);
+        transition.setCycleCount(cycleCount);
+
+        return transition;
+    }
+    public static ScaleTransition scaleAnimation(Node object, Duration length, double byY, double byX, int cycleCount) {
+        ScaleTransition transition = new ScaleTransition(length, object);
+
+        transition.setByY(byY);
+        transition.setByX(byX);
+
+
+        return transition;
     }
 
 
