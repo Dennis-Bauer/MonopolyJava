@@ -1,11 +1,14 @@
 package sandwich.de.monopoly.GUI;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -296,21 +299,91 @@ public class SpielerAnzeige extends Pane{
     }
 
     private Pane buildTradingMenu(/*Später werden hier die beiden Spieler übergeben*/) {
+
+        //Farben der Buttons und des Pfeiles werden vom Spieler her gegeben, Rafa fragen
+
         Pane tradingMenu = new Pane();
         tradingMenu.setId("gameScene_playerDisplay_TradingMenu");
 
         Label header = Utilities.buildLabel("gameScene_playerDisplay_tradingMenu_Header", "Trading", Font.font(Main.textFont, FontWeight.BOLD, width / 15), TextAlignment.CENTER, Color.WHITE);
         Utilities.centeringChildInPane(header, this);
 
-        Pane playerTradeBoxOne = buildPlayerTradeBox((width * 0.18) * 1.7, (height * 0.355) * 1.7, Color.AQUA, "NAME", 2000);
-        playerTradeBoxOne.setLayoutX(width / 2 - ((width * 0.18) * 1.7) - width * 0.18);
+        Pane playerTradeBoxOne = buildPlayerTradeBox(width * 0.306, height * 0.6035, Color.rgb(255, 49, 49), "NAME", 2000);
+        playerTradeBoxOne.setLayoutX(width / 2 - width * 0.306 - width * 0.18);
         playerTradeBoxOne.setLayoutY(height * 0.20);
 
-        Pane playerTradeBoxTwo = buildPlayerTradeBox((width * 0.18) * 1.7, (height * 0.355) * 1.7, Color.AQUA, "NAME", 2000);
+
+        Pane playerTradeBoxTwo = buildPlayerTradeBox(width * 0.306, height * 0.6035, Color.rgb( 255, 97, 0), "NAME", 2000);
         playerTradeBoxTwo.setLayoutX(width / 2 + width * 0.18);
         playerTradeBoxTwo.setLayoutY(height * 0.20);
 
-        tradingMenu.getChildren().addAll(header, playerTradeBoxOne, playerTradeBoxTwo);
+        HBox arrow = new HBox(-1);
+
+        Color arrowColor = Color.RED;
+        Polygon arrowLeftTop = Utilities.buildTriangle("gameScene_playerDisplay_tradingMenu_arrow_LeftTop", new Point2D(width * 0.005, 0), new Point2D(width * 0.065, height * 0.05), new Point2D(width * 0.065, -(height * 0.05)), arrowColor, null);
+        Rectangle arrowMiddlePart = Utilities.buildRectangle("gameScene_playerDisplay_tradingMenu_arrow_MiddlePart", width * 0.23, height * 0.05, arrowColor, true, null, 0);
+        Polygon arrowRightTop = Utilities.buildTriangle("gameScene_playerDisplay_tradingMenu_arrow_RightTop", new Point2D( width * 0.295 + width * 0.065 - width * 0.005, 0), new Point2D(width * 0.295, height * 0.05), new Point2D(width * 0.295, -(height * 0.05)), arrowColor, null);
+
+        HBox.setMargin(arrowMiddlePart, new Insets(height * 0.025, 0, 0, 0));
+
+        arrow.getChildren().addAll(arrowLeftTop, arrowMiddlePart, arrowRightTop);
+        arrow.setLayoutX(width * 0.32 + width * 0.005);
+        arrow.setLayoutY(height * 0.15 + (height * 0.6035) / 2);
+
+        //Left Buttons
+        StackPane leftConfirmButton = new StackPane();
+
+        //Left Confirm
+        Rectangle backgroundLeftConfirmButton = Utilities.buildRectangle("gameScene_playerDisplay_tradingMenu_leftConfirmButton_Background", (width * 0.306) * 0.35, height * 0.075, arrowColor, true, Color.WHITE, width * 0.005);
+        backgroundLeftConfirmButton.setArcWidth(backgroundLeftConfirmButton.getHeight());
+        backgroundLeftConfirmButton.setArcHeight(backgroundLeftConfirmButton.getHeight());
+
+        Label leftConfirmButtonLabel = Utilities.buildLabel("gameScene_playerDisplay_tradingMenu_leftConfirmButton_Label", "Fertig", Font.font(Main.textFont, FontWeight.BOLD, width * 0.025), TextAlignment.CENTER, Color.WHITE);
+
+        leftConfirmButton.getChildren().addAll(backgroundLeftConfirmButton, leftConfirmButtonLabel);
+        leftConfirmButton.setLayoutX(width / 2 + width * 0.18);
+        leftConfirmButton.setLayoutY(height * 0.825);
+
+        //Left Cancel
+        StackPane leftCancelButton = new StackPane();
+
+        Rectangle backgroundLeftCancelButton = Utilities.buildRectangle("gameScene_playerDisplay_tradingMenu_leftCancelButton_Background", (width * 0.306) * 0.35, height * 0.075, arrowColor, true, Color.WHITE, width * 0.005);
+        backgroundLeftCancelButton.setArcWidth(backgroundLeftCancelButton.getHeight());
+        backgroundLeftCancelButton.setArcHeight(backgroundLeftCancelButton.getHeight());
+
+        Label leftConfirmCancelLabel = Utilities.buildLabel("gameScene_playerDisplay_tradingMenu_leftCancelButton_Label", "Abbruch", Font.font(Main.textFont, FontWeight.BOLD, width * 0.025), TextAlignment.CENTER, Color.WHITE);
+
+        leftCancelButton.getChildren().addAll(backgroundLeftCancelButton, leftConfirmCancelLabel);
+        leftCancelButton.setLayoutX(width / 2 + width * 0.18 + width * 0.306 - (width * 0.306) * 0.35);
+        leftCancelButton.setLayoutY(height * 0.825);
+
+        //Right Buttons
+        StackPane rightConfirmButton = new StackPane();
+
+        //Right Confrim
+        Rectangle backgroundRightConfirmButton = Utilities.buildRectangle("gameScene_playerDisplay_tradingMenu_rightConfirmButton_Background", (width * 0.306) * 0.35, height * 0.075, arrowColor, true, Color.WHITE, width * 0.005);
+        backgroundRightConfirmButton.setArcWidth(backgroundRightConfirmButton.getHeight());
+        backgroundRightConfirmButton.setArcHeight(backgroundRightConfirmButton.getHeight());
+
+        Label rightConfirmButtonLabel = Utilities.buildLabel("gameScene_playerDisplay_tradingMenu_rightConfirmButton_Label", "Fertig", Font.font(Main.textFont, FontWeight.BOLD, width * 0.025), TextAlignment.CENTER, Color.WHITE);
+
+        rightConfirmButton.getChildren().addAll(backgroundRightConfirmButton, rightConfirmButtonLabel);
+        rightConfirmButton.setLayoutX(width / 2 - width * 0.306 - width * 0.18);
+        rightConfirmButton.setLayoutY(height * 0.825);
+
+        StackPane rightCancelButton = new StackPane();
+
+        Rectangle backgroundRightCancelButton = Utilities.buildRectangle("gameScene_playerDisplay_tradingMenu_rightCancelButton_Background", (width * 0.306) * 0.35, height * 0.075, arrowColor, true, Color.WHITE, width * 0.005);
+        backgroundRightCancelButton.setArcWidth(backgroundRightCancelButton.getHeight());
+        backgroundRightCancelButton.setArcHeight(backgroundRightCancelButton.getHeight());
+
+        Label rightConfirmCancelLabel = Utilities.buildLabel("gameScene_playerDisplay_tradingMenu_rightCancelButton_Label", "Abbruch", Font.font(Main.textFont, FontWeight.BOLD, width * 0.025), TextAlignment.CENTER, Color.WHITE);
+
+        rightCancelButton.getChildren().addAll(backgroundRightCancelButton, rightConfirmCancelLabel);
+        rightCancelButton.setLayoutX((width / 2 - width * 0.18) - (width * 0.306) * 0.35);
+        rightCancelButton.setLayoutY(height * 0.825);
+
+        tradingMenu.getChildren().addAll(header, playerTradeBoxOne, playerTradeBoxTwo, arrow, leftConfirmButton, leftCancelButton, rightCancelButton, rightConfirmButton);
         return tradingMenu;
     }
 
