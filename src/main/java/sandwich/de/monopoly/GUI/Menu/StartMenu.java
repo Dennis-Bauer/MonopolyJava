@@ -1,4 +1,4 @@
-package sandwich.de.monopoly.GUI;
+package sandwich.de.monopoly.GUI.Menu;
 
 import javafx.animation.*;
 import javafx.geometry.Insets;
@@ -184,20 +184,14 @@ public class StartMenu extends Pane{
         Rectangle background = Utilities.buildRectangle("menu_playerSelector_Background", width, height, color, true, null, 0);
         Polygon backgroundBottom = Utilities.buildTriangle("menu_playerSelector_background_Bottom", new Point2D(x, y + height), new Point2D(x + width / 2, y + height + height * 0.071), new Point2D(x + width, y + height),color, null, -x, -y - 0.5);
         //Name label
-        Label name = Utilities.buildLabel("menu_playerSelector_Name", "", new Font(Main.textFont, 100), TextAlignment.LEFT, Color.WHITE, 0, 0);
+        Label name = Utilities.buildLabel("menu_playerSelector_Name", "", new Font(Main.TEXT_FONT, 100), TextAlignment.LEFT, Color.WHITE, 0, 0);
         Utilities.centeringChildInPane(name, playerBox);
 
         //Cancel Button
-        StackPane cancelButton = new StackPane();
-        Rectangle xLineOne = Utilities.buildRectangle("menu_playerSelector_canceleButton_LineOne", width / 4, width / 18, Color.RED, true, null, 0);
-        Rectangle xLineTwo = Utilities.buildRectangle("menu_playerSelector_canceleButton_LineOne", width / 4, width / 18, Color.RED, true, null, 0);
-        xLineOne.setRotate(45);
-        xLineTwo.setRotate(-45);
-
+        StackPane cancelButton = Utilities.buildPlus("menu_playerSelector_canceleButton", width / 4, width / 18, 45, 0, null, Color.RED, 0, 0);
         cancelButton.setLayoutX(width / 2 - width / 8);
         cancelButton.setLayoutY(height / 1.02);
 
-        cancelButton.getChildren().addAll(xLineOne, xLineTwo);
         cancelButton.setVisible(false);
 
         //Name Input screen
@@ -207,7 +201,7 @@ public class StartMenu extends Pane{
         Background nameInputbackground = new Background(new BackgroundFill(color, null, null));
 
         //NameInput input Box
-        TextField nameInput = Utilities.buildTextField("addPlayer_NameInput", "Name", width, height / 10, Font.font(Main.textFont, width / 10));
+        TextField nameInput = Utilities.buildTextField("addPlayer_NameInput", "Name", width, height / 10, Font.font(Main.TEXT_FONT, width / 10));
         nameInput.setBackground(nameInputbackground);
         nameInput.setBorder(nameInputborder);
         nameInput.setAlignment(Pos.CENTER);
@@ -227,16 +221,12 @@ public class StartMenu extends Pane{
         finishButtonNameInput.getChildren().addAll(finishButtonBackground, finishButtonCheckmarkTwo, finishButtonCheckmarkOne);
 
         //Cancel Button
-        StackPane cancelButtonNameInput = new StackPane();
+        StackPane cancelButtonNameInput = Utilities.buildPlus("addPlayer_finishNameInput_chancelButton", width / 42.5, width / 7.5, 45, 0, null, Color.WHITE, 0, 0);
 
-        Rectangle cancelButtonBackground = Utilities.buildRectangle("addPlayer_finishNameInput_Background", width / 5, width / 5, Color.RED, true, Color.BLACK, width / 120);
-        Rectangle cancelButtonXOne = Utilities.buildRectangle("addPlayer_finishNameInput_CheckmarkOne", width / 42.5, width / 7.5, Color.WHITE, true, null, 0);
-        Rectangle cancelButtonXTwo = Utilities.buildRectangle("addPlayer_finishNameInput_CheckmarkOne", width / 42.5, width / 7.5, Color.WHITE, true, null, 0);
+        Rectangle cancelButtonBackground = Utilities.buildRectangle("addPlayer_finishNameInput_chancelButton_Background", width / 5, width / 5, Color.RED, true, Color.BLACK, width / 120);
 
-        cancelButtonXOne.setRotate(45);
-        cancelButtonXTwo.setRotate(-45);
-
-        cancelButtonNameInput.getChildren().addAll(cancelButtonBackground, cancelButtonXTwo, cancelButtonXOne);
+        cancelButtonNameInput.getChildren().addAll(cancelButtonBackground);
+        cancelButtonBackground.toBack();
 
         HBox nameInputButtons = new HBox(width / 4, cancelButtonNameInput, finishButtonNameInput);
         nameInputButtons.setAlignment(Pos.CENTER);
@@ -246,14 +236,13 @@ public class StartMenu extends Pane{
         nameInputBox.setVisible(false);
 
         //Add player Button
-        StackPane addButton = new StackPane();
+        StackPane addButton;
         double buttonRadius = width * 0.359;
         double buttonStrokeWidth = width / 18;
 
+        addButton = Utilities.buildPlus("menu_playerSelector_addButton_plus",  buttonRadius / 2.5, buttonRadius / 0.7, 0,0, null, color, (width / 2) - buttonRadius / 2, 0);
+
         Circle addButtonBackground = Utilities.buildCircle("menu_playerSelector_addButton_Background", buttonRadius, color.brighter(), true, Color.WHITE, 0);
-        Rectangle addButtonPlus1 = Utilities.buildRectangle("menu_playerSelector_addButton_PlusSymboleOne", buttonRadius / 2.5, buttonRadius / 0.7, color, true, null, 0,  (width / 2) - buttonRadius / 2, 0);
-        Rectangle addButtonPlus2 = Utilities.buildRectangle("menu_playerSelector_addButton_PlusSymboleOne", buttonRadius / 2.5, buttonRadius / 0.7, color, true, null, 0,  (width / 2) - buttonRadius / 2, 0);
-        addButtonPlus2.setRotate(90);
 
         addButton.setLayoutX(width / 2 - buttonRadius);
         addButton.setLayoutY(height / 3 - buttonRadius);
@@ -276,7 +265,8 @@ public class StartMenu extends Pane{
             addButton.setVisible(false);
         });
 
-        addButton.getChildren().addAll(addButtonBackground, addButtonPlus1, addButtonPlus2);
+        addButton.getChildren().add(addButtonBackground);
+        addButtonBackground.toBack();
 
         //Player is in Game Symbol
         StackPane playerSymbol = new StackPane();

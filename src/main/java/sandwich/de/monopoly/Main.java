@@ -5,16 +5,15 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import sandwich.de.monopoly.Enums.Figuren;
-import sandwich.de.monopoly.GUI.Spielfeld;
-import sandwich.de.monopoly.GUI.StartMenu;
+import sandwich.de.monopoly.GUI.Game.Spielfeld;
+import sandwich.de.monopoly.GUI.Menu.StartMenu;
 
 import java.util.HashMap;
 import java.util.Objects;
 
 public class Main extends Application {
 
-    public static final String textFont = "Clear Sans";
+    public static final String TEXT_FONT = "Clear Sans";
 
     public static final Image[] playerFigures = new Image[5];
 

@@ -7,6 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.text.Font;
@@ -260,6 +261,23 @@ public class Utilities {
     public static void centeringChildInPane(Control child, Pane pane) {
         child.layoutXProperty().bind(pane.widthProperty().subtract(child.widthProperty()).divide(2));
     } //(KEIN OFFICIALESE KOMMENTAR) Achtung, klappt nicht bei Formen oder anderes was nicht der Control Klasse erbt, vielleicht ändern
+
+    public static StackPane buildPlus(String id, double lineWidth, double lineHeight, double rotate, double borderWidth, Color borderColor, Color plusColor,  double lineX, double lineY) {
+        StackPane plus = new StackPane();
+        plus.setId(id);
+
+        Rectangle lineOne = buildRectangle(id + "_LineOne", lineWidth, lineHeight, plusColor, true, borderColor, borderWidth);
+        lineOne.setRotate(rotate);
+        lineOne.setX(lineX);
+        lineOne.setY(lineY);
+
+        Rectangle lineTwo = buildRectangle(id + "_LineTwo", lineWidth, lineHeight, plusColor, true, borderColor, borderWidth);
+        lineTwo.setRotate(90 + rotate);
+        lineTwo.setX(lineX);
+        lineTwo.setY(lineY);
+
+        return new StackPane(lineOne, lineTwo);
+    }
 
     //Achtung änderung: Man sollte auch mit geben was für ein Typ das Object hat mit <>
     public static Object getNodeOutAPane(String id, Pane root) {

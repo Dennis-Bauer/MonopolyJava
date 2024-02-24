@@ -1,13 +1,15 @@
-package sandwich.de.monopoly.GUI;
+package sandwich.de.monopoly.GUI.Game.Displays;
 
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import sandwich.de.monopoly.Utilities;
 
-public class AktionAnzeige extends Pane {
+import static sandwich.de.monopoly.GUI.Game.DisplayControllerOne.buildPlayer;
 
-    public AktionAnzeige(double width, double height, Color backgroundColor) {
+public class ActionDisplay extends Pane {
+
+    public ActionDisplay(double width, double height, Color backgroundColor) {
         setId("gameScene_TradingDisplay");
         setMaxSize(width, height);
 
@@ -31,5 +33,6 @@ public class AktionAnzeige extends Pane {
     }
 
      */
+
 
 }

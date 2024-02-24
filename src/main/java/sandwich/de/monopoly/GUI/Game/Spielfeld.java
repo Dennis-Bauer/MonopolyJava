@@ -1,4 +1,4 @@
-package sandwich.de.monopoly.GUI;
+package sandwich.de.monopoly.GUI.Game;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -13,12 +13,13 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import sandwich.de.monopoly.Enums.ExtraFields;
+import sandwich.de.monopoly.GUI.Game.Displays.ActionDisplay;
 import sandwich.de.monopoly.Main;
 import sandwich.de.monopoly.Utilities;
 
 import java.util.Objects;
 
-import static sandwich.de.monopoly.Main.textFont;
+import static sandwich.de.monopoly.Main.TEXT_FONT;
 
 
 public class Spielfeld extends Pane{
@@ -47,10 +48,13 @@ public class Spielfeld extends Pane{
         VBox displays = new VBox(height * 0.02);
 
         final double displaysWidth = (width - height) / 1.1;
-        SpielerAnzeige playerDisplay = new SpielerAnzeige(displaysWidth, height * 0.60, 5, Color.rgb(97, 220, 43));
-        AktionAnzeige actionDisplay = new AktionAnzeige(displaysWidth, height * 0.38, Color.rgb(56, 182, 255));
 
-        displays.getChildren().addAll(playerDisplay, actionDisplay);
+        DisplayControllerOne.createDisplayOne(displaysWidth, height * 0.60, Color.rgb(97, 220, 43));
+        DisplayControllerOne.createPlayerDisplay();
+
+        ActionDisplay actionDisplay = new ActionDisplay(displaysWidth, height * 0.38, Color.rgb(56, 182, 255));
+
+        displays.getChildren().addAll(DisplayControllerOne.getDisplayOne(), actionDisplay);
         displays.setLayoutX(height + (((width - height) / 2) - ((width - height) / 1.1) / 2));
         displays.setLayoutY(0);
 
@@ -180,8 +184,8 @@ public class Spielfeld extends Pane{
 
         Rectangle background = Utilities.buildRectangle("street_Background" ,width, height, backgroundColor, true, Color.BLACK, borderWidth);
         Rectangle colorIndicator = Utilities.buildRectangle("street_ColorIndicator" ,width, height/4, streetColor, true, Color.BLACK, borderWidth);
-        Label nameIndicator = Utilities.buildLabel("street_NameIndicator", name, Font.font(textFont, FontWeight.BOLD, fontSize), TextAlignment.CENTER, Color.BLACK, 0, height / 3);
-        Label priceIndicator = Utilities.buildLabel("street_PriceIndicator", (price + "€"), Font.font(textFont, FontWeight.BOLD, fontSize), TextAlignment.CENTER, Color.BLACK, 0, 5 * (height / 6));
+        Label nameIndicator = Utilities.buildLabel("street_NameIndicator", name, Font.font(TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, Color.BLACK, 0, height / 3);
+        Label priceIndicator = Utilities.buildLabel("street_PriceIndicator", (price + "€"), Font.font(TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, Color.BLACK, 0, 5 * (height / 6));
 
         Utilities.centeringChildInPane(nameIndicator, field);
         Utilities.centeringChildInPane(priceIndicator, field);
@@ -189,6 +193,8 @@ public class Spielfeld extends Pane{
         field.getChildren().addAll(background, colorIndicator, nameIndicator, priceIndicator);
 
         return field;
+
+
     }
 
     private Pane buildStart(Color backgroundColor, double size) {
@@ -198,7 +204,7 @@ public class Spielfeld extends Pane{
 
         Rectangle background = Utilities.buildRectangle("corner_start_Background", size, size, backgroundColor, true, Color.BLACK, borderWidth);
         ImageView arrow = Utilities.createImageView("corner_start_Arrow" ,"/sandwich/de/monopoly/gameBoard/startArrow.png", size / 6, size / 1.25, (size -(size / 1.25)) / 2, (size -(size / 1.25)) / 2);
-        Label text = Utilities.buildLabel("corner_start_Text", Utilities.buildLongText("LOS", "Bekomme 200", "beim drüber gehen"), Font.font(textFont, FontWeight.BOLD, fontSize), TextAlignment.CENTER, Color.BLACK);
+        Label text = Utilities.buildLabel("corner_start_Text", Utilities.buildLongText("LOS", "Bekomme 200", "beim drüber gehen"), Font.font(TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, Color.BLACK);
 
         text.widthProperty().addListener((obs, oldVal, newVal) -> text.setTranslateX((size - newVal.doubleValue()) / 0.8));
         text.heightProperty().addListener((obs, oldVal, newVal) -> text.setTranslateY((newVal.doubleValue()) / 1.5));
@@ -216,10 +222,10 @@ public class Spielfeld extends Pane{
         Rectangle background = Utilities.buildRectangle("corner_jail_Background", size, size, backgroundColor, true, Color.BLACK, borderWidth);
         Rectangle backgroundJail = Utilities.buildRectangle("corner_jail_JailBackground", size / 2, size / 2, Color.ORANGE, true, Color.BLACK, borderWidth, size - size / 2, 0);
         ImageView jailMan = Utilities.createImageView("corner_jail_Man" ,"/sandwich/de/monopoly/gameBoard/jailMan.png", size / 3, size / 3, size - size / 2 + (((size / 2) - (size / 3) / 2) - size / 4), (((size / 2) - (size / 3) / 2) - size / 4));
-        Label header = Utilities.buildLabel("corner_jail_Header", "Im", Font.font(textFont, FontWeight.BOLD, fontSize), TextAlignment.CENTER, Color.BLACK, size / 2 + size / 3, size / 18);
-        Label footer = Utilities.buildLabel("corner_jail_FooterText", "Bau", Font.font(textFont, FontWeight.BOLD, fontSize), TextAlignment.CENTER, Color.BLACK, size / 1.9, size / 2.9);
-        Label textOne = Utilities.buildLabel("corner_jail_FirstText", "Nur", Font.font(textFont, FontWeight.BOLD, fontSize * 1.5), TextAlignment.CENTER, Color.BLACK, 0, size / 5.5);
-        Label textTwo = Utilities.buildLabel("corner_jail_SecondText", "zu besuch", Font.font(textFont, FontWeight.BOLD, fontSize * 1.5), TextAlignment.CENTER, Color.BLACK, 0, size / 1.3);
+        Label header = Utilities.buildLabel("corner_jail_Header", "Im", Font.font(TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, Color.BLACK, size / 2 + size / 3, size / 18);
+        Label footer = Utilities.buildLabel("corner_jail_FooterText", "Bau", Font.font(TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, Color.BLACK, size / 1.9, size / 2.9);
+        Label textOne = Utilities.buildLabel("corner_jail_FirstText", "Nur", Font.font(TEXT_FONT, FontWeight.BOLD, fontSize * 1.5), TextAlignment.CENTER, Color.BLACK, 0, size / 5.5);
+        Label textTwo = Utilities.buildLabel("corner_jail_SecondText", "zu besuch", Font.font(TEXT_FONT, FontWeight.BOLD, fontSize * 1.5), TextAlignment.CENTER, Color.BLACK, 0, size / 1.3);
 
         Utilities.centeringChildInPane(textTwo, field);
 
@@ -238,9 +244,9 @@ public class Spielfeld extends Pane{
         field.setMaxSize(size, size);
 
         Rectangle background = Utilities.buildRectangle("corner_freeParking_Background", size, size, backgroundColor, true, Color.BLACK, borderWidth);
-        Label header = Utilities.buildLabel("corner_freeParking_Header", "Freies", Font.font(textFont, FontWeight.BOLD, fontSize * 2), TextAlignment.CENTER, Color.BLACK, size / 5 + size / 3.25, size / 5.75);
+        Label header = Utilities.buildLabel("corner_freeParking_Header", "Freies", Font.font(TEXT_FONT, FontWeight.BOLD, fontSize * 2), TextAlignment.CENTER, Color.BLACK, size / 5 + size / 3.25, size / 5.75);
         ImageView freeParking = Utilities.createImageView("corner_freeParking_Picture", "/sandwich/de/monopoly/gameBoard/freeParking.png", size / 1.5, size / 1.75, size / 4.75,size / 5);
-        Label footer = Utilities.buildLabel("corner_freeParking_Footer", "Parken", Font.font(textFont, FontWeight.BOLD, fontSize * 2), TextAlignment.CENTER, Color.BLACK, size / 8.25, size / 1.7);
+        Label footer = Utilities.buildLabel("corner_freeParking_Footer", "Parken", Font.font(TEXT_FONT, FontWeight.BOLD, fontSize * 2), TextAlignment.CENTER, Color.BLACK, size / 8.25, size / 1.7);
 
         header.setRotate(45);
         freeParking.setRotate(45);
@@ -256,9 +262,9 @@ public class Spielfeld extends Pane{
         field.setMaxSize(size, size);
 
         Rectangle background = Utilities.buildRectangle("corner_goToJail_Background", size, size, backgroundColor, true, Color.BLACK, borderWidth);
-        Label header = Utilities.buildLabel("corner_goToJail_Header", "Geh ins", Font.font(textFont, FontWeight.BOLD, fontSize * 2), TextAlignment.CENTER, Color.BLACK, size / 6 + size / 3.25, size / 5.75);
+        Label header = Utilities.buildLabel("corner_goToJail_Header", "Geh ins", Font.font(TEXT_FONT, FontWeight.BOLD, fontSize * 2), TextAlignment.CENTER, Color.BLACK, size / 6 + size / 3.25, size / 5.75);
         ImageView freeParking = Utilities.createImageView("corner_goToJail_Picture", "/sandwich/de/monopoly/gameBoard/goToJail.png", size / 1.5, size / 1.75, size / 4.75,size / 5);
-        Label footer = Utilities.buildLabel("corner_goToJail_Footer", "Gefängnis", Font.font(textFont, FontWeight.BOLD, fontSize * 2), TextAlignment.CENTER, Color.BLACK, -(size / 15), size / 1.8);
+        Label footer = Utilities.buildLabel("corner_goToJail_Footer", "Gefängnis", Font.font(TEXT_FONT, FontWeight.BOLD, fontSize * 2), TextAlignment.CENTER, Color.BLACK, -(size / 15), size / 1.8);
 
         header.setRotate(45);
         freeParking.setRotate(45);
@@ -274,9 +280,9 @@ public class Spielfeld extends Pane{
         field.setMaxSize(width, height);
 
         Rectangle background = Utilities.buildRectangle("station_Background" ,width, height, backgroundColor, true, Color.BLACK, borderWidth);
-        Label header = Utilities.buildLabel("station_Header", stationName, Font.font(textFont, FontWeight.BOLD, fontSize), TextAlignment.CENTER, Color.BLACK, 0, height / 50);
+        Label header = Utilities.buildLabel("station_Header", stationName, Font.font(TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, Color.BLACK, 0, height / 50);
         ImageView train = Utilities.createImageView("station_Image", "/sandwich/de/monopoly/gameBoard/train.png", width / 1.15, height / 3.7,(width - width / 1.15) / 2, height / 3);
-        Label priceIndicator = Utilities.buildLabel("station_PriceIndicator", (price + "€"), Font.font(textFont, FontWeight.BOLD, fontSize), TextAlignment.CENTER, Color.BLACK, 0, 5 * (height / 6));
+        Label priceIndicator = Utilities.buildLabel("station_PriceIndicator", (price + "€"), Font.font(TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, Color.BLACK, 0, 5 * (height / 6));
 
 
         Utilities.centeringChildInPane(header, field);
@@ -292,7 +298,7 @@ public class Spielfeld extends Pane{
         field.setMaxSize(width, height);
 
         Rectangle background = Utilities.buildRectangle("chance_Background" ,width, height, backgroundColor, true, Color.BLACK, borderWidth);
-        Label header = Utilities.buildLabel("chance_Header", "Chance", Font.font(textFont, FontWeight.BOLD, fontSize), TextAlignment.CENTER, Color.BLACK, 0, height / 50);
+        Label header = Utilities.buildLabel("chance_Header", "Chance", Font.font(TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, Color.BLACK, 0, height / 50);
 
         Image i = null;
         switch (c) {
@@ -319,7 +325,7 @@ public class Spielfeld extends Pane{
         field.setMaxSize(width, height);
 
         Rectangle background = Utilities.buildRectangle("community_Background" ,width, height, backgroundColor, true, Color.BLACK, borderWidth);
-        Label header = Utilities.buildLabel("community_Header", Utilities.buildLongText("Gesellschafts", "Feld"), Font.font(textFont, FontWeight.BOLD, fontSize), TextAlignment.CENTER, Color.BLACK, 0, height / 50);
+        Label header = Utilities.buildLabel("community_Header", Utilities.buildLongText("Gesellschafts", "Feld"), Font.font(TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, Color.BLACK, 0, height / 50);
         ImageView image = Utilities.createImageView("community_Image", "/sandwich/de/monopoly/gameBoard/communityChest.png", width / 1.1, height / 1.9,(width - width / 1.15) / 2, height / 3.5);
 
         Utilities.centeringChildInPane(header, field);
@@ -335,8 +341,8 @@ public class Spielfeld extends Pane{
         field.setMaxSize(width, height);
 
         Rectangle background = Utilities.buildRectangle("extraPay_Background" ,width, height, backgroundColor, true, Color.BLACK, borderWidth);
-        Label header = Utilities.buildLabel("extraPay_Header", "ERROR", Font.font(textFont, FontWeight.BOLD, fontSize), TextAlignment.CENTER, Color.BLACK, 0, height / 10);
-        Label priceIndicator = Utilities.buildLabel("station_PriceIndicator", (price + "€"), Font.font(textFont, FontWeight.BOLD, fontSize), TextAlignment.CENTER, Color.BLACK, 0, 5 * (height / 6));
+        Label header = Utilities.buildLabel("extraPay_Header", "ERROR", Font.font(TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, Color.BLACK, 0, height / 10);
+        Label priceIndicator = Utilities.buildLabel("station_PriceIndicator", (price + "€"), Font.font(TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, Color.BLACK, 0, 5 * (height / 6));
 
 
         Utilities.centeringChildInPane(header, field);
