@@ -13,6 +13,7 @@ import java.util.Objects;
 
 public class Main extends Application {
 
+    //Important and final variables
     public static final String TEXT_FONT = "Clear Sans";
 
     public static final Image[] playerFigures = new Image[5];
@@ -32,7 +33,7 @@ public class Main extends Application {
         primaryStage = stage;
         stage.setTitle("-M---o-----n----o---p----o---l----y");
         stage.setResizable(false);
-        stage.setScene(game);
+        stage.setScene(menu);
         stage.show();
     }
 

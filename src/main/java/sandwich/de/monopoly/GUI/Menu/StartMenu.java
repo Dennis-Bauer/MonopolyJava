@@ -16,6 +16,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
+import sandwich.de.monopoly.Enums.Figuren;
 import sandwich.de.monopoly.Main;
 import sandwich.de.monopoly.Utilities;
 
@@ -76,9 +77,9 @@ public class StartMenu extends Pane{
         parallelTransition.play();
 
         //Der Los-Button wird erstellt, und die funktion werden bestimmt
-        Image startButtonNormal = new Image(Objects.requireNonNull(Main.class.getResourceAsStream("/sandwich/de/monopoly/menu/start_button.png")));
-        Image startButtonHover = new Image(Objects.requireNonNull(Main.class.getResourceAsStream("/sandwich/de/monopoly/menu/startButtonGif.gif")));
-        Image startButtonPressed = new Image(Objects.requireNonNull(Main.class.getResourceAsStream("/sandwich/de/monopoly/menu/startButtonPressed.gif")));
+        Image startButtonNormal = Utilities.creatImage("/sandwich/de/monopoly/menu/start_button.png");
+        Image startButtonHover = Utilities.creatImage("/sandwich/de/monopoly/menu/startButtonGif.gif");
+        Image startButtonPressed = Utilities.creatImage("/sandwich/de/monopoly/menu/startButtonPressed.gif");
         ImageView startButton = Utilities.createImageView("menu_StartButton", startButtonNormal, width / 3.516, (width / 3.516) * 0.230, width / 2 - (width / 3.516) / 2, height * 0.84);
         startButton.setOnMouseEntered(event -> startButton.setImage(startButtonHover));
         startButton.setOnMouseExited(event -> startButton.setImage(startButtonNormal));

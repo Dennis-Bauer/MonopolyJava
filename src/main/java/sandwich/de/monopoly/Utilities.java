@@ -302,7 +302,7 @@ public class Utilities {
         return null;
     }
 
-    //Java FX Images (sourcePath start's add the Resources direction. Example: /pictures/menu/heading.png)
+    //Java FX ImageViews (sourcePath start's add the Resources direction. Example: /pictures/menu/heading.png)
     public static ImageView createImageView(String id, Image image, double postionX, double postionY) {
         if (image != null) {
             ImageView iv = new ImageView(image);
@@ -338,6 +338,17 @@ public class Utilities {
             iv.setFitHeight(imageHeight);
         }
         return iv;
+    }
+
+    //Java FX Images (sourcePath start's add the Resources direction. Example: /pictures/menu/heading.png)
+
+    public static Image creatImage(String sourcePath) {
+        try {
+            return new Image(Objects.requireNonNull(Main.class.getResourceAsStream(sourcePath)));
+        } catch (Exception e) {
+            consoleOutPut(colors.RED, textStyle.BOLD, "Source aus dem SourcePath \"" + sourcePath + "\" konnte nicht gefunden werden!");
+        }
+        return null;
     }
 
     /**

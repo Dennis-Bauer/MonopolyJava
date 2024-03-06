@@ -303,11 +303,11 @@ public class Spielfeld extends Pane{
         Image i = null;
         switch (c) {
             case RED ->
-                i = new Image(Objects.requireNonNull(Main.class.getResourceAsStream("/sandwich/de/monopoly/gameBoard/chance_red.png")));
+                i = Utilities.creatImage("/sandwich/de/monopoly/gameBoard/chance_red.png");
             case BLUE ->
-                i = new Image(Objects.requireNonNull(Main.class.getResourceAsStream("/sandwich/de/monopoly/gameBoard/chance_blue.png")));
+                i = Utilities.creatImage("/sandwich/de/monopoly/gameBoard/chance_blue.png");
             case GREEN ->
-                i = new Image(Objects.requireNonNull(Main.class.getResourceAsStream("/sandwich/de/monopoly/gameBoard/chance_green.png")));
+                i = Utilities.creatImage("/sandwich/de/monopoly/gameBoard/chance_green.png");
         }
 
         ImageView image = Utilities.createImageView("chance_Image", i, width / 1.1, height / 1.6,(width - width / 1.15) / 2, height / 3.5);
