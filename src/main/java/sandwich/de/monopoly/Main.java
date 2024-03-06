@@ -2,22 +2,20 @@ package sandwich.de.monopoly;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import sandwich.de.monopoly.GUI.Game.Spielfeld;
 import sandwich.de.monopoly.GUI.Menu.StartMenu;
 
 import java.util.HashMap;
-import java.util.Objects;
 
 public class Main extends Application {
 
     //Important and final variables
     public static final String TEXT_FONT = "Clear Sans";
+    public static final double startKontoStand = 2000;
 
-    public static final Image[] playerFigures = new Image[5];
-
+    //Game variables
     public static HashMap<Integer, Color> streetColor = new HashMap<>();
 
     private static final double stageWidth = 1800, stageHeight = 950;
@@ -38,12 +36,6 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-
-        playerFigures[0] = new Image(Objects.requireNonNull(Main.class.getResourceAsStream("/sandwich/de/monopoly/figuren/affe.png")));
-        playerFigures[1] = new Image(Objects.requireNonNull(Main.class.getResourceAsStream("/sandwich/de/monopoly/figuren/burger.png")));
-        playerFigures[2] = new Image(Objects.requireNonNull(Main.class.getResourceAsStream("/sandwich/de/monopoly/figuren/doener.png")));
-        playerFigures[3] = new Image(Objects.requireNonNull(Main.class.getResourceAsStream("/sandwich/de/monopoly/figuren/pinguin.png")));
-        playerFigures[4] = new Image(Objects.requireNonNull(Main.class.getResourceAsStream("/sandwich/de/monopoly/figuren/sandwich.png")));
 
         streetColor.put(0, Color.DARKBLUE); //Straße
         streetColor.put(1, Color.DARKBLUE); //Straße

@@ -34,9 +34,16 @@ public class StartMenu extends Pane{
 
     private final double width, height;
 
+    private final Image[] playerFigures = new Image[Figuren.values().length];
+
+
     public StartMenu(double width, double height) {
         this.width = width;
         this.height = height;
+
+        for (int i = 0; i < Figuren.values().length; i++)
+            playerFigures[i] = Figuren.values()[i].getFigureImage();
+
 
         buildBackground();
         createPlayerBoxes();
@@ -325,14 +332,14 @@ public class StartMenu extends Pane{
         arrowOne.setOnMouseClicked(event -> {
             if (!name.getText().isEmpty()) {
                 imagePosition.set(setFigurePosition(true, imagePosition.get()));
-                figure.setImage(Main.playerFigures[imagePosition.get()]);
+                figure.setImage(playerFigures[imagePosition.get()]);
             }
         });
 
         arrowTwo.setOnMouseClicked(event -> {
             if (!name.getText().isEmpty()) {
                 imagePosition.set(setFigurePosition(false, imagePosition.get()));
-                figure.setImage(Main.playerFigures[imagePosition.get()]);
+                figure.setImage(playerFigures[imagePosition.get()]);
             }
         });
 
@@ -410,13 +417,13 @@ public class StartMenu extends Pane{
 
     private int setFigurePosition(boolean plus, int position) {
         if (plus) {
-            if (position + 1 < Main.playerFigures.length)
+            if (position + 1 < playerFigures.length)
                 return position + 1;
             else return 0;
         } else {
             if (position - 1 >= 0)
                 return position - 1;
-            else return Main.playerFigures.length - 1;
+            else return playerFigures.length - 1;
         }
     }
 
