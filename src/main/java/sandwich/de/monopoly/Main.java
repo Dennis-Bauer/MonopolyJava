@@ -30,7 +30,6 @@ public class Main extends Application {
     public void start(Stage stage) {
 
         primaryStage = stage;
-
         stage.setTitle("-M---o-----n----o---p----o---l----y");
         stage.setResizable(false);
         stage.setScene(game);

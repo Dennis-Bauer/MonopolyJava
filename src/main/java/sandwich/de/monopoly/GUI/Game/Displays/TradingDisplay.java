@@ -41,7 +41,7 @@ public class TradingDisplay extends Pane {
         resetTrading();
 
         // ACHTUNG!!! Temporäre Variablen!!!
-        int kontoPlayerOne = 205;
+        int kontoPlayerOne = 207;
         int kontoPlayerTwo = 5463;
 
         AtomicInteger tradeOfferLeft = new AtomicInteger();

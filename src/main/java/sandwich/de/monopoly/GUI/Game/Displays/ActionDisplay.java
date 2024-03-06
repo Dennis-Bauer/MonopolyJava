@@ -1,11 +1,15 @@
 package sandwich.de.monopoly.GUI.Game.Displays;
 
+import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.TextAlignment;
+import sandwich.de.monopoly.Main;
 import sandwich.de.monopoly.Utilities;
-
-import static sandwich.de.monopoly.GUI.Game.DisplayControllerOne.buildPlayer;
 
 public class ActionDisplay extends Pane {
 
@@ -14,25 +18,38 @@ public class ActionDisplay extends Pane {
         setMaxSize(width, height);
 
         Rectangle background = Utilities.buildRectangle("gameScene_action_Background", width, height, backgroundColor, true, Color.WHITE, width * 0.006);
+        Label header = Utilities.buildLabel("gameScene_action_Header", "Aktionen", Font.font(Main.TEXT_FONT, FontWeight.BOLD, width * 0.10), TextAlignment.CENTER, Color.WHITE);
 
-        getChildren().addAll(background);
+        Utilities.centeringChildInPane(header, this);
+
+        double middleX = (width / 2) - (width * 0.25) / 2;
+        double y = height * 0.30;
+        double space = width * 0.30;
+
+        Pane bankButton = buildButton("Bank", width * 0.25, height * 0.45, "/sandwich/de/monopoly/aktionDisplay/bank.png", Color.DARKGRAY, "bank", middleX - space, y);
+        Pane buildButton = buildButton("Bauen", width * 0.25, height * 0.45, "/sandwich/de/monopoly/aktionDisplay/build.png", Color.LIME, "build", middleX, y);
+        Pane leaveButton = buildButton("Verlassen", width * 0.25, height * 0.45, "/sandwich/de/monopoly/aktionDisplay/leave.png", Color.RED, "leave", middleX + space, y);
+
+
+        getChildren().addAll(background, header, bankButton, buildButton, leaveButton);
     }
 
+    private Pane buildButton(String headerText, double width, double height, String pathButtonSymbol, Color backgroundColor, String id, double x, double y) {
+        Pane button = new Pane();
+        button.setId("gameScene_action_button_" + id);
+        button.setMaxWidth(width);
 
-    /*
-    public static Pane buildActionDisplay(double width, double height, Color backgroundColor) {
-        Pane root = new Pane();
-        root.setId("gameScene_TradingDisplay");
-        root.setMaxSize(width, height);
+        Label header = Utilities.buildLabel("gameScene_action_button_" + id + "_Header", headerText, Font.font(Main.TEXT_FONT, FontWeight.BOLD, width / 4), TextAlignment.CENTER, Color.WHITE);
+        Rectangle background = Utilities.buildRectangle("gameScene_action_button_" + id + "_Background", width, height, backgroundColor, true, Color.WHITE, width / 25, 0, height * 0.35);
+        ImageView symbol = Utilities.createImageView("gameScene_action_button_" + id + "_Symbol", pathButtonSymbol, height * 0.90, height * 0.90, (width / 2) - (height * 0.90) / 2, (height * 0.35) + (height / 2) - (height * 0.90) / 2);
 
-        Rectangle background = Utilities.buildRectangle("gameScene_action_Background", width, height, backgroundColor, true, Color.WHITE, width * 0.006);
+        Utilities.centeringChildInPane(header, button);
 
-        root.getChildren().addAll(background);
-
-        return root;
+        button.getChildren().addAll(header, background, symbol);
+        button.setLayoutX(x);
+        button.setLayoutY(y);
+        return button;
     }
-
-     */
 
 
 }
