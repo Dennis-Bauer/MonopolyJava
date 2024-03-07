@@ -15,6 +15,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 
 import java.io.*;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Stack;
@@ -411,6 +412,16 @@ public class Utilities {
                 (int) (color.getGreen() * 255),
                 (int) (color.getBlue() * 255)
         );
+    }
+
+    public static <T> boolean hasArrayDuplicates(T[] objectArray) {
+        HashSet<T> set = new HashSet<>();
+        for (T ob : objectArray) {
+            if (!set.add(ob))
+                return true; // Wenn der String bereits im Set vorhanden ist, gibt es ein Duplikat
+        }
+
+        return false; // Keine Duplikate gefunden
     }
 
     //Java save Data's in files
