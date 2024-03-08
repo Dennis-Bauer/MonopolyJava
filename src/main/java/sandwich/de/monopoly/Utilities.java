@@ -15,10 +15,8 @@ import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 
 import java.io.*;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Stack;
+import java.lang.reflect.Array;
+import java.util.*;
 
 //Don't forget: Update changes in Cloud
 public class Utilities {
@@ -27,6 +25,7 @@ public class Utilities {
 
     //Color Output
     public static final String RESET = "\033[0m";  // Text Reset
+
     public enum colors {
         BLACK, RED, GREEN, YELLOW, BLUE, PURPLE, CYAN, WHITE
     }
@@ -422,6 +421,20 @@ public class Utilities {
         }
 
         return false; // Keine Duplikate gefunden
+    }
+
+    //ACHTUNG VIELLEICHT ÄNDERN
+    public static <T> boolean hasArrayNotNullDuplicates(T[] objectArray) {
+        HashSet<T> set = new HashSet<>();
+        for (T ob : objectArray) {
+            if (ob != null) {
+                if (!set.add(ob))
+                    return true;
+            }
+
+        }
+
+        return false;
     }
 
     //Java save Data's in files
