@@ -2,6 +2,7 @@ package sandwich.de.monopoly.GUI.Game;
 
 import javafx.geometry.Point2D;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -12,9 +13,12 @@ import javafx.scene.text.TextAlignment;
 import sandwich.de.monopoly.GUI.Game.Displays.PlayerDisplay;
 import sandwich.de.monopoly.GUI.Game.Displays.TradingDisplay;
 import sandwich.de.monopoly.Main;
+import sandwich.de.monopoly.Spieler;
 import sandwich.de.monopoly.Utilities;
 
-public class DisplayControllerOne {
+import java.util.ArrayList;
+
+public class GameDisplayControllerOne {
 
     private static Pane displayOne;
     private static PlayerDisplay playerDisplay;
@@ -43,10 +47,10 @@ public class DisplayControllerOne {
 
     }
 
-    public static void createPlayerDisplay(/*Hier soll eine Liste mit den Playern Objekten übergeben werden*/) {
+    public static void displayPlayers(ArrayList<Spieler> players) {
         playerDisplay.setVisible(true);
         tradingDisplay.setVisible(false);
-        playerDisplay.createPlayers(3);
+        playerDisplay.createPlayers(players);
     }
 
     public static void displayTradingMenu(/*Player One und Player Two Objekte werden hier übergeben*/) {
@@ -64,24 +68,26 @@ public class DisplayControllerOne {
     }
 
     //Erstellt die Basis der Spieler anzeige
-    public static Pane buildPlayer(double width, double height, Color backgroundColor, /*Hier wird das Spieler-Objekt übergeben. Vorübergehende Variablen →*/ String playerName, int playerKontoStand) {
+    public static Pane buildPlayer(double width, double height, Color backgroundColor, Spieler player) {
         Pane playerBox = new Pane();
         playerBox.setId("gameScene_playerDisplay_PlayerBox");
         playerBox.setMaxSize(width, height);
 
         Rectangle background = Utilities.buildRectangle("gameScene_playerDisplay_playerBox_Background", width, height, backgroundColor, true, Color.WHITE, width * 0.005);
 
-        Label headerName = Utilities.buildLabel("gameScene_playerDisplay_playerBox_NameHeader", playerName, Font.font(Main.TEXT_FONT, FontWeight.BOLD, width / 8), TextAlignment.CENTER, Color.WHITE);
+        Label headerName = Utilities.buildLabel("gameScene_playerDisplay_playerBox_NameHeader", player.getName(), Font.font(Main.TEXT_FONT, FontWeight.BOLD, width / 8), TextAlignment.CENTER, Color.WHITE);
         Utilities.centeringChildInPane(headerName, playerBox);
+
+        ImageView figureDisplay = Utilities.createImageView("gameScene_playerDisplay_playerBox_FigureDisplay", player.getFigur().getFigureImage(), width / 3.725, (width / 3.725) / 2, width * 0.725, height * 0.025);
 
         Line headerSeparatingline = Utilities.buildLine("gameScene_playerDisplay_playerBox_NameHeaderSeparatingLine", new Point2D(0, height * 0.15), new Point2D(width, height * 0.15), width * 0.005, Color.WHITE);
 
-        Label displayAccountBalance = Utilities.buildLabel("gameScene_playerDisplay_playerBox_DisplayAccountBalance", ("Kontostand: " + playerKontoStand), Font.font(Main.TEXT_FONT, FontWeight.BOLD, width / 12), TextAlignment.CENTER, Color.WHITE, 0, height * 0.17);
+        Label displayAccountBalance = Utilities.buildLabel("gameScene_playerDisplay_playerBox_DisplayAccountBalance", ("Kontostand: " + player.getKontoStand()), Font.font(Main.TEXT_FONT, FontWeight.BOLD, width / 12), TextAlignment.CENTER, Color.WHITE, 0, height * 0.17);
         Utilities.centeringChildInPane(displayAccountBalance, playerBox);
 
         Line accountBalanceSeparatingline = Utilities.buildLine("gameScene_playerDisplay_playerBox_AccountBalanceSeparatingLine", new Point2D(0, height * 0.30), new Point2D(width, height * 0.30), width * 0.005, Color.WHITE);
 
-        playerBox.getChildren().addAll( background, headerName, headerSeparatingline, displayAccountBalance, accountBalanceSeparatingline);
+        playerBox.getChildren().addAll( background, headerName, figureDisplay, headerSeparatingline, displayAccountBalance, accountBalanceSeparatingline);
 
         return playerBox;
     }

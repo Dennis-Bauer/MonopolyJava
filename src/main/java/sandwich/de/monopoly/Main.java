@@ -13,10 +13,13 @@ public class Main extends Application {
 
     //Important and final variables
     public static final String TEXT_FONT = "Clear Sans";
-    public static final double startKontoStand = 2000;
+    public static final int START_BANK_ACCOUNT = 2000;
+    public static final boolean CONSOLE_OUT_PUT = true;
 
     //Game variables
     public static HashMap<Integer, Color> streetColor = new HashMap<>();
+
+    private static Game gameOperator;
 
     private static final double stageWidth = 1800, stageHeight = 950;
 
@@ -79,8 +82,23 @@ public class Main extends Application {
         }
     }
 
+    public static Game getGameOperator() {
+        return gameOperator;
+    }
+
+    public static void setGameOperator(Game gameOperator) {
+        Main.gameOperator = gameOperator;
+    }
+
     public enum scenes {
         MENU,
         GAME
     }
 }
+
+/*
+   Fehler 001: 2 oder mehre Spieler haben die gleiche Figure ausgewählt!
+   Fehler 002: 2 oder mehre Spieler haben den gleichen Namen ausgewählt!
+   Fehler 003: Es ist im moment nur 1 Spieler erstellt!
+   Fehler 004: Es sind im moment keine Spieler erstellt!
+ */

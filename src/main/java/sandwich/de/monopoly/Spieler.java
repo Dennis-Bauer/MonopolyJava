@@ -4,33 +4,35 @@ import sandwich.de.monopoly.Enums.Figuren;
 
 public class Spieler {
 
-    private double konto;
-    private int reihenfolge;
+    private int kontoStand;
     private String name;
-    private Figuren figur;
+    private int fieldPostion;
+    Figuren figur;
 
-    public Spieler(double konto,int reihenfolge,String name,Figuren figur) {
-        this.konto = konto;
-        this.reihenfolge = reihenfolge;
+    public Spieler(String name, Figuren f) {
         this.name = name;
-        this.figur = figur;
+        this.figur = f;
+
+        kontoStand = Main.START_BANK_ACCOUNT;
+        fieldPostion = 1;
     }
 
-    public void aenderKonto(double x) {
-        konto = konto + x;
-    }
-
-    public double getKonto() {
-        return this.konto;
-    }
-
-    public int getReihenfolge() {
-        return this.reihenfolge;
-    }
     public String getName() {
-        return this.name;
+        return name;
     }
+
+    public int getKontoStand() {
+        return kontoStand;
+    }
+
     public Figuren getFigur() {
-        return this.figur;
+        return figur;
     }
+
+
+    @Override
+    public String toString() {
+        return "Name: " + name + ", Figure: " + figur.toString().toLowerCase() + ", FieldPosition: " + fieldPostion + ", Kontostand: " + kontoStand;
+    }
+
 }

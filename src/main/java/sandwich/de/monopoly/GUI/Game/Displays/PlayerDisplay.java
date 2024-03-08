@@ -8,12 +8,17 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
-import sandwich.de.monopoly.GUI.Game.DisplayControllerOne;
+import sandwich.de.monopoly.Enums.Figuren;
+import sandwich.de.monopoly.GUI.Game.GameDisplayControllerOne;
 import sandwich.de.monopoly.Main;
+import sandwich.de.monopoly.Spieler;
 import sandwich.de.monopoly.Utilities;
 
-import static sandwich.de.monopoly.GUI.Game.DisplayControllerOne.buildPlayer;
-import static sandwich.de.monopoly.GUI.Game.DisplayControllerOne.buildStreetInventar;
+import java.security.SecurityPermission;
+import java.util.ArrayList;
+
+import static sandwich.de.monopoly.GUI.Game.GameDisplayControllerOne.buildPlayer;
+import static sandwich.de.monopoly.GUI.Game.GameDisplayControllerOne.buildStreetInventar;
 
 
 /*
@@ -38,7 +43,7 @@ public class PlayerDisplay extends Pane{
         borderWidth = width * 0.005;
     }
 
-    public void createPlayers(/*Hier soll eine Liste mit den Playern Objekten übergeben werden. Vorübergehender Input → */ double playerAmount) {
+    public void createPlayers(ArrayList<Spieler> players) {
         Pane display = new Pane();
         display.setId("gameScene_playerDisplay_Players");
 
@@ -49,65 +54,93 @@ public class PlayerDisplay extends Pane{
 
         Label header = Utilities.buildLabel("gameScene_playerDisplay_Header", "Spieler", Font.font(Main.TEXT_FONT, FontWeight.BOLD, width / 15), TextAlignment.CENTER, Color.WHITE);
 
-        if (!(playerAmount > 5)) {
-            if (playerAmount == 5) {
-                Pane playerOne = buildPlayerShowBox(playerBoxWidth, playerBoxHeight, Color.rgb(33, 203, 85), "NAME", 2000);
+        Pane playerOne = null;
+        Pane playerTwo = null;
+        Pane playerThree = null;
+        Pane playerFour = null;
+        Pane playerFive = null;
+
+        for (int i = 0; i != players.size(); i++) {
+            double bigger;
+            if (players.size() > 3) {
+                switch (i) {
+                    case 0 -> playerOne = buildPlayerShowBox(playerBoxWidth, playerBoxHeight, Color.rgb(33, 203, 85), players.get(0));
+                    case 1 -> playerTwo = buildPlayerShowBox(playerBoxWidth, playerBoxHeight, Color.rgb(255, 49, 49), players.get(1));
+                    case 2 -> playerThree = buildPlayerShowBox(playerBoxWidth, playerBoxHeight, Color.rgb( 255, 97, 0), players.get(2));
+                    case 3 -> playerFour = buildPlayerShowBox(playerBoxWidth, playerBoxHeight, Color.rgb( 140, 82, 255), players.get(3));
+                    case 4 -> playerFive = buildPlayerShowBox(playerBoxWidth, playerBoxHeight, Color.rgb( 56, 182, 255), players.get(4));
+                }
+            } else {
+                if (players.size() == 3)
+                    bigger = 1.3;
+                else
+                    bigger = 1.7;
+
+                switch (i) {
+                    case 0 -> playerOne = buildPlayerShowBox(playerBoxWidth * bigger, playerBoxHeight * bigger, Color.rgb(33, 203, 85), players.get(0));
+                    case 1 -> playerTwo = buildPlayerShowBox(playerBoxWidth * bigger, playerBoxHeight * bigger, Color.rgb(255, 49, 49), players.get(1));
+                    case 2 -> playerThree = buildPlayerShowBox(playerBoxWidth * bigger, playerBoxHeight * bigger, Color.rgb(255, 97, 0), players.get(2));
+                }
+            }
+        }
+
+        if (!(players.size() > 5)) {
+            if (players.size() == 5) {
                 playerOne.setLayoutX(((width / 2) - (playerBoxWidth / 2)) - (playerBoxWidth + width * 0.05));
                 playerOne.setLayoutY(width * 0.10);
 
-                Pane playerTwo = buildPlayerShowBox(playerBoxWidth, playerBoxHeight, Color.rgb(255, 49, 49), "NAME", 1730);
+                assert playerTwo != null;
                 playerTwo.setLayoutX((width / 2) - (playerBoxWidth / 2));
                 playerTwo.setLayoutY(width * 0.10);
 
-                Pane playerThree = buildPlayerShowBox(playerBoxWidth, playerBoxHeight, Color.rgb( 255, 97, 0), "NAME", 898);
+                assert playerThree != null;
                 playerThree.setLayoutX(((width / 2) - (playerBoxWidth / 2)) + playerBoxWidth + width * 0.05);
                 playerThree.setLayoutY(width * 0.10);
 
-                Pane playerFour = buildPlayerShowBox(playerBoxWidth, playerBoxHeight, Color.rgb( 140, 82, 255), "NAME", 8928);
+                assert playerFour != null;
                 playerFour.setLayoutX((width / 2 - playerBoxWidth) - width * 0.025);
                 playerFour.setLayoutY(width * 0.10 + playerBoxHeight + height * 0.025);
 
-                Pane playerFive = buildPlayerShowBox(playerBoxWidth, height * 0.40, Color.rgb( 56, 182, 255), "NAME", 89438);
+                assert playerFive != null;
                 playerFive.setLayoutX((width / 2) + width * 0.025);
                 playerFive.setLayoutY(width * 0.10 + playerBoxHeight + height * 0.025);
 
                 display.getChildren().addAll(playerOne, playerTwo, playerThree, playerFour, playerFive);
-            } else if (playerAmount == 4) {
-                Pane playerOne = buildPlayerShowBox(playerBoxWidth, playerBoxHeight, Color.rgb(33, 203, 85), "NAME", 2000);
+            } else if (players.size() == 4) {
                 playerOne.setLayoutX((width / 2 - playerBoxWidth) - width * 0.0125);
                 playerOne.setLayoutY(width * 0.10);
 
-                Pane playerTwo = buildPlayerShowBox(playerBoxWidth, playerBoxHeight, Color.rgb(255, 49, 49), "NAME", 1730);
+                assert playerTwo != null;
                 playerTwo.setLayoutX((width / 2) + width * 0.0125);
                 playerTwo.setLayoutY(width * 0.10);
 
-                Pane playerThree = buildPlayerShowBox(playerBoxWidth, playerBoxHeight, Color.rgb( 255, 97, 0), "NAME", 898);
+                assert playerThree != null;
                 playerThree.setLayoutX((width / 2 - playerBoxWidth) - width * 0.0125);
                 playerThree.setLayoutY(width * 0.10 + playerBoxHeight + width * 0.025);
 
-                Pane playerFour = buildPlayerShowBox(playerBoxWidth, playerBoxHeight, Color.rgb( 140, 82, 255), "NAME", 8928);
+                assert playerFour != null;
                 playerFour.setLayoutX((width / 2) + width * 0.0125);
                 playerFour.setLayoutY(width * 0.10 + playerBoxHeight +  width * 0.025);
 
                 display.getChildren().addAll(playerOne, playerTwo, playerThree, playerFour);
-            } else if (playerAmount == 3) {
+            } else if (players.size() == 3) {
                 final double bigger = 1.3;
-                Pane playerOne = buildPlayerShowBox(playerBoxWidth * bigger, playerBoxHeight * bigger, Color.rgb(33, 203, 85), "NAME", 2000);
+
                 playerOne.setLayoutX(((width / 2) - ((playerBoxWidth * bigger) / 2)) - ((playerBoxWidth * bigger) + width * 0.025));
                 playerOne.setLayoutY(height * 0.03);
 
-                Pane playerTwo = buildPlayerShowBox(playerBoxWidth * bigger, playerBoxHeight * bigger, Color.rgb(255, 49, 49), "NAME", 1730);
+                assert playerTwo != null;
                 playerTwo.setLayoutX((width / 2) - ((playerBoxWidth * bigger) / 2));
                 playerTwo.setLayoutY(height * 0.03 + (playerBoxWidth * bigger));
 
-                Pane playerThree = buildPlayerShowBox(playerBoxWidth * bigger, playerBoxHeight * bigger, Color.rgb( 255, 97, 0), "NAME", 898);
+                assert playerThree != null;
                 playerThree.setLayoutX(((width / 2) - ((playerBoxWidth * bigger) / 2)) + (playerBoxWidth * bigger) + width * 0.025);
                 playerThree.setLayoutY(height * 0.03);
 
                 display.getChildren().addAll(playerOne, playerTwo, playerThree);
-            } else if (playerAmount == 2) {
+            } else if (players.size() == 2) {
                 final double bigger = 1.7;
-                Pane playerOne = buildPlayerShowBox(playerBoxWidth * bigger, playerBoxHeight * bigger, Color.rgb(33, 203, 85), "NAME", 2000);
+
                 playerOne.setLayoutX(width / 2 - playerBoxWidth * bigger - width * 0.09);
                 playerOne.setLayoutY(height * 0.20);
 
@@ -115,7 +148,7 @@ public class PlayerDisplay extends Pane{
                 Utilities.centeringChildInPane(vs, this);
                 vs.setLayoutY(height * 0.375);
 
-                Pane playerTwo = buildPlayerShowBox(playerBoxWidth * bigger, playerBoxHeight * bigger, Color.rgb(255, 49, 49), "NAME", 1730);
+                assert playerTwo != null;
                 playerTwo.setLayoutX(width / 2 + width * 0.09);
                 playerTwo.setLayoutY(height * 0.20);
 
@@ -140,8 +173,8 @@ public class PlayerDisplay extends Pane{
         return arePlayerGenerated;
     }
 
-    private Pane buildPlayerShowBox(double width, double height, Color backgroundColor, String playerName, int playerKontoStand) {
-        Pane playerShowBox = buildPlayer(width, height, backgroundColor, playerName, playerKontoStand);
+    private Pane buildPlayerShowBox(double width, double height, Color backgroundColor, Spieler player) {
+        Pane playerShowBox = buildPlayer(width, height, backgroundColor, player);
 
         StackPane tradingButton = new StackPane();
 
@@ -155,7 +188,7 @@ public class PlayerDisplay extends Pane{
         tradingButton.setLayoutY(height * 0.40);
         tradingButton.setLayoutX(width * 0.32);
 
-        tradingButton.setOnMouseClicked(event -> DisplayControllerOne.displayTradingMenu());
+        tradingButton.setOnMouseClicked(event -> GameDisplayControllerOne.displayTradingMenu());
 
         Rectangle[] streets = buildStreetInventar(width, height);
 

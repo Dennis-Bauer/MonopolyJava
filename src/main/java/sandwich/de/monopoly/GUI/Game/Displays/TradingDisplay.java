@@ -12,14 +12,16 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
-import sandwich.de.monopoly.GUI.Game.DisplayControllerOne;
+import sandwich.de.monopoly.Enums.Figuren;
+import sandwich.de.monopoly.GUI.Game.GameDisplayControllerOne;
 import sandwich.de.monopoly.Main;
+import sandwich.de.monopoly.Spieler;
 import sandwich.de.monopoly.Utilities;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static sandwich.de.monopoly.GUI.Game.DisplayControllerOne.buildPlayer;
-import static sandwich.de.monopoly.GUI.Game.DisplayControllerOne.buildStreetInventar;
+import static sandwich.de.monopoly.GUI.Game.GameDisplayControllerOne.buildPlayer;
+import static sandwich.de.monopoly.GUI.Game.GameDisplayControllerOne.buildStreetInventar;
 
 public class TradingDisplay extends Pane {
 
@@ -186,7 +188,7 @@ public class TradingDisplay extends Pane {
         cancelButton.setLayoutX(x + WIDTH * 0.306 - buttonWidth);
         cancelButton.setLayoutY(y);
 
-        cancelButton.setOnMouseClicked(event -> DisplayControllerOne.displayPlayerDisplay());
+        cancelButton.setOnMouseClicked(event -> GameDisplayControllerOne.displayPlayerDisplay());
 
         getChildren().addAll(confirmButton, cancelButton);
     }
@@ -218,7 +220,7 @@ public class TradingDisplay extends Pane {
     }
 
     private Pane buildPlayerTradeBox(double width, double height, Color backgroundColor, String playerName, int playerKontoStand) {
-        Pane playerTradingBox = buildPlayer(width, height, backgroundColor, playerName, playerKontoStand);
+        Pane playerTradingBox = buildPlayer(width, height, backgroundColor, new Spieler("s", Figuren.AFFE));
 
         Rectangle[] streets = buildStreetInventar(width, height);
 

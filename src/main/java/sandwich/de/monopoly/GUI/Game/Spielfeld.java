@@ -17,7 +17,6 @@ import sandwich.de.monopoly.GUI.Game.Displays.ActionDisplay;
 import sandwich.de.monopoly.Main;
 import sandwich.de.monopoly.Utilities;
 
-import java.util.Objects;
 
 import static sandwich.de.monopoly.Main.TEXT_FONT;
 
@@ -49,12 +48,11 @@ public class Spielfeld extends Pane{
 
         final double displaysWidth = (width - height) / 1.1;
 
-        DisplayControllerOne.createDisplayOne(displaysWidth, height * 0.60, Color.rgb(97, 220, 43));
-        DisplayControllerOne.createPlayerDisplay();
+        GameDisplayControllerOne.createDisplayOne(displaysWidth, height * 0.60, Color.rgb(97, 220, 43));
 
         ActionDisplay actionDisplay = new ActionDisplay(displaysWidth, height * 0.38, Color.rgb(56, 182, 255));
 
-        displays.getChildren().addAll(DisplayControllerOne.getDisplayOne(), actionDisplay);
+        displays.getChildren().addAll(GameDisplayControllerOne.getDisplayOne(), actionDisplay);
         displays.setLayoutX(height + (((width - height) / 2) - ((width - height) / 1.1) / 2));
         displays.setLayoutY(0);
 
