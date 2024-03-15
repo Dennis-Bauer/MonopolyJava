@@ -15,6 +15,7 @@ public class Main extends Application {
     public static final String TEXT_FONT = "Clear Sans";
     public static final int START_BANK_ACCOUNT = 2000;
     public static final boolean CONSOLE_OUT_PUT = true;
+    public static final String CONSOLE_OUT_PUT_LINEBREAK = "---------------";
 
     //Game variables
     public static HashMap<Integer, Color> streetColor = new HashMap<>();
@@ -39,6 +40,28 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
+
+        Utilities.colors startInfoColor = Utilities.colors.CYAN;
+
+        Utilities.consoleOutPut(startInfoColor, Utilities.textStyle.REGULAR, "Monopoly made by ");
+        Utilities.consoleOutPut(startInfoColor, Utilities.textStyle.BOLD, "Charles Darrow");
+        System.out.println();
+        Utilities.consoleOutPut(startInfoColor, Utilities.textStyle.REGULAR, "Programmed by ");
+        Utilities.consoleOutPut(startInfoColor, Utilities.textStyle.BOLD, "Dennis Bauer");
+        System.out.println();
+        Utilities.consoleOutPut(startInfoColor, Utilities.textStyle.REGULAR, "Graphics by ");
+        Utilities.consoleOutPut(startInfoColor, Utilities.textStyle.BOLD, "Rafael LAST_NAME");
+        System.out.println();
+        Utilities.consoleOutPut(startInfoColor, Utilities.textStyle.REGULAR, "Ideas from ");
+        Utilities.consoleOutPut(startInfoColor, Utilities.textStyle.BOLD, "Rafael LAST_NAME ");
+        Utilities.consoleOutPut(startInfoColor, Utilities.textStyle.REGULAR, "and ");
+        Utilities.consoleOutPut(startInfoColor, Utilities.textStyle.BOLD, "Dennis Bauer");
+        System.out.println();
+
+        if (CONSOLE_OUT_PUT)
+            Utilities.consoleOutPutLine(Utilities.colors.GREEN, Utilities.textStyle.REGULAR, "Infos über die Konsole sind eingeschaltet, und auf Deutsch.");
+        else
+            Utilities.consoleOutPutLine(Utilities.colors.GREEN, Utilities.textStyle.REGULAR, "Information about the program via the console is out");
 
         streetColor.put(0, Color.DARKBLUE); //Straße
         streetColor.put(1, Color.DARKBLUE); //Straße

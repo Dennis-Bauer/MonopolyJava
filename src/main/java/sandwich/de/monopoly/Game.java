@@ -1,6 +1,5 @@
 package sandwich.de.monopoly;
 
-
 import sandwich.de.monopoly.GUI.Game.GameDisplayControllerOne;
 
 import java.util.ArrayList;
@@ -17,6 +16,11 @@ public class Game {
     private int playerInGame = 0;
 
     public Game(Spieler[] players) {
+
+        if (Main.CONSOLE_OUT_PUT) {
+            Utilities.consoleOutPutLine(Utilities.colors.WHITE, Utilities.textStyle.REGULAR, "Game Controller, Konstruktor:");
+            Utilities.consoleOutPutLine(Utilities.colors.WHITE, Utilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
+        }
 
         for (int i = 0, j = 1; i != 5; i++) {
             if (players[i] != null) {
@@ -79,11 +83,15 @@ public class Game {
                 }
                 System.out.println();
             }
+            Utilities.consoleOutPutLine(Utilities.colors.WHITE, Utilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
         }
 
         //Zeigt die Spieler an
         GameDisplayControllerOne.displayPlayers(playerList);
 
+        Main.getGameField().setPlayerToGameboard(playerList);
+
+        Main.changeScene(Main.scenes.GAME);
     }
 
 }

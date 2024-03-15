@@ -115,6 +115,11 @@ public class StartMenu extends Pane{
             errorMessage.toFront();
 
             if (Main.CONSOLE_OUT_PUT) {
+                Utilities.consoleOutPutLine(Utilities.colors.WHITE, Utilities.textStyle.REGULAR, "Start Button action:");
+                Utilities.consoleOutPutLine(Utilities.colors.WHITE, Utilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
+            }
+
+            if (Main.CONSOLE_OUT_PUT) {
                 for (int i = 0; i != 5; i++) {
                     Utilities.consoleOutPut(Utilities.colors.BLUE, Utilities.textStyle.REGULAR, "Player" + i + ": ");
                     if (isPlayerBoxAktiv[i]) {
@@ -145,9 +150,9 @@ public class StartMenu extends Pane{
                                 players[i] = new Spieler(playerNames[i], playerBoxFigures[i]);
                         }
 
+                        if (Main.CONSOLE_OUT_PUT)
+                            Utilities.consoleOutPutLine(Utilities.colors.WHITE, Utilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
                         Main.setGameOperator(new Game(players));
-
-                        Main.changeScene(Main.scenes.GAME);
                     } else {
                         errorMessage.setText("Fehler: Alle müssen verschieden Figuren haben!");
                         errorMessage.setVisible(true);
@@ -169,6 +174,10 @@ public class StartMenu extends Pane{
                 errorMessage.setText("Fehler: Es müssen Spieler erstellt werden damit das Spiel beginnen kann!");
                 errorMessage.setVisible(true);
             }
+
+            if (Main.CONSOLE_OUT_PUT)
+                Utilities.consoleOutPutLine(Utilities.colors.WHITE, Utilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
+
         });
 
         getChildren().addAll(background, header, clouds1, clouds2, startButton, errorMessage);
