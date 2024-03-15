@@ -14,7 +14,7 @@ public class Spieler {
         this.figur = f;
 
         kontoStand = Main.START_BANK_ACCOUNT;
-        fieldPostion = 1;
+        fieldPostion = 35;
     }
 
     public String getName() {
@@ -29,6 +29,9 @@ public class Spieler {
         return figur;
     }
 
+    public int getFieldPostion() {
+        return fieldPostion;
+    }
 
     @Override
     public String toString() {

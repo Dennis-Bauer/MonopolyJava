@@ -65,7 +65,7 @@ public class Main extends Application {
         streetColor.put(22, Color.GRAY);    //Anlagen
         streetColor.put(23, Color.BLACK);   //Bahnhöfe
 
-        Spielfeld gameRoot = new Spielfeld(0, stageWidth, stageHeight, Color.rgb(204, 227, 199));
+        Spielfeld gameRoot = new Spielfeld(0, stageWidth, stageHeight, Color.rgb(112, 224, 88));
         game = new Scene(gameRoot, stageWidth, stageHeight, Color.BLACK);
         StartMenu menuRoot = new StartMenu(stageWidth, stageHeight);
         menu = new Scene(menuRoot, stageWidth, stageHeight, Color.BLACK);
@@ -84,6 +84,10 @@ public class Main extends Application {
 
     public static Game getGameOperator() {
         return gameOperator;
+    }
+
+    public static Spielfeld getGameField() {
+        return (Spielfeld) game.getRoot();
     }
 
     public static void setGameOperator(Game gameOperator) {
