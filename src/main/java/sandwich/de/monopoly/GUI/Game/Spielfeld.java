@@ -14,6 +14,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import sandwich.de.monopoly.Enums.ExtraFields;
 import sandwich.de.monopoly.Exceptions.PlayerIsOutOfBoundsExceptions;
+import sandwich.de.monopoly.Exceptions.ToManyPlayersExceptions;
 import sandwich.de.monopoly.GUI.Game.Displays.ActionDisplay;
 import sandwich.de.monopoly.Main;
 import sandwich.de.monopoly.Spieler;
@@ -88,143 +89,141 @@ public class Spielfeld extends Pane{
             Utilities.consoleOutPutLine(Utilities.colors.WHITE, Utilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
         }
 
-        for (int i = 0; i != 5; i++) {
-            if (i < playerList.size())
-                players[i] = playerList.get(i);
-            if (players[i] != null) {
+        if (!(playerList.size() > 5)) {
+            for (int i = 0; i != 5; i++) {
+                if (i < playerList.size())
+                    players[i] = playerList.get(i);
+                if (players[i] != null) {
 
 
-                double[] calculationBaseX = new double[5];
-                double[] calculationBaseY = new double[5];
+                    double[] calculationBaseX = new double[5];
+                    double[] calculationBaseY = new double[5];
 
-                calculationBaseX[0] = FIELD_HEIGHT / 2 - (PLAYER_FIGURE_SIZE * 3 + (FIELD_HEIGHT * 0.01) * 2) / 2;
-                calculationBaseX[1] = calculationBaseX[0] + PLAYER_FIGURE_SIZE + FIELD_HEIGHT * 0.01;
-                calculationBaseX[2] = calculationBaseX[0] + (PLAYER_FIGURE_SIZE + FIELD_HEIGHT * 0.01) * 2;
-                calculationBaseX[3] = FIELD_HEIGHT / 2 - (PLAYER_FIGURE_SIZE * 2 + (FIELD_HEIGHT * 0.01) * 2) / 2;
-                calculationBaseX[4] = calculationBaseX[3] + PLAYER_FIGURE_SIZE + FIELD_HEIGHT * 0.01;
+                    calculationBaseX[0] = FIELD_HEIGHT / 2 - (PLAYER_FIGURE_SIZE * 3 + (FIELD_HEIGHT * 0.01) * 2) / 2;
+                    calculationBaseX[1] = calculationBaseX[0] + PLAYER_FIGURE_SIZE + FIELD_HEIGHT * 0.01;
+                    calculationBaseX[2] = calculationBaseX[0] + (PLAYER_FIGURE_SIZE + FIELD_HEIGHT * 0.01) * 2;
+                    calculationBaseX[3] = FIELD_HEIGHT / 2 - (PLAYER_FIGURE_SIZE * 2 + (FIELD_HEIGHT * 0.01) * 2) / 2;
+                    calculationBaseX[4] = calculationBaseX[3] + PLAYER_FIGURE_SIZE + FIELD_HEIGHT * 0.01;
 
-                calculationBaseY[0] = FIELD_WIDTH * 9 + FIELD_HEIGHT + FIELD_HEIGHT * 0.35;
-                calculationBaseY[1] = FIELD_WIDTH * 9 + FIELD_HEIGHT + FIELD_HEIGHT * 0.35;
-                calculationBaseY[2] = FIELD_WIDTH * 9 + FIELD_HEIGHT + FIELD_HEIGHT * 0.35;
-                calculationBaseY[3] = calculationBaseY[0] + PLAYER_FIGURE_SIZE + FIELD_HEIGHT * 0.001;
-                calculationBaseY[4] = calculationBaseY[0] + PLAYER_FIGURE_SIZE + FIELD_HEIGHT * 0.001;
+                    calculationBaseY[0] = FIELD_WIDTH * 9 + FIELD_HEIGHT + FIELD_HEIGHT * 0.35;
+                    calculationBaseY[1] = FIELD_WIDTH * 9 + FIELD_HEIGHT + FIELD_HEIGHT * 0.35;
+                    calculationBaseY[2] = FIELD_WIDTH * 9 + FIELD_HEIGHT + FIELD_HEIGHT * 0.35;
+                    calculationBaseY[3] = calculationBaseY[0] + PLAYER_FIGURE_SIZE + FIELD_HEIGHT * 0.001;
+                    calculationBaseY[4] = calculationBaseY[0] + PLAYER_FIGURE_SIZE + FIELD_HEIGHT * 0.001;
 
 
-                if (players[i].getFieldPostion() > 39 || players[i].getFieldPostion() < 0) throw new PlayerIsOutOfBoundsExceptions(players[i].getFieldPostion());
+                    if (players[i].getFieldPostion() > 39 || players[i].getFieldPostion() < 0) throw new PlayerIsOutOfBoundsExceptions(players[i].getFieldPostion());
 
-                playerFigures[i].setImage(players[i].getFigur().getFigureImage());
+                    playerFigures[i].setImage(players[i].getFigur().getFigureImage());
 
-                playerFigures[i].setVisible(true);
-                playerFigures[i].toFront();
+                    playerFigures[i].setVisible(true);
+                    playerFigures[i].toFront();
 
-                if (players[i].getFieldPostion() == 0 || players[i].getFieldPostion() == 10 || players[i].getFieldPostion() == 20 || players[i].getFieldPostion() == 30) {
-                    switch (players[i].getFieldPostion()) {
-                        case 0 -> {
-                            //Postions bleiben gleich, da die Start berechnung bei dieser Position anfängt
+                    if (players[i].getFieldPostion() == 0 || players[i].getFieldPostion() == 10 || players[i].getFieldPostion() == 20 || players[i].getFieldPostion() == 30) {
+                        switch (players[i].getFieldPostion()) {
+                            case 0 -> {
+                                //Postions bleiben gleich, da die Start berechnung bei dieser Position anfängt
+                            }
+                            case 10 -> calculationBaseY[i] = calculationBaseY[i] - FIELD_HEIGHT - FIELD_WIDTH * 9 - FIELD_HEIGHT * 0.25;
+                            case 20 -> {
+                                calculationBaseY[i] = calculationBaseY[i] - FIELD_HEIGHT - FIELD_WIDTH * 9;
+                                calculationBaseX[i] = calculationBaseX[i] + FIELD_HEIGHT + FIELD_WIDTH * 9;
+                            }
+                            case 30 -> calculationBaseX[i] = calculationBaseX[i] + FIELD_HEIGHT + FIELD_WIDTH * 9;
                         }
-                        case 10 -> {
-                            calculationBaseY[i] = calculationBaseY[i] - FIELD_HEIGHT - FIELD_WIDTH * 9 - FIELD_HEIGHT * 0.25;
-                        }
-                        case 20 -> {
-                            calculationBaseY[i] = calculationBaseY[i] - FIELD_HEIGHT - FIELD_WIDTH * 9;
-                            calculationBaseX[i] = calculationBaseX[i] + FIELD_HEIGHT + FIELD_WIDTH * 9;
-                        }
-                        case 30 -> {
-                            calculationBaseX[i] = calculationBaseX[i] + FIELD_HEIGHT + FIELD_WIDTH * 9;
-                        }
-                    }
 
-                } else {
-                    if ((players[i].getFieldPostion() >= 1 && players[i].getFieldPostion() <= 9) ||(players[i].getFieldPostion() >= 21 && players[i].getFieldPostion() <= 29)) {
-                        calculationBaseX[0] = FIELD_HEIGHT * 0.20;
-                        calculationBaseX[1] = calculationBaseX[0];
-                        calculationBaseX[2] = calculationBaseX[0];
-                        calculationBaseX[3] = calculationBaseX[0];
-                        calculationBaseX[4] = calculationBaseX[0];
-
-                        calculationBaseY[0] = FIELD_WIDTH * 8 + FIELD_HEIGHT + (FIELD_WIDTH / 2 - (PLAYER_FIGURE_SIZE * 2 + FIELD_HEIGHT * 0.005) / 2);
-                        calculationBaseY[1] = calculationBaseY[0] + PLAYER_FIGURE_SIZE + FIELD_HEIGHT * 0.005;
-                        calculationBaseY[2] = calculationBaseY[0];
-                        calculationBaseY[3] = calculationBaseY[1];
-                        calculationBaseY[4] = calculationBaseY[0];
                     } else {
-                        calculationBaseX[0] = FIELD_HEIGHT + (FIELD_WIDTH / 2 - (PLAYER_FIGURE_SIZE * 2 + FIELD_HEIGHT * 0.005) / 2);
-                        calculationBaseX[1] = calculationBaseX[0] + PLAYER_FIGURE_SIZE + FIELD_HEIGHT * 0.005;
-                        calculationBaseX[2] = calculationBaseX[0];
-                        calculationBaseX[3] = calculationBaseX[1];
-                        calculationBaseX[4] = calculationBaseX[0];
+                        if ((players[i].getFieldPostion() >= 1 && players[i].getFieldPostion() <= 9) ||(players[i].getFieldPostion() >= 21 && players[i].getFieldPostion() <= 29)) {
+                            calculationBaseX[0] = FIELD_HEIGHT * 0.20;
+                            calculationBaseX[1] = calculationBaseX[0];
+                            calculationBaseX[2] = calculationBaseX[0];
+                            calculationBaseX[3] = calculationBaseX[0];
+                            calculationBaseX[4] = calculationBaseX[0];
 
-                        calculationBaseY[0] = FIELD_HEIGHT * 0.20;
-                        calculationBaseY[1] = calculationBaseY[0];
-                        calculationBaseY[2] = calculationBaseY[0];
-                        calculationBaseY[3] = calculationBaseY[0];
-                        calculationBaseY[4] = calculationBaseY[0];
+                            calculationBaseY[0] = FIELD_WIDTH * 8 + FIELD_HEIGHT + (FIELD_WIDTH / 2 - (PLAYER_FIGURE_SIZE * 2 + FIELD_HEIGHT * 0.005) / 2);
+                            calculationBaseY[1] = calculationBaseY[0] + PLAYER_FIGURE_SIZE + FIELD_HEIGHT * 0.005;
+                            calculationBaseY[2] = calculationBaseY[0];
+                            calculationBaseY[3] = calculationBaseY[1];
+                            calculationBaseY[4] = calculationBaseY[0];
+                        } else {
+                            calculationBaseX[0] = FIELD_HEIGHT + (FIELD_WIDTH / 2 - (PLAYER_FIGURE_SIZE * 2 + FIELD_HEIGHT * 0.005) / 2);
+                            calculationBaseX[1] = calculationBaseX[0] + PLAYER_FIGURE_SIZE + FIELD_HEIGHT * 0.005;
+                            calculationBaseX[2] = calculationBaseX[0];
+                            calculationBaseX[3] = calculationBaseX[1];
+                            calculationBaseX[4] = calculationBaseX[0];
+
+                            calculationBaseY[0] = FIELD_HEIGHT * 0.20;
+                            calculationBaseY[1] = calculationBaseY[0];
+                            calculationBaseY[2] = calculationBaseY[0];
+                            calculationBaseY[3] = calculationBaseY[0];
+                            calculationBaseY[4] = calculationBaseY[0];
+                        }
+
+                        if (players[i].getFieldPostion() >= 1 && players[i].getFieldPostion() <= 9) {
+                            calculationBaseY[i] = calculationBaseY[i] - ((players[i].getFieldPostion() - 1) * FIELD_WIDTH);
+                        } else if (players[i].getFieldPostion() >= 11 && players[i].getFieldPostion() <= 19) {
+                            calculationBaseX[i] = calculationBaseX[i] + ((players[i].getFieldPostion() - 11) * FIELD_WIDTH);
+                        } else if (players[i].getFieldPostion() >= 21 && players[i].getFieldPostion() <= 29) {
+                            calculationBaseY[i] = calculationBaseY[i] - ((29 - players[i].getFieldPostion()) * FIELD_WIDTH);
+                            calculationBaseX[i] = calculationBaseX[i] + FIELD_HEIGHT + FIELD_WIDTH * 9 + FIELD_HEIGHT * 0.60 - PLAYER_FIGURE_SIZE;
+                        } else if (players[i].getFieldPostion() >= 31 && players[i].getFieldPostion() <= 39) {
+                            calculationBaseY[i] = calculationBaseY[i] + FIELD_HEIGHT + FIELD_WIDTH * 9 + FIELD_HEIGHT * 0.60 - PLAYER_FIGURE_SIZE;
+                            calculationBaseX[i] = calculationBaseX[i] + ((players[i].getFieldPostion() - 31) * FIELD_WIDTH);
+                        } else throw new PlayerIsOutOfBoundsExceptions(players[i].getFieldPostion());
                     }
 
-                    if (players[i].getFieldPostion() >= 1 && players[i].getFieldPostion() <= 9) {
-                        calculationBaseY[i] = calculationBaseY[i] - ((players[i].getFieldPostion() - 1) * FIELD_WIDTH);
-                    } else if (players[i].getFieldPostion() >= 11 && players[i].getFieldPostion() <= 19) {
-                        calculationBaseX[i] = calculationBaseX[i] + ((players[i].getFieldPostion() - 11) * FIELD_WIDTH);
-                    } else if (players[i].getFieldPostion() >= 21 && players[i].getFieldPostion() <= 29) {
-                        calculationBaseY[i] = calculationBaseY[i] - ((29 - players[i].getFieldPostion()) * FIELD_WIDTH);
-                        calculationBaseX[i] = calculationBaseX[i] + FIELD_HEIGHT + FIELD_WIDTH * 9 + FIELD_HEIGHT * 0.60 - PLAYER_FIGURE_SIZE;
-                    } else if (players[i].getFieldPostion() >= 31 && players[i].getFieldPostion() <= 39) {
-                        calculationBaseY[i] = calculationBaseY[i] + FIELD_HEIGHT + FIELD_WIDTH * 9 + FIELD_HEIGHT * 0.60 - PLAYER_FIGURE_SIZE;
-                        calculationBaseX[i] = calculationBaseX[i] + ((players[i].getFieldPostion() - 31) * FIELD_WIDTH);
-                    } else throw new PlayerIsOutOfBoundsExceptions(players[i].getFieldPostion());
+                    switch (i) {
+                        case 0 -> {
+                            playerFigures[i].setX(calculationBaseX[0]);
+                            playerFigures[i].setY(calculationBaseY[0]);
+                            if (Main.CONSOLE_OUT_PUT) {
+                                Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.REGULAR, "Die Figur vom 1. Spieler wurde auf diese Position gesetzt: ");
+                                Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.BOLD, "[" + calculationBaseX[0] + "/" + calculationBaseY[0] + "]");
+                                System.out.println();
+                            }
+                        }
+                        case 1 -> {
+                            playerFigures[i].setX(calculationBaseX[1]);
+                            playerFigures[i].setY(calculationBaseY[1]);
+                            if (Main.CONSOLE_OUT_PUT) {
+                                Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.REGULAR, "Die Figur vom 2. Spieler wurde auf diese Position gesetzt: ");
+                                Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.BOLD, "[" + calculationBaseX[1] + "/" + calculationBaseY[1] + "]");
+                                System.out.println();
+                            }
+                        }
+                        case 2 -> {
+                            playerFigures[i].setX(calculationBaseX[2]);
+                            playerFigures[i].setY(calculationBaseY[2]);
+                            if (Main.CONSOLE_OUT_PUT) {
+                                Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.REGULAR, "Die Figur vom 3. Spieler wurde auf diese Position gesetzt: ");
+                                Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.BOLD, "[" + calculationBaseX[2] + "/" + calculationBaseY[2] + "]");
+                                System.out.println();
+                            }
+                        }
+                        case 3 -> {
+                            playerFigures[i].setX(calculationBaseX[3]);
+                            playerFigures[i].setY(calculationBaseY[3]);
+                            if (Main.CONSOLE_OUT_PUT) {
+                                Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.REGULAR, "Die Figur vom 4. Spieler wurde auf diese Position gesetzt: ");
+                                Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.BOLD, "[" + calculationBaseX[4] + "/" + calculationBaseY[4] + "]");
+                                System.out.println();
+                            }
+                        }
+                        case 4 -> {
+                            playerFigures[i].setX(calculationBaseX[4]);
+                            playerFigures[i].setY(calculationBaseY[4]);
+                            if (Main.CONSOLE_OUT_PUT) {
+                                Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.REGULAR, "Die Figur vom 5. Spieler wurde auf diese Position gesetzt: ");
+                                Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.BOLD, "[" + calculationBaseX[4] + "/" + calculationBaseY[4] + "]");
+                                System.out.println();
+                            }
+                        }
+                    }
+                } else {
+                    playerFigures[i].setVisible(false);
                 }
-
-                switch (i) {
-                    case 0 -> {
-                        playerFigures[i].setX(calculationBaseX[0]);
-                        playerFigures[i].setY(calculationBaseY[0]);
-                        if (Main.CONSOLE_OUT_PUT) {
-                            Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.REGULAR, "Die Figur vom 1. Spieler wurde auf diese Position gesetzt: ");
-                            Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.BOLD, "[" + calculationBaseX[0] + "/" + calculationBaseY[0] + "]");
-                            System.out.println();
-                        }
-                    }
-                    case 1 -> {
-                        playerFigures[i].setX(calculationBaseX[1]);
-                        playerFigures[i].setY(calculationBaseY[1]);
-                        if (Main.CONSOLE_OUT_PUT) {
-                            Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.REGULAR, "Die Figur vom 2. Spieler wurde auf diese Position gesetzt: ");
-                            Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.BOLD, "[" + calculationBaseX[1] + "/" + calculationBaseY[1] + "]");
-                            System.out.println();
-                        }
-                    }
-                    case 2 -> {
-                        playerFigures[i].setX(calculationBaseX[2]);
-                        playerFigures[i].setY(calculationBaseY[2]);
-                        if (Main.CONSOLE_OUT_PUT) {
-                            Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.REGULAR, "Die Figur vom 3. Spieler wurde auf diese Position gesetzt: ");
-                            Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.BOLD, "[" + calculationBaseX[2] + "/" + calculationBaseY[2] + "]");
-                            System.out.println();
-                        }
-                    }
-                    case 3 -> {
-                        playerFigures[i].setX(calculationBaseX[3]);
-                        playerFigures[i].setY(calculationBaseY[3]);
-                        if (Main.CONSOLE_OUT_PUT) {
-                            Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.REGULAR, "Die Figur vom 4. Spieler wurde auf diese Position gesetzt: ");
-                            Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.BOLD, "[" + calculationBaseX[4] + "/" + calculationBaseY[4] + "]");
-                            System.out.println();
-                        }
-                    }
-                    case 4 -> {
-                        playerFigures[i].setX(calculationBaseX[4]);
-                        playerFigures[i].setY(calculationBaseY[4]);
-                        if (Main.CONSOLE_OUT_PUT) {
-                            Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.REGULAR, "Die Figur vom 5. Spieler wurde auf diese Position gesetzt: ");
-                            Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.BOLD, "[" + calculationBaseX[4] + "/" + calculationBaseY[4] + "]");
-                            System.out.println();
-                        }
-                    }
-                }
-            } else {
-                playerFigures[i].setVisible(false);
             }
-        }
+        } else throw new ToManyPlayersExceptions();
 
         if (Main.CONSOLE_OUT_PUT)
             Utilities.consoleOutPutLine(Utilities.colors.WHITE, Utilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);

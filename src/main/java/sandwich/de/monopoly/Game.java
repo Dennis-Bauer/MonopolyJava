@@ -1,5 +1,6 @@
 package sandwich.de.monopoly;
 
+import sandwich.de.monopoly.Exceptions.ToManyPlayersExceptions;
 import sandwich.de.monopoly.GUI.Game.GameDisplayControllerOne;
 
 import java.util.ArrayList;
@@ -80,6 +81,7 @@ public class Game {
                         } else
                             Utilities.consoleOutPut(Utilities.colors.RED, Utilities.textStyle.REGULAR, "Null");
                     }
+                    default -> throw new ToManyPlayersExceptions();
                 }
                 System.out.println();
             }

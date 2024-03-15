@@ -8,13 +8,12 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
-import sandwich.de.monopoly.Enums.Figuren;
+import sandwich.de.monopoly.Exceptions.ToManyPlayersExceptions;
 import sandwich.de.monopoly.GUI.Game.GameDisplayControllerOne;
 import sandwich.de.monopoly.Main;
 import sandwich.de.monopoly.Spieler;
 import sandwich.de.monopoly.Utilities;
 
-import java.security.SecurityPermission;
 import java.util.ArrayList;
 
 import static sandwich.de.monopoly.GUI.Game.GameDisplayControllerOne.buildPlayer;
@@ -154,8 +153,8 @@ public class PlayerDisplay extends Pane{
 
 
                 display.getChildren().addAll(playerOne, vs, playerTwo);
-            } else throw new RuntimeException("Too many/little Players");
-        } else throw new RuntimeException("Too many Players");
+            } else throw new ToManyPlayersExceptions();
+        } else throw new ToManyPlayersExceptions();
 
         display.getChildren().add(header);
 
