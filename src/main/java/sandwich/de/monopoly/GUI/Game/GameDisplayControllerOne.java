@@ -24,12 +24,12 @@ public class GameDisplayControllerOne {
     private static PlayerDisplay playerDisplay;
     private static TradingDisplay tradingDisplay;
 
-    public static void createDisplayOne(double width, double height, Color backgroundColor) {
+    public static void createDisplayOne(double width, double height) {
         displayOne = new Pane();
         displayOne.setId("gameScene_DisplayOne");
         displayOne.setMaxSize(width, height);
 
-        Rectangle background = Utilities.buildRectangle("gameScene_playerDisplay_Background", width, height, backgroundColor, true, Color.WHITE, width * 0.005);
+        Rectangle background = Utilities.buildRectangle("gameScene_playerDisplay_Background", width, height, Color.rgb(97, 220, 43), true, Color.WHITE, width * 0.005);
 
         playerDisplay = new PlayerDisplay(width, height);
         tradingDisplay = new TradingDisplay(width, height, Color.RED);
@@ -78,7 +78,7 @@ public class GameDisplayControllerOne {
         Label headerName = Utilities.buildLabel("gameScene_playerDisplay_playerBox_NameHeader", player.getName(), Font.font(Main.TEXT_FONT, FontWeight.BOLD, width / 8), TextAlignment.CENTER, Color.WHITE);
         Utilities.centeringChildInPane(headerName, playerBox);
 
-        ImageView figureDisplay = Utilities.createImageView("gameScene_playerDisplay_playerBox_FigureDisplay", player.getFigur().getFigureImage(), width / 3.725, (width / 3.725) / 2, width * 0.725, height * 0.025);
+        ImageView figureDisplay = Utilities.createImageView("gameScene_playerDisplay_playerBox_FigureDisplay", player.getFigur().getFigureImage(), (width / 3.725) / 2, (width / 3.725) / 2, width - (width / 3.725) / 2 - (width * 0.001), height * 0.025);
 
         Line headerSeparatingline = Utilities.buildLine("gameScene_playerDisplay_playerBox_NameHeaderSeparatingLine", new Point2D(0, height * 0.15), new Point2D(width, height * 0.15), width * 0.005, Color.WHITE);
 

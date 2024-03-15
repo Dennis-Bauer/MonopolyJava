@@ -83,6 +83,10 @@ public class Spielfeld extends Pane{
 
     public void setPlayerToGameboard(ArrayList<Spieler> playerList) {
 
+        if (Main.CONSOLE_OUT_PUT) {
+            Utilities.consoleOutPutLine(Utilities.colors.WHITE, Utilities.textStyle.REGULAR, "Spieler Figuren werden auf dem Spielbrett Positioniert:");
+            Utilities.consoleOutPutLine(Utilities.colors.WHITE, Utilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
+        }
 
         for (int i = 0; i != 5; i++) {
             if (i < playerList.size())
@@ -174,22 +178,47 @@ public class Spielfeld extends Pane{
                     case 0 -> {
                         playerFigures[i].setX(calculationBaseX[0]);
                         playerFigures[i].setY(calculationBaseY[0]);
+                        if (Main.CONSOLE_OUT_PUT) {
+                            Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.REGULAR, "Die Figur vom 1. Spieler wurde auf diese Position gesetzt: ");
+                            Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.BOLD, "[" + calculationBaseX[0] + "/" + calculationBaseY[0] + "]");
+                            System.out.println();
+                        }
                     }
                     case 1 -> {
                         playerFigures[i].setX(calculationBaseX[1]);
                         playerFigures[i].setY(calculationBaseY[1]);
+                        if (Main.CONSOLE_OUT_PUT) {
+                            Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.REGULAR, "Die Figur vom 2. Spieler wurde auf diese Position gesetzt: ");
+                            Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.BOLD, "[" + calculationBaseX[1] + "/" + calculationBaseY[1] + "]");
+                            System.out.println();
+                        }
                     }
                     case 2 -> {
                         playerFigures[i].setX(calculationBaseX[2]);
                         playerFigures[i].setY(calculationBaseY[2]);
+                        if (Main.CONSOLE_OUT_PUT) {
+                            Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.REGULAR, "Die Figur vom 3. Spieler wurde auf diese Position gesetzt: ");
+                            Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.BOLD, "[" + calculationBaseX[2] + "/" + calculationBaseY[2] + "]");
+                            System.out.println();
+                        }
                     }
                     case 3 -> {
                         playerFigures[i].setX(calculationBaseX[3]);
                         playerFigures[i].setY(calculationBaseY[3]);
+                        if (Main.CONSOLE_OUT_PUT) {
+                            Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.REGULAR, "Die Figur vom 4. Spieler wurde auf diese Position gesetzt: ");
+                            Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.BOLD, "[" + calculationBaseX[4] + "/" + calculationBaseY[4] + "]");
+                            System.out.println();
+                        }
                     }
                     case 4 -> {
                         playerFigures[i].setX(calculationBaseX[4]);
                         playerFigures[i].setY(calculationBaseY[4]);
+                        if (Main.CONSOLE_OUT_PUT) {
+                            Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.REGULAR, "Die Figur vom 5. Spieler wurde auf diese Position gesetzt: ");
+                            Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.BOLD, "[" + calculationBaseX[4] + "/" + calculationBaseY[4] + "]");
+                            System.out.println();
+                        }
                     }
                 }
             } else {
@@ -197,6 +226,8 @@ public class Spielfeld extends Pane{
             }
         }
 
+        if (Main.CONSOLE_OUT_PUT)
+            Utilities.consoleOutPutLine(Utilities.colors.WHITE, Utilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
 
     }
     public void rotateGameBoard(double rotate) {
