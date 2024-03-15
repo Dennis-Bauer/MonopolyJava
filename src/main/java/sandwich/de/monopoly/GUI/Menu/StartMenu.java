@@ -384,8 +384,8 @@ public class StartMenu extends Pane{
 
         ImageView figure = Utilities.createImageView("menu_playerSelector_selectPlayerFigur_Figur", new Image(Objects.requireNonNull(Main.class.getResourceAsStream("/sandwich/de/monopoly/figuren/affe.png"))), 0, 0);
         figure.setY(buttonRadius / 20);
-        figure.setX(buttonRadius * 0.4 );
-        figure.setFitWidth(width / 2.125);
+        figure.setX(buttonRadius * 0.4 + (width / 4.25) / 2);
+        figure.setFitWidth(width / 4.25);
         figure.setFitHeight(width / 4.25);
         figure.setVisible(false);
 
