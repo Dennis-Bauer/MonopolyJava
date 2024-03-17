@@ -12,16 +12,22 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
+import sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities;
 import sandwich.de.monopoly.Enums.ExtraFields;
 import sandwich.de.monopoly.Exceptions.PlayerIsOutOfBoundsExceptions;
 import sandwich.de.monopoly.Exceptions.ToManyPlayersExceptions;
 import sandwich.de.monopoly.GUI.Game.Displays.ActionDisplay;
 import sandwich.de.monopoly.Main;
 import sandwich.de.monopoly.Spieler;
-import sandwich.de.monopoly.Utilities;
 
 import java.util.ArrayList;
 
+import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPut;
+import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPutLine;
+import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.JavaUtilities.buildLongText;
+import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildLabel;
+import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildRectangle;
+import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXUtilities.*;
 import static sandwich.de.monopoly.Main.TEXT_FONT;
 
 
@@ -49,7 +55,7 @@ public class Spielfeld extends Pane{
         FIELD_WIDTH = (height / MIDDLE_RECTANGLE_RATION) / 9;
         PLAYER_FIGURE_SIZE = height * 0.035;
 
-        Rectangle background = Utilities.buildRectangle("gameScene_Background", width, height, backgroundColor, true, null, 0, height, 0);
+        Rectangle background = buildRectangle("gameScene_Background", width, height, backgroundColor, true, null, 0, height, 0);
 
         VBox displays = new VBox(height * 0.02);
 
@@ -85,8 +91,8 @@ public class Spielfeld extends Pane{
     public void setPlayerToGameboard(ArrayList<Spieler> playerList) {
 
         if (Main.CONSOLE_OUT_PUT) {
-            Utilities.consoleOutPutLine(Utilities.colors.WHITE, Utilities.textStyle.REGULAR, "Spieler Figuren werden auf dem Spielbrett Positioniert:");
-            Utilities.consoleOutPutLine(Utilities.colors.WHITE, Utilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
+            consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, "Spieler Figuren werden auf dem Spielbrett Positioniert:");
+            consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
         }
 
         if (!(playerList.size() > 5)) {
@@ -177,8 +183,8 @@ public class Spielfeld extends Pane{
                             playerFigures[i].setX(calculationBaseX[0]);
                             playerFigures[i].setY(calculationBaseY[0]);
                             if (Main.CONSOLE_OUT_PUT) {
-                                Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.REGULAR, "Die Figur vom 1. Spieler wurde auf diese Position gesetzt: ");
-                                Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.BOLD, "[" + calculationBaseX[0] + "/" + calculationBaseY[0] + "]");
+                                consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Die Figur vom 1. Spieler wurde auf diese Position gesetzt: ");
+                                consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.BOLD, "[" + calculationBaseX[0] + "/" + calculationBaseY[0] + "]");
                                 System.out.println();
                             }
                         }
@@ -186,8 +192,8 @@ public class Spielfeld extends Pane{
                             playerFigures[i].setX(calculationBaseX[1]);
                             playerFigures[i].setY(calculationBaseY[1]);
                             if (Main.CONSOLE_OUT_PUT) {
-                                Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.REGULAR, "Die Figur vom 2. Spieler wurde auf diese Position gesetzt: ");
-                                Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.BOLD, "[" + calculationBaseX[1] + "/" + calculationBaseY[1] + "]");
+                                consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Die Figur vom 2. Spieler wurde auf diese Position gesetzt: ");
+                                consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.BOLD, "[" + calculationBaseX[1] + "/" + calculationBaseY[1] + "]");
                                 System.out.println();
                             }
                         }
@@ -195,8 +201,8 @@ public class Spielfeld extends Pane{
                             playerFigures[i].setX(calculationBaseX[2]);
                             playerFigures[i].setY(calculationBaseY[2]);
                             if (Main.CONSOLE_OUT_PUT) {
-                                Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.REGULAR, "Die Figur vom 3. Spieler wurde auf diese Position gesetzt: ");
-                                Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.BOLD, "[" + calculationBaseX[2] + "/" + calculationBaseY[2] + "]");
+                                consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Die Figur vom 3. Spieler wurde auf diese Position gesetzt: ");
+                                consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.BOLD, "[" + calculationBaseX[2] + "/" + calculationBaseY[2] + "]");
                                 System.out.println();
                             }
                         }
@@ -204,8 +210,8 @@ public class Spielfeld extends Pane{
                             playerFigures[i].setX(calculationBaseX[3]);
                             playerFigures[i].setY(calculationBaseY[3]);
                             if (Main.CONSOLE_OUT_PUT) {
-                                Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.REGULAR, "Die Figur vom 4. Spieler wurde auf diese Position gesetzt: ");
-                                Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.BOLD, "[" + calculationBaseX[4] + "/" + calculationBaseY[4] + "]");
+                                consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Die Figur vom 4. Spieler wurde auf diese Position gesetzt: ");
+                                consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.BOLD, "[" + calculationBaseX[4] + "/" + calculationBaseY[4] + "]");
                                 System.out.println();
                             }
                         }
@@ -213,8 +219,8 @@ public class Spielfeld extends Pane{
                             playerFigures[i].setX(calculationBaseX[4]);
                             playerFigures[i].setY(calculationBaseY[4]);
                             if (Main.CONSOLE_OUT_PUT) {
-                                Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.REGULAR, "Die Figur vom 5. Spieler wurde auf diese Position gesetzt: ");
-                                Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.BOLD, "[" + calculationBaseX[4] + "/" + calculationBaseY[4] + "]");
+                                consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Die Figur vom 5. Spieler wurde auf diese Position gesetzt: ");
+                                consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.BOLD, "[" + calculationBaseX[4] + "/" + calculationBaseY[4] + "]");
                                 System.out.println();
                             }
                         }
@@ -226,7 +232,7 @@ public class Spielfeld extends Pane{
         } else throw new ToManyPlayersExceptions();
 
         if (Main.CONSOLE_OUT_PUT)
-            Utilities.consoleOutPutLine(Utilities.colors.WHITE, Utilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
+            consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
 
     }
     public void rotateGameBoard(double rotate) {
@@ -241,48 +247,48 @@ public class Spielfeld extends Pane{
         board.setAlignment(Pos.CENTER);
 
         //Black Field
-        Rectangle f = Utilities.buildRectangle("Test" ,size, size, Color.BLACK, true, Color.BLACK, 0);
-        Rectangle v = Utilities.buildRectangle("Test" ,size / MIDDLE_RECTANGLE_RATION, size/ MIDDLE_RECTANGLE_RATION, COLOR, true, Color.BLACK, 0);
+        Rectangle f = buildRectangle("Test" ,size, size, Color.BLACK, true, Color.BLACK, 0);
+        Rectangle v = buildRectangle("Test" ,size / MIDDLE_RECTANGLE_RATION, size/ MIDDLE_RECTANGLE_RATION, COLOR, true, Color.BLACK, 0);
 
         board.getChildren().addAll(f, v);
 
         //Creating Fields
-        fields[0] = buildStreet(Main.streetColor.get(0).brighter(), Utilities.buildLongText("Bank", "Straße 00"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[0] = buildStreet(Main.streetColor.get(0).brighter(), buildLongText("Bank", "Straße 00"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
         fields[1] = buildExtraPayField(ExtraFields.SPOTIFY_PREMIUM, 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[2] = buildStreet(Main.streetColor.get(1), Utilities.buildLongText("Bank", "Straße 02"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[2] = buildStreet(Main.streetColor.get(1), buildLongText("Bank", "Straße 02"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
         fields[3] = buildGetChanceCard(ChanceColors.RED ,COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[4] = buildStation(Utilities.buildLongText("Nord-", "Bahnhof"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[5] = buildStreet(Main.streetColor.get(2), Utilities.buildLongText("Bank", "Straße 05"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[4] = buildStation(buildLongText("Nord-", "Bahnhof"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[5] = buildStreet(Main.streetColor.get(2), buildLongText("Bank", "Straße 05"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
         fields[6] = buildGetCommunityCard(COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[7] = buildStreet(Main.streetColor.get(3), Utilities.buildLongText("Bank", "Straße 07"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[8] = buildStreet(Main.streetColor.get(4), Utilities.buildLongText("Bank", "Straße 08"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[9] = buildStreet(Main.streetColor.get(5), Utilities.buildLongText("Bank", "Straße 09"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[7] = buildStreet(Main.streetColor.get(3),buildLongText("Bank", "Straße 07"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[8] = buildStreet(Main.streetColor.get(4),buildLongText("Bank", "Straße 08"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[9] = buildStreet(Main.streetColor.get(5),buildLongText("Bank", "Straße 09"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
         fields[10] = buildExtraPayField(ExtraFields.HESSLER_SCHULDEN, 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[11] = buildStreet(Main.streetColor.get(6), Utilities.buildLongText("Bank", "Straße 11"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[12] = buildStreet(Main.streetColor.get(7), Utilities.buildLongText("Bank", "Straße 12"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[13] = buildStation(Utilities.buildLongText("West-", "Bahnhof"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[14] = buildStreet(Main.streetColor.get(8), Utilities.buildLongText("Bank", "Straße 13"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[15] = buildStreet(Main.streetColor.get(9), Utilities.buildLongText("Bank", "Straße 15"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[11] = buildStreet(Main.streetColor.get(6), buildLongText("Bank", "Straße 11"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[12] = buildStreet(Main.streetColor.get(7), buildLongText("Bank", "Straße 12"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[13] = buildStation(buildLongText("West-", "Bahnhof"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[14] = buildStreet(Main.streetColor.get(8), buildLongText("Bank", "Straße 13"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[15] = buildStreet(Main.streetColor.get(9), buildLongText("Bank", "Straße 15"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
         fields[16] = buildGetChanceCard(ChanceColors.BLUE, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[17] = buildStreet(Main.streetColor.get(10), Utilities.buildLongText("Bank", "Straße 17"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[18] = buildStreet(Main.streetColor.get(11), Utilities.buildLongText("Bank", "Straße 18"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[19] = buildStreet(Main.streetColor.get(12), Utilities.buildLongText("Bank", "Straße 19"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[17] = buildStreet(Main.streetColor.get(10), buildLongText("Bank", "Straße 17"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[18] = buildStreet(Main.streetColor.get(11), buildLongText("Bank", "Straße 18"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[19] = buildStreet(Main.streetColor.get(12), buildLongText("Bank", "Straße 19"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
         fields[20] = buildGetCommunityCard(COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[21] = buildStreet(Main.streetColor.get(13), Utilities.buildLongText("Bank", "Straße 21"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[22] = buildStation(Utilities.buildLongText("Süd-", "Bahnhof"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[23] = buildStreet(Main.streetColor.get(14), Utilities.buildLongText("Bank", "Straße 23"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[24] = buildStreet(Main.streetColor.get(15), Utilities.buildLongText("Bank", "Straße 24"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[21] = buildStreet(Main.streetColor.get(13), buildLongText("Bank", "Straße 21"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[22] = buildStation(buildLongText("Süd-", "Bahnhof"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[23] = buildStreet(Main.streetColor.get(14), buildLongText("Bank", "Straße 23"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[24] = buildStreet(Main.streetColor.get(15), buildLongText("Bank", "Straße 24"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
         fields[25] = buildExtraPayField(ExtraFields.NAME_THREE, 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[26] = buildStreet(Main.streetColor.get(16), Utilities.buildLongText("Bank", "Straße 26"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[27] = buildStreet(Main.streetColor.get(17), Utilities.buildLongText("Bank", "Straße 27"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[28] = buildStreet(Main.streetColor.get(18), Utilities.buildLongText("Bank", "Straße 28"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[26] = buildStreet(Main.streetColor.get(16), buildLongText("Bank", "Straße 26"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[27] = buildStreet(Main.streetColor.get(17), buildLongText("Bank", "Straße 27"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[28] = buildStreet(Main.streetColor.get(18), buildLongText("Bank", "Straße 28"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
         fields[29] = buildGetChanceCard(ChanceColors.GREEN, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[30] = buildStreet(Main.streetColor.get(19), Utilities.buildLongText("Bank", "Straße 30"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[31] = buildStation(Utilities.buildLongText("Haupt-", "Bahnhof"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[30] = buildStreet(Main.streetColor.get(19), buildLongText("Bank", "Straße 30"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[31] = buildStation(buildLongText("Haupt-", "Bahnhof"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
         fields[32] = buildExtraPayField(ExtraFields.NAME_FOUR, 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[33] = buildStreet(Main.streetColor.get(20), Utilities.buildLongText("Bank", "Straße 33"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[33] = buildStreet(Main.streetColor.get(20), buildLongText("Bank", "Straße 33"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
         fields[34] = buildGetCommunityCard(COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[35] = buildStreet(Main.streetColor.get(21), Utilities.buildLongText("Bank", "Straße 35"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[35] = buildStreet(Main.streetColor.get(21), buildLongText("Bank", "Straße 35"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
 
         //Creating Corners
         corners[0] = buildStart(COLOR, FIELD_HEIGHT);
@@ -345,13 +351,13 @@ public class Spielfeld extends Pane{
         field.setId("street_field");
         field.setMaxSize(width, height);
 
-        Rectangle background = Utilities.buildRectangle("street_Background" ,width, height, backgroundColor, true, Color.BLACK, BORDER_WIDTH);
-        Rectangle colorIndicator = Utilities.buildRectangle("street_ColorIndicator" ,width, height/4, streetColor, true, Color.BLACK, BORDER_WIDTH);
-        Label nameIndicator = Utilities.buildLabel("street_NameIndicator", name, Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE), TextAlignment.CENTER, Color.BLACK, 0, height / 3);
-        Label priceIndicator = Utilities.buildLabel("street_PriceIndicator", (price + "€"), Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE), TextAlignment.CENTER, Color.BLACK, 0, 5 * (height / 6));
+        Rectangle background = buildRectangle("street_Background" ,width, height, backgroundColor, true, Color.BLACK, BORDER_WIDTH);
+        Rectangle colorIndicator = buildRectangle("street_ColorIndicator" ,width, height/4, streetColor, true, Color.BLACK, BORDER_WIDTH);
+        Label nameIndicator =  buildLabel("street_NameIndicator", name, Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE), TextAlignment.CENTER, Color.BLACK, 0, height / 3);
+        Label priceIndicator = buildLabel("street_PriceIndicator", (price + "€"), Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE), TextAlignment.CENTER, Color.BLACK, 0, 5 * (height / 6));
 
-        Utilities.centeringChildInPane(nameIndicator, field);
-        Utilities.centeringChildInPane(priceIndicator, field);
+        centeringChildInPane(nameIndicator, field);
+        centeringChildInPane(priceIndicator, field);
 
         field.getChildren().addAll(background, colorIndicator, nameIndicator, priceIndicator);
 
@@ -365,9 +371,9 @@ public class Spielfeld extends Pane{
         field.setId("start_field");
         field.setMaxSize(size, size);
 
-        Rectangle background = Utilities.buildRectangle("corner_start_Background", size, size, backgroundColor, true, Color.BLACK, BORDER_WIDTH);
-        ImageView arrow = Utilities.createImageView("corner_start_Arrow" ,"/sandwich/de/monopoly/gameBoard/startArrow.png", size / 6, size / 1.25, (size -(size / 1.25)) / 2, (size -(size / 1.25)) / 2);
-        Label text = Utilities.buildLabel("corner_start_Text", Utilities.buildLongText("LOS", "Bekomme 200", "beim drüber gehen"), Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE), TextAlignment.CENTER, Color.BLACK);
+        Rectangle background = buildRectangle("corner_start_Background", size, size, backgroundColor, true, Color.BLACK, BORDER_WIDTH);
+        ImageView arrow = createImageView("corner_start_Arrow" ,"/sandwich/de/monopoly/gameBoard/startArrow.png", size / 6, size / 1.25, (size -(size / 1.25)) / 2, (size -(size / 1.25)) / 2);
+        Label text = buildLabel("corner_start_Text", buildLongText("LOS", "Bekomme 200", "beim drüber gehen"), Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE), TextAlignment.CENTER, Color.BLACK);
 
         text.widthProperty().addListener((obs, oldVal, newVal) -> text.setTranslateX((size - newVal.doubleValue()) / 0.8));
         text.heightProperty().addListener((obs, oldVal, newVal) -> text.setTranslateY((newVal.doubleValue()) / 1.5));
@@ -382,15 +388,15 @@ public class Spielfeld extends Pane{
         field.setId("jail_field");
         field.setMaxSize(size, size);
 
-        Rectangle background = Utilities.buildRectangle("corner_jail_Background", size, size, backgroundColor, true, Color.BLACK, BORDER_WIDTH);
-        Rectangle backgroundJail = Utilities.buildRectangle("corner_jail_JailBackground", size / 2, size / 2, Color.ORANGE, true, Color.BLACK, BORDER_WIDTH, size - size / 2, 0);
-        ImageView jailMan = Utilities.createImageView("corner_jail_Man" ,"/sandwich/de/monopoly/gameBoard/jailMan.png", size / 3, size / 3, size - size / 2 + (((size / 2) - (size / 3) / 2) - size / 4), (((size / 2) - (size / 3) / 2) - size / 4));
-        Label header = Utilities.buildLabel("corner_jail_Header", "Im", Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE), TextAlignment.CENTER, Color.BLACK, size / 2 + size / 3, size / 18);
-        Label footer = Utilities.buildLabel("corner_jail_FooterText", "Bau", Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE), TextAlignment.CENTER, Color.BLACK, size / 1.9, size / 2.9);
-        Label textOne = Utilities.buildLabel("corner_jail_FirstText", "Nur", Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE * 1.5), TextAlignment.CENTER, Color.BLACK, 0, size / 5.5);
-        Label textTwo = Utilities.buildLabel("corner_jail_SecondText", "zu besuch", Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE * 1.5), TextAlignment.CENTER, Color.BLACK, 0, size / 1.3);
+        Rectangle background = buildRectangle("corner_jail_Background", size, size, backgroundColor, true, Color.BLACK, BORDER_WIDTH);
+        Rectangle backgroundJail = buildRectangle("corner_jail_JailBackground", size / 2, size / 2, Color.ORANGE, true, Color.BLACK, BORDER_WIDTH, size - size / 2, 0);
+        ImageView jailMan = createImageView("corner_jail_Man" ,"/sandwich/de/monopoly/gameBoard/jailMan.png", size / 3, size / 3, size - size / 2 + (((size / 2) - (size / 3) / 2) - size / 4), (((size / 2) - (size / 3) / 2) - size / 4));
+        Label header = buildLabel("corner_jail_Header", "Im", Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE), TextAlignment.CENTER, Color.BLACK, size / 2 + size / 3, size / 18);
+        Label footer = buildLabel("corner_jail_FooterText", "Bau", Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE), TextAlignment.CENTER, Color.BLACK, size / 1.9, size / 2.9);
+        Label textOne = buildLabel("corner_jail_FirstText", "Nur", Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE * 1.5), TextAlignment.CENTER, Color.BLACK, 0, size / 5.5);
+        Label textTwo = buildLabel("corner_jail_SecondText", "zu besuch", Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE * 1.5), TextAlignment.CENTER, Color.BLACK, 0, size / 1.3);
 
-        Utilities.centeringChildInPane(textTwo, field);
+        centeringChildInPane(textTwo, field);
 
         jailMan.setRotate(45);
         header.setRotate(45);
@@ -406,10 +412,10 @@ public class Spielfeld extends Pane{
         field.setId("freeParking_field");
         field.setMaxSize(size, size);
 
-        Rectangle background = Utilities.buildRectangle("corner_freeParking_Background", size, size, backgroundColor, true, Color.BLACK, BORDER_WIDTH);
-        Label header = Utilities.buildLabel("corner_freeParking_Header", "Freies", Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE * 2), TextAlignment.CENTER, Color.BLACK, size / 5 + size / 3.25, size / 5.75);
-        ImageView freeParking = Utilities.createImageView("corner_freeParking_Picture", "/sandwich/de/monopoly/gameBoard/freeParking.png", size / 1.5, size / 1.75, size / 4.75,size / 5);
-        Label footer = Utilities.buildLabel("corner_freeParking_Footer", "Parken", Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE * 2), TextAlignment.CENTER, Color.BLACK, size / 8.25, size / 1.7);
+        Rectangle background = buildRectangle("corner_freeParking_Background", size, size, backgroundColor, true, Color.BLACK, BORDER_WIDTH);
+        Label header = buildLabel("corner_freeParking_Header", "Freies", Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE * 2), TextAlignment.CENTER, Color.BLACK, size / 5 + size / 3.25, size / 5.75);
+        ImageView freeParking = createImageView("corner_freeParking_Picture", "/sandwich/de/monopoly/gameBoard/freeParking.png", size / 1.5, size / 1.75, size / 4.75,size / 5);
+        Label footer = buildLabel("corner_freeParking_Footer", "Parken", Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE * 2), TextAlignment.CENTER, Color.BLACK, size / 8.25, size / 1.7);
 
         header.setRotate(45);
         freeParking.setRotate(45);
@@ -424,10 +430,10 @@ public class Spielfeld extends Pane{
         field.setId("goToJail_field");
         field.setMaxSize(size, size);
 
-        Rectangle background = Utilities.buildRectangle("corner_goToJail_Background", size, size, backgroundColor, true, Color.BLACK, BORDER_WIDTH);
-        Label header = Utilities.buildLabel("corner_goToJail_Header", "Geh ins", Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE * 2), TextAlignment.CENTER, Color.BLACK, size / 6 + size / 3.25, size / 5.75);
-        ImageView freeParking = Utilities.createImageView("corner_goToJail_Picture", "/sandwich/de/monopoly/gameBoard/goToJail.png", size / 1.5, size / 1.75, size / 4.75,size / 5);
-        Label footer = Utilities.buildLabel("corner_goToJail_Footer", "Gefängnis", Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE * 2), TextAlignment.CENTER, Color.BLACK, -(size / 15), size / 1.8);
+        Rectangle background = buildRectangle("corner_goToJail_Background", size, size, backgroundColor, true, Color.BLACK, BORDER_WIDTH);
+        Label header = buildLabel("corner_goToJail_Header", "Geh ins", Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE * 2), TextAlignment.CENTER, Color.BLACK, size / 6 + size / 3.25, size / 5.75);
+        ImageView freeParking = createImageView("corner_goToJail_Picture", "/sandwich/de/monopoly/gameBoard/goToJail.png", size / 1.5, size / 1.75, size / 4.75,size / 5);
+        Label footer = buildLabel("corner_goToJail_Footer", "Gefängnis", Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE * 2), TextAlignment.CENTER, Color.BLACK, -(size / 15), size / 1.8);
 
         header.setRotate(45);
         freeParking.setRotate(45);
@@ -442,14 +448,14 @@ public class Spielfeld extends Pane{
         field.setId("station_field");
         field.setMaxSize(width, height);
 
-        Rectangle background = Utilities.buildRectangle("station_Background" ,width, height, backgroundColor, true, Color.BLACK, BORDER_WIDTH);
-        Label header = Utilities.buildLabel("station_Header", stationName, Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE), TextAlignment.CENTER, Color.BLACK, 0, height / 50);
-        ImageView train = Utilities.createImageView("station_Image", "/sandwich/de/monopoly/gameBoard/train.png", width / 1.15, height / 3.7,(width - width / 1.15) / 2, height / 3);
-        Label priceIndicator = Utilities.buildLabel("station_PriceIndicator", (price + "€"), Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE), TextAlignment.CENTER, Color.BLACK, 0, 5 * (height / 6));
+        Rectangle background = buildRectangle("station_Background" ,width, height, backgroundColor, true, Color.BLACK, BORDER_WIDTH);
+        Label header = buildLabel("station_Header", stationName, Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE), TextAlignment.CENTER, Color.BLACK, 0, height / 50);
+        ImageView train = createImageView("station_Image", "/sandwich/de/monopoly/gameBoard/train.png", width / 1.15, height / 3.7,(width - width / 1.15) / 2, height / 3);
+        Label priceIndicator = buildLabel("station_PriceIndicator", (price + "€"), Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE), TextAlignment.CENTER, Color.BLACK, 0, 5 * (height / 6));
 
 
-        Utilities.centeringChildInPane(header, field);
-        Utilities.centeringChildInPane(priceIndicator, field);
+        centeringChildInPane(header, field);
+        centeringChildInPane(priceIndicator, field);
 
         field.getChildren().addAll(background, header, train, priceIndicator);
         return field;
@@ -460,22 +466,22 @@ public class Spielfeld extends Pane{
         field.setId("getChanceCard_field");
         field.setMaxSize(width, height);
 
-        Rectangle background = Utilities.buildRectangle("chance_Background" ,width, height, backgroundColor, true, Color.BLACK, BORDER_WIDTH);
-        Label header = Utilities.buildLabel("chance_Header", "Chance", Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE), TextAlignment.CENTER, Color.BLACK, 0, height / 50);
+        Rectangle background = buildRectangle("chance_Background" ,width, height, backgroundColor, true, Color.BLACK, BORDER_WIDTH);
+        Label header = buildLabel("chance_Header", "Chance", Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE), TextAlignment.CENTER, Color.BLACK, 0, height / 50);
 
         Image i = null;
         switch (c) {
             case RED ->
-                i = Utilities.creatImage("/sandwich/de/monopoly/gameBoard/chance_red.png");
+                i = creatImage("/sandwich/de/monopoly/gameBoard/chance_red.png");
             case BLUE ->
-                i = Utilities.creatImage("/sandwich/de/monopoly/gameBoard/chance_blue.png");
+                i = creatImage("/sandwich/de/monopoly/gameBoard/chance_blue.png");
             case GREEN ->
-                i = Utilities.creatImage("/sandwich/de/monopoly/gameBoard/chance_green.png");
+                i = creatImage("/sandwich/de/monopoly/gameBoard/chance_green.png");
         }
 
-        ImageView image = Utilities.createImageView("chance_Image", i, width / 1.1, height / 1.6,(width - width / 1.15) / 2, height / 3.5);
+        ImageView image = createImageView("chance_Image", i, width / 1.1, height / 1.6,(width - width / 1.15) / 2, height / 3.5);
 
-        Utilities.centeringChildInPane(header, field);
+        centeringChildInPane(header, field);
 
 
         field.getChildren().addAll(background, header, image);
@@ -487,11 +493,11 @@ public class Spielfeld extends Pane{
         field.setId("getCommunityCard_field");
         field.setMaxSize(width, height);
 
-        Rectangle background = Utilities.buildRectangle("community_Background" ,width, height, backgroundColor, true, Color.BLACK, BORDER_WIDTH);
-        Label header = Utilities.buildLabel("community_Header", Utilities.buildLongText("Gesellschafts", "Feld"), Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE), TextAlignment.CENTER, Color.BLACK, 0, height / 50);
-        ImageView image = Utilities.createImageView("community_Image", "/sandwich/de/monopoly/gameBoard/communityChest.png", width / 1.1, height / 1.9,(width - width / 1.15) / 2, height / 3.5);
+        Rectangle background = buildRectangle("community_Background" ,width, height, backgroundColor, true, Color.BLACK, BORDER_WIDTH);
+        Label header = buildLabel("community_Header", buildLongText("Gesellschafts", "Feld"), Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE), TextAlignment.CENTER, Color.BLACK, 0, height / 50);
+        ImageView image = createImageView("community_Image", "/sandwich/de/monopoly/gameBoard/communityChest.png", width / 1.1, height / 1.9,(width - width / 1.15) / 2, height / 3.5);
 
-        Utilities.centeringChildInPane(header, field);
+        centeringChildInPane(header, field);
 
 
         field.getChildren().addAll(background, header, image);
@@ -503,30 +509,30 @@ public class Spielfeld extends Pane{
         field.setId("extraPay_field");
         field.setMaxSize(width, height);
 
-        Rectangle background = Utilities.buildRectangle("extraPay_Background" ,width, height, backgroundColor, true, Color.BLACK, BORDER_WIDTH);
-        Label header = Utilities.buildLabel("extraPay_Header", "ERROR", Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE), TextAlignment.CENTER, Color.BLACK, 0, height / 10);
-        Label priceIndicator = Utilities.buildLabel("station_PriceIndicator", (price + "€"), Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE), TextAlignment.CENTER, Color.BLACK, 0, 5 * (height / 6));
+        Rectangle background = buildRectangle("extraPay_Background" ,width, height, backgroundColor, true, Color.BLACK, BORDER_WIDTH);
+        Label header = buildLabel("extraPay_Header", "ERROR", Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE), TextAlignment.CENTER, Color.BLACK, 0, height / 10);
+        Label priceIndicator = buildLabel("station_PriceIndicator", (price + "€"), Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE), TextAlignment.CENTER, Color.BLACK, 0, 5 * (height / 6));
 
 
-        Utilities.centeringChildInPane(header, field);
-        Utilities.centeringChildInPane(priceIndicator, field);
+        centeringChildInPane(header, field);
+        centeringChildInPane(priceIndicator, field);
 
         ImageView picture = null;
         switch (f) {
             case SPOTIFY_PREMIUM -> {
-                picture = Utilities.createImageView("community_Image", "/sandwich/de/monopoly/gameBoard/spotify.png", width / 1.2, width / 1.2,(width - width / 1.15) / 2, height / 3);
-                header.setText(Utilities.buildLongText("Spotify", "Premium Abo"));
+                picture = createImageView("community_Image", "/sandwich/de/monopoly/gameBoard/spotify.png", width / 1.2, width / 1.2,(width - width / 1.15) / 2, height / 3);
+                header.setText(buildLongText("Spotify", "Premium Abo"));
             }
             case HESSLER_SCHULDEN -> {
-                picture = Utilities.createImageView("community_Image", "/sandwich/de/monopoly/gameBoard/hessler.png", width / 3.4, height / 2.3,(width - width / 3.3) / 2, height / 2.7);
-                header.setText(Utilities.buildLongText("Freu Hessler", "Schulden ab", "bezahlen"));
+                picture = createImageView("community_Image", "/sandwich/de/monopoly/gameBoard/hessler.png", width / 3.4, height / 2.3,(width - width / 3.3) / 2, height / 2.7);
+                header.setText(buildLongText("Freu Hessler", "Schulden ab", "bezahlen"));
             }
             case NAME_THREE -> {
-                picture = Utilities.createImageView("community_Image", "/sandwich/de/monopoly/gameBoard/spotify.png", width / 1.2, width / 1.2,(width - width / 1.15) / 2, height / 3);
+                picture = createImageView("community_Image", "/sandwich/de/monopoly/gameBoard/spotify.png", width / 1.2, width / 1.2,(width - width / 1.15) / 2, height / 3);
                 header.setText("NAME3");
             }
             case NAME_FOUR -> {
-                picture = Utilities.createImageView("community_Image", "/sandwich/de/monopoly/gameBoard/spotify.png", width / 1.2, width / 1.2,(width - width / 1.15) / 2, height / 3);
+                picture = createImageView("community_Image", "/sandwich/de/monopoly/gameBoard/spotify.png", width / 1.2, width / 1.2,(width - width / 1.15) / 2, height / 3);
                 header.setText("NAME4");
             }
         }

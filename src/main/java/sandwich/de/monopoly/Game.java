@@ -1,9 +1,13 @@
 package sandwich.de.monopoly;
 
+import sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities;
 import sandwich.de.monopoly.Exceptions.ToManyPlayersExceptions;
 import sandwich.de.monopoly.GUI.Game.GameDisplayControllerOne;
 
 import java.util.ArrayList;
+
+import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPut;
+import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPutLine;
 
 public class Game {
 
@@ -19,8 +23,8 @@ public class Game {
     public Game(Spieler[] players) {
 
         if (Main.CONSOLE_OUT_PUT) {
-            Utilities.consoleOutPutLine(Utilities.colors.WHITE, Utilities.textStyle.REGULAR, "Game Controller, Konstruktor:");
-            Utilities.consoleOutPutLine(Utilities.colors.WHITE, Utilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
+            consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, "Game Controller, Konstruktor:");
+            consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
         }
 
         for (int i = 0, j = 1; i != 5; i++) {
@@ -42,50 +46,51 @@ public class Game {
         }
 
         if (Main.CONSOLE_OUT_PUT) {
-            Utilities.consoleOutPutLine(Utilities.colors.GREEN, Utilities.textStyle.BOLD, "Game Operator wurde erstellt!");
-            Utilities.consoleOutPutLine(Utilities.colors.GREEN, Utilities.textStyle.REGULAR, playerInGame + " Player Objects: ");
+            consoleOutPutLine(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.BOLD, "Game Operator wurde erstellt!");
+            consoleOutPutLine(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, playerInGame + " Player Objects: ");
+
             for (int i = 0; i != 5; i++) {
                 switch (i) {
                     case 0 -> {
                         if (playerOne != null) {
-                            Utilities.consoleOutPut(Utilities.colors.BLUE, Utilities.textStyle.REGULAR, "PlayerOne: ");
-                            Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.REGULAR, playerOne.toString());
+                            consoleOutPut(ConsoleUtilities.colors.BLUE, ConsoleUtilities.textStyle.REGULAR, "PlayerOne: ");
+                            consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, playerOne.toString());
                         } else
-                            Utilities.consoleOutPut(Utilities.colors.RED, Utilities.textStyle.REGULAR, "Null");
+                            consoleOutPut(ConsoleUtilities.colors.RED, ConsoleUtilities.textStyle.REGULAR, "Null");
                     }
                     case 1 -> {
                         if (playerTwo != null) {
-                            Utilities.consoleOutPut(Utilities.colors.BLUE, Utilities.textStyle.REGULAR, "PlayerTwo: ");
-                            Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.REGULAR, playerTwo.toString());
+                            consoleOutPut(ConsoleUtilities.colors.BLUE, ConsoleUtilities.textStyle.REGULAR, "PlayerTwo: ");
+                            consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, playerTwo.toString());
                         } else
-                            Utilities.consoleOutPut(Utilities.colors.RED, Utilities.textStyle.REGULAR, "Null");
+                            consoleOutPut(ConsoleUtilities.colors.RED, ConsoleUtilities.textStyle.REGULAR, "Null");
                     }
                     case 2 -> {
                         if (playerThree != null) {
-                            Utilities.consoleOutPut(Utilities.colors.BLUE, Utilities.textStyle.REGULAR, "PlayerThree: ");
-                            Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.REGULAR, playerThree.toString());
+                            consoleOutPut(ConsoleUtilities.colors.BLUE, ConsoleUtilities.textStyle.REGULAR, "PlayerThree: ");
+                            consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, playerThree.toString());
                         } else
-                            Utilities.consoleOutPut(Utilities.colors.RED, Utilities.textStyle.REGULAR, "Null");
+                            consoleOutPut(ConsoleUtilities.colors.RED, ConsoleUtilities.textStyle.REGULAR, "Null");
                     }
                     case 3 -> {
                         if (playerFour != null) {
-                            Utilities.consoleOutPut(Utilities.colors.BLUE, Utilities.textStyle.REGULAR, "PlayerFour: ");
-                            Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.REGULAR, playerFour.toString());
+                            consoleOutPut(ConsoleUtilities.colors.BLUE, ConsoleUtilities.textStyle.REGULAR, "PlayerFour: ");
+                            consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, playerFour.toString());
                         } else
-                            Utilities.consoleOutPut(Utilities.colors.RED, Utilities.textStyle.REGULAR, "Null");
+                            consoleOutPut(ConsoleUtilities.colors.RED, ConsoleUtilities.textStyle.REGULAR, "Null");
                     }
                     case 4 -> {
                         if (playerFive != null) {
-                            Utilities.consoleOutPut(Utilities.colors.BLUE, Utilities.textStyle.REGULAR, "PlayerFive: ");
-                            Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.REGULAR, playerFive.toString());
+                            consoleOutPut(ConsoleUtilities.colors.BLUE, ConsoleUtilities.textStyle.REGULAR, "PlayerFive: ");
+                            consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, playerFive.toString());
                         } else
-                            Utilities.consoleOutPut(Utilities.colors.RED, Utilities.textStyle.REGULAR, "Null");
+                            consoleOutPut(ConsoleUtilities.colors.RED, ConsoleUtilities.textStyle.REGULAR, "Null");
                     }
                     default -> throw new ToManyPlayersExceptions();
                 }
                 System.out.println();
             }
-            Utilities.consoleOutPutLine(Utilities.colors.WHITE, Utilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
+            consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
         }
 
         //Zeigt die Spieler an

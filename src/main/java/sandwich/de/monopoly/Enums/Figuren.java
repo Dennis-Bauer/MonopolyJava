@@ -1,7 +1,7 @@
 package sandwich.de.monopoly.Enums;
 
 import javafx.scene.image.Image;
-import sandwich.de.monopoly.Utilities;
+import sandwich.de.monopoly.DennisUtilitiesPackage.Utilities;
 
 public enum Figuren {
 

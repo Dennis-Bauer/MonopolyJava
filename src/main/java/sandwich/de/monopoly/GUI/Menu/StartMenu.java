@@ -17,15 +17,22 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
+import sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities;
 import sandwich.de.monopoly.Enums.Figuren;
 import sandwich.de.monopoly.Game;
 import sandwich.de.monopoly.Main;
 import sandwich.de.monopoly.Spieler;
-import sandwich.de.monopoly.Utilities;
 
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPut;
+import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPutLine;
+import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.JavaUtilities.hasArrayDuplicates;
+import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.JavaUtilities.hasArrayNotNullDuplicates;
+import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.*;
+import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXUtilities.*;
 
 
 public class StartMenu extends Pane{
@@ -66,11 +73,11 @@ public class StartMenu extends Pane{
     }
 
     private void buildBackground() {
-        ImageView background = Utilities.createImageView("menu_Background", "/sandwich/de/monopoly/menu/background.png", width, height, 0, 0);
-        ImageView header = Utilities.createImageView("menu_Header", "/sandwich/de/monopoly/menu/header.png", width / 2.196, (width / 2.196) * 0.18, width / 2 - (width / 2.196) / 2, 0);
+        ImageView background = createImageView("menu_Background", "/sandwich/de/monopoly/menu/background.png", width, height, 0, 0);
+        ImageView header = createImageView("menu_Header", "/sandwich/de/monopoly/menu/header.png", width / 2.196, (width / 2.196) * 0.18, width / 2 - (width / 2.196) / 2, 0);
 
-        ImageView clouds1 = Utilities.createImageView("menu_CloudAnimation", "/sandwich/de/monopoly/menu/clouds.png", 0, 0);
-        ImageView clouds2 = Utilities.createImageView("menu_CloudAnimation", "/sandwich/de/monopoly/menu/clouds.png", 0, 0);
+        ImageView clouds1 = createImageView("menu_CloudAnimation", "/sandwich/de/monopoly/menu/clouds.png", 0, 0);
+        ImageView clouds2 = createImageView("menu_CloudAnimation", "/sandwich/de/monopoly/menu/clouds.png", 0, 0);
 
         assert clouds1 != null;
         clouds1.setFitWidth(width * 4.167);
@@ -96,36 +103,36 @@ public class StartMenu extends Pane{
         parallelTransition.play();
 
         //Der Los-Button wird erstellt, und die funktion werden bestimmt
-        Image startButtonNormal = Utilities.creatImage("/sandwich/de/monopoly/menu/start_button.png");
-        Image startButtonHover = Utilities.creatImage("/sandwich/de/monopoly/menu/startButtonGif.gif");
-        Image startButtonPressed = Utilities.creatImage("/sandwich/de/monopoly/menu/startButtonPressed.gif");
-        ImageView startButton = Utilities.createImageView("menu_StartButton", startButtonNormal, width / 3.516, (width / 3.516) * 0.230, width / 2 - (width / 3.516) / 2, height * 0.84);
+        Image startButtonNormal = creatImage("/sandwich/de/monopoly/menu/start_button.png");
+        Image startButtonHover = creatImage("/sandwich/de/monopoly/menu/startButtonGif.gif");
+        Image startButtonPressed = creatImage("/sandwich/de/monopoly/menu/startButtonPressed.gif");
+        ImageView startButton = createImageView("menu_StartButton", startButtonNormal, width / 3.516, (width / 3.516) * 0.230, width / 2 - (width / 3.516) / 2, height * 0.84);
         startButton.setOnMouseEntered(event -> startButton.setImage(startButtonHover));
         startButton.setOnMouseExited(event -> startButton.setImage(startButtonNormal));
         startButton.setOnMousePressed(event -> startButton.setImage(startButtonPressed));
         startButton.setOnMouseReleased(event -> startButton.setImage(startButtonHover));
 
-        Label errorMessage = Utilities.buildLabel("menu_ErrorLabel", "ERROR", Font.font(Main.TEXT_FONT, FontWeight.BOLD, width * 0.01), TextAlignment.CENTER, Color.RED, 0, height * 0.81);
+        Label errorMessage = buildLabel("menu_ErrorLabel", "ERROR", Font.font(Main.TEXT_FONT, FontWeight.BOLD, width * 0.01), TextAlignment.CENTER, Color.RED, 0, height * 0.81);
         errorMessage.toFront();
         errorMessage.setVisible(false);
 
-        Utilities.centeringChildInPane(errorMessage, this);
+        centeringChildInPane(errorMessage, this);
 
         startButton.setOnMouseClicked(event -> {
             errorMessage.toFront();
 
             if (Main.CONSOLE_OUT_PUT) {
-                Utilities.consoleOutPutLine(Utilities.colors.WHITE, Utilities.textStyle.REGULAR, "Start Button action:");
-                Utilities.consoleOutPutLine(Utilities.colors.WHITE, Utilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
+                consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, "Start Button action:");
+                consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
             }
 
             if (Main.CONSOLE_OUT_PUT) {
                 for (int i = 0; i != 5; i++) {
-                    Utilities.consoleOutPut(Utilities.colors.BLUE, Utilities.textStyle.REGULAR, "Player" + i + ": ");
+                    consoleOutPut(ConsoleUtilities.colors.BLUE, ConsoleUtilities.textStyle.REGULAR, "Player" + i + ": ");
                     if (isPlayerBoxAktiv[i]) {
-                        Utilities.consoleOutPut(Utilities.colors.GREEN, Utilities.textStyle.REGULAR, "Name: " + playerNames[i] + ", Figure: " + playerBoxFigures[i].toString());
+                        consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Name: " + playerNames[i] + ", Figure: " + playerBoxFigures[i].toString());
                     } else {
-                        Utilities.consoleOutPut(Utilities.colors.RED, Utilities.textStyle.REGULAR, "Null");
+                        consoleOutPut(ConsoleUtilities.colors.RED, ConsoleUtilities.textStyle.REGULAR, "Null");
                     }
                     System.out.println();
                 }
@@ -138,10 +145,10 @@ public class StartMenu extends Pane{
             }
 
             if(aktivPlayer >= 2) {
-                if (!Utilities.hasArrayDuplicates(playerNames)) {
-                    if (!Utilities.hasArrayNotNullDuplicates(playerBoxFigures)) {
+                if (!hasArrayDuplicates(playerNames)) {
+                    if (!hasArrayNotNullDuplicates(playerBoxFigures)) {
                         if (Main.CONSOLE_OUT_PUT)
-                            Utilities.consoleOutPutLine(Utilities.colors.GREEN, Utilities.textStyle.REGULAR, "Spieler werden erstellt und gespeichert!");
+                            consoleOutPutLine(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Spieler werden erstellt und gespeichert!");
 
                         Spieler[] players = new Spieler[5];
 
@@ -151,32 +158,32 @@ public class StartMenu extends Pane{
                         }
 
                         if (Main.CONSOLE_OUT_PUT)
-                            Utilities.consoleOutPutLine(Utilities.colors.WHITE, Utilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
+                            consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
                         Main.setGameOperator(new Game(players));
                     } else {
                         errorMessage.setText("Fehler: Alle müssen verschieden Figuren haben!");
                         errorMessage.setVisible(true);
                         if (Main.CONSOLE_OUT_PUT)
-                            Utilities.consoleOutPutLine(Utilities.colors.RED, Utilities.textStyle.REGULAR, "FEHLER: 001");
+                            consoleOutPutLine(ConsoleUtilities.colors.RED, ConsoleUtilities.textStyle.REGULAR, "FEHLER: 001");
                     }
                 } else {
                     errorMessage.setText("Fehler: Alle müssen verschieden Namen haben!");
                     errorMessage.setVisible(true);
                     if (Main.CONSOLE_OUT_PUT)
-                        Utilities.consoleOutPutLine(Utilities.colors.RED, Utilities.textStyle.REGULAR, "FEHLER: 002");
+                        consoleOutPutLine(ConsoleUtilities.colors.RED, ConsoleUtilities.textStyle.REGULAR, "FEHLER: 002");
                 }
             } else if (aktivPlayer == 1) {
                 errorMessage.setText("Fehler: Es muss mehr als ein Spieler Spielen!");
                 errorMessage.setVisible(true);
                 if (Main.CONSOLE_OUT_PUT)
-                    Utilities.consoleOutPutLine(Utilities.colors.RED, Utilities.textStyle.REGULAR, "FEHLER: 003");
+                    consoleOutPutLine(ConsoleUtilities.colors.RED, ConsoleUtilities.textStyle.REGULAR, "FEHLER: 003");
             } else {
                 errorMessage.setText("Fehler: Es müssen Spieler erstellt werden damit das Spiel beginnen kann!");
                 errorMessage.setVisible(true);
             }
 
             if (Main.CONSOLE_OUT_PUT)
-                Utilities.consoleOutPutLine(Utilities.colors.WHITE, Utilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
+                consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
 
         });
 
@@ -201,10 +208,10 @@ public class StartMenu extends Pane{
         middlePlayer.setLayoutY(-middlePlayerHeight);
 
         //Start Transition
-        TranslateTransition middleStartTransition = Utilities.moveAnimation(middlePlayer, startAnimationLength, middlePlayerHeight + middlePlayerY, 0, 1);
+        TranslateTransition middleStartTransition = moveAnimation(middlePlayer, startAnimationLength, middlePlayerHeight + middlePlayerY, 0, 1);
 
         //Loop Transition
-        ScaleTransition middleTransition = Utilities.scaleAnimation(middlePlayer, loopAnimationSpeed, loopTransitionSize, loopTransitionSize, Animation.INDEFINITE);
+        ScaleTransition middleTransition = scaleAnimation(middlePlayer, loopAnimationSpeed, loopTransitionSize, loopTransitionSize, Animation.INDEFINITE);
         middleTransition.setAutoReverse(true);
 
         //Left Player One
@@ -212,9 +219,9 @@ public class StartMenu extends Pane{
         leftPlayerOne.setLayoutX(middlePlayerX * 0.533 - 2 * (middlePlayerWidth * 0.881));
         leftPlayerOne.setLayoutY(-(middlePlayerHeight * 0.881));
 
-        TranslateTransition leftOnStartTransition = Utilities.moveAnimation(leftPlayerOne, startAnimationLength, middlePlayerHeight * 0.881 + middlePlayerY, 2 * (middlePlayerWidth * 0.881), 1);
+        TranslateTransition leftOnStartTransition = moveAnimation(leftPlayerOne, startAnimationLength, middlePlayerHeight * 0.881 + middlePlayerY, 2 * (middlePlayerWidth * 0.881), 1);
 
-        ScaleTransition leftOneTransition = Utilities.scaleAnimation(leftPlayerOne, loopAnimationSpeed, loopTransitionSize, loopTransitionSize, Animation.INDEFINITE);
+        ScaleTransition leftOneTransition = scaleAnimation(leftPlayerOne, loopAnimationSpeed, loopTransitionSize, loopTransitionSize, Animation.INDEFINITE);
         leftOneTransition.setAutoReverse(true);
 
         //Left Player Two
@@ -222,9 +229,9 @@ public class StartMenu extends Pane{
         leftPlayerTwo.setLayoutX(middlePlayerX * 0.110 - 2 * (middlePlayerWidth * 0.756));
         leftPlayerTwo.setLayoutY(-(middlePlayerHeight * 0.722));
 
-        TranslateTransition leftTwoStartTransition = Utilities.moveAnimation(leftPlayerTwo, startAnimationLength, middlePlayerHeight * 0.722 + middlePlayerY, 2 * (middlePlayerWidth * 0.756), 1);
+        TranslateTransition leftTwoStartTransition = moveAnimation(leftPlayerTwo, startAnimationLength, middlePlayerHeight * 0.722 + middlePlayerY, 2 * (middlePlayerWidth * 0.756), 1);
 
-        ScaleTransition leftTwoTransition = Utilities.scaleAnimation(leftPlayerTwo, loopAnimationSpeed, loopTransitionSize, loopTransitionSize, Animation.INDEFINITE);
+        ScaleTransition leftTwoTransition = scaleAnimation(leftPlayerTwo, loopAnimationSpeed, loopTransitionSize, loopTransitionSize, Animation.INDEFINITE);
         leftTwoTransition.setAutoReverse(true);
 
         //Right Player One
@@ -232,9 +239,9 @@ public class StartMenu extends Pane{
         rightPlayerOne.setLayoutX(middlePlayerX * 1.500 + 2 * (middlePlayerWidth * 0.881));
         rightPlayerOne.setLayoutY(-(middlePlayerHeight * 0.881));
 
-        TranslateTransition rightOneStartTransition = Utilities.moveAnimation(rightPlayerOne, startAnimationLength, middlePlayerHeight * 0.881 + middlePlayerY, 2 * -(middlePlayerWidth * 0.881), 1);
+        TranslateTransition rightOneStartTransition = moveAnimation(rightPlayerOne, startAnimationLength, middlePlayerHeight * 0.881 + middlePlayerY, 2 * -(middlePlayerWidth * 0.881), 1);
 
-        ScaleTransition rightOneTransition = Utilities.scaleAnimation(rightPlayerOne, loopAnimationSpeed, loopTransitionSize, loopTransitionSize, Animation.INDEFINITE);
+        ScaleTransition rightOneTransition = scaleAnimation(rightPlayerOne, loopAnimationSpeed, loopTransitionSize, loopTransitionSize, Animation.INDEFINITE);
         rightOneTransition.setAutoReverse(true);
 
         //Right Player Two
@@ -242,9 +249,9 @@ public class StartMenu extends Pane{
         rightPlayerTwo.setLayoutX(middlePlayerX * 1.968 + 2 * (middlePlayerWidth * 0.756));
         rightPlayerTwo.setLayoutY(-(middlePlayerHeight * 0.722));
 
-        TranslateTransition rightTwoStartTransition = Utilities.moveAnimation(rightPlayerTwo, startAnimationLength, middlePlayerHeight * 0.722 + middlePlayerY, 2 * -(middlePlayerWidth * 0.756), 1);
+        TranslateTransition rightTwoStartTransition = moveAnimation(rightPlayerTwo, startAnimationLength, middlePlayerHeight * 0.722 + middlePlayerY, 2 * -(middlePlayerWidth * 0.756), 1);
 
-        ScaleTransition rightTwoTransition = Utilities.scaleAnimation(rightPlayerTwo, loopAnimationSpeed, loopTransitionSize, loopTransitionSize, Animation.INDEFINITE);
+        ScaleTransition rightTwoTransition = scaleAnimation(rightPlayerTwo, loopAnimationSpeed, loopTransitionSize, loopTransitionSize, Animation.INDEFINITE);
         rightTwoTransition.setAutoReverse(true);
 
         //Start Transitions
@@ -277,14 +284,14 @@ public class StartMenu extends Pane{
         playerBox.setId("menu_PlayerSelector");
 
         //Background
-        Rectangle background = Utilities.buildRectangle("menu_playerSelector_Background", width, height, color, true, null, 0);
-        Polygon backgroundBottom = Utilities.buildTriangle("menu_playerSelector_background_Bottom", new Point2D(x, y + height), new Point2D(x + width / 2, y + height + height * 0.071), new Point2D(x + width, y + height),color, null, -x, -y - 0.5);
+        Rectangle background = buildRectangle("menu_playerSelector_Background", width, height, color, true, null, 0);
+        Polygon backgroundBottom = buildTriangle("menu_playerSelector_background_Bottom", new Point2D(x, y + height), new Point2D(x + width / 2, y + height + height * 0.071), new Point2D(x + width, y + height),color, null, -x, -y - 0.5);
         //Name label
-        Label nameLabel = Utilities.buildLabel("menu_playerSelector_Name", "", new Font(Main.TEXT_FONT, 100), TextAlignment.LEFT, Color.WHITE, 0, 0);
-        Utilities.centeringChildInPane(nameLabel, playerBox);
+        Label nameLabel = buildLabel("menu_playerSelector_Name", "", new Font(Main.TEXT_FONT, 100), TextAlignment.LEFT, Color.WHITE, 0, 0);
+        centeringChildInPane(nameLabel, playerBox);
 
         //Cancel Button
-        StackPane removePlayerButton = Utilities.buildPlus("menu_playerSelector_canceleButton", width / 4, width / 18, 45, 0, null, Color.RED, 0, 0);
+        StackPane removePlayerButton = buildPlus("menu_playerSelector_canceleButton", width / 4, width / 18, 45, 0, null, Color.RED, 0, 0);
         removePlayerButton.setLayoutX(width / 2 - width / 8);
         removePlayerButton.setLayoutY(height / 1.02);
 
@@ -297,7 +304,7 @@ public class StartMenu extends Pane{
         Background nameInputBackground = new Background(new BackgroundFill(color, null, null));
 
         //NameInput input Box
-        TextField nameInput = Utilities.buildTextField("addPlayer_NameInput", "Name", width, height / 10, Font.font(Main.TEXT_FONT, width / 10));
+        TextField nameInput = buildTextField("addPlayer_NameInput", "Name", width, height / 10, Font.font(Main.TEXT_FONT, width / 10));
         nameInput.setBackground(nameInputBackground);
         nameInput.setBorder(nameInputborder);
         nameInput.setAlignment(Pos.CENTER);
@@ -305,9 +312,9 @@ public class StartMenu extends Pane{
         //Finish Button
         StackPane nameInputFinishButton = new StackPane();
 
-        Rectangle finishButtonBackground = Utilities.buildRectangle("addPlayer_finishNameInput_Background", width / 5, width / 5, Color.LIME, true, Color.BLACK, width / 120);
-        Rectangle finishButtonCheckmarkOne = Utilities.buildRectangle("addPlayer_finishNameInput_CheckmarkOne", width / 42.5, width / 14.5, Color.WHITE, true, null, 0);
-        Rectangle finishButtonCheckmarkTwo = Utilities.buildRectangle("addPlayer_finishNameInput_CheckmarkOne", width / 42.5, width / 22.5, Color.WHITE, true, null, 0);
+        Rectangle finishButtonBackground = buildRectangle("addPlayer_finishNameInput_Background", width / 5, width / 5, Color.LIME, true, Color.BLACK, width / 120);
+        Rectangle finishButtonCheckmarkOne = buildRectangle("addPlayer_finishNameInput_CheckmarkOne", width / 42.5, width / 14.5, Color.WHITE, true, null, 0);
+        Rectangle finishButtonCheckmarkTwo = buildRectangle("addPlayer_finishNameInput_CheckmarkOne", width / 42.5, width / 22.5, Color.WHITE, true, null, 0);
 
         finishButtonCheckmarkOne.setRotate(45);
         finishButtonCheckmarkTwo.setRotate(-45);
@@ -317,9 +324,9 @@ public class StartMenu extends Pane{
         nameInputFinishButton.getChildren().addAll(finishButtonBackground, finishButtonCheckmarkTwo, finishButtonCheckmarkOne);
 
         //Cancel Button
-        StackPane nameInputChancelButton = Utilities.buildPlus("addPlayer_finishNameInput_chancelButton", width / 42.5, width / 7.5, 45, 0, null, Color.WHITE, 0, 0);
+        StackPane nameInputChancelButton = buildPlus("addPlayer_finishNameInput_chancelButton", width / 42.5, width / 7.5, 45, 0, null, Color.WHITE, 0, 0);
 
-        Rectangle cancelButtonBackground = Utilities.buildRectangle("addPlayer_finishNameInput_chancelButton_Background", width / 5, width / 5, Color.RED, true, Color.BLACK, width / 120);
+        Rectangle cancelButtonBackground = buildRectangle("addPlayer_finishNameInput_chancelButton_Background", width / 5, width / 5, Color.RED, true, Color.BLACK, width / 120);
 
         nameInputChancelButton.getChildren().addAll(cancelButtonBackground);
         cancelButtonBackground.toBack();
@@ -336,9 +343,9 @@ public class StartMenu extends Pane{
         double buttonRadius = width * 0.359;
         double buttonStrokeWidth = width / 18;
 
-        createPlayerButton = Utilities.buildPlus("menu_playerSelector_addButton_plus",  buttonRadius / 2.5, buttonRadius / 0.7, 0,0, null, color, (width / 2) - buttonRadius / 2, 0);
+        createPlayerButton = buildPlus("menu_playerSelector_addButton_plus",  buttonRadius / 2.5, buttonRadius / 0.7, 0,0, null, color, (width / 2) - buttonRadius / 2, 0);
 
-        Circle addButtonBackground = Utilities.buildCircle("menu_playerSelector_addButton_Background", buttonRadius, color.brighter(), true, Color.WHITE, 0);
+        Circle addButtonBackground = buildCircle("menu_playerSelector_addButton_Background", buttonRadius, color.brighter(), true, Color.WHITE, 0);
 
         createPlayerButton.setLayoutX(width / 2 - buttonRadius);
         createPlayerButton.setLayoutY(height / 3 - buttonRadius);
@@ -367,12 +374,12 @@ public class StartMenu extends Pane{
         //Player is in Game Symbol
         StackPane playerSymbol = new StackPane();
 
-        Circle playerSymbolbackground = Utilities.buildCircle("menu_playerSelector_playerSymbol_Background", buttonRadius, color.darker(), true, Color.BLACK, buttonRadius / 20);
-        Circle playerHead = Utilities.buildCircle("menu_playerSelector_playerSymbol_Head", buttonRadius / 2.5, color.brighter(), true, Color.BLACK, buttonRadius / 20);
+        Circle playerSymbolbackground = buildCircle("menu_playerSelector_playerSymbol_Background", buttonRadius, color.darker(), true, Color.BLACK, buttonRadius / 20);
+        Circle playerHead = buildCircle("menu_playerSelector_playerSymbol_Head", buttonRadius / 2.5, color.brighter(), true, Color.BLACK, buttonRadius / 20);
 
         StackPane.setMargin(playerHead, new Insets(0, 0, height / 10, 0));
 
-        Rectangle playerBody = Utilities.buildRectangle("menu_playerSelector_playerSymbol_Body", buttonRadius, buttonRadius / 1.2, color.brighter(), true, Color.BLACK, buttonRadius / 20);
+        Rectangle playerBody = buildRectangle("menu_playerSelector_playerSymbol_Body", buttonRadius, buttonRadius / 1.2, color.brighter(), true, Color.BLACK, buttonRadius / 20);
         playerBody.setArcWidth(40);
         playerBody.setArcHeight(20);
 
@@ -387,11 +394,11 @@ public class StartMenu extends Pane{
         //Select Player Figure
         Pane selectPlayerFigur = new Pane();
 
-        Rectangle figurBackground = Utilities.buildRectangle("menu_playerSelector_selectPlayerFigur_Background", buttonRadius * 2, buttonRadius / 1.3, color.brighter(), true, Color.BLACK, width / 43);
+        Rectangle figurBackground = buildRectangle("menu_playerSelector_selectPlayerFigur_Background", buttonRadius * 2, buttonRadius / 1.3, color.brighter(), true, Color.BLACK, width / 43);
         figurBackground.setArcHeight(buttonRadius / 1.3);
         figurBackground.setArcWidth(buttonRadius / 1.3);
 
-        ImageView figure = Utilities.createImageView("menu_playerSelector_selectPlayerFigur_Figur", new Image(Objects.requireNonNull(Main.class.getResourceAsStream("/sandwich/de/monopoly/figuren/affe.png"))), 0, 0);
+        ImageView figure = createImageView("menu_playerSelector_selectPlayerFigur_Figur", new Image(Objects.requireNonNull(Main.class.getResourceAsStream("/sandwich/de/monopoly/figuren/affe.png"))), 0, 0);
         figure.setY(buttonRadius / 20);
         figure.setX(buttonRadius * 0.4 + (width / 4.25) / 2);
         figure.setFitWidth(width / 4.25);
@@ -504,13 +511,13 @@ public class StartMenu extends Pane{
     private ImageView buildArrow(int arrowNumber) {
         switch (arrowNumber) {
             case 1 -> {
-                return Utilities.createImageView("selectFigureArrow", "/sandwich/de/monopoly/menu/blue_arrow.png", 0, 0);
+                return createImageView("selectFigureArrow", "/sandwich/de/monopoly/menu/blue_arrow.png", 0, 0);
             }
             case 2 -> {
-                return Utilities.createImageView("selectFigureArrow", "/sandwich/de/monopoly/menu/grey_arrow.png", 0, 0);
+                return createImageView("selectFigureArrow", "/sandwich/de/monopoly/menu/grey_arrow.png", 0, 0);
             }
             case 3 -> {
-                return Utilities.createImageView("selectFigureArrow", "/sandwich/de/monopoly/menu/white_arrow.png", 0, 0);
+                return createImageView("selectFigureArrow", "/sandwich/de/monopoly/menu/white_arrow.png", 0, 0);
             }
             default -> {
                 return null;

@@ -12,10 +12,12 @@ import sandwich.de.monopoly.Exceptions.ToManyPlayersExceptions;
 import sandwich.de.monopoly.GUI.Game.GameDisplayControllerOne;
 import sandwich.de.monopoly.Main;
 import sandwich.de.monopoly.Spieler;
-import sandwich.de.monopoly.Utilities;
 
 import java.util.ArrayList;
 
+import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildLabel;
+import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildRectangle;
+import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXUtilities.centeringChildInPane;
 import static sandwich.de.monopoly.GUI.Game.GameDisplayControllerOne.buildPlayer;
 import static sandwich.de.monopoly.GUI.Game.GameDisplayControllerOne.buildStreetInventar;
 
@@ -51,7 +53,7 @@ public class PlayerDisplay extends Pane{
         final double playerBoxWidth = width * 0.225;
         final double playerBoxHeight = height * 0.40;
 
-        Label header = Utilities.buildLabel("gameScene_playerDisplay_Header", "Spieler", Font.font(Main.TEXT_FONT, FontWeight.BOLD, width / 15), TextAlignment.CENTER, Color.WHITE);
+        Label header = buildLabel("gameScene_playerDisplay_Header", "Spieler", Font.font(Main.TEXT_FONT, FontWeight.BOLD, width / 15), TextAlignment.CENTER, Color.WHITE);
 
         Pane playerOne = null;
         Pane playerTwo = null;
@@ -143,8 +145,8 @@ public class PlayerDisplay extends Pane{
                 playerOne.setLayoutX(width / 2 - playerBoxWidth * bigger - width * 0.09);
                 playerOne.setLayoutY(height * 0.20);
 
-                Label vs = Utilities.buildLabel("gameScene_playerDisplay_playerBoxes_VS", "VS", Font.font(Main.TEXT_FONT, FontWeight.BOLD, width / 10), TextAlignment.CENTER, Color.WHITE);
-                Utilities.centeringChildInPane(vs, this);
+                Label vs = buildLabel("gameScene_playerDisplay_playerBoxes_VS", "VS", Font.font(Main.TEXT_FONT, FontWeight.BOLD, width / 10), TextAlignment.CENTER, Color.WHITE);
+                centeringChildInPane(vs, this);
                 vs.setLayoutY(height * 0.375);
 
                 assert playerTwo != null;
@@ -158,7 +160,7 @@ public class PlayerDisplay extends Pane{
 
         display.getChildren().add(header);
 
-        Utilities.centeringChildInPane(header, this);
+        centeringChildInPane(header, this);
 
         getChildren().add(display);
     }
@@ -177,11 +179,11 @@ public class PlayerDisplay extends Pane{
 
         StackPane tradingButton = new StackPane();
 
-        Rectangle tradingButtonBackground = Utilities.buildRectangle("gameScene_playerDisplay_tradingStartButton_Background", width * 0.36, height * 0.09, backgroundColor.desaturate(), true, Color.WHITE, width * 0.015);
+        Rectangle tradingButtonBackground = buildRectangle("gameScene_playerDisplay_tradingStartButton_Background", width * 0.36, height * 0.09, backgroundColor.desaturate(), true, Color.WHITE, width * 0.015);
         tradingButtonBackground.setArcHeight(width * 0.12);
         tradingButtonBackground.setArcWidth(width * 0.12);
 
-        Label tradingButtonLabel = Utilities.buildLabel("gameScene_playerDisplay_tradingStartButton_Label", "Trading", Font.font(Main.TEXT_FONT,  FontWeight.BOLD, width * 0.08), TextAlignment.CENTER, Color.WHITE);
+        Label tradingButtonLabel = buildLabel("gameScene_playerDisplay_tradingStartButton_Label", "Trading", Font.font(Main.TEXT_FONT,  FontWeight.BOLD, width * 0.08), TextAlignment.CENTER, Color.WHITE);
 
         tradingButton.getChildren().setAll(tradingButtonBackground, tradingButtonLabel);
         tradingButton.setLayoutY(height * 0.40);

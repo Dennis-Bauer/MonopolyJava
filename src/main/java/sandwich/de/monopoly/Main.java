@@ -4,10 +4,14 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities;
 import sandwich.de.monopoly.GUI.Game.Spielfeld;
 import sandwich.de.monopoly.GUI.Menu.StartMenu;
 
 import java.util.HashMap;
+
+import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPut;
+import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPutLine;
 
 public class Main extends Application {
 
@@ -41,27 +45,27 @@ public class Main extends Application {
 
     public static void main(String[] args) {
 
-        Utilities.colors startInfoColor = Utilities.colors.CYAN;
+        ConsoleUtilities.colors startInfoColor = ConsoleUtilities.colors.CYAN;
 
-        Utilities.consoleOutPut(startInfoColor, Utilities.textStyle.REGULAR, "Monopoly made by ");
-        Utilities.consoleOutPut(startInfoColor, Utilities.textStyle.BOLD, "Charles Darrow");
+        consoleOutPut(startInfoColor, ConsoleUtilities.textStyle.REGULAR, "Monopoly made by ");
+        consoleOutPut(startInfoColor, ConsoleUtilities.textStyle.BOLD, "Charles Darrow");
         System.out.println();
-        Utilities.consoleOutPut(startInfoColor, Utilities.textStyle.REGULAR, "Programmed by ");
-        Utilities.consoleOutPut(startInfoColor, Utilities.textStyle.BOLD, "Dennis Bauer");
+        consoleOutPut(startInfoColor, ConsoleUtilities.textStyle.REGULAR, "Programmed by ");
+        consoleOutPut(startInfoColor, ConsoleUtilities.textStyle.BOLD, "Dennis Bauer");
         System.out.println();
-        Utilities.consoleOutPut(startInfoColor, Utilities.textStyle.REGULAR, "Graphics by ");
-        Utilities.consoleOutPut(startInfoColor, Utilities.textStyle.BOLD, "Rafael LAST_NAME");
+        consoleOutPut(startInfoColor, ConsoleUtilities.textStyle.REGULAR, "Graphics by ");
+        consoleOutPut(startInfoColor, ConsoleUtilities.textStyle.BOLD, "Rafael LAST_NAME");
         System.out.println();
-        Utilities.consoleOutPut(startInfoColor, Utilities.textStyle.REGULAR, "Ideas from ");
-        Utilities.consoleOutPut(startInfoColor, Utilities.textStyle.BOLD, "Rafael LAST_NAME ");
-        Utilities.consoleOutPut(startInfoColor, Utilities.textStyle.REGULAR, "and ");
-        Utilities.consoleOutPut(startInfoColor, Utilities.textStyle.BOLD, "Dennis Bauer");
+        consoleOutPut(startInfoColor, ConsoleUtilities.textStyle.REGULAR, "Ideas from ");
+        consoleOutPut(startInfoColor, ConsoleUtilities.textStyle.BOLD, "Rafael LAST_NAME ");
+        consoleOutPut(startInfoColor, ConsoleUtilities.textStyle.REGULAR, "and ");
+        consoleOutPut(startInfoColor, ConsoleUtilities.textStyle.BOLD, "Dennis Bauer");
         System.out.println();
 
         if (CONSOLE_OUT_PUT)
-            Utilities.consoleOutPutLine(Utilities.colors.GREEN, Utilities.textStyle.REGULAR, "Infos über die Konsole sind eingeschaltet, und auf Deutsch.");
+            consoleOutPutLine(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Infos über die Konsole sind eingeschaltet, und auf Deutsch.");
         else
-            Utilities.consoleOutPutLine(Utilities.colors.GREEN, Utilities.textStyle.REGULAR, "Information about the program via the console is out");
+            consoleOutPutLine(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Information about the program via the console is out");
 
         streetColor.put(0, Color.DARKBLUE); //Straße
         streetColor.put(1, Color.DARKBLUE); //Straße

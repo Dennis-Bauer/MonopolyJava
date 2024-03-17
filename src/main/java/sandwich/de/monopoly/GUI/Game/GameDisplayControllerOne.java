@@ -14,9 +14,13 @@ import sandwich.de.monopoly.GUI.Game.Displays.PlayerDisplay;
 import sandwich.de.monopoly.GUI.Game.Displays.TradingDisplay;
 import sandwich.de.monopoly.Main;
 import sandwich.de.monopoly.Spieler;
-import sandwich.de.monopoly.Utilities;
+import sandwich.de.monopoly.DennisUtilitiesPackage.Utilities;
 
 import java.util.ArrayList;
+
+import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.*;
+import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXUtilities.centeringChildInPane;
+import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXUtilities.createImageView;
 
 public class GameDisplayControllerOne {
 
@@ -29,7 +33,7 @@ public class GameDisplayControllerOne {
         displayOne.setId("gameScene_DisplayOne");
         displayOne.setMaxSize(width, height);
 
-        Rectangle background = Utilities.buildRectangle("gameScene_playerDisplay_Background", width, height, Color.rgb(97, 220, 43), true, Color.WHITE, width * 0.005);
+        Rectangle background = buildRectangle("gameScene_playerDisplay_Background", width, height, Color.rgb(97, 220, 43), true, Color.WHITE, width * 0.005);
 
         playerDisplay = new PlayerDisplay(width, height);
         tradingDisplay = new TradingDisplay(width, height, Color.RED);
@@ -73,19 +77,19 @@ public class GameDisplayControllerOne {
         playerBox.setId("gameScene_playerDisplay_PlayerBox");
         playerBox.setMaxSize(width, height);
 
-        Rectangle background = Utilities.buildRectangle("gameScene_playerDisplay_playerBox_Background", width, height, backgroundColor, true, Color.WHITE, width * 0.005);
+        Rectangle background = buildRectangle("gameScene_playerDisplay_playerBox_Background", width, height, backgroundColor, true, Color.WHITE, width * 0.005);
 
-        Label headerName = Utilities.buildLabel("gameScene_playerDisplay_playerBox_NameHeader", player.getName(), Font.font(Main.TEXT_FONT, FontWeight.BOLD, width / 8), TextAlignment.CENTER, Color.WHITE);
-        Utilities.centeringChildInPane(headerName, playerBox);
+        Label headerName = buildLabel("gameScene_playerDisplay_playerBox_NameHeader", player.getName(), Font.font(Main.TEXT_FONT, FontWeight.BOLD, width / 8), TextAlignment.CENTER, Color.WHITE);
+        centeringChildInPane(headerName, playerBox);
 
-        ImageView figureDisplay = Utilities.createImageView("gameScene_playerDisplay_playerBox_FigureDisplay", player.getFigur().getFigureImage(), (width / 3.725) / 2, (width / 3.725) / 2, width - (width / 3.725) / 2 - (width * 0.001), height * 0.025);
+        ImageView figureDisplay = createImageView("gameScene_playerDisplay_playerBox_FigureDisplay", player.getFigur().getFigureImage(), (width / 3.725) / 2, (width / 3.725) / 2, width - (width / 3.725) / 2 - (width * 0.001), height * 0.025);
 
-        Line headerSeparatingline = Utilities.buildLine("gameScene_playerDisplay_playerBox_NameHeaderSeparatingLine", new Point2D(0, height * 0.15), new Point2D(width, height * 0.15), width * 0.005, Color.WHITE);
+        Line headerSeparatingline = buildLine("gameScene_playerDisplay_playerBox_NameHeaderSeparatingLine", new Point2D(0, height * 0.15), new Point2D(width, height * 0.15), width * 0.005, Color.WHITE);
 
-        Label displayAccountBalance = Utilities.buildLabel("gameScene_playerDisplay_playerBox_DisplayAccountBalance", ("Kontostand: " + player.getKontoStand()), Font.font(Main.TEXT_FONT, FontWeight.BOLD, width / 12), TextAlignment.CENTER, Color.WHITE, 0, height * 0.17);
-        Utilities.centeringChildInPane(displayAccountBalance, playerBox);
+        Label displayAccountBalance = buildLabel("gameScene_playerDisplay_playerBox_DisplayAccountBalance", ("Kontostand: " + player.getKontoStand()), Font.font(Main.TEXT_FONT, FontWeight.BOLD, width / 12), TextAlignment.CENTER, Color.WHITE, 0, height * 0.17);
+        centeringChildInPane(displayAccountBalance, playerBox);
 
-        Line accountBalanceSeparatingline = Utilities.buildLine("gameScene_playerDisplay_playerBox_AccountBalanceSeparatingLine", new Point2D(0, height * 0.30), new Point2D(width, height * 0.30), width * 0.005, Color.WHITE);
+        Line accountBalanceSeparatingline = buildLine("gameScene_playerDisplay_playerBox_AccountBalanceSeparatingLine", new Point2D(0, height * 0.30), new Point2D(width, height * 0.30), width * 0.005, Color.WHITE);
 
         playerBox.getChildren().addAll( background, headerName, figureDisplay, headerSeparatingline, displayAccountBalance, accountBalanceSeparatingline);
 
@@ -102,7 +106,7 @@ public class GameDisplayControllerOne {
         final double startY = h * 0.40;
         final double startX = w * 0.04;
         for (int i = 0; i < streets.length; i++) {
-            streets[i] = Utilities.buildRectangle("street:" + i + ", isOwner:", width, height, Color.LIGHTGRAY, true, Color.WHITE, (w * 0.005) / 2);
+            streets[i] = buildRectangle("street:" + i + ", isOwner:", width, height, Color.LIGHTGRAY, true, Color.WHITE, (w * 0.005) / 2);
             streets[i].setFill(Main.streetColor.get(i));
 
             switch (i) {

@@ -16,10 +16,12 @@ import sandwich.de.monopoly.Enums.Figuren;
 import sandwich.de.monopoly.GUI.Game.GameDisplayControllerOne;
 import sandwich.de.monopoly.Main;
 import sandwich.de.monopoly.Spieler;
-import sandwich.de.monopoly.Utilities;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.*;
+import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXUtilities.buildPlus;
+import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXUtilities.centeringChildInPane;
 import static sandwich.de.monopoly.GUI.Game.GameDisplayControllerOne.buildPlayer;
 import static sandwich.de.monopoly.GUI.Game.GameDisplayControllerOne.buildStreetInventar;
 
@@ -61,17 +63,17 @@ public class TradingDisplay extends Pane {
         Pane setLeftCash = new Pane();
         setLeftCash.setMaxSize((WIDTH * 0.306) * 0.36, (HEIGHT * 0.6035) * 0.10);
 
-        StackPane addLeftCash = Utilities.buildPlus("gameScene_playerDisplay_tradingMenu_plusCashLeft", (WIDTH * 0.306) * 0.015, (WIDTH * 0.306) * 0.10, 0, 0, null, Color.WHITE, 0, ((WIDTH * 0.306) * 0.08) / 2);
+        StackPane addLeftCash = buildPlus("gameScene_playerDisplay_tradingMenu_plusCashLeft", (WIDTH * 0.306) * 0.015, (WIDTH * 0.306) * 0.10, 0, 0, null, Color.WHITE, 0, ((WIDTH * 0.306) * 0.08) / 2);
         addLeftCash.setLayoutY(((WIDTH * 0.306) * 0.08) / 2);
 
-        Label leftCashLabel = Utilities.buildLabel("gameScene_playerDisplay_tradingMenu_CashLabelLeft", Integer.toString(tradeOfferLeft.get()), Font.font(Main.TEXT_FONT, FontWeight.BOLD, WIDTH * 0.025), TextAlignment.CENTER, Color.WHITE);
-        Utilities.centeringChildInPane(leftCashLabel, setLeftCash);
+        Label leftCashLabel = buildLabel("gameScene_playerDisplay_tradingMenu_CashLabelLeft", Integer.toString(tradeOfferLeft.get()), Font.font(Main.TEXT_FONT, FontWeight.BOLD, WIDTH * 0.025), TextAlignment.CENTER, Color.WHITE);
+        centeringChildInPane(leftCashLabel, setLeftCash);
         leftCashLabel.setLayoutY((HEIGHT * 0.6035) * 0.0125);
 
         StackPane removeLeftCash = new StackPane();
 
-        Rectangle removeLeftCashSymbole = Utilities.buildRectangle("gameScene_playerDisplay_tradingMenu_minusCashLeft", (WIDTH * 0.306) * 0.08, (WIDTH * 0.306) * 0.015, Color.WHITE, true, null, 0);
-        Rectangle removeLeftCashClickBox = Utilities.buildRectangle("gameScene_playerDisplay_tradingMenu_clickBoxLeft", (WIDTH * 0.306) * 0.08, (WIDTH * 0.306) * 0.08, Color.BLACK, false, null, 0);
+        Rectangle removeLeftCashSymbole = buildRectangle("gameScene_playerDisplay_tradingMenu_minusCashLeft", (WIDTH * 0.306) * 0.08, (WIDTH * 0.306) * 0.015, Color.WHITE, true, null, 0);
+        Rectangle removeLeftCashClickBox = buildRectangle("gameScene_playerDisplay_tradingMenu_clickBoxLeft", (WIDTH * 0.306) * 0.08, (WIDTH * 0.306) * 0.08, Color.BLACK, false, null, 0);
 
         removeLeftCash.getChildren().addAll(removeLeftCashSymbole, removeLeftCashClickBox);
         removeLeftCash.setLayoutY(((WIDTH * 0.306) * 0.08) / 2);
@@ -94,17 +96,17 @@ public class TradingDisplay extends Pane {
         Pane setRightCash = new Pane();
         setRightCash.setMaxSize((WIDTH * 0.306) * 0.36, (HEIGHT * 0.6035) * 0.10);
 
-        StackPane addRightCash = Utilities.buildPlus("gameScene_playerDisplay_tradingMenu_plusCashRight", (WIDTH * 0.306) * 0.015, (WIDTH * 0.306) * 0.10, 0, 0, null, Color.WHITE, 0, ((WIDTH * 0.306) * 0.08) / 2);
+        StackPane addRightCash = buildPlus("gameScene_playerDisplay_tradingMenu_plusCashRight", (WIDTH * 0.306) * 0.015, (WIDTH * 0.306) * 0.10, 0, 0, null, Color.WHITE, 0, ((WIDTH * 0.306) * 0.08) / 2);
         addRightCash.setLayoutY(((WIDTH * 0.306) * 0.08) / 2);
 
-        Label rightCashLabel = Utilities.buildLabel("gameScene_playerDisplay_tradingMenu_CashLabelRight", Integer.toString(tradeOfferRight.get()), Font.font(Main.TEXT_FONT, FontWeight.BOLD, WIDTH * 0.025), TextAlignment.CENTER, Color.WHITE);
-        Utilities.centeringChildInPane(rightCashLabel, setRightCash);
+        Label rightCashLabel = buildLabel("gameScene_playerDisplay_tradingMenu_CashLabelRight", Integer.toString(tradeOfferRight.get()), Font.font(Main.TEXT_FONT, FontWeight.BOLD, WIDTH * 0.025), TextAlignment.CENTER, Color.WHITE);
+        centeringChildInPane(rightCashLabel, setRightCash);
         rightCashLabel.setLayoutY((HEIGHT * 0.6035) * 0.0125);
 
         StackPane removeRightCash = new StackPane();
 
-        Rectangle removeRightCashSymbole = Utilities.buildRectangle("gameScene_playerDisplay_tradingMenu_minusCashRight", (WIDTH * 0.306) * 0.08, (WIDTH * 0.306) * 0.015, Color.WHITE, true, null, 0);
-        Rectangle removeRightCashClickBox = Utilities.buildRectangle("gameScene_playerDisplay_tradingMenu_clickBoxRight", (WIDTH * 0.306) * 0.08, (WIDTH * 0.306) * 0.08, Color.BLACK, false, null, 0);
+        Rectangle removeRightCashSymbole = buildRectangle("gameScene_playerDisplay_tradingMenu_minusCashRight", (WIDTH * 0.306) * 0.08, (WIDTH * 0.306) * 0.015, Color.WHITE, true, null, 0);
+        Rectangle removeRightCashClickBox = buildRectangle("gameScene_playerDisplay_tradingMenu_clickBoxRight", (WIDTH * 0.306) * 0.08, (WIDTH * 0.306) * 0.08, Color.BLACK, false, null, 0);
 
 
         removeRightCash.setLayoutY(((WIDTH * 0.306) * 0.08) / 2);
@@ -165,11 +167,11 @@ public class TradingDisplay extends Pane {
         //Confirm Button
         StackPane confirmButton = new StackPane();
 
-        Rectangle backgroundConfirmButton = Utilities.buildRectangle("gameScene_playerDisplay_tradingMenu_" + id + "ConfirmButton_Background", buttonWidth, buttonHeight, colorRafa, true, Color.WHITE, BORDER_WIDTH);
+        Rectangle backgroundConfirmButton = buildRectangle("gameScene_playerDisplay_tradingMenu_" + id + "ConfirmButton_Background", buttonWidth, buttonHeight, colorRafa, true, Color.WHITE, BORDER_WIDTH);
         backgroundConfirmButton.setArcWidth(backgroundConfirmButton.getHeight());
         backgroundConfirmButton.setArcHeight(backgroundConfirmButton.getHeight());
 
-        Label confirmButtonLabel = Utilities.buildLabel("gameScene_playerDisplay_tradingMenu_" + id + "ConfirmButton_Label", "Fertig", Font.font(Main.TEXT_FONT, FontWeight.BOLD, WIDTH * 0.025), TextAlignment.CENTER, Color.WHITE);
+        Label confirmButtonLabel = buildLabel("gameScene_playerDisplay_tradingMenu_" + id + "ConfirmButton_Label", "Fertig", Font.font(Main.TEXT_FONT, FontWeight.BOLD, WIDTH * 0.025), TextAlignment.CENTER, Color.WHITE);
 
         confirmButton.getChildren().addAll(backgroundConfirmButton, confirmButtonLabel);
         confirmButton.setLayoutX(x);
@@ -178,11 +180,11 @@ public class TradingDisplay extends Pane {
         //Cancel Button
         StackPane cancelButton = new StackPane();
 
-        Rectangle backgroundCancelButton = Utilities.buildRectangle("gameScene_playerDisplay_tradingMenu_" + id + "CancelButton_Background", buttonWidth, buttonHeight, colorRafa, true, Color.WHITE, BORDER_WIDTH);
+        Rectangle backgroundCancelButton = buildRectangle("gameScene_playerDisplay_tradingMenu_" + id + "CancelButton_Background", buttonWidth, buttonHeight, colorRafa, true, Color.WHITE, BORDER_WIDTH);
         backgroundCancelButton.setArcWidth(backgroundCancelButton.getHeight());
         backgroundCancelButton.setArcHeight(backgroundCancelButton.getHeight());
 
-        Label cancelCancelLabel = Utilities.buildLabel("gameScene_playerDisplay_tradingMenu_" + id + "CancelButton_Label", "Abbruch", Font.font(Main.TEXT_FONT, FontWeight.BOLD, WIDTH * 0.024), TextAlignment.CENTER, Color.WHITE);
+        Label cancelCancelLabel = buildLabel("gameScene_playerDisplay_tradingMenu_" + id + "CancelButton_Label", "Abbruch", Font.font(Main.TEXT_FONT, FontWeight.BOLD, WIDTH * 0.024), TextAlignment.CENTER, Color.WHITE);
 
         cancelButton.getChildren().addAll(backgroundCancelButton, cancelCancelLabel);
         cancelButton.setLayoutX(x + WIDTH * 0.306 - buttonWidth);
@@ -199,16 +201,16 @@ public class TradingDisplay extends Pane {
         //Farben der Buttons und des Pfeiles werden vom Spieler her gegeben, Rafa fragen
 
         //Header
-        Label header = Utilities.buildLabel("gameScene_playerDisplay_tradingMenu_Header", "Trading", Font.font(Main.TEXT_FONT, FontWeight.BOLD, WIDTH / 15), TextAlignment.CENTER, Color.WHITE);
-        Utilities.centeringChildInPane(header, this);
+        Label header = buildLabel("gameScene_playerDisplay_tradingMenu_Header", "Trading", Font.font(Main.TEXT_FONT, FontWeight.BOLD, WIDTH / 15), TextAlignment.CENTER, Color.WHITE);
+        centeringChildInPane(header, this);
 
         //Arrow
         HBox arrow = new HBox(-1);
 
         Color arrowColor = Color.RED;
-        Polygon arrowLeftTop = Utilities.buildTriangle("gameScene_playerDisplay_tradingMenu_arrow_LeftTop", new Point2D(WIDTH * 0.005, 0), new Point2D(WIDTH * 0.065, HEIGHT * 0.05), new Point2D(WIDTH * 0.065, -(HEIGHT * 0.05)), arrowColor, null);
-        Rectangle arrowMiddlePart = Utilities.buildRectangle("gameScene_playerDisplay_tradingMenu_arrow_MiddlePart", WIDTH * 0.23, HEIGHT * 0.05, arrowColor, true, null, 0);
-        Polygon arrowRightTop = Utilities.buildTriangle("gameScene_playerDisplay_tradingMenu_arrow_RightTop", new Point2D( WIDTH * 0.295 + WIDTH * 0.065 - WIDTH * 0.005, 0), new Point2D(WIDTH * 0.295, HEIGHT * 0.05), new Point2D(WIDTH * 0.295, -(HEIGHT * 0.05)), arrowColor, null);
+        Polygon arrowLeftTop = buildTriangle("gameScene_playerDisplay_tradingMenu_arrow_LeftTop", new Point2D(WIDTH * 0.005, 0), new Point2D(WIDTH * 0.065, HEIGHT * 0.05), new Point2D(WIDTH * 0.065, -(HEIGHT * 0.05)), arrowColor, null);
+        Rectangle arrowMiddlePart = buildRectangle("gameScene_playerDisplay_tradingMenu_arrow_MiddlePart", WIDTH * 0.23, HEIGHT * 0.05, arrowColor, true, null, 0);
+        Polygon arrowRightTop = buildTriangle("gameScene_playerDisplay_tradingMenu_arrow_RightTop", new Point2D( WIDTH * 0.295 + WIDTH * 0.065 - WIDTH * 0.005, 0), new Point2D(WIDTH * 0.295, HEIGHT * 0.05), new Point2D(WIDTH * 0.295, -(HEIGHT * 0.05)), arrowColor, null);
 
         HBox.setMargin(arrowMiddlePart, new Insets(HEIGHT * 0.025, 0, 0, 0));
 
