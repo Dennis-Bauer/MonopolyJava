@@ -14,7 +14,6 @@ import sandwich.de.monopoly.GUI.Game.Displays.PlayerDisplay;
 import sandwich.de.monopoly.GUI.Game.Displays.TradingDisplay;
 import sandwich.de.monopoly.Main;
 import sandwich.de.monopoly.Spieler;
-import sandwich.de.monopoly.DennisUtilitiesPackage.Utilities;
 
 import java.util.ArrayList;
 
