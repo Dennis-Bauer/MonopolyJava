@@ -16,9 +16,8 @@ import sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities;
 import sandwich.de.monopoly.Enums.ExtraFields;
 import sandwich.de.monopoly.Exceptions.PlayerIsOutOfBoundsExceptions;
 import sandwich.de.monopoly.Exceptions.ToManyPlayersExceptions;
-import sandwich.de.monopoly.GUI.Game.Displays.ActionDisplay;
 import sandwich.de.monopoly.Main;
-import sandwich.de.monopoly.Spieler;
+import sandwich.de.monopoly.Player;
 
 import java.util.ArrayList;
 
@@ -35,7 +34,7 @@ public class Spielfeld extends Pane{
 
     private final Pane[] fields = new Pane[36];
     private final Pane[] corners = new Pane[4];
-    private final Spieler[] players = new Spieler[5];
+    private final Player[] players = new Player[5];
     private final ImageView[] playerFigures = new ImageView[5];
     private final Pane BOARD;
     private final double MIDDLE_RECTANGLE_RATION = 1.4;
@@ -60,10 +59,9 @@ public class Spielfeld extends Pane{
         VBox displays = new VBox(height * 0.02);
 
         GameDisplayControllerOne.createDisplayOne((width - height) / 1.1, height * 0.60);
-        //CHANGE
-        ActionDisplay actionDisplay = new ActionDisplay((width - height) / 1.1, height * 0.38, Color.rgb(56, 182, 255));
+        GameDisplayControllerTwo.createDisplayTwo((width - height) / 1.1, height * 0.38, Color.rgb(56, 182, 255));
 
-        displays.getChildren().addAll(GameDisplayControllerOne.getDisplayOne(), actionDisplay);
+        displays.getChildren().addAll(GameDisplayControllerOne.getDisplay(), GameDisplayControllerTwo.getDisplay());
         displays.setLayoutX(height + (((width - height) / 2) - ((width - height) / 1.1) / 2));
         displays.setLayoutY(0);
 
@@ -88,7 +86,7 @@ public class Spielfeld extends Pane{
     }
 
 
-    public void setPlayerToGameboard(ArrayList<Spieler> playerList) {
+    public void setPlayerToGameboard(ArrayList<Player> playerList) {
 
         if (Main.CONSOLE_OUT_PUT) {
             consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, "Spieler Figuren werden auf dem Spielbrett Positioniert:");
@@ -124,6 +122,7 @@ public class Spielfeld extends Pane{
 
                     playerFigures[i].setVisible(true);
                     playerFigures[i].toFront();
+
 
                     if (players[i].getFieldPostion() == 0 || players[i].getFieldPostion() == 10 || players[i].getFieldPostion() == 20 || players[i].getFieldPostion() == 30) {
                         switch (players[i].getFieldPostion()) {

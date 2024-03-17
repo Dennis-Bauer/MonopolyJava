@@ -98,8 +98,6 @@ public class Main extends Application {
         menu = new Scene(menuRoot, stageWidth, stageHeight, Color.BLACK);
 
         launch();
-
-
     }
 
     public static void changeScene(scenes s) {

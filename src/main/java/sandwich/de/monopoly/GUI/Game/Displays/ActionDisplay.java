@@ -20,40 +20,31 @@ public class ActionDisplay extends Pane {
     private Pane aktionButtons;
     private Pane diceButton;
 
-    public ActionDisplay(double width, double height, Color backgroundColor) {
+    public ActionDisplay(double width, double height) {
         setId("gameScene_TradingDisplay");
         setMaxSize(width, height);
-
-        Rectangle background = buildRectangle("gameScene_action_Background", width, height, backgroundColor, true, Color.WHITE, width * 0.006);
-        Label header = buildLabel("gameScene_action_Header", "Aktionen", Font.font(Main.TEXT_FONT, FontWeight.BOLD, width * 0.10), TextAlignment.CENTER, Color.WHITE);
-
-        centeringChildInPane(header, this);
 
         double middleX = (width / 2) - (width * 0.25) / 2;
         double y = height * 0.30;
         double space = width * 0.30;
 
         Pane bankButton = buildButton("Bank", width * 0.25, height * 0.45, "/sandwich/de/monopoly/aktionDisplay/bank.png", Color.DARKGRAY, "bank", middleX - space, y);
+        bankButton.setOnMouseClicked(mouseEvent -> {
+
+        });
+
         Pane buildButton = buildButton("Bauen", width * 0.25, height * 0.45, "/sandwich/de/monopoly/aktionDisplay/build.png", Color.LIME, "build", middleX, y);
+        buildButton.setOnMouseClicked(mouseEvent -> {
+
+        });
+
         Pane leaveButton = buildButton("Verlassen", width * 0.25, height * 0.45, "/sandwich/de/monopoly/aktionDisplay/leave.png", Color.RED, "leave", middleX + space, y);
+        leaveButton.setOnMouseClicked(mouseEvent -> {
 
-        aktionButtons = new Pane(bankButton, buildButton, leaveButton);
+        });
 
-        aktionButtons.setVisible(false);
 
-        diceButton = buildButton("Würfel", width * 0.80, height * 0.45, "/sandwich/de/monopoly/aktionDisplay/wuerfel.png", Color.DARKGRAY, "dice", (width / 2) - (width * 0.80) / 2, y);
-
-        getChildren().addAll(background, header, aktionButtons, diceButton);
-    }
-
-    public void changeButton() {
-        if (aktionButtons.isVisible()) {
-            aktionButtons.setVisible(false);
-            diceButton.setVisible(true);
-        } else  {
-            aktionButtons.setVisible(true);
-            diceButton.setVisible(false);
-        }
+        getChildren().addAll(bankButton, buildButton, leaveButton);
     }
 
     private Pane buildButton(String headerText, double width, double height, String pathButtonSymbol, Color backgroundColor, String id, double x, double y) {

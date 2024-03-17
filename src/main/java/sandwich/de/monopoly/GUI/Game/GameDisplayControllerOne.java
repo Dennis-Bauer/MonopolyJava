@@ -13,7 +13,7 @@ import javafx.scene.text.TextAlignment;
 import sandwich.de.monopoly.GUI.Game.Displays.PlayerDisplay;
 import sandwich.de.monopoly.GUI.Game.Displays.TradingDisplay;
 import sandwich.de.monopoly.Main;
-import sandwich.de.monopoly.Spieler;
+import sandwich.de.monopoly.Player;
 
 import java.util.ArrayList;
 
@@ -23,34 +23,37 @@ import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXUtilities
 
 public class GameDisplayControllerOne {
 
-    private static Pane displayOne;
+    private static Pane display;
     private static PlayerDisplay playerDisplay;
     private static TradingDisplay tradingDisplay;
 
     public static void createDisplayOne(double width, double height) {
-        displayOne = new Pane();
-        displayOne.setId("gameScene_DisplayOne");
-        displayOne.setMaxSize(width, height);
+        if (display == null) {
+            display = new Pane();
+            display.setId("gameScene_DisplayOne");
+            display.setMaxSize(width, height);
 
-        Rectangle background = buildRectangle("gameScene_playerDisplay_Background", width, height, Color.rgb(97, 220, 43), true, Color.WHITE, width * 0.005);
 
-        playerDisplay = new PlayerDisplay(width, height);
-        tradingDisplay = new TradingDisplay(width, height, Color.RED);
-        tradingDisplay.setVisible(false);
-        playerDisplay.setVisible(false);
+            Rectangle background = buildRectangle("gameScene_playerDisplay_Background", width, height, Color.rgb(97, 220, 43), true, Color.WHITE, width * 0.005);
 
-        displayOne.getChildren().addAll(background, playerDisplay, tradingDisplay);
+            playerDisplay = new PlayerDisplay(width, height);
+            tradingDisplay = new TradingDisplay(width, height, Color.RED);
+            tradingDisplay.setVisible(false);
+            playerDisplay.setVisible(false);
+
+            display.getChildren().addAll(background, playerDisplay, tradingDisplay);
+        } else throw new RuntimeException("Display One is already created!");
     }
 
-    public static Pane getDisplayOne() {
-        if (displayOne != null)
-            return displayOne;
+    public static Pane getDisplay() {
+        if (display != null)
+            return display;
         else
-            throw new RuntimeException("Display One is not yet created");
+            throw new RuntimeException("Display One is not yet created!");
 
     }
 
-    public static void displayPlayers(ArrayList<Spieler> players) {
+    public static void displayPlayers(ArrayList<Player> players) {
         playerDisplay.setVisible(true);
         tradingDisplay.setVisible(false);
         playerDisplay.createPlayers(players);
@@ -71,7 +74,7 @@ public class GameDisplayControllerOne {
     }
 
     //Erstellt die Basis der Spieler anzeige
-    public static Pane buildPlayer(double width, double height, Color backgroundColor, Spieler player) {
+    public static Pane buildPlayer(double width, double height, Color backgroundColor, Player player) {
         Pane playerBox = new Pane();
         playerBox.setId("gameScene_playerDisplay_PlayerBox");
         playerBox.setMaxSize(width, height);

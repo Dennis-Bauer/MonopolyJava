@@ -15,7 +15,7 @@ import javafx.scene.text.TextAlignment;
 import sandwich.de.monopoly.Enums.Figuren;
 import sandwich.de.monopoly.GUI.Game.GameDisplayControllerOne;
 import sandwich.de.monopoly.Main;
-import sandwich.de.monopoly.Spieler;
+import sandwich.de.monopoly.Player;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -222,7 +222,7 @@ public class TradingDisplay extends Pane {
     }
 
     private Pane buildPlayerTradeBox(double width, double height, Color backgroundColor, String playerName, int playerKontoStand) {
-        Pane playerTradingBox = buildPlayer(width, height, backgroundColor, new Spieler("s", Figuren.AFFE));
+        Pane playerTradingBox = buildPlayer(width, height, backgroundColor, new Player("s", Figuren.AFFE));
 
         Rectangle[] streets = buildStreetInventar(width, height);
 

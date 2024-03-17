@@ -21,7 +21,7 @@ import sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities;
 import sandwich.de.monopoly.Enums.Figuren;
 import sandwich.de.monopoly.Game;
 import sandwich.de.monopoly.Main;
-import sandwich.de.monopoly.Spieler;
+import sandwich.de.monopoly.Player;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -150,11 +150,11 @@ public class StartMenu extends Pane{
                         if (Main.CONSOLE_OUT_PUT)
                             consoleOutPutLine(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Spieler werden erstellt und gespeichert!");
 
-                        Spieler[] players = new Spieler[5];
+                        Player[] players = new Player[5];
 
                         for (int i = 0; i != 5; i++) {
                             if (isPlayerBoxAktiv[i])
-                                players[i] = new Spieler(playerNames[i], playerBoxFigures[i]);
+                                players[i] = new Player(playerNames[i], playerBoxFigures[i]);
                         }
 
                         if (Main.CONSOLE_OUT_PUT)

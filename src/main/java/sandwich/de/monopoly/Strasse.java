@@ -7,7 +7,7 @@ public class Strasse {
     private int position;
     private int mietkosten;
     private boolean istGekauft;
-    private Spieler besitzer;
+    private Player besitzer;
 
     public Strasse(String name, int kaufpreis, int position, int mietkosten, boolean istGekauft){
         this.name = name;
@@ -17,12 +17,12 @@ public class Strasse {
         this.istGekauft = istGekauft;
     }
 
-    public void kaufen (Spieler Spieler){
+    public void kaufen (Player Player){
         istGekauft = true;
-        besitzer = Spieler;
+        besitzer = Player;
         // Geld abziehen und grundstueck spieler zuweisen
     }
-    public void zahlenMiete(Spieler zahlenderSpieler){
+    public void zahlenMiete(Player zahlenderPlayer){
         // Zahlender Spieler Zahlt miete ( ZahlenderSpieler pay mietkosten Spieler )
         //if zahlenderSpieler.aenderKonto(mietkosten);
     }
@@ -31,5 +31,5 @@ public class Strasse {
     public int getPosition(){ return this.position;}
     public int getMietkosten(){ return this.mietkosten;}
     public boolean getIstGekauft(){ return this.istGekauft;}
-    public Spieler getBesitzer(){ return besitzer;}
+    public Player getBesitzer(){ return besitzer;}
 }

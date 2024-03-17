@@ -1,6 +1,7 @@
 package sandwich.de.monopoly.GUI.Game.Displays;
 
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -11,7 +12,7 @@ import javafx.scene.text.TextAlignment;
 import sandwich.de.monopoly.Exceptions.ToManyPlayersExceptions;
 import sandwich.de.monopoly.GUI.Game.GameDisplayControllerOne;
 import sandwich.de.monopoly.Main;
-import sandwich.de.monopoly.Spieler;
+import sandwich.de.monopoly.Player;
 
 import java.util.ArrayList;
 
@@ -35,18 +36,40 @@ public class PlayerDisplay extends Pane{
     private final double borderWidth;
     private final double width, height;
     private boolean arePlayerGenerated = false;
+    private ImageView[] playerOrderFigures = new ImageView[5];
 
     public PlayerDisplay(double width, double height) {
         setId("gameScene_PlayerDisplay");
         setMaxSize(width, height);
+
+
+        double playerSize = (((width * 0.225) / 3.725) / 2);
+        for (int i = 0; i != 5; i++) {
+            playerOrderFigures[i] = new ImageView();
+
+            playerOrderFigures[i].setFitWidth(playerSize);
+            playerOrderFigures[i].setFitHeight(playerSize);
+
+            playerOrderFigures[i].setY(height - playerSize);
+
+            playerOrderFigures[i].setX((playerSize + width * 0.005) * i);
+
+            getChildren().add(playerOrderFigures[i]);
+        }
+
         this.width = width;
         this.height = height;
         borderWidth = width * 0.005;
     }
 
-    public void createPlayers(ArrayList<Spieler> players) {
+    public void createPlayers(ArrayList<Player> players) {
         Pane display = new Pane();
         display.setId("gameScene_playerDisplay_Players");
+
+        for (int i = 0; i != players.size(); i++) {
+            if (players.get(i) != null)
+                playerOrderFigures[i].setImage(players.get(i).getFigur().getFigureImage());
+        }
 
         arePlayerGenerated = true;
 
@@ -174,7 +197,7 @@ public class PlayerDisplay extends Pane{
         return arePlayerGenerated;
     }
 
-    private Pane buildPlayerShowBox(double width, double height, Color backgroundColor, Spieler player) {
+    private Pane buildPlayerShowBox(double width, double height, Color backgroundColor, Player player) {
         Pane playerShowBox = buildPlayer(width, height, backgroundColor, player);
 
         StackPane tradingButton = new StackPane();

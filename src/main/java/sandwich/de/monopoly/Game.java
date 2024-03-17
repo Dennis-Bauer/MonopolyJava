@@ -3,6 +3,8 @@ package sandwich.de.monopoly;
 import sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities;
 import sandwich.de.monopoly.Exceptions.ToManyPlayersExceptions;
 import sandwich.de.monopoly.GUI.Game.GameDisplayControllerOne;
+import sandwich.de.monopoly.GUI.Game.GameDisplayControllerTwo;
+import sandwich.de.monopoly.GUI.Game.Spielfeld;
 
 import java.util.ArrayList;
 
@@ -11,16 +13,17 @@ import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities.
 
 public class Game {
 
-    private Spieler playerOne = null;
-    private Spieler playerTwo = null;
-    private Spieler playerThree = null;
-    private Spieler playerFour = null;
-    private Spieler playerFive = null;
-    private final ArrayList<Spieler> playerList = new ArrayList<>();
+    private Player playerOne = null;
+    private Player playerTwo = null;
+    private Player playerThree = null;
+    private Player playerFour = null;
+    private Player playerFive = null;
+    private Player turnPlayer = null;
+    private final ArrayList<Player> playerList = new ArrayList<>();
 
     private int playerInGame = 0;
 
-    public Game(Spieler[] players) {
+    public Game(Player[] players) {
 
         if (Main.CONSOLE_OUT_PUT) {
             consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, "Game Controller, Konstruktor:");
@@ -42,8 +45,11 @@ public class Game {
                     case 5 -> playerFive = players[i];
                 }
                 j++;
+
             }
         }
+
+        turnPlayer = playerOne;
 
         if (Main.CONSOLE_OUT_PUT) {
             consoleOutPutLine(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.BOLD, "Game Operator wurde erstellt!");
@@ -95,10 +101,16 @@ public class Game {
 
         //Zeigt die Spieler an
         GameDisplayControllerOne.displayPlayers(playerList);
+        GameDisplayControllerTwo.waitForTheDiceRoll();
 
         Main.getGameField().setPlayerToGameboard(playerList);
 
         Main.changeScene(Main.scenes.GAME);
+    }
+
+    public void playerRolledDice(int diceOne, int diceTwo) {
+        turnPlayer.moveFieldPostion(diceOne + diceTwo);
+        Main.getGameField().setPlayerToGameboard(playerList);
     }
 
 }
