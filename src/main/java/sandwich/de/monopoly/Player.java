@@ -41,10 +41,6 @@ public class Player {
         if (((fieldPostion - postions) + postions) >= 40)
             fieldPostion = fieldPostion - 40;
         System.out.println("Seine neue Postion: " + fieldPostion);
-        System.out.println("KOMMENTAR GUCKEN HIER");
-        /*
-        Das Problem ist das der Spieler unten in der Reihe falsch geht. Zumbeispiel field postion 32 ist links das Zweite.--
-         */
     }
 
     @Override

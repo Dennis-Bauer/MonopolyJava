@@ -98,47 +98,59 @@ public class Spielfeld extends Pane{
                 if (i < playerList.size())
                     players[i] = playerList.get(i);
                 if (players[i] != null) {
+                    //Testes if the player is out of bounce the area.
+                    if (players[i].getFieldPostion() > 39 || players[i].getFieldPostion() < 0) throw new PlayerIsOutOfBoundsExceptions(players[i].getFieldPostion());
 
-
+                    //Creates the array that stores the base variable of the player coordinate from which it is then calculated
+                    //where the player will be positioned
                     double[] calculationBaseX = new double[5];
                     double[] calculationBaseY = new double[5];
 
+                    //Calculate the left corner X Postion from each Player
+                    //and thus also creates the base coordinate
+                    //from which every calculation begins.
                     calculationBaseX[0] = FIELD_HEIGHT / 2 - (PLAYER_FIGURE_SIZE * 3 + (FIELD_HEIGHT * 0.01) * 2) / 2;
                     calculationBaseX[1] = calculationBaseX[0] + PLAYER_FIGURE_SIZE + FIELD_HEIGHT * 0.01;
                     calculationBaseX[2] = calculationBaseX[0] + (PLAYER_FIGURE_SIZE + FIELD_HEIGHT * 0.01) * 2;
                     calculationBaseX[3] = FIELD_HEIGHT / 2 - (PLAYER_FIGURE_SIZE * 2 + (FIELD_HEIGHT * 0.01) * 2) / 2;
                     calculationBaseX[4] = calculationBaseX[3] + PLAYER_FIGURE_SIZE + FIELD_HEIGHT * 0.01;
 
+                    //Calculate the left corner Y Postion from each Player
+                    //and thus also creates the base coordinate
+                    //from which every calculation begins
                     calculationBaseY[0] = FIELD_WIDTH * 9 + FIELD_HEIGHT + FIELD_HEIGHT * 0.35;
                     calculationBaseY[1] = FIELD_WIDTH * 9 + FIELD_HEIGHT + FIELD_HEIGHT * 0.35;
                     calculationBaseY[2] = FIELD_WIDTH * 9 + FIELD_HEIGHT + FIELD_HEIGHT * 0.35;
                     calculationBaseY[3] = calculationBaseY[0] + PLAYER_FIGURE_SIZE + FIELD_HEIGHT * 0.001;
                     calculationBaseY[4] = calculationBaseY[0] + PLAYER_FIGURE_SIZE + FIELD_HEIGHT * 0.001;
 
-
-                    if (players[i].getFieldPostion() > 39 || players[i].getFieldPostion() < 0) throw new PlayerIsOutOfBoundsExceptions(players[i].getFieldPostion());
-
+                    //Saves the player figure in an extra variable
                     playerFigures[i].setImage(players[i].getFigur().getFigureImage());
 
                     playerFigures[i].setVisible(true);
                     playerFigures[i].toFront();
 
-
+                    //Calculate the Corner Postions
                     if (players[i].getFieldPostion() == 0 || players[i].getFieldPostion() == 10 || players[i].getFieldPostion() == 20 || players[i].getFieldPostion() == 30) {
                         switch (players[i].getFieldPostion()) {
-                            case 0 -> {
-                                //Postions bleiben gleich, da die Start berechnung bei dieser Position anfängt
+                            case 0 -> { //Bottom left corner
+                                //Positions remain the same
+                                //because the start calculation begins at this position
                             }
-                            case 10 -> calculationBaseY[i] = calculationBaseY[i] - FIELD_HEIGHT - FIELD_WIDTH * 9 - FIELD_HEIGHT * 0.25;
-                            case 20 -> {
+                            case 10 ->  { //Upper left corner
+                                calculationBaseY[i] = calculationBaseY[i] - FIELD_HEIGHT - FIELD_WIDTH * 9 - FIELD_HEIGHT * 0.25;
+                            }
+                            case 20 -> { //Upper right corner
                                 calculationBaseY[i] = calculationBaseY[i] - FIELD_HEIGHT - FIELD_WIDTH * 9;
                                 calculationBaseX[i] = calculationBaseX[i] + FIELD_HEIGHT + FIELD_WIDTH * 9;
                             }
-                            case 30 -> calculationBaseX[i] = calculationBaseX[i] + FIELD_HEIGHT + FIELD_WIDTH * 9;
+                            case 30 -> { //Bottom right corner
+                                calculationBaseX[i] = calculationBaseX[i] + FIELD_HEIGHT + FIELD_WIDTH * 9;
+                            }
                         }
-
                     } else {
                         if ((players[i].getFieldPostion() >= 1 && players[i].getFieldPostion() <= 9) ||(players[i].getFieldPostion() >= 21 && players[i].getFieldPostion() <= 29)) {
+                            //Creates the basic coordinates when the player is on the left or right on fields
                             calculationBaseX[0] = FIELD_HEIGHT * 0.20;
                             calculationBaseX[1] = calculationBaseX[0];
                             calculationBaseX[2] = calculationBaseX[0];
@@ -151,6 +163,7 @@ public class Spielfeld extends Pane{
                             calculationBaseY[3] = calculationBaseY[1];
                             calculationBaseY[4] = calculationBaseY[0];
                         } else {
+                            //Creates the basic coordinates when the player is on top or bottom of fields
                             calculationBaseX[0] = FIELD_HEIGHT + (FIELD_WIDTH / 2 - (PLAYER_FIGURE_SIZE * 2 + FIELD_HEIGHT * 0.005) / 2);
                             calculationBaseX[1] = calculationBaseX[0] + PLAYER_FIGURE_SIZE + FIELD_HEIGHT * 0.005;
                             calculationBaseX[2] = calculationBaseX[0];
@@ -164,16 +177,21 @@ public class Spielfeld extends Pane{
                             calculationBaseY[4] = calculationBaseY[0];
                         }
 
+                        //Calculates the exact position of the player
                         if (players[i].getFieldPostion() >= 1 && players[i].getFieldPostion() <= 9) {
+                            //Left up (field 1-9)
                             calculationBaseY[i] = calculationBaseY[i] - ((players[i].getFieldPostion() - 1) * FIELD_WIDTH);
                         } else if (players[i].getFieldPostion() >= 11 && players[i].getFieldPostion() <= 19) {
+                            //above (field 11-19)
                             calculationBaseX[i] = calculationBaseX[i] + ((players[i].getFieldPostion() - 11) * FIELD_WIDTH);
                         } else if (players[i].getFieldPostion() >= 21 && players[i].getFieldPostion() <= 29) {
+                            //Right down (field 21-29)
                             calculationBaseY[i] = calculationBaseY[i] - ((29 - players[i].getFieldPostion()) * FIELD_WIDTH);
                             calculationBaseX[i] = calculationBaseX[i] + FIELD_HEIGHT + FIELD_WIDTH * 9 + FIELD_HEIGHT * 0.60 - PLAYER_FIGURE_SIZE;
                         } else if (players[i].getFieldPostion() >= 31 && players[i].getFieldPostion() <= 39) {
+                            //Bottom (field 31-39)
                             calculationBaseY[i] = calculationBaseY[i] + FIELD_HEIGHT + FIELD_WIDTH * 9 + FIELD_HEIGHT * 0.60 - PLAYER_FIGURE_SIZE;
-                            calculationBaseX[i] = calculationBaseX[i] + ((players[i].getFieldPostion() - 31) * FIELD_WIDTH);
+                            calculationBaseX[i] = calculationBaseX[i] - ((players[i].getFieldPostion() - 39) * FIELD_WIDTH);
                         } else throw new PlayerIsOutOfBoundsExceptions(players[i].getFieldPostion());
                     }
 
@@ -252,42 +270,42 @@ public class Spielfeld extends Pane{
         board.getChildren().addAll(f, v);
 
         //Creating Fields
-        fields[0] = buildStreet(Main.streetColor.get(0).brighter(), buildLongText("Bank", "Straße 00"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[0] = buildStreet(Main.streetColor.get(0).brighter(), buildLongText("Bank", "Straße 39"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
         fields[1] = buildExtraPayField(ExtraFields.SPOTIFY_PREMIUM, 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[2] = buildStreet(Main.streetColor.get(1), buildLongText("Bank", "Straße 02"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[2] = buildStreet(Main.streetColor.get(1), buildLongText("Bank", "Straße 37"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
         fields[3] = buildGetChanceCard(ChanceColors.RED ,COLOR, FIELD_WIDTH, FIELD_HEIGHT);
         fields[4] = buildStation(buildLongText("Nord-", "Bahnhof"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[5] = buildStreet(Main.streetColor.get(2), buildLongText("Bank", "Straße 05"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[5] = buildStreet(Main.streetColor.get(2), buildLongText("Bank", "Straße 34"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
         fields[6] = buildGetCommunityCard(COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[7] = buildStreet(Main.streetColor.get(3),buildLongText("Bank", "Straße 07"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[8] = buildStreet(Main.streetColor.get(4),buildLongText("Bank", "Straße 08"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[9] = buildStreet(Main.streetColor.get(5),buildLongText("Bank", "Straße 09"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[7] = buildStreet(Main.streetColor.get(3),buildLongText("Bank", "Straße 32"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[8] = buildStreet(Main.streetColor.get(4),buildLongText("Bank", "Straße 31"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[9] = buildStreet(Main.streetColor.get(5),buildLongText("Bank", "Straße 29"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
         fields[10] = buildExtraPayField(ExtraFields.HESSLER_SCHULDEN, 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[11] = buildStreet(Main.streetColor.get(6), buildLongText("Bank", "Straße 11"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[12] = buildStreet(Main.streetColor.get(7), buildLongText("Bank", "Straße 12"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[11] = buildStreet(Main.streetColor.get(6), buildLongText("Bank", "Straße 27"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[12] = buildStreet(Main.streetColor.get(7), buildLongText("Bank", "Straße 26"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
         fields[13] = buildStation(buildLongText("West-", "Bahnhof"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[14] = buildStreet(Main.streetColor.get(8), buildLongText("Bank", "Straße 13"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[15] = buildStreet(Main.streetColor.get(9), buildLongText("Bank", "Straße 15"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[14] = buildStreet(Main.streetColor.get(8), buildLongText("Bank", "Straße 24"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[15] = buildStreet(Main.streetColor.get(9), buildLongText("Bank", "Straße 23"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
         fields[16] = buildGetChanceCard(ChanceColors.BLUE, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[17] = buildStreet(Main.streetColor.get(10), buildLongText("Bank", "Straße 17"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[18] = buildStreet(Main.streetColor.get(11), buildLongText("Bank", "Straße 18"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[19] = buildStreet(Main.streetColor.get(12), buildLongText("Bank", "Straße 19"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[17] = buildStreet(Main.streetColor.get(10), buildLongText("Bank", "Straße 21"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[18] = buildStreet(Main.streetColor.get(11), buildLongText("Bank", "Straße 19"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[19] = buildStreet(Main.streetColor.get(12), buildLongText("Bank", "Straße 18"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
         fields[20] = buildGetCommunityCard(COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[21] = buildStreet(Main.streetColor.get(13), buildLongText("Bank", "Straße 21"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[21] = buildStreet(Main.streetColor.get(13), buildLongText("Bank", "Straße 16"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
         fields[22] = buildStation(buildLongText("Süd-", "Bahnhof"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[23] = buildStreet(Main.streetColor.get(14), buildLongText("Bank", "Straße 23"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[24] = buildStreet(Main.streetColor.get(15), buildLongText("Bank", "Straße 24"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[23] = buildStreet(Main.streetColor.get(14), buildLongText("Bank", "Straße 14"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[24] = buildStreet(Main.streetColor.get(15), buildLongText("Bank", "Straße 13"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
         fields[25] = buildExtraPayField(ExtraFields.NAME_THREE, 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[26] = buildStreet(Main.streetColor.get(16), buildLongText("Bank", "Straße 26"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[27] = buildStreet(Main.streetColor.get(17), buildLongText("Bank", "Straße 27"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[28] = buildStreet(Main.streetColor.get(18), buildLongText("Bank", "Straße 28"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[26] = buildStreet(Main.streetColor.get(16), buildLongText("Bank", "Straße 11"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[27] = buildStreet(Main.streetColor.get(17), buildLongText("Bank", "Straße 9"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[28] = buildStreet(Main.streetColor.get(18), buildLongText("Bank", "Straße 8"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
         fields[29] = buildGetChanceCard(ChanceColors.GREEN, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[30] = buildStreet(Main.streetColor.get(19), buildLongText("Bank", "Straße 30"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[30] = buildStreet(Main.streetColor.get(19), buildLongText("Bank", "Straße 6"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
         fields[31] = buildStation(buildLongText("Haupt-", "Bahnhof"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
         fields[32] = buildExtraPayField(ExtraFields.NAME_FOUR, 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[33] = buildStreet(Main.streetColor.get(20), buildLongText("Bank", "Straße 33"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[33] = buildStreet(Main.streetColor.get(20), buildLongText("Bank", "Straße 3"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
         fields[34] = buildGetCommunityCard(COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[35] = buildStreet(Main.streetColor.get(21), buildLongText("Bank", "Straße 35"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[35] = buildStreet(Main.streetColor.get(21), buildLongText("Bank", "Straße 1"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
 
         //Creating Corners
         corners[0] = buildStart(COLOR, FIELD_HEIGHT);

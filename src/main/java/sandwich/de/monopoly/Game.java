@@ -4,7 +4,6 @@ import sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities;
 import sandwich.de.monopoly.Exceptions.ToManyPlayersExceptions;
 import sandwich.de.monopoly.GUI.Game.GameDisplayControllerOne;
 import sandwich.de.monopoly.GUI.Game.GameDisplayControllerTwo;
-import sandwich.de.monopoly.GUI.Game.Spielfeld;
 
 import java.util.ArrayList;
 
@@ -18,7 +17,7 @@ public class Game {
     private Player playerThree = null;
     private Player playerFour = null;
     private Player playerFive = null;
-    private Player turnPlayer = null;
+    private Player turnPlayer;
     private final ArrayList<Player> playerList = new ArrayList<>();
 
     private int playerInGame = 0;

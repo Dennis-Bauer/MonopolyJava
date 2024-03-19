@@ -22,7 +22,7 @@ public class DiceDisplay extends Pane {
 
     private Thread numberAnimationOne = new Thread("NumberAnimationOne");
     private Thread numberAnimationTwo = new Thread("NumberAnimationTwo");
-    private Random rn = new Random();
+    private final Random rn = new Random();
 
     public DiceDisplay(double width, double height) {
         setId("gameScene_DiceDisplay");
