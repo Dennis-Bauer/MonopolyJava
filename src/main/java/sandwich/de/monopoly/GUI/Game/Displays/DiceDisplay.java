@@ -11,6 +11,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import sandwich.de.monopoly.Main;
+import sandwich.de.monopoly.Threads.NumberAnimationThread;
 
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -19,10 +20,9 @@ import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXConstruct
 import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXUtilities.centeringChildInPane;
 
 public class DiceDisplay extends Pane {
-
-    private Thread numberAnimationOne = new Thread("NumberAnimationOne");
-    private Thread numberAnimationTwo = new Thread("NumberAnimationTwo");
     private final Random rn = new Random();
+    private NumberAnimationThread rowOneAnimation;
+    private NumberAnimationThread rowTwoAnimation;
 
     public DiceDisplay(double width, double height) {
         setId("gameScene_DiceDisplay");
@@ -59,100 +59,19 @@ public class DiceDisplay extends Pane {
 
         roleDiceButton.setOnMouseClicked(event -> {
 
-            if (!numberAnimationOne.isAlive() && !numberAnimationTwo.isAlive()) {
-                AtomicInteger diceOneNumber = new AtomicInteger();
-                AtomicInteger diceTwoNumber = new AtomicInteger();
+            rowOneAnimation = new NumberAnimationThread(numberRowOne);
+            rowTwoAnimation = new NumberAnimationThread(numberRowTwo);
 
-                AtomicInteger randomOneLength = new AtomicInteger();
-                randomOneLength.set(rn.nextInt(60 - 20 + 1) + 20);
-                if ((randomOneLength.get() % 2) != 0)
-                    randomOneLength.set(randomOneLength.get() + 1);
+            if (!rowOneAnimation.isAlive() && !rowTwoAnimation.isAlive()) {
+                rowOneAnimation.setLength(rn.nextInt(60 - 20 + 1) + 20);
+                rowTwoAnimation.setLength(rn.nextInt(60 - 20 + 1) + 20);
 
-                int dOne = Integer.parseInt(String.valueOf(numberRowOne.getText().charAt(16)));
-                for (int i = 0; i < randomOneLength.get() / 2; i++) {
-                    if (dOne >= 6)
-                        dOne = 1;
-                    else dOne = dOne + 1;
+                rowOneAnimation.start();
+                rowTwoAnimation.start();
 
-                    System.out.println("DOne: " + dOne);
-                }
-                diceOneNumber.set(dOne);
-
-                AtomicInteger randomTwoLength = new AtomicInteger();
-                randomTwoLength.set(rn.nextInt(60 - 20 + 1) + 20);
-                if ((randomTwoLength.get() % 2) != 0)
-                    randomTwoLength.set(randomTwoLength.get() + 1);
-
-                int dTwo = Integer.parseInt(String.valueOf(numberRowTwo.getText().charAt(16)));
-                for (int i = 0; i < randomTwoLength.get() / 2; i++) {
-                    if (dTwo >= 6)
-                        dTwo = 1;
-                    else dTwo = dTwo + 1;
-                }
-                diceTwoNumber.set(dTwo);
-
-
-                numberAnimationOne = new Thread(() -> {
-                    for (int i = 0; i < randomOneLength.get(); i++) {
-                        try {Thread.sleep(20);} catch (InterruptedException ignored) {}
-
-                        Platform.runLater(() -> {
-
-                            String rowText = numberRowOne.getText();
-                            StringBuilder rowNewText = new StringBuilder();
-
-                            rowNewText.append(rowText.substring(1));
-                            if (!rowText.endsWith("-")) {
-                                rowNewText.append("-");
-                            } else {
-                                int rowLastNumber = Integer.parseInt(String.valueOf(rowText.charAt(rowText.length() - 2)));
-                                if (rowLastNumber >= 6) {
-                                    rowNewText.append("1");
-                                } else {
-                                    rowNewText.append(rowLastNumber + 1);
-                                }
-                            }
-                            numberRowOne.setText(rowNewText.toString());
-
-
-                        });
-                    }
-                });
-                numberAnimationOne.start();
-
-                numberAnimationTwo = new Thread(() -> {
-                    for (int i = 0; i < randomTwoLength.get(); i++) {
-                        try {Thread.sleep(20);} catch (InterruptedException ignored) {}
-
-                        Platform.runLater(() -> {
-
-                            String rowText = numberRowTwo.getText();
-                            StringBuilder rowNewText = new StringBuilder();
-
-                            rowNewText.append(rowText.substring(1));
-                            if (!rowText.endsWith("-")) {
-                                rowNewText.append("-");
-                            } else {
-                                int rowLastNumber = Integer.parseInt(String.valueOf(rowText.charAt(rowText.length() - 2)));
-                                if (rowLastNumber >= 6) {
-                                    rowNewText.append("1");
-                                } else {
-                                    rowNewText.append(rowLastNumber + 1);
-                                }
-                            }
-                            numberRowTwo.setText(rowNewText.toString());
-
-
-                        });
-                    }
-                });
-                numberAnimationTwo.start();
-
-                Main.getGameOperator().playerRolledDice(diceOneNumber.get(), diceTwoNumber.get());
+                Main.getGameOperator().playerRolledDice(rowOneAnimation.getLastNumber(), rowTwoAnimation.getLastNumber());
+                //Main.getGameOperator().playerRolledDice(1, 0);
             }
-
-            //Main.getGameOperator().playerRolledDice(numberRowOne.getText().substring(15, 16));
-
         });
 
         getChildren().addAll(numberField, roleDiceButton);
