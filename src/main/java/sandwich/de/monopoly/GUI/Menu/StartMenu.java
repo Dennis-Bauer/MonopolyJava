@@ -154,7 +154,7 @@ public class StartMenu extends Pane{
 
                         for (int i = 0; i != 5; i++) {
                             if (isPlayerBoxAktiv[i])
-                                players[i] = new Player(playerNames[i], playerBoxFigures[i]);
+                                players[i] = new Player(playerNames[i], playerBoxFigures[i], i);
                         }
 
                         if (Main.CONSOLE_OUT_PUT)

@@ -7,14 +7,16 @@ public class Player {
     private int kontoStand;
     private String name;
     private int fieldPostion;
+    private final int orderNumber;
     Figuren figur;
 
-    public Player(String name, Figuren f) {
+    public Player(String name, Figuren f, int orderNumber) {
         this.name = name;
         this.figur = f;
+        this.orderNumber = orderNumber;
 
         kontoStand = Main.START_BANK_ACCOUNT;
-        fieldPostion = 0;
+        fieldPostion = 20;
     }
 
     public String getName() {
@@ -34,13 +36,9 @@ public class Player {
     }
 
     public void moveFieldPostion(int postions) {
-        System.out.println("Übergebende Menge wie viel der Spieler sich bewegen soll: " + postions);
-        System.out.println("Welche Postion er bekommen soll: " +  (fieldPostion + postions));
-        System.out.println("Seine jetztige Postion: " + fieldPostion);
         fieldPostion = fieldPostion + postions;
-        if (((fieldPostion - postions) + postions) >= 40)
+        if (fieldPostion >= 40)
             fieldPostion = fieldPostion - 40;
-        System.out.println("Seine neue Postion: " + fieldPostion);
     }
 
     @Override

@@ -222,7 +222,7 @@ public class TradingDisplay extends Pane {
     }
 
     private Pane buildPlayerTradeBox(double width, double height, Color backgroundColor, String playerName, int playerKontoStand) {
-        Pane playerTradingBox = buildPlayer(width, height, backgroundColor, new Player("s", Figuren.AFFE));
+        Pane playerTradingBox = buildPlayer(width, height, backgroundColor, new Player("s", Figuren.AFFE, 0));
 
         Rectangle[] streets = buildStreetInventar(width, height);
 
