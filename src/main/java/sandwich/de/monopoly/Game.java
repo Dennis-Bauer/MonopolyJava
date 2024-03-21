@@ -1,6 +1,7 @@
 package sandwich.de.monopoly;
 
 import sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities;
+import sandwich.de.monopoly.Exceptions.PlayerNotFoundExceptions;
 import sandwich.de.monopoly.Exceptions.ToManyPlayersExceptions;
 import sandwich.de.monopoly.GUI.Game.GameDisplayControllerOne;
 import sandwich.de.monopoly.GUI.Game.GameDisplayControllerTwo;
@@ -108,8 +109,11 @@ public class Game {
     }
 
     public void playerRolledDice(int diceOne, int diceTwo) {
+        try {
+            Main.getGameField().movePlayerOnGameBoard(turnPlayer, diceOne + diceTwo);
+        } catch (PlayerNotFoundExceptions ignored) {}
         turnPlayer.moveFieldPostion(diceOne + diceTwo);
-        Main.getGameField().setPlayerToGameboard(playerList);
+        System.out.println("Player new Postion: " + turnPlayer.getFieldPostion());
     }
 
 }

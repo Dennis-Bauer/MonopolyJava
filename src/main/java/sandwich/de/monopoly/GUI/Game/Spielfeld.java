@@ -1,5 +1,7 @@
 package sandwich.de.monopoly.GUI.Game;
 
+import javafx.animation.TranslateTransition;
+import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -12,14 +14,17 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
+import javafx.util.Duration;
 import sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities;
 import sandwich.de.monopoly.Enums.ExtraFields;
 import sandwich.de.monopoly.Exceptions.PlayerIsOutOfBoundsExceptions;
+import sandwich.de.monopoly.Exceptions.PlayerNotFoundExceptions;
 import sandwich.de.monopoly.Exceptions.ToManyPlayersExceptions;
 import sandwich.de.monopoly.Main;
 import sandwich.de.monopoly.Player;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPut;
 import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPutLine;
@@ -101,146 +106,18 @@ public class Spielfeld extends Pane{
                     //Testes if the player is out of bounce the area.
                     if (players[i].getFieldPostion() > 39 || players[i].getFieldPostion() < 0) throw new PlayerIsOutOfBoundsExceptions(players[i].getFieldPostion());
 
-                    //Creates the array that stores the base variable of the player coordinate from which it is then calculated
-                    //where the player will be positioned
-                    double[] calculationBaseX = new double[5];
-                    double[] calculationBaseY = new double[5];
-
-                    //Calculate the left corner X Postion from each Player
-                    //and thus also creates the base coordinate
-                    //from which every calculation begins.
-                    calculationBaseX[0] = FIELD_HEIGHT / 2 - (PLAYER_FIGURE_SIZE * 3 + (FIELD_HEIGHT * 0.01) * 2) / 2;
-                    calculationBaseX[1] = calculationBaseX[0] + PLAYER_FIGURE_SIZE + FIELD_HEIGHT * 0.01;
-                    calculationBaseX[2] = calculationBaseX[0] + (PLAYER_FIGURE_SIZE + FIELD_HEIGHT * 0.01) * 2;
-                    calculationBaseX[3] = FIELD_HEIGHT / 2 - (PLAYER_FIGURE_SIZE * 2 + (FIELD_HEIGHT * 0.01) * 2) / 2;
-                    calculationBaseX[4] = calculationBaseX[3] + PLAYER_FIGURE_SIZE + FIELD_HEIGHT * 0.01;
-
-                    //Calculate the left corner Y Postion from each Player
-                    //and thus also creates the base coordinate
-                    //from which every calculation begins
-                    calculationBaseY[0] = FIELD_WIDTH * 9 + FIELD_HEIGHT + FIELD_HEIGHT * 0.35;
-                    calculationBaseY[1] = FIELD_WIDTH * 9 + FIELD_HEIGHT + FIELD_HEIGHT * 0.35;
-                    calculationBaseY[2] = FIELD_WIDTH * 9 + FIELD_HEIGHT + FIELD_HEIGHT * 0.35;
-                    calculationBaseY[3] = calculationBaseY[0] + PLAYER_FIGURE_SIZE + FIELD_HEIGHT * 0.001;
-                    calculationBaseY[4] = calculationBaseY[0] + PLAYER_FIGURE_SIZE + FIELD_HEIGHT * 0.001;
-
                     //Saves the player figure in an extra variable
                     playerFigures[i].setImage(players[i].getFigur().getFigureImage());
 
                     playerFigures[i].setVisible(true);
                     playerFigures[i].toFront();
 
-                    //Calculate the Corner Postions
-                    if (players[i].getFieldPostion() == 0 || players[i].getFieldPostion() == 10 || players[i].getFieldPostion() == 20 || players[i].getFieldPostion() == 30) {
-                        switch (players[i].getFieldPostion()) {
-                            case 0 -> { //Bottom left corner
-                                //Positions remain the same
-                                //because the start calculation begins at this position
-                            }
-                            case 10 ->  { //Upper left corner
-                                calculationBaseY[i] = calculationBaseY[i] - FIELD_HEIGHT - FIELD_WIDTH * 9 - FIELD_HEIGHT * 0.25;
-                            }
-                            case 20 -> { //Upper right corner
-                                calculationBaseY[i] = calculationBaseY[i] - FIELD_HEIGHT - FIELD_WIDTH * 9;
-                                calculationBaseX[i] = calculationBaseX[i] + FIELD_HEIGHT + FIELD_WIDTH * 9;
-                            }
-                            case 30 -> { //Bottom right corner
-                                calculationBaseX[i] = calculationBaseX[i] + FIELD_HEIGHT + FIELD_WIDTH * 9;
-                            }
-                        }
-                    } else {
-                        if ((players[i].getFieldPostion() >= 1 && players[i].getFieldPostion() <= 9) ||(players[i].getFieldPostion() >= 21 && players[i].getFieldPostion() <= 29)) {
-                            //Creates the basic coordinates when the player is on the left or right on fields
-                            calculationBaseX[0] = FIELD_HEIGHT * 0.20;
-                            calculationBaseX[1] = calculationBaseX[0];
-                            calculationBaseX[2] = calculationBaseX[0];
-                            calculationBaseX[3] = calculationBaseX[0];
-                            calculationBaseX[4] = calculationBaseX[0];
-
-                            calculationBaseY[0] = FIELD_WIDTH * 8 + FIELD_HEIGHT + (FIELD_WIDTH / 2 - (PLAYER_FIGURE_SIZE * 2 + FIELD_HEIGHT * 0.005) / 2);
-                            calculationBaseY[1] = calculationBaseY[0] + PLAYER_FIGURE_SIZE + FIELD_HEIGHT * 0.005;
-                            calculationBaseY[2] = calculationBaseY[0];
-                            calculationBaseY[3] = calculationBaseY[1];
-                            calculationBaseY[4] = calculationBaseY[0];
-                        } else {
-                            //Creates the basic coordinates when the player is on top or bottom of fields
-                            calculationBaseX[0] = FIELD_HEIGHT + (FIELD_WIDTH / 2 - (PLAYER_FIGURE_SIZE * 2 + FIELD_HEIGHT * 0.005) / 2);
-                            calculationBaseX[1] = calculationBaseX[0] + PLAYER_FIGURE_SIZE + FIELD_HEIGHT * 0.005;
-                            calculationBaseX[2] = calculationBaseX[0];
-                            calculationBaseX[3] = calculationBaseX[1];
-                            calculationBaseX[4] = calculationBaseX[0];
-
-                            calculationBaseY[0] = FIELD_HEIGHT * 0.20;
-                            calculationBaseY[1] = calculationBaseY[0];
-                            calculationBaseY[2] = calculationBaseY[0];
-                            calculationBaseY[3] = calculationBaseY[0];
-                            calculationBaseY[4] = calculationBaseY[0];
-                        }
-
-                        //Calculates the exact position of the player
-                        if (players[i].getFieldPostion() >= 1 && players[i].getFieldPostion() <= 9) {
-                            //Left up (field 1-9)
-                            calculationBaseY[i] = calculationBaseY[i] - ((players[i].getFieldPostion() - 1) * FIELD_WIDTH);
-                        } else if (players[i].getFieldPostion() >= 11 && players[i].getFieldPostion() <= 19) {
-                            //above (field 11-19)
-                            calculationBaseX[i] = calculationBaseX[i] + ((players[i].getFieldPostion() - 11) * FIELD_WIDTH);
-                        } else if (players[i].getFieldPostion() >= 21 && players[i].getFieldPostion() <= 29) {
-                            //Right down (field 21-29)
-                            calculationBaseY[i] = calculationBaseY[i] - ((29 - players[i].getFieldPostion()) * FIELD_WIDTH);
-                            calculationBaseX[i] = calculationBaseX[i] + FIELD_HEIGHT + FIELD_WIDTH * 9 + FIELD_HEIGHT * 0.60 - PLAYER_FIGURE_SIZE;
-                        } else if (players[i].getFieldPostion() >= 31 && players[i].getFieldPostion() <= 39) {
-                            //Bottom (field 31-39)
-                            calculationBaseY[i] = calculationBaseY[i] + FIELD_HEIGHT + FIELD_WIDTH * 9 + FIELD_HEIGHT * 0.60 - PLAYER_FIGURE_SIZE;
-                            calculationBaseX[i] = calculationBaseX[i] - ((players[i].getFieldPostion() - 39) * FIELD_WIDTH);
-                        } else throw new PlayerIsOutOfBoundsExceptions(players[i].getFieldPostion());
-                    }
-
-                    switch (i) {
-                        case 0 -> {
-                            playerFigures[i].setX(calculationBaseX[0]);
-                            playerFigures[i].setY(calculationBaseY[0]);
-                            if (Main.CONSOLE_OUT_PUT) {
-                                consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Die Figur vom 1. Spieler wurde auf diese Position gesetzt: ");
-                                consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.BOLD, "[" + calculationBaseX[0] + "/" + calculationBaseY[0] + "]");
-                                System.out.println();
-                            }
-                        }
-                        case 1 -> {
-                            playerFigures[i].setX(calculationBaseX[1]);
-                            playerFigures[i].setY(calculationBaseY[1]);
-                            if (Main.CONSOLE_OUT_PUT) {
-                                consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Die Figur vom 2. Spieler wurde auf diese Position gesetzt: ");
-                                consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.BOLD, "[" + calculationBaseX[1] + "/" + calculationBaseY[1] + "]");
-                                System.out.println();
-                            }
-                        }
-                        case 2 -> {
-                            playerFigures[i].setX(calculationBaseX[2]);
-                            playerFigures[i].setY(calculationBaseY[2]);
-                            if (Main.CONSOLE_OUT_PUT) {
-                                consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Die Figur vom 3. Spieler wurde auf diese Position gesetzt: ");
-                                consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.BOLD, "[" + calculationBaseX[2] + "/" + calculationBaseY[2] + "]");
-                                System.out.println();
-                            }
-                        }
-                        case 3 -> {
-                            playerFigures[i].setX(calculationBaseX[3]);
-                            playerFigures[i].setY(calculationBaseY[3]);
-                            if (Main.CONSOLE_OUT_PUT) {
-                                consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Die Figur vom 4. Spieler wurde auf diese Position gesetzt: ");
-                                consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.BOLD, "[" + calculationBaseX[4] + "/" + calculationBaseY[4] + "]");
-                                System.out.println();
-                            }
-                        }
-                        case 4 -> {
-                            playerFigures[i].setX(calculationBaseX[4]);
-                            playerFigures[i].setY(calculationBaseY[4]);
-                            if (Main.CONSOLE_OUT_PUT) {
-                                consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Die Figur vom 5. Spieler wurde auf diese Position gesetzt: ");
-                                consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.BOLD, "[" + calculationBaseX[4] + "/" + calculationBaseY[4] + "]");
-                                System.out.println();
-                            }
-                        }
+                    playerFigures[i].setX(calculateXYPostion(i, players[i].getFieldPostion()).getX());
+                    playerFigures[i].setY(calculateXYPostion(i, players[i].getFieldPostion()).getY());
+                    if (Main.CONSOLE_OUT_PUT) {
+                        consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Die Figur vom " + i + ". Spieler wurde auf diese Position gesetzt: ");
+                        consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.BOLD, "[" + (calculateXYPostion(i, players[i].getFieldPostion()).getX()) + "/" + (calculateXYPostion(i, players[i].getFieldPostion()).getY()) + "]");
+                        System.out.println();
                     }
                 } else {
                     playerFigures[i].setVisible(false);
@@ -252,8 +129,147 @@ public class Spielfeld extends Pane{
             consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
 
     }
+
+    public void movePlayerOnGameBoard(Player player, int steps) throws PlayerNotFoundExceptions {
+
+        int playerArrayPostion = 0;
+        for (Player p: players) {
+            if (p == player)
+                break;
+            else playerArrayPostion++;
+        }
+
+        final int pArrayPos = playerArrayPostion;
+        final int startPostion = players[pArrayPos].getFieldPostion();
+
+        if (!(playerArrayPostion > 4)) {
+
+            TranslateTransition moveAnimation = new TranslateTransition(Duration.seconds(0.8), playerFigures[pArrayPos]);
+            moveAnimation.setToX((calculateXYPostion(pArrayPos, startPostion + 1).getX()) - (calculateXYPostion(pArrayPos, startPostion).getX()));
+            moveAnimation.setToY((calculateXYPostion(pArrayPos, startPostion + 1).getY()) - (calculateXYPostion(pArrayPos, startPostion).getY()));
+            moveAnimation.play();
+
+
+            AtomicInteger i = new AtomicInteger();
+            AtomicInteger step = new AtomicInteger();
+
+            moveAnimation.setOnFinished(event -> {
+                if (!(i.get() >= steps)) {
+                    if (step.get() + 1 > 39)
+                        step.set(-1);
+                    step.getAndIncrement();
+
+                    moveAnimation.setToX((calculateXYPostion(pArrayPos, startPostion + step.get()).getX()) - (calculateXYPostion(pArrayPos, startPostion).getX()));
+                    moveAnimation.setToY((calculateXYPostion(pArrayPos, startPostion + step.get()).getY()) - (calculateXYPostion(pArrayPos, startPostion).getY()));
+                    moveAnimation.play();
+
+
+                    if (Main.CONSOLE_OUT_PUT) {
+                        consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Die Figur vom " + pArrayPos + ". Spieler wurde auf diese Position gesetzt: ");
+                        consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.BOLD, "[" + (calculateXYPostion(pArrayPos, players[pArrayPos].getFieldPostion()).getX()) + "/" + (calculateXYPostion(pArrayPos, players[pArrayPos].getFieldPostion()).getY()) + "]");
+                        System.out.println();
+                    }
+                } else moveAnimation.stop();
+                i.getAndIncrement();
+            });
+        } else throw new PlayerNotFoundExceptions();
+
+    }
     public void rotateGameBoard(double rotate) {
         BOARD.setRotate(rotate);
+    }
+
+    public Point2D calculateXYPostion(int playerOrderPostion, int setToPostion) {
+        //Creates the array that stores the base variable of the player coordinate from which it is then calculated
+        //where the player will be positioned
+        double[] calculationBaseX = new double[5];
+        double[] calculationBaseY = new double[5];
+
+        //Calculate the left corner X Postion from each Player
+        //and thus also creates the base coordinate
+        //from which every calculation begins.
+        calculationBaseX[0] = FIELD_HEIGHT / 2 - (PLAYER_FIGURE_SIZE * 3 + (FIELD_HEIGHT * 0.01) * 2) / 2;
+        calculationBaseX[1] = calculationBaseX[0] + PLAYER_FIGURE_SIZE + FIELD_HEIGHT * 0.01;
+        calculationBaseX[2] = calculationBaseX[0] + (PLAYER_FIGURE_SIZE + FIELD_HEIGHT * 0.01) * 2;
+        calculationBaseX[3] = FIELD_HEIGHT / 2 - (PLAYER_FIGURE_SIZE * 2 + (FIELD_HEIGHT * 0.01) * 2) / 2;
+        calculationBaseX[4] = calculationBaseX[3] + PLAYER_FIGURE_SIZE + FIELD_HEIGHT * 0.01;
+
+        //Calculate the left corner Y Postion from each Player
+        //and thus also creates the base coordinate
+        //from which every calculation begins
+        calculationBaseY[0] = FIELD_WIDTH * 9 + FIELD_HEIGHT + FIELD_HEIGHT * 0.35;
+        calculationBaseY[1] = FIELD_WIDTH * 9 + FIELD_HEIGHT + FIELD_HEIGHT * 0.35;
+        calculationBaseY[2] = FIELD_WIDTH * 9 + FIELD_HEIGHT + FIELD_HEIGHT * 0.35;
+        calculationBaseY[3] = calculationBaseY[0] + PLAYER_FIGURE_SIZE + FIELD_HEIGHT * 0.001;
+        calculationBaseY[4] = calculationBaseY[0] + PLAYER_FIGURE_SIZE + FIELD_HEIGHT * 0.001;
+
+        if (!(setToPostion > 39 || setToPostion < 0)) {
+            if (setToPostion == 0 || setToPostion == 10 || setToPostion == 20 || setToPostion == 30) {
+                switch (setToPostion) {
+                    case 0 -> { //Bottom left corner
+                        //Positions remain the same
+                        //because the start calculation begins at this position
+                    }
+                    case 10 ->  { //Upper left corner
+                        calculationBaseY[playerOrderPostion] = calculationBaseY[playerOrderPostion] - FIELD_HEIGHT - FIELD_WIDTH * 9 - FIELD_HEIGHT * 0.25;
+                    }
+                    case 20 -> { //Upper right corner
+                        calculationBaseY[playerOrderPostion] = calculationBaseY[playerOrderPostion] - FIELD_HEIGHT - FIELD_WIDTH * 9;
+                        calculationBaseX[playerOrderPostion] = calculationBaseX[playerOrderPostion] + FIELD_HEIGHT + FIELD_WIDTH * 9;
+                    }
+                    case 30 -> { //Bottom right corner
+                        calculationBaseX[playerOrderPostion] = calculationBaseX[playerOrderPostion] + FIELD_HEIGHT + FIELD_WIDTH * 9;
+                    }
+                }
+            } else {
+                if (setToPostion <= 9 ||(setToPostion >= 21 && setToPostion <= 29)) {
+                    //Creates the basic coordinates when the player is on the left or right on fields
+                    calculationBaseX[0] = FIELD_HEIGHT * 0.20;
+                    calculationBaseX[1] = calculationBaseX[0];
+                    calculationBaseX[2] = calculationBaseX[0];
+                    calculationBaseX[3] = calculationBaseX[0];
+                    calculationBaseX[4] = calculationBaseX[0];
+
+                    calculationBaseY[0] = FIELD_WIDTH * 8 + FIELD_HEIGHT + (FIELD_WIDTH / 2 - (PLAYER_FIGURE_SIZE * 2 + FIELD_HEIGHT * 0.005) / 2);
+                    calculationBaseY[1] = calculationBaseY[0] + PLAYER_FIGURE_SIZE + FIELD_HEIGHT * 0.005;
+                    calculationBaseY[2] = calculationBaseY[0];
+                    calculationBaseY[3] = calculationBaseY[1];
+                } else {
+                    //Creates the basic coordinates when the player is on top or bottom of fields
+                    calculationBaseX[0] = FIELD_HEIGHT + (FIELD_WIDTH / 2 - (PLAYER_FIGURE_SIZE * 2 + FIELD_HEIGHT * 0.005) / 2);
+                    calculationBaseX[1] = calculationBaseX[0] + PLAYER_FIGURE_SIZE + FIELD_HEIGHT * 0.005;
+                    calculationBaseX[2] = calculationBaseX[0];
+                    calculationBaseX[3] = calculationBaseX[1];
+                    calculationBaseX[4] = calculationBaseX[0];
+
+                    calculationBaseY[0] = FIELD_HEIGHT * 0.20;
+                    calculationBaseY[1] = calculationBaseY[0];
+                    calculationBaseY[2] = calculationBaseY[0];
+                    calculationBaseY[3] = calculationBaseY[0];
+                }
+                calculationBaseY[4] = calculationBaseY[0];
+
+                //Calculates the exact position of the player
+                if (setToPostion <= 9) {
+                    //Left up (field 1-9)
+                    calculationBaseY[playerOrderPostion] = calculationBaseY[playerOrderPostion] - ((setToPostion - 1) * FIELD_WIDTH);
+                } else if (setToPostion <= 19) {
+                    //above (field 11-19)
+                    calculationBaseX[playerOrderPostion] = calculationBaseX[playerOrderPostion] + ((setToPostion - 11) * FIELD_WIDTH);
+                } else if (setToPostion <= 29) {
+                    //Right down (field 21-29)
+                    calculationBaseY[playerOrderPostion] = calculationBaseY[playerOrderPostion] - ((29 - setToPostion) * FIELD_WIDTH);
+                    calculationBaseX[playerOrderPostion] = calculationBaseX[playerOrderPostion] + FIELD_HEIGHT + FIELD_WIDTH * 9 + FIELD_HEIGHT * 0.60 - PLAYER_FIGURE_SIZE;
+                } else {
+                    //Bottom (field 31-39)
+                    calculationBaseY[playerOrderPostion] = calculationBaseY[playerOrderPostion] + FIELD_HEIGHT + FIELD_WIDTH * 9 + FIELD_HEIGHT * 0.60 - PLAYER_FIGURE_SIZE;
+                    calculationBaseX[playerOrderPostion] = calculationBaseX[playerOrderPostion] - ((setToPostion - 39) * FIELD_WIDTH);
+                }
+
+            }
+
+        } else throw new PlayerIsOutOfBoundsExceptions(setToPostion);
+        return new Point2D(calculationBaseX[playerOrderPostion], calculationBaseY[playerOrderPostion]);
     }
 
     private Pane buildGameBoard(double size, double rotate) {
