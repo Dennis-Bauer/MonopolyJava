@@ -10,6 +10,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
+import sandwich.de.monopoly.Exceptions.PlayerNotFoundExceptions;
 import sandwich.de.monopoly.GUI.Game.Displays.PlayerDisplay;
 import sandwich.de.monopoly.GUI.Game.Displays.TradingDisplay;
 import sandwich.de.monopoly.Main;
@@ -25,6 +26,7 @@ public class GameDisplayControllerOne {
 
     private static Pane display;
     private static PlayerDisplay playerDisplay;
+    private static ArrayList<Player> lastPlayerSave;
     private static TradingDisplay tradingDisplay;
 
     public static void createDisplayOne(double width, double height) {
@@ -53,10 +55,21 @@ public class GameDisplayControllerOne {
 
     }
 
+    public static void updateDisplay() throws PlayerNotFoundExceptions {
+        if (playerDisplay.isVisible()) {
+            if (lastPlayerSave != null)
+                playerDisplay.createPlayers(lastPlayerSave);
+            else throw new PlayerNotFoundExceptions();
+        } else {
+            System.out.println("ACHTUNG, DIE UPDATE METHODE FÜR DAS TRADING DISPLAY IST NOCH NICHT GEMACHT!!!");
+        }
+    }
+
     public static void displayPlayers(ArrayList<Player> players) {
         playerDisplay.setVisible(true);
         tradingDisplay.setVisible(false);
         playerDisplay.createPlayers(players);
+        lastPlayerSave = players;
     }
 
     public static void displayTradingMenu(/*Player One und Player Two Objekte werden hier übergeben*/) {
@@ -88,7 +101,7 @@ public class GameDisplayControllerOne {
 
         Line headerSeparatingline = buildLine("gameScene_playerDisplay_playerBox_NameHeaderSeparatingLine", new Point2D(0, height * 0.15), new Point2D(width, height * 0.15), width * 0.005, Color.WHITE);
 
-        Label displayAccountBalance = buildLabel("gameScene_playerDisplay_playerBox_DisplayAccountBalance", ("Kontostand: " + player.getKontoStand()), Font.font(Main.TEXT_FONT, FontWeight.BOLD, width / 12), TextAlignment.CENTER, Color.WHITE, 0, height * 0.17);
+        Label displayAccountBalance = buildLabel("gameScene_playerDisplay_playerBox_DisplayAccountBalance", ("Kontostand: " + player.getBankAccount()), Font.font(Main.TEXT_FONT, FontWeight.BOLD, width / 12), TextAlignment.CENTER, Color.WHITE, 0, height * 0.17);
         centeringChildInPane(displayAccountBalance, playerBox);
 
         Line accountBalanceSeparatingline = buildLine("gameScene_playerDisplay_playerBox_AccountBalanceSeparatingLine", new Point2D(0, height * 0.30), new Point2D(width, height * 0.30), width * 0.005, Color.WHITE);

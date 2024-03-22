@@ -30,12 +30,13 @@ public class Player {
         return name;
     }
 
-    public int getKontoStand() {
-        return kontoStand;
     public int getBankAccount() {
         return bankAccount;
     }
 
+    public void addBankAccount(int transferNumber) {
+        bankAccount = bankAccount + transferNumber;
+        try { GameDisplayControllerOne.updateDisplay(); } catch (PlayerNotFoundExceptions ignored) {}
     }
 
     public Figuren getFigur() {
