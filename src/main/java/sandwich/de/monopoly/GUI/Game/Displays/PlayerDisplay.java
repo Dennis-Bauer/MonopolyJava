@@ -33,16 +33,15 @@ import static sandwich.de.monopoly.GUI.Game.GameDisplayControllerOne.buildStreet
 public class PlayerDisplay extends Pane{
 
     //Variables
-    private final double borderWidth;
     private final double width, height;
     private boolean arePlayerGenerated = false;
-    private ImageView[] playerOrderFigures = new ImageView[5];
+    private final ImageView[] playerOrderFigures = new ImageView[5];
 
     public PlayerDisplay(double width, double height) {
         setId("gameScene_PlayerDisplay");
         setMaxSize(width, height);
 
-
+        //Creates the player Displays without any images
         double playerSize = (((width * 0.225) / 3.725) / 2);
         for (int i = 0; i != 5; i++) {
             playerOrderFigures[i] = new ImageView();
@@ -59,13 +58,13 @@ public class PlayerDisplay extends Pane{
 
         this.width = width;
         this.height = height;
-        borderWidth = width * 0.005;
     }
 
     public void createPlayers(ArrayList<Player> players) {
         Pane display = new Pane();
         display.setId("gameScene_playerDisplay_Players");
 
+        //Sets the player figure images that displayed
         for (int i = 0; i != players.size(); i++) {
             if (players.get(i) != null)
                 playerOrderFigures[i].setImage(players.get(i).getFigur().getFigureImage());
@@ -84,6 +83,7 @@ public class PlayerDisplay extends Pane{
         Pane playerFour = null;
         Pane playerFive = null;
 
+        //Generates the Player boxes that are displayed in game
         for (int i = 0; i != players.size(); i++) {
             double bigger;
             if (players.size() > 3) {
@@ -108,9 +108,10 @@ public class PlayerDisplay extends Pane{
             }
         }
 
+        //Set the postions from the Player boxes that are displayed in game
         if (!(players.size() > 5)) {
             if (players.size() == 5) {
-                playerOne.setLayoutX(((width / 2) - (playerBoxWidth / 2)) - (playerBoxWidth + width * 0.05));
+                playerOne.setLayoutX((width / 2 - playerBoxWidth / 2) - (playerBoxWidth + width * 0.05));
                 playerOne.setLayoutY(width * 0.10);
 
                 assert playerTwo != null;
@@ -118,7 +119,7 @@ public class PlayerDisplay extends Pane{
                 playerTwo.setLayoutY(width * 0.10);
 
                 assert playerThree != null;
-                playerThree.setLayoutX(((width / 2) - (playerBoxWidth / 2)) + playerBoxWidth + width * 0.05);
+                playerThree.setLayoutX((width / 2 - playerBoxWidth / 2) + playerBoxWidth + width * 0.05);
                 playerThree.setLayoutY(width * 0.10);
 
                 assert playerFour != null;
@@ -193,7 +194,7 @@ public class PlayerDisplay extends Pane{
         arePlayerGenerated = false;
     }
 
-    public boolean arePlayerGenerated() {
+    public boolean arePlayersGenerated() {
         return arePlayerGenerated;
     }
 

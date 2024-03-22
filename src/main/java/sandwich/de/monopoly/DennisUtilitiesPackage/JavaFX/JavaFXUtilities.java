@@ -23,10 +23,12 @@ import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXConstruct
  *  <p>
  *  These utilities are intended to simplify programming with Java/JavaFX
  *  and keep the code clean.
+ *  These specific utilities make some processes in JavaFX easier.
+ *  Please note that you need the JavaFX Constructor Utilities to use them.
  *  <p>
  *  <h3>Infos for this specific version:</h3>
  *  <p>
- *  Nop, you don't have to know anything to use this.
+ *  You need the JavaFXConstructorUtilities to use these utilities!
  *  <p>
  * @author bauer
  * @version 1.0
@@ -44,6 +46,20 @@ public class JavaFXUtilities {
         child.layoutXProperty().bind(pane.widthProperty().subtract(child.widthProperty()).divide(2));
     }
 
+    /**
+     * This method creates a plus symbol.
+     * @param id This is the basic root of the IDs in plus.
+     * @param lineWidth This determines the width of the lines in the plus.
+     * @param lineHeight This determines the height of the lines in the plus.
+     * @param rotate This determines the rotating of the hole plus.
+     * @param borderWidth This determines the border width of the lines in the plus if you don't want a border set it to 0.
+     * @param borderColor This determines the border color of the lines in the plus if you don't want a border set it to null.
+     * @param plusColor This determines the fill color of the lines in the plus.
+     * @param lineX This sets the x value from both lines
+     * @param lineY This sets the y value from both lines
+     * @return It returns a stack pane with two rectangles inside that have specific values.
+     * One is rotated 90 degrees to represent the plus symbole.
+     */
     public static StackPane buildPlus(String id, double lineWidth, double lineHeight, double rotate, double borderWidth, Color borderColor, Color plusColor, double lineX, double lineY) {
         StackPane plus = new StackPane();
         plus.setId(id);
@@ -61,7 +77,12 @@ public class JavaFXUtilities {
         return new StackPane(lineOne, lineTwo);
     }
 
-    //Achtung änderung: Man sollte auch mit geben was für ein Typ das Object hat mit <>
+    /**
+     * This method returns a node with a specific id in a pane
+     * @param id The id from the node.
+     * @param root The pane in which the search is being carried out.
+     * @return It returns null if no node was found.
+     */
     public static Object getNodeOutAPane(String id, Pane root) {
 
         Stack<Pane> panes = new Stack<>();
@@ -85,43 +106,6 @@ public class JavaFXUtilities {
         return null;
     }
 
-    //Java FX ImageViews (sourcePath start's add the Resources direction. Example: /pictures/menu/heading.png)
-    public static ImageView createImageView(String id, Image image, double postionX, double postionY) {
-        if (image != null) {
-            ImageView iv = new ImageView(image);
-
-            iv.setId(id);
-            iv.setX(postionX);
-            iv.setY(postionY);
-            iv.toBack();
-
-            return iv;
-        } else return null;
-    }
-
-    public static ImageView createImageView(String id ,String sourcePath, double postionX, double postionY) {
-        if(Main.class.getResourceAsStream(sourcePath) != null)
-            return createImageView(id, new Image(Objects.requireNonNull(Main.class.getResourceAsStream(sourcePath))), postionX, postionY);
-        else return null;
-    }
-
-    public static ImageView createImageView(String id ,Image image, double imageWidth, double imageHeight, double postionX, double postionY) {
-        ImageView iv = createImageView(id ,image, postionX, postionY);
-        if (iv != null) {
-            iv.setFitWidth(imageWidth);
-            iv.setFitHeight(imageHeight);
-        }
-        return iv;
-    }
-
-    public static ImageView createImageView(String id ,String sourcePath, double imageWidth, double imageHeight, double postionX, double postionY) {
-        ImageView iv = createImageView(id ,sourcePath, postionX, postionY);
-        if (iv != null) {
-            iv.setFitWidth(imageWidth);
-            iv.setFitHeight(imageHeight);
-        }
-        return iv;
-    }
 
     //Java FX Images (sourcePath start's add the Resources direction. Example: /pictures/menu/heading.png)
 

@@ -20,7 +20,6 @@ import java.util.ArrayList;
 
 import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.*;
 import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXUtilities.centeringChildInPane;
-import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXUtilities.createImageView;
 
 public class GameDisplayControllerOne {
 
@@ -52,7 +51,6 @@ public class GameDisplayControllerOne {
             return display;
         else
             throw new RuntimeException("Display One is not yet created!");
-
     }
 
     public static void updateDisplay() throws PlayerNotFoundExceptions {
@@ -79,14 +77,14 @@ public class GameDisplayControllerOne {
     }
 
     public static void displayPlayerDisplay() {
-        if (playerDisplay.arePlayerGenerated() && !playerDisplay.isVisible()) {
+        if (playerDisplay.arePlayersGenerated() && !playerDisplay.isVisible()) {
             tradingDisplay.setVisible(false);
 
             playerDisplay.setVisible(true);
         }
     }
 
-    //Erstellt die Basis der Spieler anzeige
+    //Creates the base from the player boxes
     public static Pane buildPlayer(double width, double height, Color backgroundColor, Player player) {
         Pane playerBox = new Pane();
         playerBox.setId("gameScene_playerDisplay_PlayerBox");

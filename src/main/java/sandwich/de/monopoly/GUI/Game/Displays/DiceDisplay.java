@@ -1,6 +1,5 @@
 package sandwich.de.monopoly.GUI.Game.Displays;
 
-import javafx.application.Platform;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
@@ -10,12 +9,14 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
+import sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities;
 import sandwich.de.monopoly.Main;
 import sandwich.de.monopoly.Threads.NumberAnimationThread;
 
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicInteger;
 
+import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPut;
+import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPutLine;
 import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.*;
 import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXUtilities.centeringChildInPane;
 
@@ -57,6 +58,7 @@ public class DiceDisplay extends Pane {
         numberField.getChildren().addAll(numberBackground, arrowOne, arrowTwo, numberRowOne, numberRowTwo);
         roleDiceButton.getChildren().addAll(buttonBackground, buttonText);
 
+        //Starts the player's turn
         roleDiceButton.setOnMouseClicked(event -> {
 
             rowOneAnimation = new NumberAnimationThread(numberRowOne);
@@ -70,7 +72,16 @@ public class DiceDisplay extends Pane {
                 rowTwoAnimation.start();
 
                 Main.getGameOperator().playerRolledDice(rowOneAnimation.getLastNumber(), rowTwoAnimation.getLastNumber());
-                //Main.getGameOperator().playerRolledDice(1, 0);
+                if (Main.CONSOLE_OUT_PUT) {
+                    consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
+                    consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Der erste Würfel hat eine");
+                    consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.BOLD, " " + rowOneAnimation.getLastNumber());
+                    consoleOutPutLine(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, " gewürfelt!");
+                    consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Der zweite Würfel hat eine");
+                    consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.BOLD, " " + rowTwoAnimation.getLastNumber());
+                    consoleOutPutLine(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, " gewürfelt!");
+                    consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
+                }
             }
         });
 

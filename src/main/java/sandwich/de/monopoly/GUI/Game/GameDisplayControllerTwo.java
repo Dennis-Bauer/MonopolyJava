@@ -35,9 +35,6 @@ public class GameDisplayControllerTwo {
             actionDisplay = new ActionDisplay(width, height);
             diceDisplay = new DiceDisplay(width, height);
             actionDisplay.setVisible(false);
-            diceDisplay.setVisible(false);
-
-            //CHANGE
             diceDisplay.setVisible(true);
 
             display.getChildren().addAll(background, header, actionDisplay, diceDisplay);
@@ -50,9 +47,14 @@ public class GameDisplayControllerTwo {
         else throw new RuntimeException("Display One is not yet created!");
     }
 
-    public static void waitForTheDiceRoll() {
+    public static void displayDice() {
         diceDisplay.setVisible(true);
         actionDisplay.setVisible(false);
+    }
+
+    public static void showPlayerAction() {
+        diceDisplay.setVisible(false);
+        actionDisplay.setVisible(true);
     }
 
 

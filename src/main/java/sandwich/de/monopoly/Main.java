@@ -5,7 +5,6 @@ import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities;
-import sandwich.de.monopoly.GUI.Game.Spielfeld;
 import sandwich.de.monopoly.GUI.Menu.StartMenu;
 
 import java.util.HashMap;
@@ -17,20 +16,15 @@ public class Main extends Application {
 
     //Important and final variables
     public static final String TEXT_FONT = "Clear Sans";
-    public static final int START_BANK_ACCOUNT = 2000;
     public static final boolean CONSOLE_OUT_PUT = true;
     public static final String CONSOLE_OUT_PUT_LINEBREAK = "---------------";
+    public static final double WINDOW_WIDTH = 1800;
+    public static final double WINDOW_HEIGHT = 950;
 
     //Game variables
     public static HashMap<Integer, Color> streetColor = new HashMap<>();
 
     private static Game gameOperator;
-
-    private static final double stageWidth = 1800, stageHeight = 950;
-
-    private static Scene game;
-
-    private static Scene menu;
 
     private static Stage primaryStage;
     @Override
@@ -39,7 +33,7 @@ public class Main extends Application {
         primaryStage = stage;
         stage.setTitle("-M---o-----n----o---p----o---l----y");
         stage.setResizable(true);
-        stage.setScene(menu);
+        stage.setScene(new Scene(new StartMenu(WINDOW_WIDTH, WINDOW_HEIGHT)));
         stage.show();
     }
 
@@ -92,36 +86,23 @@ public class Main extends Application {
         streetColor.put(22, Color.GRAY);    //Anlagen
         streetColor.put(23, Color.BLACK);   //Bahnhöfe
 
-        Spielfeld gameRoot = new Spielfeld(0, stageWidth, stageHeight, Color.rgb(112, 224, 88));
-        game = new Scene(gameRoot, stageWidth, stageHeight, Color.BLACK);
-        StartMenu menuRoot = new StartMenu(stageWidth, stageHeight);
-        menu = new Scene(menuRoot, stageWidth, stageHeight, Color.BLACK);
-
         launch();
     }
 
-    public static void changeScene(scenes s) {
-        switch (s) {
-            case GAME -> primaryStage.setScene(game);
-            case MENU -> primaryStage.setScene(menu);
-        }
-    }
-
     public static Game getGameOperator() {
-        return gameOperator;
-    }
-
-    public static Spielfeld getGameField() {
-        return (Spielfeld) game.getRoot();
+        if (gameOperator != null)
+            return gameOperator;
+        else throw new NullPointerException("The game operator is null!");
     }
 
     public static void setGameOperator(Game gameOperator) {
-        Main.gameOperator = gameOperator;
+        if (Main.gameOperator == null)
+            Main.gameOperator = gameOperator;
+        else throw new NullPointerException("The game operator is already created!");
     }
 
-    public enum scenes {
-        MENU,
-        GAME
+    public static Stage getPrimaryStage() {
+        return primaryStage;
     }
 }
 

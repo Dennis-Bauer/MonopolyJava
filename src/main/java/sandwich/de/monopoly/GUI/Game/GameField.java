@@ -31,17 +31,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPut;
 import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPutLine;
 import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.JavaUtilities.buildLongText;
-import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildLabel;
-import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildRectangle;
+import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.*;
 import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXUtilities.*;
 import static sandwich.de.monopoly.Main.TEXT_FONT;
 
 
-public class Spielfeld extends Pane{
-
-    private final Pane[] fields = new Pane[36];
-    private final Pane[] corners = new Pane[4];
-    private final Player[] players = new Player[5];
+public class GameField extends Pane{
     private final ImageView[] playerFigures = new ImageView[5];
     private final Pane BOARD;
     private final double MIDDLE_RECTANGLE_RATION = 1.4;
@@ -49,11 +44,11 @@ public class Spielfeld extends Pane{
     private final double FIELD_HEIGHT;
     private final double FIELD_WIDTH;
     private final double PLAYER_FIGURE_SIZE;
-    private final Color COLOR;
+    private final Color BACKGROUND_COLOR;
 
-    public Spielfeld(double gameBoardRotate, double width, double height, Color backgroundColor) {
+    public GameField(double gameBoardRotate, double width, double height, Color backgroundColor, HashMap<Integer, Street> streets) {
 
-        this.COLOR = backgroundColor;
+        this.BACKGROUND_COLOR = backgroundColor;
 
         FONT_SIZE = ((height / MIDDLE_RECTANGLE_RATION) / 9) / 8;
         BORDER_WIDTH = ((height / MIDDLE_RECTANGLE_RATION) / 9) / 25;
@@ -72,7 +67,7 @@ public class Spielfeld extends Pane{
         displays.setLayoutX(height + (((width - height) / 2) - ((width - height) / 1.1) / 2));
         displays.setLayoutY(0);
 
-        BOARD = buildGameBoard(height, gameBoardRotate);
+        BOARD = buildGameBoard(height, gameBoardRotate, streets);
         getChildren().add(BOARD);
 
         for (int i = 0; i != 5; i++) {
@@ -101,24 +96,22 @@ public class Spielfeld extends Pane{
         }
 
         if (!(playerList.size() > 5)) {
-            for (int i = 0; i != 5; i++) {
-                if (i < playerList.size())
-                    players[i] = playerList.get(i);
-                if (players[i] != null) {
+            for (int i = 0; i < playerList.size(); i++) {
+                if (playerList.get(i) != null) {
                     //Testes if the player is out of bounce the area.
-                    if (players[i].getFieldPostion() > 39 || players[i].getFieldPostion() < 0) throw new PlayerIsOutOfBoundsExceptions(players[i].getFieldPostion());
+                    if (playerList.get(i).getFieldPostion() > 39 || playerList.get(i).getFieldPostion() < 0) throw new PlayerIsOutOfBoundsExceptions(playerList.get(i).getFieldPostion());
 
                     //Saves the player figure in an extra variable
-                    playerFigures[i].setImage(players[i].getFigur().getFigureImage());
+                    playerFigures[i].setImage(playerList.get(i).getFigur().getFigureImage());
 
                     playerFigures[i].setVisible(true);
                     playerFigures[i].toFront();
 
-                    playerFigures[i].setX(calculateXYPostion(i, players[i].getFieldPostion()).getX());
-                    playerFigures[i].setY(calculateXYPostion(i, players[i].getFieldPostion()).getY());
+                    playerFigures[i].setX(calculateXYPostion(i, playerList.get(i).getFieldPostion()).getX());
+                    playerFigures[i].setY(calculateXYPostion(i, playerList.get(i).getFieldPostion()).getY());
                     if (Main.CONSOLE_OUT_PUT) {
                         consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Die Figur vom " + i + ". Spieler wurde auf diese Position gesetzt: ");
-                        consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.BOLD, "[" + (calculateXYPostion(i, players[i].getFieldPostion()).getX()) + "/" + (calculateXYPostion(i, players[i].getFieldPostion()).getY()) + "]");
+                        consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.BOLD, "[" + (calculateXYPostion(i, playerList.get(i).getFieldPostion()).getX()) + "/" + (calculateXYPostion(i, playerList.get(i).getFieldPostion()).getY()) + "]");
                         System.out.println();
                     }
                 } else {
@@ -135,14 +128,14 @@ public class Spielfeld extends Pane{
     public void movePlayerOnGameBoard(Player player, int steps) throws PlayerNotFoundExceptions {
 
         int playerArrayPostion = 0;
-        for (Player p: players) {
-            if (p == player)
+        for (ImageView i: playerFigures) {
+            if (i.getImage() == player.getFigur().getFigureImage())
                 break;
             else playerArrayPostion++;
         }
 
         final int pArrayPos = playerArrayPostion;
-        final int startPostion = players[pArrayPos].getFieldPostion();
+        final int startPostion = player.getFieldPostion();
 
         if (!(playerArrayPostion > 4)) {
 
@@ -157,8 +150,8 @@ public class Spielfeld extends Pane{
 
             moveAnimation.setOnFinished(event -> {
                 if (!(i.get() >= steps)) {
-                    if (step.get() + 1 > 39)
-                        step.set(-1);
+                    if ((startPostion + step.get()) >= 39)
+                        step.set(-(startPostion + 1));
                     step.getAndIncrement();
 
                     moveAnimation.setToX((calculateXYPostion(pArrayPos, startPostion + step.get()).getX()) - (calculateXYPostion(pArrayPos, startPostion).getX()));
@@ -168,7 +161,7 @@ public class Spielfeld extends Pane{
 
                     if (Main.CONSOLE_OUT_PUT) {
                         consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Die Figur vom " + pArrayPos + ". Spieler wurde auf diese Position gesetzt: ");
-                        consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.BOLD, "[" + (calculateXYPostion(pArrayPos, players[pArrayPos].getFieldPostion()).getX()) + "/" + (calculateXYPostion(pArrayPos, players[pArrayPos].getFieldPostion()).getY()) + "]");
+                        consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.BOLD, "[" + (calculateXYPostion(pArrayPos, player.getFieldPostion()).getX()) + "/" + (calculateXYPostion(pArrayPos, player.getFieldPostion()).getY()) + "]");
                         System.out.println();
                     }
                 } else {
@@ -290,43 +283,44 @@ public class Spielfeld extends Pane{
 
         board.getChildren().addAll(f, v);
 
+        Pane[] fields = new Pane[36];
+
         //Creating Fields
-        fields[0] = streets.get(1).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
-        fields[1] = buildExtraPayField(ExtraFields.SPOTIFY_PREMIUM, 200, BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[2] = streets.get(3).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
-        fields[3] = buildGetChanceCard(ChanceColors.RED , BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[4] = buildStation(buildLongText("Nord-", "Bahnhof"), 200, BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[5] = streets.get(6).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
-        fields[6] = buildGetCommunityCard(BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[7] = streets.get(8).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
-        fields[8] = streets.get(9).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
-        fields[9] = streets.get(11).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
-        fields[10] = buildExtraPayField(ExtraFields.HESSLER_SCHULDEN, 200, BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[11] = streets.get(13).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
-        fields[12] = streets.get(14).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
-        fields[13] = buildStation(buildLongText("West-", "Bahnhof"), 200, BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[14] = streets.get(16).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
-        fields[15] = streets.get(17).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
-        fields[16] = buildGetChanceCard(ChanceColors.BLUE, BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[17] = streets.get(19).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
-        fields[18] = streets.get(21).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
-        fields[19] = streets.get(22).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
-        fields[20] = buildGetCommunityCard(BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[21] = streets.get(24).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
-        fields[22] = buildStation(buildLongText("Süd-", "Bahnhof"), 200, BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[23] = streets.get(26).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
-        fields[24] = streets.get(27).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
-        fields[25] = buildExtraPayField(ExtraFields.NAME_THREE, 200, BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[26] = streets.get(29).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
-        fields[27] = streets.get(31).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
-        fields[28] = streets.get(32).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
-        fields[29] = buildGetChanceCard(ChanceColors.GREEN, BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[30] = streets.get(34).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
-        fields[31] = buildStation(buildLongText("Haupt-", "Bahnhof"), 200, BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[32] = buildExtraPayField(ExtraFields.NAME_FOUR, 200, BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[33] = streets.get(37).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
-        fields[34] = buildGetCommunityCard(BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[35] = streets.get(39).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
+        for (int i = 0, j = 1; i < fields.length; i++) {
+            if (i < 9)
+                j = 1;
+            else if (i < 18)
+                j = 2;
+            else if (i < 27)
+                j = 3;
+            else
+                j = 4;
+
+            if (streets.get(i + j) != null) {
+                fields[i] = streets.get(i + j).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
+            } else {
+                switch (i) {
+                    case 1 -> fields[i] = buildExtraPayField(ExtraFields.SPOTIFY_PREMIUM, 200, BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+                    case 3 -> fields[i] = buildGetChanceCard(ChanceColors.RED , BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+                    case 4 -> fields[i] = buildStation(buildLongText("Nord-", "Bahnhof"), 200, BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+                    case 10 -> fields[i] = buildExtraPayField(ExtraFields.HESSLER_SCHULDEN, 200, BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+                    case 13 -> fields[i] = buildStation(buildLongText("West-", "Bahnhof"), 200, BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+                    case 16 -> fields[i] = buildGetChanceCard(ChanceColors.BLUE, BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+                    case 22 -> fields[i] = buildStation(buildLongText("Süd-", "Bahnhof"), 200, BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+                    case 25 -> fields[i] = buildExtraPayField(ExtraFields.NAME_THREE, 200, BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+                    case 29 -> fields[i] = buildGetChanceCard(ChanceColors.GREEN, BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+                    case 31 -> fields[i] = buildStation(buildLongText("Haupt-", "Bahnhof"), 200, BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+                    case 32 -> fields[i] = buildExtraPayField(ExtraFields.NAME_FOUR, 200, BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+                    case 34, 6, 20 -> fields[i] = buildGetCommunityCard(BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+                }
+            }
+
+            if (fields[i] == null)
+                System.out.println("Da ist noch null: " + i);
+
+        }
+
+        Pane[] corners = new Pane[4];
 
         //Creating Corners
         corners[0] = buildStart(BACKGROUND_COLOR, FIELD_HEIGHT);
@@ -342,6 +336,7 @@ public class Spielfeld extends Pane{
             double rightCorner = (size / MIDDLE_RECTANGLE_RATION) + ((size * (MIDDLE_RECTANGLE_RATION - 1) / (2 * MIDDLE_RECTANGLE_RATION)));
 
             if (i < 9) {
+                assert fields[i] != null;
                 fields[i].rotateProperty().set(90);
                 fields[i].setTranslateY(((FIELD_HEIGHT + FIELD_WIDTH) / 2) + (8 * FIELD_WIDTH - FIELD_WIDTH * i));
                 fields[i].setTranslateX((FIELD_HEIGHT - FIELD_WIDTH) / 2);
@@ -371,7 +366,7 @@ public class Spielfeld extends Pane{
             } else if(i == 2) {
                 corners[i].setRotate(180);
                 corners[i].setTranslateX(cornerCoordinate);
-            } else if(i == 3) {
+            } else {
                 corners[i].setRotate(270);
                 corners[i].setTranslateY(cornerCoordinate);
                 corners[i].setTranslateX(cornerCoordinate);

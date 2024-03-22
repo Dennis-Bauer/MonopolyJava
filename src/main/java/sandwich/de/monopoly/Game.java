@@ -36,6 +36,8 @@ public class Game {
             consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
         }
 
+        gameField = new GameField(0, Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT, Color.rgb(112, 224, 88), streets);
+
         for (int i = 0, j = 1; i != 5; i++) {
             if (players[i] != null) {
                 playerInGame++;
@@ -105,23 +107,49 @@ public class Game {
         }
 
         //Zeigt die Spieler an
+        gameField.setPlayerToGameboard(playerList);
         GameDisplayControllerOne.displayPlayers(playerList);
-        GameDisplayControllerTwo.waitForTheDiceRoll();
-
-        Main.getGameField().setPlayerToGameboard(playerList);
-
-        Main.changeScene(Main.scenes.GAME);
+        GameDisplayControllerTwo.displayDice();
+        //Zeigt das Game Board an
+        Main.getPrimaryStage().setScene(new Scene(gameField));
     }
 
     public void playerRolledDice(int diceOne, int diceTwo) {
-        try {
-            Main.getGameField().movePlayerOnGameBoard(turnPlayer, diceOne + diceTwo);
-        } catch (PlayerNotFoundExceptions ignored) {}
+
+        try { gameField.movePlayerOnGameBoard(turnPlayer, diceOne + diceTwo); } catch (PlayerNotFoundExceptions ignored) {}
         turnPlayer.moveFieldPostion(diceOne + diceTwo);
-        System.out.println("Player new Postion: " + turnPlayer.getFieldPostion());
+
+        if (diceOne == diceTwo)
+            nextPlayer = turnPlayer;
+
+        if (streets.get(turnPlayer.getFieldPostion()) == null) {
+
+        }
+
+        if (Main.CONSOLE_OUT_PUT) {
+            consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
+            consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Spieler nummer " + turnPlayer.getOrderNumber() + ", wurde bewegt auf die Feld Postion Nummer:");
+            consoleOutPutLine(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.BOLD, " " + turnPlayer.getFieldPostion());
+            consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
+        }
     }
 
-}
+    public ArrayList<Player> getPlayers() {
+        ArrayList<Player> ps = new ArrayList<>();
+
+        if (playerOne != null)
+            ps.add(playerOne);
+        if (playerTwo != null)
+            ps.add(playerTwo);
+        if (playerThree != null)
+            ps.add(playerThree);
+        if (playerFour != null)
+            ps.add(playerFour);
+        if (playerFive != null)
+            ps.add(playerFive);
+
+        return ps;
+    }
 
     public HashMap<Integer, Street> getStreets() {
         return streets;
