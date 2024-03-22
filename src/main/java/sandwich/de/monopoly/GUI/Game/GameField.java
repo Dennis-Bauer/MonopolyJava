@@ -22,8 +22,10 @@ import sandwich.de.monopoly.Exceptions.PlayerNotFoundExceptions;
 import sandwich.de.monopoly.Exceptions.ToManyPlayersExceptions;
 import sandwich.de.monopoly.Main;
 import sandwich.de.monopoly.Player;
+import sandwich.de.monopoly.Street;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPut;
@@ -169,7 +171,10 @@ public class Spielfeld extends Pane{
                         consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.BOLD, "[" + (calculateXYPostion(pArrayPos, players[pArrayPos].getFieldPostion()).getX()) + "/" + (calculateXYPostion(pArrayPos, players[pArrayPos].getFieldPostion()).getY()) + "]");
                         System.out.println();
                     }
-                } else moveAnimation.stop();
+                } else {
+                    moveAnimation.stop();
+                    GameDisplayControllerTwo.showPlayerAction();
+                }
                 i.getAndIncrement();
             });
         } else throw new PlayerNotFoundExceptions();
@@ -272,7 +277,7 @@ public class Spielfeld extends Pane{
         return new Point2D(calculationBaseX[playerOrderPostion], calculationBaseY[playerOrderPostion]);
     }
 
-    private Pane buildGameBoard(double size, double rotate) {
+    private Pane buildGameBoard(double size, double rotate, HashMap<Integer, Street> streets) {
         Pane root = new Pane();
         root.setId("gameBoard_Root");
         StackPane board = new StackPane();
@@ -281,75 +286,76 @@ public class Spielfeld extends Pane{
 
         //Black Field
         Rectangle f = buildRectangle("Test" ,size, size, Color.BLACK, true, Color.BLACK, 0);
-        Rectangle v = buildRectangle("Test" ,size / MIDDLE_RECTANGLE_RATION, size/ MIDDLE_RECTANGLE_RATION, COLOR, true, Color.BLACK, 0);
+        Rectangle v = buildRectangle("Test" ,size / MIDDLE_RECTANGLE_RATION, size/ MIDDLE_RECTANGLE_RATION, BACKGROUND_COLOR, true, Color.BLACK, 0);
 
         board.getChildren().addAll(f, v);
 
         //Creating Fields
-        fields[0] = buildStreet(Main.streetColor.get(0).brighter(), buildLongText("Bank", "Straße 39"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[1] = buildExtraPayField(ExtraFields.SPOTIFY_PREMIUM, 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[2] = buildStreet(Main.streetColor.get(1), buildLongText("Bank", "Straße 37"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[3] = buildGetChanceCard(ChanceColors.RED ,COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[4] = buildStation(buildLongText("Nord-", "Bahnhof"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[5] = buildStreet(Main.streetColor.get(2), buildLongText("Bank", "Straße 34"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[6] = buildGetCommunityCard(COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[7] = buildStreet(Main.streetColor.get(3),buildLongText("Bank", "Straße 32"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[8] = buildStreet(Main.streetColor.get(4),buildLongText("Bank", "Straße 31"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[9] = buildStreet(Main.streetColor.get(5),buildLongText("Bank", "Straße 29"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[10] = buildExtraPayField(ExtraFields.HESSLER_SCHULDEN, 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[11] = buildStreet(Main.streetColor.get(6), buildLongText("Bank", "Straße 27"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[12] = buildStreet(Main.streetColor.get(7), buildLongText("Bank", "Straße 26"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[13] = buildStation(buildLongText("West-", "Bahnhof"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[14] = buildStreet(Main.streetColor.get(8), buildLongText("Bank", "Straße 24"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[15] = buildStreet(Main.streetColor.get(9), buildLongText("Bank", "Straße 23"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[16] = buildGetChanceCard(ChanceColors.BLUE, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[17] = buildStreet(Main.streetColor.get(10), buildLongText("Bank", "Straße 21"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[18] = buildStreet(Main.streetColor.get(11), buildLongText("Bank", "Straße 19"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[19] = buildStreet(Main.streetColor.get(12), buildLongText("Bank", "Straße 18"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[20] = buildGetCommunityCard(COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[21] = buildStreet(Main.streetColor.get(13), buildLongText("Bank", "Straße 16"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[22] = buildStation(buildLongText("Süd-", "Bahnhof"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[23] = buildStreet(Main.streetColor.get(14), buildLongText("Bank", "Straße 14"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[24] = buildStreet(Main.streetColor.get(15), buildLongText("Bank", "Straße 13"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[25] = buildExtraPayField(ExtraFields.NAME_THREE, 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[26] = buildStreet(Main.streetColor.get(16), buildLongText("Bank", "Straße 11"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[27] = buildStreet(Main.streetColor.get(17), buildLongText("Bank", "Straße 9"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[28] = buildStreet(Main.streetColor.get(18), buildLongText("Bank", "Straße 8"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[29] = buildGetChanceCard(ChanceColors.GREEN, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[30] = buildStreet(Main.streetColor.get(19), buildLongText("Bank", "Straße 6"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[31] = buildStation(buildLongText("Haupt-", "Bahnhof"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[32] = buildExtraPayField(ExtraFields.NAME_FOUR, 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[33] = buildStreet(Main.streetColor.get(20), buildLongText("Bank", "Straße 3"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[34] = buildGetCommunityCard(COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-        fields[35] = buildStreet(Main.streetColor.get(21), buildLongText("Bank", "Straße 1"), 200, COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[0] = streets.get(1).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
+        fields[1] = buildExtraPayField(ExtraFields.SPOTIFY_PREMIUM, 200, BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[2] = streets.get(3).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
+        fields[3] = buildGetChanceCard(ChanceColors.RED , BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[4] = buildStation(buildLongText("Nord-", "Bahnhof"), 200, BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[5] = streets.get(6).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
+        fields[6] = buildGetCommunityCard(BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[7] = streets.get(8).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
+        fields[8] = streets.get(9).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
+        fields[9] = streets.get(11).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
+        fields[10] = buildExtraPayField(ExtraFields.HESSLER_SCHULDEN, 200, BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[11] = streets.get(13).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
+        fields[12] = streets.get(14).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
+        fields[13] = buildStation(buildLongText("West-", "Bahnhof"), 200, BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[14] = streets.get(16).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
+        fields[15] = streets.get(17).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
+        fields[16] = buildGetChanceCard(ChanceColors.BLUE, BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[17] = streets.get(19).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
+        fields[18] = streets.get(21).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
+        fields[19] = streets.get(22).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
+        fields[20] = buildGetCommunityCard(BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[21] = streets.get(24).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
+        fields[22] = buildStation(buildLongText("Süd-", "Bahnhof"), 200, BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[23] = streets.get(26).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
+        fields[24] = streets.get(27).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
+        fields[25] = buildExtraPayField(ExtraFields.NAME_THREE, 200, BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[26] = streets.get(29).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
+        fields[27] = streets.get(31).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
+        fields[28] = streets.get(32).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
+        fields[29] = buildGetChanceCard(ChanceColors.GREEN, BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[30] = streets.get(34).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
+        fields[31] = buildStation(buildLongText("Haupt-", "Bahnhof"), 200, BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[32] = buildExtraPayField(ExtraFields.NAME_FOUR, 200, BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[33] = streets.get(37).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
+        fields[34] = buildGetCommunityCard(BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
+        fields[35] = streets.get(39).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
 
         //Creating Corners
-        corners[0] = buildStart(COLOR, FIELD_HEIGHT);
-        corners[1] = buildJail(COLOR, FIELD_HEIGHT);
-        corners[2] = buildFreeParking(COLOR, FIELD_HEIGHT);
-        corners[3] = buildGoToJail(COLOR, FIELD_HEIGHT);
+        corners[0] = buildStart(BACKGROUND_COLOR, FIELD_HEIGHT);
+        corners[1] = buildJail(BACKGROUND_COLOR, FIELD_HEIGHT);
+        corners[2] = buildFreeParking(BACKGROUND_COLOR, FIELD_HEIGHT);
+        corners[3] = buildGoToJail(BACKGROUND_COLOR, FIELD_HEIGHT);
 
 
         //Position fields
         for (int i = 0; i < 36; i++) {
             board.getChildren().add(fields[i]);
             StackPane.setAlignment(fields[i], Pos.TOP_LEFT);
-            double rightCorner = ((size / MIDDLE_RECTANGLE_RATION) + (size - size / MIDDLE_RECTANGLE_RATION) / 2);
+            double rightCorner = (size / MIDDLE_RECTANGLE_RATION) + ((size * (MIDDLE_RECTANGLE_RATION - 1) / (2 * MIDDLE_RECTANGLE_RATION)));
+
             if (i < 9) {
-                fields[i].setTranslateY(size - FIELD_HEIGHT);
-                fields[i].setTranslateX(FIELD_HEIGHT + (i * FIELD_WIDTH));
+                fields[i].rotateProperty().set(90);
+                fields[i].setTranslateY(((FIELD_HEIGHT + FIELD_WIDTH) / 2) + (8 * FIELD_WIDTH - FIELD_WIDTH * i));
+                fields[i].setTranslateX((FIELD_HEIGHT - FIELD_WIDTH) / 2);
             } else if (i < 18) {
-                fields[i].rotateProperty().set(270);
-                fields[i].setTranslateY( ((((10 * FIELD_WIDTH) + (size / MIDDLE_RECTANGLE_RATION)) - (i + 1) * FIELD_WIDTH)) - (FIELD_WIDTH / 2 - FIELD_HEIGHT / 2) );
-                fields[i].setTranslateX(rightCorner + (FIELD_HEIGHT / 2 - FIELD_WIDTH / 2));
-            } else if (i < 27) {
                 fields[i].rotateProperty().set(180);
                 fields[i].setTranslateY(0);
-                fields[i].setTranslateX((rightCorner - FIELD_WIDTH) - FIELD_WIDTH * (i - 18));
+                fields[i].setTranslateX(rightCorner - FIELD_WIDTH * 17 + FIELD_WIDTH * i - FIELD_WIDTH);
+            } else if (i < 27) {
+                fields[i].rotateProperty().set(270);
+                fields[i].setTranslateY((FIELD_HEIGHT + FIELD_WIDTH) / 2 - 18 * FIELD_WIDTH + FIELD_WIDTH * i);
+                fields[i].setTranslateX(rightCorner + (FIELD_HEIGHT - FIELD_WIDTH) / 2);
             } else {
-                fields[i].rotateProperty().set(90);
-                fields[i].setTranslateY(((FIELD_HEIGHT / 2) + FIELD_WIDTH / 2) + FIELD_WIDTH * (i - 27));
-                fields[i].setTranslateX((FIELD_HEIGHT / 2) - FIELD_WIDTH / 2);
+                fields[i].setTranslateY(size - FIELD_HEIGHT);
+                fields[i].setTranslateX(FIELD_HEIGHT + 8 * FIELD_WIDTH - i * FIELD_WIDTH + 27 * FIELD_WIDTH);
             }
         }
 
@@ -377,26 +383,6 @@ public class Spielfeld extends Pane{
         board.setRotate(rotate);
 
         return root;
-    }
-
-    private Pane buildStreet(Color streetColor, String name, double price, Color backgroundColor, double width, double height) {
-        Pane field = new Pane();
-        field.setId("street_field");
-        field.setMaxSize(width, height);
-
-        Rectangle background = buildRectangle("street_Background" ,width, height, backgroundColor, true, Color.BLACK, BORDER_WIDTH);
-        Rectangle colorIndicator = buildRectangle("street_ColorIndicator" ,width, height/4, streetColor, true, Color.BLACK, BORDER_WIDTH);
-        Label nameIndicator =  buildLabel("street_NameIndicator", name, Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE), TextAlignment.CENTER, Color.BLACK, 0, height / 3);
-        Label priceIndicator = buildLabel("street_PriceIndicator", (price + "€"), Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE), TextAlignment.CENTER, Color.BLACK, 0, 5 * (height / 6));
-
-        centeringChildInPane(nameIndicator, field);
-        centeringChildInPane(priceIndicator, field);
-
-        field.getChildren().addAll(background, colorIndicator, nameIndicator, priceIndicator);
-
-        return field;
-
-
     }
 
     private Pane buildStart(Color backgroundColor, double size) {
