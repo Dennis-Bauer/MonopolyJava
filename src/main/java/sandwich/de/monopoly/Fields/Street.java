@@ -14,7 +14,7 @@ import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXConstruct
 import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXUtilities.centeringChildInPane;
 import static sandwich.de.monopoly.Main.TEXT_FONT;
 
-public class Street {
+public class Street extends Field{
 
     //Field (Visual) values
     private final Color color;
@@ -22,14 +22,13 @@ public class Street {
     //Functional values
     private final String name;
     private final int salePrice;
-    private final int position;
     private boolean isOwned;
     private Player owner;
 
-    public Street(String name, int salePrice, int position, Color color){
+    public Street(String name, int salePrice, Color color, double position) {
+        super(position);
         this.name = name;
         this.salePrice = salePrice;
-        this.position = position;
         this.color = color;
 
     }
@@ -60,7 +59,8 @@ public class Street {
         return color;
     }
 
-    public Pane buildStreetField(double width, double height, double borderWidth, double fontSize, Color backgroundColor) {
+    @Override
+    public Pane buildField(double width, double height, double borderWidth, double fontSize, Color backgroundColor) {
         Pane field = new Pane();
         field.setId("street_field");
         field.setMaxSize(width, height);

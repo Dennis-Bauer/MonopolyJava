@@ -11,6 +11,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import sandwich.de.monopoly.Exceptions.PlayerNotFoundExceptions;
+import sandwich.de.monopoly.Fields.Field;
 import sandwich.de.monopoly.GUI.Game.Displays.PlayerDisplay;
 import sandwich.de.monopoly.GUI.Game.Displays.TradingDisplay;
 import sandwich.de.monopoly.Game;
@@ -118,7 +119,7 @@ public class GameDisplayControllerOne {
 
     public static Rectangle[] buildStreetInventar(double w, double h, Player p) {
         Rectangle[] streetsR = new Rectangle[28];
-        HashMap<Integer, Street> streets = Game.getStreets();
+        HashMap<Integer, Field> fields = Game.getFields();
 
         //ÄDNEREN!!!
         System.out.println("HIER MUSS WAS IM BUILD STREET INVENTAR GEÄNDERT WERDEN");
@@ -157,14 +158,16 @@ public class GameDisplayControllerOne {
                 j++;
 
             } else {
-                if (streets.get(i) != null) {
+                if (fields.get(i) instanceof Street) {
 
-                    System.out.println("Die Streets Owner ist: " + streets.get(i).getOwner());
+                    Street street = (Street) fields.get(i);
 
-                    if (streets.get(i).isOwned()) {
-                        if (streets.get(i).getOwner() == p) {
+                    System.out.println("Die Streets Owner ist: " + street.getOwner());
+
+                    if (street.isOwned()) {
+                        if (street.getOwner() == p) {
                             streetsR[j].setId(streetsR[j].getId() + true);
-                            streetsR[j].setFill(streets.get(i).getColor());
+                            streetsR[j].setFill(street.getColor());
                         }
                     } else {
                         streetsR[j].setId(streetsR[j].getId() + false);

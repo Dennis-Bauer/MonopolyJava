@@ -20,6 +20,8 @@ import sandwich.de.monopoly.Enums.ExtraFields;
 import sandwich.de.monopoly.Exceptions.PlayerIsOutOfBoundsExceptions;
 import sandwich.de.monopoly.Exceptions.PlayerNotFoundExceptions;
 import sandwich.de.monopoly.Exceptions.ToManyPlayersExceptions;
+import sandwich.de.monopoly.Fields.Corner;
+import sandwich.de.monopoly.Fields.Field;
 import sandwich.de.monopoly.GUI.Game.DisplayController.GameDisplayControllerOne;
 import sandwich.de.monopoly.GUI.Game.DisplayController.GameDisplayControllerTwo;
 import sandwich.de.monopoly.GUI.Game.DisplayController.MiddleGameDisplayController;
@@ -49,7 +51,7 @@ public class GameField extends Pane{
     private final double PLAYER_FIGURE_SIZE;
     private final Color BACKGROUND_COLOR;
 
-    public GameField(double gameBoardRotate, double width, double height, Color backgroundColor, HashMap<Integer, Street> streets) {
+    public GameField(double gameBoardRotate, double width, double height, Color backgroundColor, HashMap<Integer, Field> fields) {
 
         this.BACKGROUND_COLOR = backgroundColor;
 
@@ -74,7 +76,7 @@ public class GameField extends Pane{
         displays.setLayoutX(height + (((width - height) / 2) - ((width - height) / 1.1) / 2));
         displays.setLayoutY(0);
 
-        BOARD = buildGameBoard(height, gameBoardRotate, streets);
+        BOARD = buildGameBoard(height, gameBoardRotate, fields);
         getChildren().add(BOARD);
 
         for (int i = 0; i != 5; i++) {
@@ -278,7 +280,7 @@ public class GameField extends Pane{
         return new Point2D(calculationBaseX[playerOrderPostion], calculationBaseY[playerOrderPostion]);
     }
 
-    private Pane buildGameBoard(double size, double rotate, HashMap<Integer, Street> streets) {
+    private Pane buildGameBoard(double size, double rotate, HashMap<Integer, Field> fieldObjects) {
         Pane root = new Pane();
         root.setId("gameBoard_Root");
         StackPane board = new StackPane();
@@ -291,93 +293,51 @@ public class GameField extends Pane{
 
         board.getChildren().addAll(f, v);
 
-        Pane[] fields = new Pane[36];
+        Pane[] fields = new Pane[40];
 
         //Creating Fields
-        for (int i = 0, j = 1; i < fields.length; i++) {
-            if (i < 9)
-                j = 1;
-            else if (i < 18)
-                j = 2;
-            else if (i < 27)
-                j = 3;
-            else
-                j = 4;
-
-            if (streets.get(i + j) != null) {
-                fields[i] = streets.get(i + j).buildStreetField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
+        for (int i = 0; i < fields.length; i++) {
+            if (i != 0 && i != 10 && i != 20 && i != 30) {
+                fields[i] = fieldObjects.get(i).buildField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
             } else {
-                switch (i) {
-                    case 1 -> fields[i] = buildExtraPayField(ExtraFields.SPOTIFY_PREMIUM, 200, BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-                    case 3 -> fields[i] = buildGetChanceCard(ChanceColors.RED , BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-                    case 4 -> fields[i] = buildStation(buildLongText("Nord-", "Bahnhof"), 200, BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-                    case 10 -> fields[i] = buildExtraPayField(ExtraFields.HESSLER_SCHULDEN, 200, BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-                    case 13 -> fields[i] = buildStation(buildLongText("West-", "Bahnhof"), 200, BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-                    case 16 -> fields[i] = buildGetChanceCard(ChanceColors.BLUE, BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-                    case 22 -> fields[i] = buildStation(buildLongText("Süd-", "Bahnhof"), 200, BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-                    case 25 -> fields[i] = buildExtraPayField(ExtraFields.NAME_THREE, 200, BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-                    case 29 -> fields[i] = buildGetChanceCard(ChanceColors.GREEN, BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-                    case 31 -> fields[i] = buildStation(buildLongText("Haupt-", "Bahnhof"), 200, BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-                    case 32 -> fields[i] = buildExtraPayField(ExtraFields.NAME_FOUR, 200, BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-                    case 34, 6, 20 -> fields[i] = buildGetCommunityCard(BACKGROUND_COLOR, FIELD_WIDTH, FIELD_HEIGHT);
-                }
+                fields[i] = ( (Corner) fieldObjects.get(10)).buildCorner(BORDER_WIDTH, FONT_SIZE, FIELD_HEIGHT, BACKGROUND_COLOR);
             }
-
-            if (fields[i] == null)
-                System.out.println("Da ist noch null: " + i);
-
         }
 
-        Pane[] corners = new Pane[4];
-
-        //Creating Corners
-        corners[0] = buildStart(BACKGROUND_COLOR, FIELD_HEIGHT);
-        corners[1] = buildJail(BACKGROUND_COLOR, FIELD_HEIGHT);
-        corners[2] = buildFreeParking(BACKGROUND_COLOR, FIELD_HEIGHT);
-        corners[3] = buildGoToJail(BACKGROUND_COLOR, FIELD_HEIGHT);
-
-
         //Position fields
-        for (int i = 0; i < 36; i++) {
+        for (int i = 0; i < 40; i++) {
             board.getChildren().add(fields[i]);
             StackPane.setAlignment(fields[i], Pos.TOP_LEFT);
             double rightCorner = (size / MIDDLE_RECTANGLE_RATION) + ((size * (MIDDLE_RECTANGLE_RATION - 1) / (2 * MIDDLE_RECTANGLE_RATION)));
+            double cornerCoordinate = ((size - size / MIDDLE_RECTANGLE_RATION) / 2) + size / MIDDLE_RECTANGLE_RATION;
 
-            if (i < 9) {
+            if(i == 0) {
+                fields[i].setTranslateY(cornerCoordinate);
+            } else if(i == 10) {
+                fields[i].setRotate(90);
+            } else if(i == 20) {
+                fields[i].setRotate(180);
+                fields[i].setTranslateX(cornerCoordinate);
+            } else if (i == 30){
+                fields[i].setRotate(270);
+                fields[i].setTranslateY(cornerCoordinate);
+                fields[i].setTranslateX(cornerCoordinate);
+            } else if (i <= 9) {
                 assert fields[i] != null;
                 fields[i].rotateProperty().set(90);
-                fields[i].setTranslateY(((FIELD_HEIGHT + FIELD_WIDTH) / 2) + (8 * FIELD_WIDTH - FIELD_WIDTH * i));
+                fields[i].setTranslateY(((FIELD_HEIGHT + FIELD_WIDTH) / 2) + (8 * FIELD_WIDTH - FIELD_WIDTH * (i - 1)));
                 fields[i].setTranslateX((FIELD_HEIGHT - FIELD_WIDTH) / 2);
-            } else if (i < 18) {
+            } else if (i <= 19) {
                 fields[i].rotateProperty().set(180);
                 fields[i].setTranslateY(0);
-                fields[i].setTranslateX(rightCorner - FIELD_WIDTH * 17 + FIELD_WIDTH * i - FIELD_WIDTH);
-            } else if (i < 27) {
+                fields[i].setTranslateX(rightCorner - FIELD_WIDTH * 17 + FIELD_WIDTH * (i - 2) - FIELD_WIDTH);
+            } else if (i <= 29) {
                 fields[i].rotateProperty().set(270);
-                fields[i].setTranslateY((FIELD_HEIGHT + FIELD_WIDTH) / 2 - 18 * FIELD_WIDTH + FIELD_WIDTH * i);
+                fields[i].setTranslateY((FIELD_HEIGHT + FIELD_WIDTH) / 2 - 18 * FIELD_WIDTH + FIELD_WIDTH * (i - 3));
                 fields[i].setTranslateX(rightCorner + (FIELD_HEIGHT - FIELD_WIDTH) / 2);
             } else {
                 fields[i].setTranslateY(size - FIELD_HEIGHT);
-                fields[i].setTranslateX(FIELD_HEIGHT + 8 * FIELD_WIDTH - i * FIELD_WIDTH + 27 * FIELD_WIDTH);
-            }
-        }
-
-        //Position Corners
-        for (int i = 0; i < 4; i++) {
-            board.getChildren().add(corners[i]);
-            StackPane.setAlignment(corners[i], Pos.TOP_LEFT);
-            double cornerCoordinate = ((size - size / MIDDLE_RECTANGLE_RATION) / 2) + size / MIDDLE_RECTANGLE_RATION;
-            if(i == 0) {
-                corners[i].setTranslateY(cornerCoordinate);
-            } else if(i == 1) {
-                corners[i].setRotate(90);
-            } else if(i == 2) {
-                corners[i].setRotate(180);
-                corners[i].setTranslateX(cornerCoordinate);
-            } else {
-                corners[i].setRotate(270);
-                corners[i].setTranslateY(cornerCoordinate);
-                corners[i].setTranslateX(cornerCoordinate);
+                fields[i].setTranslateX(FIELD_HEIGHT + 8 * FIELD_WIDTH - (i - 4) * FIELD_WIDTH + 27 * FIELD_WIDTH);
             }
         }
 
@@ -388,150 +348,6 @@ public class GameField extends Pane{
         return root;
     }
 
-    private Pane buildStart(Color backgroundColor, double size) {
-        Pane field = new Pane();
-        field.setId("start_field");
-        field.setMaxSize(size, size);
-
-        Rectangle background = buildRectangle("corner_start_Background", size, size, backgroundColor, true, Color.BLACK, BORDER_WIDTH);
-        ImageView arrow = createImageView("corner_start_Arrow" ,"/sandwich/de/monopoly/gameBoard/startArrow.png", size / 6, size / 1.25, (size -(size / 1.25)) / 2, (size -(size / 1.25)) / 2);
-        Label text = buildLabel("corner_start_Text", buildLongText("LOS", "Bekomme 200", "beim drüber gehen"), Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE), TextAlignment.CENTER, Color.BLACK);
-
-        text.widthProperty().addListener((obs, oldVal, newVal) -> text.setTranslateX((size - newVal.doubleValue()) / 0.8));
-        text.heightProperty().addListener((obs, oldVal, newVal) -> text.setTranslateY((newVal.doubleValue()) / 1.5));
-        text.setRotate(45);
-
-        field.getChildren().addAll(background, arrow, text);
-        return field;
-    }
-
-    private Pane buildJail(Color backgroundColor, double size) {
-        Pane field = new Pane();
-        field.setId("jail_field");
-        field.setMaxSize(size, size);
-
-        Rectangle background = buildRectangle("corner_jail_Background", size, size, backgroundColor, true, Color.BLACK, BORDER_WIDTH);
-        Rectangle backgroundJail = buildRectangle("corner_jail_JailBackground", size / 2, size / 2, Color.ORANGE, true, Color.BLACK, BORDER_WIDTH, size - size / 2, 0);
-        ImageView jailMan = createImageView("corner_jail_Man" ,"/sandwich/de/monopoly/gameBoard/jailMan.png", size / 3, size / 3, size - size / 2 + (((size / 2) - (size / 3) / 2) - size / 4), (((size / 2) - (size / 3) / 2) - size / 4));
-        Label header = buildLabel("corner_jail_Header", "Im", Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE), TextAlignment.CENTER, Color.BLACK, size / 2 + size / 3, size / 18);
-        Label footer = buildLabel("corner_jail_FooterText", "Bau", Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE), TextAlignment.CENTER, Color.BLACK, size / 1.9, size / 2.9);
-        Label textOne = buildLabel("corner_jail_FirstText", "Nur", Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE * 1.5), TextAlignment.CENTER, Color.BLACK, 0, size / 5.5);
-        Label textTwo = buildLabel("corner_jail_SecondText", "zu besuch", Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE * 1.5), TextAlignment.CENTER, Color.BLACK, 0, size / 1.3);
-
-        centeringChildInPane(textTwo, field);
-
-        jailMan.setRotate(45);
-        header.setRotate(45);
-        footer.setRotate(45);
-        textOne.setRotate(90);
-
-        field.getChildren().addAll(background, backgroundJail, jailMan, header, footer, textOne, textTwo);
-        return field;
-    }
-
-    private Pane buildFreeParking(Color backgroundColor, double size) {
-        Pane field = new Pane();
-        field.setId("freeParking_field");
-        field.setMaxSize(size, size);
-
-        Rectangle background = buildRectangle("corner_freeParking_Background", size, size, backgroundColor, true, Color.BLACK, BORDER_WIDTH);
-        Label header = buildLabel("corner_freeParking_Header", "Freies", Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE * 2), TextAlignment.CENTER, Color.BLACK, size / 5 + size / 3.25, size / 5.75);
-        ImageView freeParking = createImageView("corner_freeParking_Picture", "/sandwich/de/monopoly/gameBoard/freeParking.png", size / 1.5, size / 1.75, size / 4.75,size / 5);
-        Label footer = buildLabel("corner_freeParking_Footer", "Parken", Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE * 2), TextAlignment.CENTER, Color.BLACK, size / 8.25, size / 1.7);
-
-        header.setRotate(45);
-        freeParking.setRotate(45);
-        footer.setRotate(45);
-
-        field.getChildren().addAll(background, header, freeParking, footer);
-        return field;
-    }
-
-    private Pane buildGoToJail(Color backgroundColor, double size) {
-        Pane field = new Pane();
-        field.setId("goToJail_field");
-        field.setMaxSize(size, size);
-
-        Rectangle background = buildRectangle("corner_goToJail_Background", size, size, backgroundColor, true, Color.BLACK, BORDER_WIDTH);
-        Label header = buildLabel("corner_goToJail_Header", "Geh ins", Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE * 2), TextAlignment.CENTER, Color.BLACK, size / 6 + size / 3.25, size / 5.75);
-        ImageView freeParking = createImageView("corner_goToJail_Picture", "/sandwich/de/monopoly/gameBoard/goToJail.png", size / 1.5, size / 1.75, size / 4.75,size / 5);
-        Label footer = buildLabel("corner_goToJail_Footer", "Gefängnis", Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE * 2), TextAlignment.CENTER, Color.BLACK, -(size / 15), size / 1.8);
-
-        header.setRotate(45);
-        freeParking.setRotate(45);
-        footer.setRotate(45);
-
-        field.getChildren().addAll(background, header, freeParking, footer);
-        return field;
-    }
-
-    private Pane buildStation(String stationName, double price, Color backgroundColor ,double width, double height) {
-        Pane field = new Pane();
-        field.setId("station_field");
-        field.setMaxSize(width, height);
-
-        Rectangle background = buildRectangle("station_Background" ,width, height, backgroundColor, true, Color.BLACK, BORDER_WIDTH);
-        Label header = buildLabel("station_Header", stationName, Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE), TextAlignment.CENTER, Color.BLACK, 0, height / 50);
-        ImageView train = createImageView("station_Image", "/sandwich/de/monopoly/gameBoard/train.png", width / 1.15, height / 3.7,(width - width / 1.15) / 2, height / 3);
-        Label priceIndicator = buildLabel("station_PriceIndicator", (price + "€"), Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE), TextAlignment.CENTER, Color.BLACK, 0, 5 * (height / 6));
-
-
-        centeringChildInPane(header, field);
-        centeringChildInPane(priceIndicator, field);
-
-        field.getChildren().addAll(background, header, train, priceIndicator);
-        return field;
-    }
-
-    private Pane buildGetChanceCard(ChanceColors c, Color backgroundColor ,double width, double height) {
-        Pane field = new Pane();
-        field.setId("getChanceCard_field");
-        field.setMaxSize(width, height);
-
-        Rectangle background = buildRectangle("chance_Background" ,width, height, backgroundColor, true, Color.BLACK, BORDER_WIDTH);
-        Label header = buildLabel("chance_Header", "Chance", Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE), TextAlignment.CENTER, Color.BLACK, 0, height / 50);
-
-        Image i = null;
-        switch (c) {
-            case RED ->
-                i = creatImage("/sandwich/de/monopoly/gameBoard/chance_red.png");
-            case BLUE ->
-                i = creatImage("/sandwich/de/monopoly/gameBoard/chance_blue.png");
-            case GREEN ->
-                i = creatImage("/sandwich/de/monopoly/gameBoard/chance_green.png");
-        }
-
-        ImageView image = createImageView("chance_Image", i, width / 1.1, height / 1.6,(width - width / 1.15) / 2, height / 3.5);
-
-        centeringChildInPane(header, field);
-
-
-        field.getChildren().addAll(background, header, image);
-        return field;
-    }
-
-    private Pane buildGetCommunityCard(Color backgroundColor ,double width, double height) {
-        Pane field = new Pane();
-        field.setId("getCommunityCard_field");
-        field.setMaxSize(width, height);
-
-        Rectangle background = buildRectangle("community_Background" ,width, height, backgroundColor, true, Color.BLACK, BORDER_WIDTH);
-        Label header = buildLabel("community_Header", buildLongText("Gesellschafts", "Feld"), Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE), TextAlignment.CENTER, Color.BLACK, 0, height / 50);
-        ImageView image = createImageView("community_Image", "/sandwich/de/monopoly/gameBoard/communityChest.png", width / 1.1, height / 1.9,(width - width / 1.15) / 2, height / 3.5);
-
-        centeringChildInPane(header, field);
-
-
-        field.getChildren().addAll(background, header, image);
-        return field;
-    }
-
-
-    private enum ChanceColors {
-        RED,
-        GREEN,
-        BLUE
-    }
 }
 
 /*

@@ -3,9 +3,12 @@ package sandwich.de.monopoly;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities;
+import sandwich.de.monopoly.Enums.CommunityCards;
+import sandwich.de.monopoly.Enums.CornerTyp;
+import sandwich.de.monopoly.Enums.ExtraFields;
 import sandwich.de.monopoly.Exceptions.PlayerNotFoundExceptions;
 import sandwich.de.monopoly.Exceptions.ToManyPlayersExceptions;
-import sandwich.de.monopoly.Fields.Street;
+import sandwich.de.monopoly.Fields.*;
 import sandwich.de.monopoly.GUI.Game.DisplayController.GameDisplayControllerOne;
 import sandwich.de.monopoly.GUI.Game.DisplayController.GameDisplayControllerTwo;
 import sandwich.de.monopoly.GUI.Game.DisplayController.MiddleGameDisplayController;
@@ -27,8 +30,8 @@ public class Game {
     private Player turnPlayer;
     private Player nextPlayer;
     private final ArrayList<Player> playerList = new ArrayList<>();
-    private static final HashMap<Integer, Street> streets = createStreets();
-    private GameField gameField;
+    private static final HashMap<Integer, Field> FIELDS = createFields();
+    private final GameField gameField;
     private int playerInGame = 0;
 
     public Game(Player[] players) {
@@ -38,7 +41,7 @@ public class Game {
             consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
         }
 
-        gameField = new GameField(0, Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT, Color.rgb(112, 224, 88), streets);
+        gameField = new GameField(0, Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT, Color.rgb(112, 224, 88), FIELDS);
 
         for (int i = 0, j = 1; i != 5; i++) {
             if (players[i] != null) {
@@ -136,14 +139,10 @@ public class Game {
     //Starts the street/buy system, know the player can build, leave make game things
     public void playerHasMoved() {
         GameDisplayControllerTwo.showPlayerAction();
-        if (streets.get(turnPlayer.getFieldPostion()) != null) {
-
-            int streetNumber = turnPlayer.getFieldPostion();
-
-            if (!streets.get(streetNumber).isOwned()) {
-
-                if (streets.get(streetNumber).getSalePrice() <= turnPlayer.getBankAccount())
-                    MiddleGameDisplayController.displayBuyStreet(streets.get(turnPlayer.getFieldPostion()));
+        if (FIELDS.get(turnPlayer.getFieldPostion()) instanceof Street street) {
+            if (!street.isOwned()) {
+                if (street.getSalePrice() <= turnPlayer.getBankAccount())
+                    MiddleGameDisplayController.displayBuyStreet(street);
 
             } //else pay Player!
         }
@@ -172,35 +171,53 @@ public class Game {
         return ps;
     }
 
-    public static HashMap<Integer, Street> getStreets() {
-        return streets;
+    public static HashMap<Integer, Field> getFields() {
+        return FIELDS;
     }
 
-    private static HashMap<Integer, Street> createStreets() {
-        HashMap<Integer, Street> s = new HashMap<>();
+    private static HashMap<Integer, Field> createFields() {
+        HashMap<Integer, Field> s = new HashMap<>();
 
-        s.put(1, new Street("Braune Straße", 200, 1, Color.rgb(112, 40, 0)));
-        s.put(3, new Street("Braune Straße", 200, 2, Color.rgb(112, 40, 0)));
-        s.put(6, new Street("Aqua Straße", 200, 3, Color.AQUA));
-        s.put(8, new Street("Aqua Straße", 200, 4, Color.AQUA));
-        s.put(9, new Street("Aqua Straße", 200, 5, Color.AQUA));
-        s.put(11, new Street("Purple Straße", 200, 6, Color.PURPLE));
-        s.put(13, new Street("Purple Straße", 200, 7, Color.PURPLE));
-        s.put(14, new Street("Purple Straße", 200, 8, Color.PURPLE));
-        s.put(16, new Street("Orang Straße", 200, 9, Color.ORANGE));
-        s.put(17, new Street("Orang Straße", 200, 10, Color.ORANGE));
-        s.put(19, new Street("Orang Straße", 200, 11, Color.ORANGE));
-        s.put(21, new Street("Red Straße", 200, 12, Color.RED));
-        s.put(22, new Street("Red Straße", 200, 13, Color.RED));
-        s.put(24, new Street("Red Straße", 200, 14, Color.RED));
-        s.put(26, new Street("Yellow Straße", 200, 15, Color.YELLOW));
-        s.put(27, new Street("Yellow Straße", 200, 16, Color.YELLOW));
-        s.put(29, new Street("Yellow Straße", 200, 17, Color.YELLOW));
-        s.put(31, new Street("LIME Straße", 200, 18, Color.LIME));
-        s.put(32, new Street("LIME Straße", 200, 19, Color.LIME));
-        s.put(34, new Street("LIME Straße", 200, 20, Color.LIME));
-        s.put(37, new Street("Dark Blue Straße", 200, 21, Color.DARKBLUE));
-        s.put(39, new Street("Dark Blue Straße", 200, 12, Color.DARKBLUE));
+        s.put(0, new Corner(CornerTyp.START, 0));
+        s.put(1, new Street("Braune Straße", 200, Color.rgb(112, 40, 0), 1));
+        s.put(2, new GetCard(2));
+        s.put(3, new Street("Braune Straße", 200,  Color.rgb(112, 40, 0), 3));
+        s.put(4, new PayExtra(200, ExtraFields.SPOTIFY_PREMIUM, 4));
+        s.put(5, new Station("Bahnhof", 200, 5));
+        s.put(6, new Street("Aqua Straße", 200, Color.AQUA, 6));
+        s.put(7, new GetCard(GetCard.ChanceColors.GREEN, 7));
+        s.put(8, new Street("Aqua Straße", 200, Color.AQUA, 8));
+        s.put(9, new Street("Aqua Straße", 200, Color.AQUA, 9));
+        s.put(10, new Corner(CornerTyp.JAIL, 10));
+        s.put(11, new Street("Purple Straße", 200, Color.PURPLE, 11));
+        s.put(12, new PayExtra(200, ExtraFields.HESSLER_SCHULDEN, 12));
+        s.put(13, new Street("Purple Straße", 200, Color.PURPLE, 13));
+        s.put(14, new Street("Purple Straße", 200, Color.PURPLE, 14));
+        s.put(15, new Station("Bahnhof", 200, 15));
+        s.put(16, new Street("Orang Straße", 200, Color.ORANGE, 16));
+        s.put(17, new Street("Orang Straße", 200, Color.ORANGE, 17));
+        s.put(18, new GetCard(18));
+        s.put(19, new Street("Orang Straße", 200, Color.ORANGE, 19));
+        s.put(20, new Corner(CornerTyp.FREE_PARKING, 20));
+        s.put(21, new Street("Red Straße", 200, Color.RED, 21));
+        s.put(22, new Street("Red Straße", 200, Color.RED, 22));
+        s.put(23, new GetCard(GetCard.ChanceColors.BLUE, 23));
+        s.put(24, new Street("Red Straße", 200, Color.RED, 24));
+        s.put(25, new Station("Bahnhoff", 200, 25));
+        s.put(26, new Street("Yellow Straße", 200, Color.YELLOW, 26));
+        s.put(27, new Street("Yellow Straße", 200, Color.YELLOW, 27));
+        s.put(28, new PayExtra(200, ExtraFields.NAME_THREE, 28));
+        s.put(29, new Street("Yellow Straße", 200, Color.YELLOW, 29));
+        s.put(30, new Corner(CornerTyp.GO_TO_JAIL, 30));
+        s.put(31, new Street("LIME Straße", 200, Color.LIME, 31));
+        s.put(32, new Street("LIME Straße", 200, Color.LIME, 32));
+        s.put(33, new GetCard(33));
+        s.put(34, new Street("LIME Straße", 200, Color.LIME, 34));
+        s.put(35, new Station("Bhanhoff", 200, 35));
+        s.put(36, new GetCard(GetCard.ChanceColors.RED, 36));
+        s.put(37, new Street("Dark Blue Straße", 200, Color.DARKBLUE, 37));
+        s.put(38, new PayExtra(200, ExtraFields.NAME_FOUR, 38));
+        s.put(39, new Street("Dark Blue Straße", 200, Color.DARKBLUE, 39));
 
         return s;
     }

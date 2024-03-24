@@ -10,9 +10,8 @@ import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities.
 
 public class Player {
 
-    private final int START_BANK_ACCOUNT = 2000;
     private int bankAccount;
-    private String name;
+    private final String name;
     private int fieldPostion;
     private final int orderNumber;
     Figuren figur;
@@ -22,7 +21,8 @@ public class Player {
         this.figur = f;
         this.orderNumber = orderNumber;
 
-        bankAccount = START_BANK_ACCOUNT;
+        //Start account
+        bankAccount = 2000;
         fieldPostion = 0;
     }
 
