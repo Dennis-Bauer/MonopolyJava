@@ -3,20 +3,14 @@ package sandwich.de.monopoly.GUI.Game;
 import javafx.animation.TranslateTransition;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 import sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities;
-import sandwich.de.monopoly.Enums.ExtraFields;
 import sandwich.de.monopoly.Exceptions.PlayerIsOutOfBoundsExceptions;
 import sandwich.de.monopoly.Exceptions.PlayerNotFoundExceptions;
 import sandwich.de.monopoly.Exceptions.ToManyPlayersExceptions;
@@ -27,7 +21,6 @@ import sandwich.de.monopoly.GUI.Game.DisplayController.GameDisplayControllerTwo;
 import sandwich.de.monopoly.GUI.Game.DisplayController.MiddleGameDisplayController;
 import sandwich.de.monopoly.Main;
 import sandwich.de.monopoly.Player;
-import sandwich.de.monopoly.Fields.Street;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,10 +28,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPut;
 import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPutLine;
-import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.JavaUtilities.buildLongText;
 import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.*;
-import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXUtilities.*;
-import static sandwich.de.monopoly.Main.TEXT_FONT;
 
 
 public class GameField extends Pane{

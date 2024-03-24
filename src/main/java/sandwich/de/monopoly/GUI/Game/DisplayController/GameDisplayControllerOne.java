@@ -144,7 +144,7 @@ public class GameDisplayControllerOne {
 
                 j++;
 
-            } else if (j >= 24 && j <= 27) {
+            } else if (j >= 24) {
                 streetsR[j].setFill(BAHNHOEFE);
 
                 if (j == 24 || j == 25) {
@@ -158,11 +158,7 @@ public class GameDisplayControllerOne {
                 j++;
 
             } else {
-                if (fields.get(i) instanceof Street) {
-
-                    Street street = (Street) fields.get(i);
-
-                    System.out.println("Die Streets Owner ist: " + street.getOwner());
+                if (fields.get(i) instanceof Street street) {
 
                     if (street.isOwned()) {
                         if (street.getOwner() == p) {

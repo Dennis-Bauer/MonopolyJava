@@ -10,6 +10,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 
+import java.util.Objects;
+
 import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.JavaUtilities.buildLongText;
 import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.*;
 import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.createImageView;
@@ -55,7 +57,7 @@ public class GetCard extends Field{
         Label header = buildLabel("chance_Header", "Chance", Font.font(TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, Color.BLACK, 0, height / 50);
 
         Image i = null;
-        switch (color) {
+        switch (Objects.requireNonNull(color)) {
             case RED ->
                     i = creatImage("/sandwich/de/monopoly/gameBoard/chance_red.png");
             case BLUE ->

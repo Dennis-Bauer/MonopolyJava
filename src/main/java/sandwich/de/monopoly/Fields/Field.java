@@ -15,4 +15,7 @@ public abstract class Field {
         return new Pane();
     }
 
+    public double getPosition() {
+        return POS;
+    }
 }

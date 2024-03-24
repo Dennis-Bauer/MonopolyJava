@@ -3,7 +3,6 @@ package sandwich.de.monopoly;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities;
-import sandwich.de.monopoly.Enums.CommunityCards;
 import sandwich.de.monopoly.Enums.CornerTyp;
 import sandwich.de.monopoly.Enums.ExtraFields;
 import sandwich.de.monopoly.Exceptions.PlayerNotFoundExceptions;
