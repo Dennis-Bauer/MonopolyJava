@@ -15,7 +15,7 @@ public enum Figuren {
 
     private final Image figureImage;
 
-    Figuren (Image i) {
+    Figuren(Image i) {
         this.figureImage = i;
     }
 

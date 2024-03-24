@@ -24,6 +24,7 @@ public class Street extends Field{
     private final int salePrice;
     private boolean isOwned;
     private Player owner;
+    private int rent;
 
     public Street(String name, int salePrice, Color color, double position) {
         super(position);
@@ -31,6 +32,8 @@ public class Street extends Field{
         this.salePrice = salePrice;
         this.color = color;
 
+
+        rent = 200;
     }
 
     public void setOwner(Player owner) {
@@ -49,6 +52,10 @@ public class Street extends Field{
 
     public int getSalePrice() {
         return salePrice;
+    }
+
+    public int getRent() {
+        return rent;
     }
 
     public String getName() {

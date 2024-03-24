@@ -1,4 +1,4 @@
-package sandwich.de.monopoly.GUI.Game.Displays;
+package sandwich.de.monopoly.GUI.Game.Displays.DisplayTwo;
 
 import javafx.geometry.Point2D;
 import javafx.scene.control.Label;
@@ -64,7 +64,7 @@ public class DiceDisplay extends Pane {
             rowOneAnimation = new NumberAnimationThread(numberRowOne);
             rowTwoAnimation = new NumberAnimationThread(numberRowTwo);
 
-            if (!rowOneAnimation.isAlive() && !rowTwoAnimation.isAlive()) {
+            if (!rowOneAnimation.isAlive() && !rowTwoAnimation.isAlive() && !Main.getGameOperator().isTurnPlayerIsMoving()) {
                 rowOneAnimation.setLength(rn.nextInt(60 - 20 + 1) + 20);
                 rowTwoAnimation.setLength(rn.nextInt(60 - 20 + 1) + 20);
 
@@ -72,7 +72,7 @@ public class DiceDisplay extends Pane {
                 rowTwoAnimation.start();
 
                 //Main.getGameOperator().playerRolledDice(rowOneAnimation.getLastNumber(), rowTwoAnimation.getLastNumber());
-                Main.getGameOperator().playerRolledDice(1, 2);
+                Main.getGameOperator().playerRolledDice(40, 10);
                 if (Main.CONSOLE_OUT_PUT) {
                     consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
                     consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Der erste Würfel hat eine");

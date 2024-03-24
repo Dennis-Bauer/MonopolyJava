@@ -18,14 +18,22 @@ import static sandwich.de.monopoly.Main.TEXT_FONT;
 
 public class PayExtra extends Field{
 
-    private final double price;
+    private final int price;
     private final ExtraFields typ;
 
-    public PayExtra(double price, ExtraFields typ, double postion) {
+    public PayExtra(int price, ExtraFields typ, double postion) {
         super(postion);
         this.price = price;
         this.typ = typ;
 
+    }
+
+    public ExtraFields getTyp() {
+        return typ;
+    }
+
+    public int getPrice() {
+        return price;
     }
 
     @Override

@@ -6,8 +6,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
-import sandwich.de.monopoly.GUI.Game.Displays.ActionDisplay;
-import sandwich.de.monopoly.GUI.Game.Displays.DiceDisplay;
+import sandwich.de.monopoly.GUI.Game.Displays.DisplayTwo.ActionDisplay;
+import sandwich.de.monopoly.GUI.Game.Displays.DisplayTwo.DiceDisplay;
 import sandwich.de.monopoly.Main;
 
 import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildLabel;

@@ -87,7 +87,6 @@ public class GameField extends Pane{
         setId("gameScreen_Root");
     }
 
-
     public void setPlayerToGameboard(ArrayList<Player> playerList) {
 
         if (Main.CONSOLE_OUT_PUT) {
@@ -123,6 +122,34 @@ public class GameField extends Pane{
         if (Main.CONSOLE_OUT_PUT)
             consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
 
+    }
+
+    public void setPlayerInJail(Player p) {
+        int playerArrayPostion = 0;
+        for (ImageView i: playerFigures) {
+            if (i.getImage() == p.getFigur().getFigureImage())
+                break;
+            else playerArrayPostion++;
+        }
+
+        if (!(playerArrayPostion > 4)) {
+            playerFigures[playerArrayPostion].setX(FIELD_HEIGHT * 0.6 - (FIELD_HEIGHT + FIELD_WIDTH * 9));
+            playerFigures[playerArrayPostion].setY(FIELD_HEIGHT * 0.6);
+        }
+    }
+
+    public void removePlayerFromJail(Player p) {
+        int playerArrayPostion = 0;
+        for (ImageView i: playerFigures) {
+            if (i.getImage() == p.getFigur().getFigureImage())
+                break;
+            else playerArrayPostion++;
+        }
+
+        if (!(playerArrayPostion > 4)) {
+            playerFigures[playerArrayPostion].setX(calculateXYPostion(p.getOrderNumber(), 10).getX());
+            playerFigures[playerArrayPostion].setY(calculateXYPostion(p.getOrderNumber(), 10).getY());
+        }
     }
 
     public void movePlayerOnGameBoard(Player player, int steps) throws PlayerNotFoundExceptions {
@@ -173,6 +200,7 @@ public class GameField extends Pane{
         } else throw new PlayerNotFoundExceptions();
 
     }
+
     public void rotateGameBoard(double rotate) {
         BOARD.setRotate(rotate);
     }
@@ -290,7 +318,7 @@ public class GameField extends Pane{
             if (i != 0 && i != 10 && i != 20 && i != 30) {
                 fields[i] = fieldObjects.get(i).buildField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
             } else {
-                fields[i] = ( (Corner) fieldObjects.get(10)).buildCorner(BORDER_WIDTH, FONT_SIZE, FIELD_HEIGHT, BACKGROUND_COLOR);
+                fields[i] = ( (Corner) fieldObjects.get(i)).buildCorner(BORDER_WIDTH, FONT_SIZE, FIELD_HEIGHT, BACKGROUND_COLOR);
             }
         }
 

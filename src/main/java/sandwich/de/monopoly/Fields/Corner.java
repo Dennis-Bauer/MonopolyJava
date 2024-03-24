@@ -25,6 +25,10 @@ public class Corner extends Field {
         this.typ = typ;
     }
 
+    public CornerTyp getTyp() {
+        return typ;
+    }
+
     public Pane buildCorner(double borderWidth, double fontSize, double size, Color backgroundColor) {
         switch (typ) {
             case START -> {

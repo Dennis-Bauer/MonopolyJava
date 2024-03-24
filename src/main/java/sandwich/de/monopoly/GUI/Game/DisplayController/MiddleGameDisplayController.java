@@ -1,13 +1,12 @@
 package sandwich.de.monopoly.GUI.Game.DisplayController;
 
-import javafx.animation.Animation;
-import javafx.animation.FadeTransition;
-import javafx.animation.ScaleTransition;
-import javafx.animation.TranslateTransition;
+import javafx.animation.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-import sandwich.de.monopoly.GUI.Game.Displays.BuyStreetDisplay;
+import sandwich.de.monopoly.GUI.Game.Displays.DisplayMiddle.BuyStreetDisplay;
+import sandwich.de.monopoly.GUI.Game.Displays.DisplayMiddle.PayDisplay;
 import sandwich.de.monopoly.Main;
 import sandwich.de.monopoly.Fields.Street;
 
@@ -18,6 +17,10 @@ public class MiddleGameDisplayController {
     private static final NullPointerException DISPLAY_NOT_CREATED = new NullPointerException("Middle display is not yet created!");
     private static Pane display;
     private static BuyStreetDisplay buyStreetDisplay;
+    private static PayDisplay payDisplay;
+
+    private static Rectangle background;
+
     private static double maxY = 0;
     private static ScaleTransition waitTransition;
 
@@ -28,7 +31,8 @@ public class MiddleGameDisplayController {
             display = new Pane();
             display.setId("MiddleDisplay");
             display.setMaxSize(width, height);
-            display.getChildren().add(buildRectangle("middleDisplay_Background", width, height, backgroundColor, true, Color.BLACK, width * 0.01));
+            background = buildRectangle("middleDisplay_Background", width, height, backgroundColor, true, Color.BLACK, width * 0.01);
+            display.getChildren().add(background);
 
             waitTransition = new ScaleTransition(Duration.seconds(1), display);
             waitTransition.setCycleCount(Animation.INDEFINITE);
@@ -39,7 +43,10 @@ public class MiddleGameDisplayController {
             buyStreetDisplay = new BuyStreetDisplay(width, height);
             buyStreetDisplay.setVisible(false);
 
-            display.getChildren().add(buyStreetDisplay);
+            payDisplay = new PayDisplay(width, height);
+            payDisplay.setVisible(false);
+
+            display.getChildren().addAll(buyStreetDisplay, payDisplay);
             display.setVisible(false);
         } else throw new RuntimeException("Middle display is already created!");
     }
@@ -55,21 +62,76 @@ public class MiddleGameDisplayController {
 
             display.setVisible(true);
 
+            payDisplay.setVisible(false);
+
             buyStreetDisplay.showStreet(street);
             buyStreetDisplay.setVisible(true);
             enterAnimation();
         } else throw DISPLAY_NOT_CREATED;
+    }
 
+    public static void displayPayDisplay(String message, int price) {
+        if (display != null) {
 
+            display.setVisible(true);
 
+            buyStreetDisplay.setVisible(false);
 
+            payDisplay.showPayScreen(message, price);
+            payDisplay.setVisible(true);
+            enterAnimation();
+        } else throw DISPLAY_NOT_CREATED;
     }
 
     public static void removeDisplay() {
         waitTransition.stop();
-        display.setVisible(false);
 
-        buyStreetDisplay.setVisible(false);
+        TranslateTransition upTransition = new TranslateTransition(Duration.seconds(0.30), display);
+        upTransition.setToY(-(Main.WINDOW_HEIGHT * 0.95));
+
+        TranslateTransition downTransition = new TranslateTransition(Duration.seconds(0.9), display);
+        downTransition.setToY(Main.WINDOW_HEIGHT);
+
+        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(2), display);
+        fadeTransition.setFromValue(1);
+        fadeTransition.setToValue(0);
+
+        upTransition.play();
+
+        upTransition.setOnFinished(actionEvent -> {
+            downTransition.play();
+            fadeTransition.play();
+        });
+
+        fadeTransition.setOnFinished(actionEvent -> {
+            display.setVisible(false);
+
+            buyStreetDisplay.setVisible(false);
+            payDisplay.setVisible(false);
+        });
+
+    }
+
+    public static void errorAnimation() {
+
+        RotateTransition transitionPositiv = new RotateTransition(Duration.seconds(0.125), display);
+        transitionPositiv.setByAngle(4);
+        transitionPositiv.setCycleCount(2);
+        transitionPositiv.setInterpolator(Interpolator.LINEAR);
+        transitionPositiv.setAutoReverse(true);
+
+        RotateTransition transitionNegativ = new RotateTransition(Duration.seconds(0.125), display);
+        transitionNegativ.setByAngle(-4);
+        transitionNegativ.setCycleCount(2);
+        transitionNegativ.setInterpolator(Interpolator.LINEAR);
+        transitionNegativ.setAutoReverse(true);
+
+        transitionPositiv.play();
+
+        transitionPositiv.setOnFinished(actionEvent -> transitionNegativ.play());
+
+        background.setStroke(Color.RED);
+        background.setOnMouseExited(mouseEvent -> background.setStroke(Color.BLACK));
     }
 
     private static void enterAnimation() {

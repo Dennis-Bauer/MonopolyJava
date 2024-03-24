@@ -1,4 +1,4 @@
-package sandwich.de.monopoly.GUI.Game.Displays;
+package sandwich.de.monopoly.GUI.Game.Displays.DisplayOne;
 
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;

@@ -19,7 +19,7 @@ public class Station extends Field {
     private final String name;
     private final double price;
 
-    public Station(String name ,double price, double postion) {
+    public Station(String name ,int price, double postion) {
         super(postion);
         this.name = name;
         this.price = price;

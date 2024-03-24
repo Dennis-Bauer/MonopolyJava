@@ -14,7 +14,12 @@ public class Player {
     private final String name;
     private int fieldPostion;
     private final int orderNumber;
-    Figuren figur;
+    private final Figuren figur;
+
+    //Game Variables
+    private boolean isInJail = false;
+    private int inJailRemain = 0;
+
 
     public Player(String name, Figuren f, int orderNumber) {
         this.name = name;
@@ -34,11 +39,6 @@ public class Player {
         return bankAccount;
     }
 
-    public void addBankAccount(int transferNumber) {
-        bankAccount = bankAccount + transferNumber;
-        try { GameDisplayControllerOne.updateDisplay(); } catch (PlayerNotFoundExceptions ignored) {}
-    }
-
     public Figuren getFigur() {
         return figur;
     }
@@ -49,6 +49,31 @@ public class Player {
 
     public int getFieldPostion() {
         return fieldPostion;
+    }
+
+    public int getInJailRemain() {
+        return inJailRemain;
+    }
+
+    public boolean isInJail() {
+        return isInJail;
+    }
+
+    public void addBankAccount(int transferNumber) {
+        bankAccount = bankAccount + transferNumber;
+        try { GameDisplayControllerOne.updateDisplay(); } catch (PlayerNotFoundExceptions ignored) {}
+    }
+
+    public void setInJail(boolean inJail) {
+        isInJail = inJail;
+        if (inJail) {
+            inJailRemain = 3;
+            fieldPostion = 10;
+        }
+    }
+
+    public void removeOnInJailRemain() {
+        this.inJailRemain--;
     }
 
     public void moveFieldPostion(int postions) {

@@ -18,6 +18,7 @@ import java.util.HashMap;
 
 import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPut;
 import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPutLine;
+import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.JavaUtilities.buildLongText;
 
 public class Game {
 
@@ -28,10 +29,12 @@ public class Game {
     private Player playerFive;
     private Player turnPlayer;
     private Player nextPlayer;
+    private int playerInGame = 0;
+    private int freeParkingMoney = 999;
+    private boolean turnPlayerIsMoving = false;
     private final ArrayList<Player> playerList = new ArrayList<>();
     private static final HashMap<Integer, Field> FIELDS = createFields();
     private final GameField gameField;
-    private int playerInGame = 0;
 
     public Game(Player[] players) {
 
@@ -121,29 +124,61 @@ public class Game {
     //Starts the Animation and controls the postion from the player.
     public void playerRolledDice(int diceOne, int diceTwo) {
 
-        try { gameField.movePlayerOnGameBoard(turnPlayer, diceOne + diceTwo); } catch (PlayerNotFoundExceptions ignored) {}
-        turnPlayer.moveFieldPostion(diceOne + diceTwo);
+        turnPlayerIsMoving = true;
 
-        if (diceOne == diceTwo)
-            nextPlayer = turnPlayer;
+        if (turnPlayer.isInJail()) {
+            if (diceOne == diceTwo) {
+                nextPlayer = turnPlayer;
+                turnPlayer.setInJail(false);
+            } else {
+                turnPlayer.removeOnInJailRemain();
+                if (turnPlayer.getInJailRemain() <= 0) {
+                    turnPlayer.setInJail(false);
+                    gameField.removePlayerFromJail(turnPlayer);
+                }
+            }
+        } else {
+            turnPlayerIsMoving = true;
+            try { gameField.movePlayerOnGameBoard(turnPlayer, diceOne + diceTwo); } catch (PlayerNotFoundExceptions ignored) {}
+            turnPlayer.moveFieldPostion(diceOne + diceTwo);
 
-        if (Main.CONSOLE_OUT_PUT) {
-            consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
-            consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Spieler nummer " + turnPlayer.getOrderNumber() + ", wurde bewegt auf die Feld Postion Nummer:");
-            consoleOutPutLine(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.BOLD, " " + turnPlayer.getFieldPostion());
-            consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
+            if (diceOne == diceTwo)
+                nextPlayer = turnPlayer;
+
+            if (Main.CONSOLE_OUT_PUT) {
+                consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
+                consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Spieler nummer " + turnPlayer.getOrderNumber() + ", wurde bewegt auf die Feld Postion Nummer:");
+                consoleOutPutLine(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.BOLD, " " + turnPlayer.getFieldPostion());
+                consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
+            }
         }
     }
 
-    //Starts the street/buy system, know the player can build, leave make game things
+    //Detects the field where the player is standing on, and then carries out the function of the field.
     public void playerHasMoved() {
+        turnPlayerIsMoving = false;
         GameDisplayControllerTwo.showPlayerAction();
-        if (FIELDS.get(turnPlayer.getFieldPostion()) instanceof Street street) {
-            if (!street.isOwned()) {
-                if (street.getSalePrice() <= turnPlayer.getBankAccount())
-                    MiddleGameDisplayController.displayBuyStreet(street);
 
-            } //else pay Player!
+        if (FIELDS.get(turnPlayer.getFieldPostion()) instanceof Street street) { //Is the player on a Street
+            if (!street.isOwned()) {
+                if (street.getSalePrice() <= turnPlayer.getBankAccount()) {
+                    MiddleGameDisplayController.displayBuyStreet(street);
+                }
+            } else {
+                MiddleGameDisplayController.displayPayDisplay(buildLongText("Du schuldest den Spieler", street.getOwner().getName() + " " + (street.getRent() + "€")), street.getRent());
+            }
+        } else if (FIELDS.get(turnPlayer.getFieldPostion()) instanceof Corner corner) { //Is the player on a Corner
+            switch (corner.getTyp()) {
+                case FREE_PARKING -> {
+                    turnPlayer.addBankAccount(freeParkingMoney);
+                }
+                case GO_TO_JAIL -> {
+                    turnPlayer.setInJail(true);
+                    gameField.setPlayerInJail(turnPlayer);
+                }
+            }
+        } else if (FIELDS.get(turnPlayer.getFieldPostion()) instanceof PayExtra payField) { //Is the player on a pay extra field
+            MiddleGameDisplayController.displayPayDisplay(payField.getTyp().getMessage(), payField.getPrice());
         }
     }
 
@@ -151,6 +186,34 @@ public class Game {
     public void buyStreet(Street street) {
         street.setOwner(turnPlayer);
         turnPlayer.addBankAccount(-street.getSalePrice());
+    }
+
+    public void transferMoney(int money) {
+        if (!(money <= 0)) {
+
+            if (FIELDS.get(turnPlayer.getFieldPostion()) instanceof Street street) {
+                if (street.isOwned())
+                    street.getOwner().addBankAccount(money);
+            } else if (FIELDS.get(turnPlayer.getFieldPostion()) instanceof PayExtra) {
+                freeParkingMoney = freeParkingMoney + money;
+
+                if (Main.CONSOLE_OUT_PUT) {
+                    consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
+                    consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Auf das frei-parken Konto wurden ");
+                    consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.BOLD, money + "€");
+                    consoleOutPutLine(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, " hinzugefügt!");
+                    consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Damit sind jetzt ");
+                    consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.BOLD, freeParkingMoney + "€");
+                    consoleOutPutLine(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, " auf frei-parken!");
+                    consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
+                }
+            }
+        }
+        else throw new IllegalArgumentException("No negative amounts can be transfer!");
+    }
+
+    public Player getTurnPlayer() {
+        return turnPlayer;
     }
 
     public ArrayList<Player> getPlayers() {
@@ -168,6 +231,10 @@ public class Game {
             ps.add(playerFive);
 
         return ps;
+    }
+
+    public boolean isTurnPlayerIsMoving() {
+        return turnPlayerIsMoving;
     }
 
     public static HashMap<Integer, Field> getFields() {
