@@ -13,7 +13,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import sandwich.de.monopoly.Enums.Figuren;
-import sandwich.de.monopoly.GUI.Game.GameDisplayControllerOne;
+import sandwich.de.monopoly.GUI.Game.DisplayController.GameDisplayControllerOne;
 import sandwich.de.monopoly.Main;
 import sandwich.de.monopoly.Player;
 
@@ -22,8 +22,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.*;
 import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXUtilities.buildPlus;
 import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXUtilities.centeringChildInPane;
-import static sandwich.de.monopoly.GUI.Game.GameDisplayControllerOne.buildPlayer;
-import static sandwich.de.monopoly.GUI.Game.GameDisplayControllerOne.buildStreetInventar;
+import static sandwich.de.monopoly.GUI.Game.DisplayController.GameDisplayControllerOne.buildPlayer;
+import static sandwich.de.monopoly.GUI.Game.DisplayController.GameDisplayControllerOne.buildStreetInventar;
 
 public class TradingDisplay extends Pane {
 
@@ -52,7 +52,7 @@ public class TradingDisplay extends Pane {
         AtomicInteger tradeOfferRight = new AtomicInteger();
 
         //Left
-        Pane playerTradeBoxLeft = buildPlayerTradeBox(WIDTH * 0.306, HEIGHT * 0.6035, Color.rgb(255, 49, 49), "NAME", kontoPlayerOne);
+        Pane playerTradeBoxLeft = buildPlayerTradeBox(WIDTH * 0.306, HEIGHT * 0.6035, Color.rgb(255, 49, 49), new Player("NAME", Figuren.AFFE, 0));
         playerTradeBoxLeft.setLayoutX(WIDTH * 0.014);
         playerTradeBoxLeft.setLayoutY(HEIGHT * 0.20);
 
@@ -85,7 +85,7 @@ public class TradingDisplay extends Pane {
 
 
         //Right
-        Pane playerTradeBoxRight = buildPlayerTradeBox(WIDTH * 0.306, HEIGHT * 0.6035, Color.rgb( 255, 97, 0), "NAME", kontoPlayerTwo);
+        Pane playerTradeBoxRight = buildPlayerTradeBox(WIDTH * 0.306, HEIGHT * 0.6035, Color.rgb( 255, 97, 0), new Player("NAME", Figuren.AFFE, 0));
         playerTradeBoxRight.setLayoutX(WIDTH / 2 + WIDTH * 0.18);
         playerTradeBoxRight.setLayoutY(HEIGHT * 0.20);
 
@@ -221,10 +221,10 @@ public class TradingDisplay extends Pane {
         getChildren().addAll(header, arrow);
     }
 
-    private Pane buildPlayerTradeBox(double width, double height, Color backgroundColor, String playerName, int playerKontoStand) {
-        Pane playerTradingBox = buildPlayer(width, height, backgroundColor, new Player("s", Figuren.AFFE, 0));
+    private Pane buildPlayerTradeBox(double width, double height, Color backgroundColor, Player player) {
+        Pane playerTradingBox = buildPlayer(width, height, backgroundColor, player);
 
-        Rectangle[] streets = buildStreetInventar(width, height);
+        Rectangle[] streets = buildStreetInventar(width, height, player);
 
         for (Rectangle street : streets) {
             street.setOnMouseClicked(event -> {

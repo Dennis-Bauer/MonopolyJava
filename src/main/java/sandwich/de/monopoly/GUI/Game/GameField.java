@@ -20,9 +20,12 @@ import sandwich.de.monopoly.Enums.ExtraFields;
 import sandwich.de.monopoly.Exceptions.PlayerIsOutOfBoundsExceptions;
 import sandwich.de.monopoly.Exceptions.PlayerNotFoundExceptions;
 import sandwich.de.monopoly.Exceptions.ToManyPlayersExceptions;
+import sandwich.de.monopoly.GUI.Game.DisplayController.GameDisplayControllerOne;
+import sandwich.de.monopoly.GUI.Game.DisplayController.GameDisplayControllerTwo;
+import sandwich.de.monopoly.GUI.Game.DisplayController.MiddleGameDisplayController;
 import sandwich.de.monopoly.Main;
 import sandwich.de.monopoly.Player;
-import sandwich.de.monopoly.Street;
+import sandwich.de.monopoly.Fields.Street;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,6 +65,10 @@ public class GameField extends Pane{
 
         GameDisplayControllerOne.createDisplayOne((width - height) / 1.1, height * 0.60);
         GameDisplayControllerTwo.createDisplayTwo((width - height) / 1.1, height * 0.38, Color.rgb(56, 182, 255));
+        MiddleGameDisplayController.createDisplay(height * 0.40, height * 0.20, height * 0.18, Color.rgb(13, 155, 35));
+
+        MiddleGameDisplayController.getDisplay().setLayoutX((height / 2) - (height * 0.40) / 2);
+        MiddleGameDisplayController.getDisplay().setLayoutY(200);
 
         displays.getChildren().addAll(GameDisplayControllerOne.getDisplay(), GameDisplayControllerTwo.getDisplay());
         displays.setLayoutX(height + (((width - height) / 2) - ((width - height) / 1.1) / 2));
@@ -81,9 +88,10 @@ public class GameField extends Pane{
             getChildren().add(playerFigures[i]);
         }
 
-        getChildren().addAll(background, displays);
+        getChildren().addAll(background, displays, MiddleGameDisplayController.getDisplay());
         background.toBack();
         BOARD.toFront();
+        MiddleGameDisplayController.getDisplay().toFront();
         setId("gameScreen_Root");
     }
 
@@ -166,7 +174,7 @@ public class GameField extends Pane{
                     }
                 } else {
                     moveAnimation.stop();
-                    GameDisplayControllerTwo.showPlayerAction();
+                    Main.getGameOperator().playerHasMoved();
                 }
                 i.getAndIncrement();
             });
@@ -518,42 +526,6 @@ public class GameField extends Pane{
         return field;
     }
 
-	private Pane buildExtraPayField(ExtraFields f, int price, Color backgroundColor, double width, double height) {
-        Pane field = new Pane();
-        field.setId("extraPay_field");
-        field.setMaxSize(width, height);
-
-        Rectangle background = buildRectangle("extraPay_Background" ,width, height, backgroundColor, true, Color.BLACK, BORDER_WIDTH);
-        Label header = buildLabel("extraPay_Header", "ERROR", Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE), TextAlignment.CENTER, Color.BLACK, 0, height / 10);
-        Label priceIndicator = buildLabel("station_PriceIndicator", (price + "€"), Font.font(TEXT_FONT, FontWeight.BOLD, FONT_SIZE), TextAlignment.CENTER, Color.BLACK, 0, 5 * (height / 6));
-
-
-        centeringChildInPane(header, field);
-        centeringChildInPane(priceIndicator, field);
-
-        ImageView picture = null;
-        switch (f) {
-            case SPOTIFY_PREMIUM -> {
-                picture = createImageView("community_Image", "/sandwich/de/monopoly/gameBoard/spotify.png", width / 1.2, width / 1.2,(width - width / 1.15) / 2, height / 3);
-                header.setText(buildLongText("Spotify", "Premium Abo"));
-            }
-            case HESSLER_SCHULDEN -> {
-                picture = createImageView("community_Image", "/sandwich/de/monopoly/gameBoard/hessler.png", width / 3.4, height / 2.3,(width - width / 3.3) / 2, height / 2.7);
-                header.setText(buildLongText("Freu Hessler", "Schulden ab", "bezahlen"));
-            }
-            case NAME_THREE -> {
-                picture = createImageView("community_Image", "/sandwich/de/monopoly/gameBoard/spotify.png", width / 1.2, width / 1.2,(width - width / 1.15) / 2, height / 3);
-                header.setText("NAME3");
-            }
-            case NAME_FOUR -> {
-                picture = createImageView("community_Image", "/sandwich/de/monopoly/gameBoard/spotify.png", width / 1.2, width / 1.2,(width - width / 1.15) / 2, height / 3);
-                header.setText("NAME4");
-            }
-        }
-
-        field.getChildren().addAll(background, header, picture, priceIndicator);
-        return field;
-	}
 
     private enum ChanceColors {
         RED,

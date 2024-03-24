@@ -48,10 +48,10 @@ public class Main extends Application {
         consoleOutPut(startInfoColor, ConsoleUtilities.textStyle.BOLD, "Dennis Bauer");
         System.out.println();
         consoleOutPut(startInfoColor, ConsoleUtilities.textStyle.REGULAR, "Graphics by ");
-        consoleOutPut(startInfoColor, ConsoleUtilities.textStyle.BOLD, "Rafael LAST_NAME");
+        consoleOutPut(startInfoColor, ConsoleUtilities.textStyle.BOLD, "Rafael Mikaeljan");
         System.out.println();
         consoleOutPut(startInfoColor, ConsoleUtilities.textStyle.REGULAR, "Ideas from ");
-        consoleOutPut(startInfoColor, ConsoleUtilities.textStyle.BOLD, "Rafael LAST_NAME ");
+        consoleOutPut(startInfoColor, ConsoleUtilities.textStyle.BOLD, "Rafael Mikaeljan ");
         consoleOutPut(startInfoColor, ConsoleUtilities.textStyle.REGULAR, "and ");
         consoleOutPut(startInfoColor, ConsoleUtilities.textStyle.BOLD, "Dennis Bauer");
         System.out.println();

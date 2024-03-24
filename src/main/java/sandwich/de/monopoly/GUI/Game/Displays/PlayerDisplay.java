@@ -10,7 +10,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import sandwich.de.monopoly.Exceptions.ToManyPlayersExceptions;
-import sandwich.de.monopoly.GUI.Game.GameDisplayControllerOne;
+import sandwich.de.monopoly.GUI.Game.DisplayController.GameDisplayControllerOne;
 import sandwich.de.monopoly.Main;
 import sandwich.de.monopoly.Player;
 
@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildLabel;
 import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildRectangle;
 import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXUtilities.centeringChildInPane;
-import static sandwich.de.monopoly.GUI.Game.GameDisplayControllerOne.buildPlayer;
-import static sandwich.de.monopoly.GUI.Game.GameDisplayControllerOne.buildStreetInventar;
+import static sandwich.de.monopoly.GUI.Game.DisplayController.GameDisplayControllerOne.buildPlayer;
+import static sandwich.de.monopoly.GUI.Game.DisplayController.GameDisplayControllerOne.buildStreetInventar;
 
 
 /*
@@ -215,7 +215,7 @@ public class PlayerDisplay extends Pane{
 
         tradingButton.setOnMouseClicked(event -> GameDisplayControllerOne.displayTradingMenu());
 
-        Rectangle[] streets = buildStreetInventar(width, height);
+        Rectangle[] streets = buildStreetInventar(width, height, player);
 
         playerShowBox.getChildren().add(tradingButton);
 

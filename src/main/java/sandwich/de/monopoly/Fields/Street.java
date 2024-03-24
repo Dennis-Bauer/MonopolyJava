@@ -1,4 +1,4 @@
-package sandwich.de.monopoly;
+package sandwich.de.monopoly.Fields;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
@@ -7,6 +7,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
+import sandwich.de.monopoly.Player;
 
 import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildLabel;
 import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildRectangle;
@@ -31,6 +32,32 @@ public class Street {
         this.position = position;
         this.color = color;
 
+    }
+
+    public void setOwner(Player owner) {
+        isOwned = owner != null;
+
+        this.owner = owner;
+    }
+
+    public Player getOwner() {
+        return owner;
+    }
+
+    public boolean isOwned() {
+        return isOwned;
+    }
+
+    public int getSalePrice() {
+        return salePrice;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Color getColor() {
+        return color;
     }
 
     public Pane buildStreetField(double width, double height, double borderWidth, double fontSize, Color backgroundColor) {

@@ -1,4 +1,4 @@
-package sandwich.de.monopoly.GUI.Game;
+package sandwich.de.monopoly.GUI.Game.DisplayController;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
@@ -26,10 +26,9 @@ public class GameDisplayControllerTwo {
             display = new Pane();
             display.setId("gameScene_DisplayTwo");
             display.setMaxSize(width, height);
+            display.getChildren().add(buildRectangle("gameScene_action_Background", width, height, backgroundColor, true, Color.WHITE, width * 0.006));
 
-            Rectangle background = buildRectangle("gameScene_action_Background", width, height, backgroundColor, true, Color.WHITE, width * 0.006);
             Label header = buildLabel("gameScene_action_Header", "Aktionen", Font.font(Main.TEXT_FONT, FontWeight.BOLD, width * 0.10), TextAlignment.CENTER, Color.WHITE);
-
             centeringChildInPane(header, display);
 
             actionDisplay = new ActionDisplay(width, height);
@@ -37,24 +36,28 @@ public class GameDisplayControllerTwo {
             actionDisplay.setVisible(false);
             diceDisplay.setVisible(true);
 
-            display.getChildren().addAll(background, header, actionDisplay, diceDisplay);
-        } else throw new RuntimeException("Display Two is already created!");
+            display.getChildren().addAll(header, actionDisplay, diceDisplay);
+        } else throw new RuntimeException("Display two is already created!");
     }
 
     public static Pane getDisplay() {
         if (display != null)
             return display;
-        else throw new RuntimeException("Display One is not yet created!");
+        else throw new RuntimeException("Display two is not yet created!");
     }
 
     public static void displayDice() {
-        diceDisplay.setVisible(true);
-        actionDisplay.setVisible(false);
+        if (display != null) {
+            diceDisplay.setVisible(true);
+            actionDisplay.setVisible(false);
+        } else throw new NullPointerException("Display two is not yet created!");
     }
 
     public static void showPlayerAction() {
-        diceDisplay.setVisible(false);
-        actionDisplay.setVisible(true);
+        if (display != null) {
+            diceDisplay.setVisible(false);
+            actionDisplay.setVisible(true);
+        } else throw new NullPointerException("Display two is not yet created!");
     }
 
 

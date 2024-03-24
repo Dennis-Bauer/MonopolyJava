@@ -3,7 +3,7 @@ package sandwich.de.monopoly;
 import sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities;
 import sandwich.de.monopoly.Enums.Figuren;
 import sandwich.de.monopoly.Exceptions.PlayerNotFoundExceptions;
-import sandwich.de.monopoly.GUI.Game.GameDisplayControllerOne;
+import sandwich.de.monopoly.GUI.Game.DisplayController.GameDisplayControllerOne;
 
 import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPut;
 import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPutLine;

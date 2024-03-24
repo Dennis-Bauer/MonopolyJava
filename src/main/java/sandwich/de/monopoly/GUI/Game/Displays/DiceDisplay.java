@@ -71,7 +71,8 @@ public class DiceDisplay extends Pane {
                 rowOneAnimation.start();
                 rowTwoAnimation.start();
 
-                Main.getGameOperator().playerRolledDice(rowOneAnimation.getLastNumber(), rowTwoAnimation.getLastNumber());
+                //Main.getGameOperator().playerRolledDice(rowOneAnimation.getLastNumber(), rowTwoAnimation.getLastNumber());
+                Main.getGameOperator().playerRolledDice(1, 2);
                 if (Main.CONSOLE_OUT_PUT) {
                     consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
                     consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Der erste Würfel hat eine");

@@ -5,8 +5,10 @@ import javafx.scene.paint.Color;
 import sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities;
 import sandwich.de.monopoly.Exceptions.PlayerNotFoundExceptions;
 import sandwich.de.monopoly.Exceptions.ToManyPlayersExceptions;
-import sandwich.de.monopoly.GUI.Game.GameDisplayControllerOne;
-import sandwich.de.monopoly.GUI.Game.GameDisplayControllerTwo;
+import sandwich.de.monopoly.Fields.Street;
+import sandwich.de.monopoly.GUI.Game.DisplayController.GameDisplayControllerOne;
+import sandwich.de.monopoly.GUI.Game.DisplayController.GameDisplayControllerTwo;
+import sandwich.de.monopoly.GUI.Game.DisplayController.MiddleGameDisplayController;
 import sandwich.de.monopoly.GUI.Game.GameField;
 
 import java.util.ArrayList;
@@ -25,7 +27,7 @@ public class Game {
     private Player turnPlayer;
     private Player nextPlayer;
     private final ArrayList<Player> playerList = new ArrayList<>();
-    private final HashMap<Integer, Street> streets = createStreets();
+    private static final HashMap<Integer, Street> streets = createStreets();
     private GameField gameField;
     private int playerInGame = 0;
 
@@ -114,6 +116,7 @@ public class Game {
         Main.getPrimaryStage().setScene(new Scene(gameField));
     }
 
+    //Starts the Animation and controls the postion from the player.
     public void playerRolledDice(int diceOne, int diceTwo) {
 
         try { gameField.movePlayerOnGameBoard(turnPlayer, diceOne + diceTwo); } catch (PlayerNotFoundExceptions ignored) {}
@@ -122,16 +125,34 @@ public class Game {
         if (diceOne == diceTwo)
             nextPlayer = turnPlayer;
 
-        if (streets.get(turnPlayer.getFieldPostion()) == null) {
-
-        }
-
         if (Main.CONSOLE_OUT_PUT) {
             consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
             consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Spieler nummer " + turnPlayer.getOrderNumber() + ", wurde bewegt auf die Feld Postion Nummer:");
             consoleOutPutLine(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.BOLD, " " + turnPlayer.getFieldPostion());
             consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
         }
+    }
+
+    //Starts the street/buy system, know the player can build, leave make game things
+    public void playerHasMoved() {
+        GameDisplayControllerTwo.showPlayerAction();
+        if (streets.get(turnPlayer.getFieldPostion()) != null) {
+
+            int streetNumber = turnPlayer.getFieldPostion();
+
+            if (!streets.get(streetNumber).isOwned()) {
+
+                if (streets.get(streetNumber).getSalePrice() <= turnPlayer.getBankAccount())
+                    MiddleGameDisplayController.displayBuyStreet(streets.get(turnPlayer.getFieldPostion()));
+
+            } //else pay Player!
+        }
+    }
+
+    //Controls the Street buy System
+    public void buyStreet(Street street) {
+        street.setOwner(turnPlayer);
+        turnPlayer.addBankAccount(-street.getSalePrice());
     }
 
     public ArrayList<Player> getPlayers() {
@@ -151,11 +172,11 @@ public class Game {
         return ps;
     }
 
-    public HashMap<Integer, Street> getStreets() {
+    public static HashMap<Integer, Street> getStreets() {
         return streets;
     }
 
-    private HashMap<Integer, Street> createStreets() {
+    private static HashMap<Integer, Street> createStreets() {
         HashMap<Integer, Street> s = new HashMap<>();
 
         s.put(1, new Street("Braune Straße", 200, 1, Color.rgb(112, 40, 0)));
