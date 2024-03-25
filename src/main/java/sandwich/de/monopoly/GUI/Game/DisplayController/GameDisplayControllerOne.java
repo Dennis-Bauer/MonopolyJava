@@ -12,6 +12,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import sandwich.de.monopoly.Exceptions.PlayerNotFoundExceptions;
 import sandwich.de.monopoly.Fields.Field;
+import sandwich.de.monopoly.GUI.Game.Displays.DisplayOne.BankDisplay;
 import sandwich.de.monopoly.GUI.Game.Displays.DisplayOne.PlayerDisplay;
 import sandwich.de.monopoly.GUI.Game.Displays.DisplayOne.TradingDisplay;
 import sandwich.de.monopoly.Game;
@@ -27,10 +28,12 @@ import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXUtilities
 
 public class GameDisplayControllerOne {
 
+    private static final NullPointerException DISPLAY_NOT_CREATED = new NullPointerException("Display one is not yet created!");
     private static Pane display;
     private static PlayerDisplay playerDisplay;
-    private static ArrayList<Player> lastPlayerSave;
     private static TradingDisplay tradingDisplay;
+    private static BankDisplay bankDisplay;
+    private static ArrayList<Player> lastPlayerSave;
 
     public static void createDisplayOne(double width, double height) {
         if (display == null) {
@@ -40,11 +43,15 @@ public class GameDisplayControllerOne {
             display.getChildren().add(buildRectangle("gameScene_playerDisplay_Background", width, height, Color.rgb(97, 220, 43), true, Color.WHITE, width * 0.005));
 
             playerDisplay = new PlayerDisplay(width, height);
-            tradingDisplay = new TradingDisplay(width, height, Color.RED);
-            tradingDisplay.setVisible(false);
             playerDisplay.setVisible(false);
 
-            display.getChildren().addAll(playerDisplay, tradingDisplay);
+            tradingDisplay = new TradingDisplay(width, height, Color.RED);
+            tradingDisplay.setVisible(false);
+
+            bankDisplay = new BankDisplay(width, height, Color.rgb(78, 138, 186));
+            bankDisplay.setVisible(false);
+
+            display.getChildren().addAll(playerDisplay, tradingDisplay, bankDisplay);
         } else throw new RuntimeException("Display One is already created!");
     }
 
@@ -52,7 +59,7 @@ public class GameDisplayControllerOne {
         if (display != null)
             return display;
         else
-            throw new RuntimeException("Display One is not yet created!");
+            throw DISPLAY_NOT_CREATED;
     }
 
     public static void updateDisplay() throws PlayerNotFoundExceptions {
@@ -60,57 +67,82 @@ public class GameDisplayControllerOne {
             if (lastPlayerSave != null)
                 playerDisplay.createPlayers(lastPlayerSave);
             else throw new PlayerNotFoundExceptions();
-        } else {
+        } else if (bankDisplay.isVisible())
+            bankDisplay.displayPlayer(Main.getGameOperator().getTurnPlayer());
+        else {
             System.out.println("ACHTUNG, DIE UPDATE METHODE FÜR DAS TRADING DISPLAY IST NOCH NICHT GEMACHT!!!");
         }
     }
 
     public static void displayPlayers(ArrayList<Player> players) {
         if (display != null) {
+            clearDisplay();
+
             playerDisplay.setVisible(true);
-            tradingDisplay.setVisible(false);
+
             playerDisplay.createPlayers(players);
             lastPlayerSave = players;
-        } else throw new NullPointerException("Display one is not yet created!");
+        } else throw DISPLAY_NOT_CREATED;
     }
 
     public static void displayTradingMenu(/*Player One und Player Two Objekte werden hier übergeben*/) {
         if (display != null) {
+
+            clearDisplay();
+
             tradingDisplay.setVisible(true);
-            playerDisplay.setVisible(false);
+
             tradingDisplay.startTrading();
-        } else throw new NullPointerException("Display one is not yet created!");
+        } else throw DISPLAY_NOT_CREATED;
     }
 
     public static void displayPlayerDisplay() {
         if (display != null) {
             if (playerDisplay.arePlayersGenerated() && !playerDisplay.isVisible()) {
-                tradingDisplay.setVisible(false);
+
+                clearDisplay();
 
                 playerDisplay.setVisible(true);
             }
-        } else throw new NullPointerException("Display one is not yet created!");
+        } else throw DISPLAY_NOT_CREATED;
+    }
+
+    public static void displayBankDisplay(Player p) {
+        if (display != null) {
+
+            clearDisplay();
+
+            bankDisplay.displayPlayer(p);
+            bankDisplay.setVisible(true);
+
+        } else throw DISPLAY_NOT_CREATED;
+    }
+
+    private static void clearDisplay() {
+        bankDisplay.setVisible(false);
+        tradingDisplay.setVisible(false);
+        playerDisplay.setVisible(false);
     }
 
     //Creates the base from the player boxes
-    public static Pane buildPlayer(double width, double height, Color backgroundColor, Player player) {
+    public static Pane buildPlayer(double w, double h, Color backgroundColor, Player p) {
         Pane playerBox = new Pane();
         playerBox.setId("gameScene_playerDisplay_PlayerBox");
-        playerBox.setMaxSize(width, height);
+        playerBox.setMaxSize(w, h);
 
-        Rectangle background = buildRectangle("gameScene_playerDisplay_playerBox_Background", width, height, backgroundColor, true, Color.WHITE, width * 0.005);
+        Rectangle background = buildRectangle("gameScene_playerDisplay_playerBox_Background", w, h, backgroundColor, true, Color.WHITE, w * 0.005);
 
-        Label headerName = buildLabel("gameScene_playerDisplay_playerBox_NameHeader", player.getName(), Font.font(Main.TEXT_FONT, FontWeight.BOLD, width / 8), TextAlignment.CENTER, Color.WHITE);
+        Label headerName = buildLabel("gameScene_playerDisplay_playerBox_NameHeader", p.getName(), Font.font(Main.TEXT_FONT, FontWeight.BOLD, w / 8), TextAlignment.CENTER, Color.WHITE);
         centeringChildInPane(headerName, playerBox);
 
-        ImageView figureDisplay = createImageView("gameScene_playerDisplay_playerBox_FigureDisplay", player.getFigur().getFigureImage(), (width / 3.725) / 2, (width / 3.725) / 2, width - (width / 3.725) / 2 - (width * 0.001), height * 0.025);
+        ImageView figureDisplay = createImageView("gameScene_playerDisplay_playerBox_FigureDisplay", p.getFigur().getFigureImage(), (w / 3.725) / 2, (w / 3.725) / 2, w - (w / 3.725) / 2 - (w * 0.001), h * 0.025);
 
-        Line headerSeparatingline = buildLine("gameScene_playerDisplay_playerBox_NameHeaderSeparatingLine", new Point2D(0, height * 0.15), new Point2D(width, height * 0.15), width * 0.005, Color.WHITE);
+        Line headerSeparatingline = buildLine("gameScene_playerDisplay_playerBox_NameHeaderSeparatingLine", new Point2D(0, h * 0.15), new Point2D(w, h * 0.15), w * 0.005, Color.WHITE);
 
-        Label displayAccountBalance = buildLabel("gameScene_playerDisplay_playerBox_DisplayAccountBalance", ("Kontostand: " + player.getBankAccount()), Font.font(Main.TEXT_FONT, FontWeight.BOLD, width / 12), TextAlignment.CENTER, Color.WHITE, 0, height * 0.17);
+        Label displayAccountBalance = buildLabel("gameScene_playerDisplay_playerBox_DisplayAccountBalance", ("Kontostand: " + p.getBankAccount()), Font.font(Main.TEXT_FONT, FontWeight.BOLD, w / 12), TextAlignment.CENTER, Color.WHITE, 0, h * 0.17);
         centeringChildInPane(displayAccountBalance, playerBox);
 
-        Line accountBalanceSeparatingline = buildLine("gameScene_playerDisplay_playerBox_AccountBalanceSeparatingLine", new Point2D(0, height * 0.30), new Point2D(width, height * 0.30), width * 0.005, Color.WHITE);
+        Line accountBalanceSeparatingline = buildLine("gameScene_playerDisplay_playerBox_AccountBalanceSeparatingLine", new Point2D(0, h * 0.30), new Point2D(w, h * 0.30), w * 0.005, Color.WHITE);
 
         playerBox.getChildren().addAll( background, headerName, figureDisplay, headerSeparatingline, displayAccountBalance, accountBalanceSeparatingline);
 

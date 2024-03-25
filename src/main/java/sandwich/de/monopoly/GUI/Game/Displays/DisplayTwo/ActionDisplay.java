@@ -8,6 +8,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
+import sandwich.de.monopoly.GUI.Game.DisplayController.GameDisplayControllerOne;
 import sandwich.de.monopoly.Main;
 
 import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.*;
@@ -28,7 +29,7 @@ public class ActionDisplay extends Pane {
 
         Pane bankButton = buildButton("Bank", width * 0.25, height * 0.45, "/sandwich/de/monopoly/aktionDisplay/bank.png", Color.DARKGRAY, "bank", middleX - space, y);
         bankButton.setOnMouseClicked(mouseEvent -> {
-
+            GameDisplayControllerOne.displayBankDisplay(Main.getGameOperator().getTurnPlayer());
         });
 
         Pane buildButton = buildButton("Bauen", width * 0.25, height * 0.45, "/sandwich/de/monopoly/aktionDisplay/build.png", Color.LIME, "build", middleX, y);
@@ -36,7 +37,7 @@ public class ActionDisplay extends Pane {
 
         });
 
-        Pane leaveButton = buildButton("Verlassen", width * 0.25, height * 0.45, "/sandwich/de/monopoly/aktionDisplay/leave.png", Color.RED, "leave", middleX + space, y);
+        Pane leaveButton = buildButton("Aufgeben", width * 0.25, height * 0.45, "/sandwich/de/monopoly/aktionDisplay/leave.png", Color.RED, "leave", middleX + space, y);
         leaveButton.setOnMouseClicked(mouseEvent -> {
 
         });
