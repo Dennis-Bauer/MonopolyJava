@@ -50,7 +50,7 @@ public class Corner extends Field {
     }
 
     private Pane buildStart(double borderWidth, double fontSize, Color backgroundColor, double size) {
-        javafx.scene.layout.Pane field = new Pane();
+        Pane field = new Pane();
         field.setId("start_field");
         field.setMaxSize(size, size);
 
@@ -63,6 +63,8 @@ public class Corner extends Field {
         text.setRotate(45);
 
         field.getChildren().addAll(background, arrow, text);
+
+        super.field = field;
         return field;
     }
 
@@ -87,6 +89,8 @@ public class Corner extends Field {
         textOne.setRotate(90);
 
         field.getChildren().addAll(background, backgroundJail, jailMan, header, footer, textOne, textTwo);
+
+        super.field = field;
         return field;
     }
 
@@ -105,6 +109,8 @@ public class Corner extends Field {
         footer.setRotate(45);
 
         field.getChildren().addAll(background, header, freeParking, footer);
+
+        super.field = field;
         return field;
     }
 
@@ -123,6 +129,8 @@ public class Corner extends Field {
         footer.setRotate(45);
 
         field.getChildren().addAll(background, header, freeParking, footer);
+
+        super.field = field;
         return field;
     }
 

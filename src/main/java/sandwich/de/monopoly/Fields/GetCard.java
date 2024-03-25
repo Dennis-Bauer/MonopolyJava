@@ -72,6 +72,8 @@ public class GetCard extends Field{
 
 
         field.getChildren().addAll(background, header, image);
+
+        super.field = field;
         return field;
     }
 

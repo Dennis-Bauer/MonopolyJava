@@ -66,14 +66,17 @@ public class Street extends Field{
         return color;
     }
 
+    private Rectangle background;
+    private Rectangle colorIndicator;
+
     @Override
     public Pane buildField(double width, double height, double borderWidth, double fontSize, Color backgroundColor) {
         Pane field = new Pane();
         field.setId("street_field");
         field.setMaxSize(width, height);
 
-        Rectangle background = buildRectangle("street_Background" ,width, height, backgroundColor, true, Color.BLACK, borderWidth);
-        Rectangle colorIndicator = buildRectangle("street_ColorIndicator" ,width, height/4, color, true, Color.BLACK, borderWidth);
+        background = buildRectangle("street_Background" ,width, height, backgroundColor, true, Color.BLACK, borderWidth);
+        colorIndicator = buildRectangle("street_ColorIndicator" ,width, height/4, color, true, Color.BLACK, borderWidth);
         Label nameIndicator =  buildLabel("street_NameIndicator", name, Font.font(TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, Color.BLACK, 0, height / 3);
         Label priceIndicator = buildLabel("street_PriceIndicator", (salePrice + "€"), Font.font(TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, Color.BLACK, 0, 5 * (height / 6));
 
@@ -82,7 +85,26 @@ public class Street extends Field{
 
         field.getChildren().addAll(background, colorIndicator, nameIndicator, priceIndicator);
 
+        super.field = field;
         return field;
+    }
+
+    public void highlightField() {
+        background.setStrokeWidth(background.getStrokeWidth() * 2);
+        background.setStroke(Color.WHITE);
+
+        colorIndicator.setStrokeWidth(colorIndicator.getStrokeWidth() * 2);
+        colorIndicator.setStroke(Color.WHITE);
+
+        field.toFront();
+    }
+
+    public void removeHighlight() {
+        background.setStrokeWidth(background.getStrokeWidth() / 2);
+        background.setStroke(BORDER_COLOR);
+
+        colorIndicator.setStrokeWidth(colorIndicator.getStrokeWidth() / 2);
+        colorIndicator.setStroke(BORDER_COLOR);
     }
 
 }

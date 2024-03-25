@@ -41,6 +41,8 @@ public class Station extends Field {
         centeringChildInPane(priceIndicator, field);
 
         field.getChildren().addAll(background, header, train, priceIndicator);
+
+        super.field = field;
         return field;
     }
 

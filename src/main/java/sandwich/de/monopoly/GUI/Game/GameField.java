@@ -8,6 +8,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities;
@@ -16,6 +17,7 @@ import sandwich.de.monopoly.Exceptions.PlayerNotFoundExceptions;
 import sandwich.de.monopoly.Exceptions.ToManyPlayersExceptions;
 import sandwich.de.monopoly.Fields.Corner;
 import sandwich.de.monopoly.Fields.Field;
+import sandwich.de.monopoly.Fields.Street;
 import sandwich.de.monopoly.GUI.Game.DisplayController.GameDisplayControllerOne;
 import sandwich.de.monopoly.GUI.Game.DisplayController.GameDisplayControllerTwo;
 import sandwich.de.monopoly.GUI.Game.DisplayController.MiddleGameDisplayController;
@@ -24,6 +26,7 @@ import sandwich.de.monopoly.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPut;
@@ -359,6 +362,22 @@ public class GameField extends Pane{
             }
         }
 
+
+        for (int i = 0; i < fields.length; i++) {
+            if (fieldObjects.get(i) instanceof Street street) {
+
+                fields[i].setOnMouseEntered(mouseEvent0 -> {
+                    street.highlightField();
+                });
+
+                fields[i].setOnMouseExited(mouseEvent -> {
+                   street.removeHighlight();
+                });
+            }
+        }
+
+
+
         root.getChildren().addAll(board);
 
         board.setRotate(rotate);
@@ -369,10 +388,5 @@ public class GameField extends Pane{
 }
 
 /*
-Todo:
-1. Für die extra Fleder die Methode benutzten die oben erstellt wurde
-2. Enum ersteller für die jewaldigen arten der "Kraftwerke" (Hier auch die Enum klassen für die Karten erstellen)
-3. Issue ab arbeiten!
-
 Die höhe einer Straße wird immer Größe des Feldes / 9 (9 Felder sind an jeder Seite (ohne die Ecken)) 
 */

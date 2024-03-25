@@ -217,9 +217,11 @@ public class PlayerDisplay extends Pane{
 
         Rectangle[] streets = buildStreetInventar(width, height, player);
 
+
+
         playerShowBox.getChildren().add(tradingButton);
 
-        for (Rectangle street : streets) {playerShowBox.getChildren().addAll(street);}
+        for (Rectangle street : streets) {playerShowBox.getChildren().add(street);}
 
         return playerShowBox;
     }

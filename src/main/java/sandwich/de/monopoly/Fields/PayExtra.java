@@ -71,6 +71,8 @@ public class PayExtra extends Field{
         }
 
         field.getChildren().addAll(background, header, picture, priceIndicator);
+
+        super.field = field;
         return field;
     }
 
