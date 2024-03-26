@@ -7,92 +7,83 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import sandwich.de.monopoly.GUI.Game.Displays.DisplayMiddle.BuyStreetDisplay;
 import sandwich.de.monopoly.GUI.Game.Displays.DisplayMiddle.PayDisplay;
+import sandwich.de.monopoly.GUI.Game.Displays.DisplayMiddle.StreetInfoDisplay;
 import sandwich.de.monopoly.Main;
 import sandwich.de.monopoly.Fields.Street;
 
 import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildRectangle;
 
-public class MiddleGameDisplayController {
+public class MiddleGameDisplayController extends Pane{
 
-    private static final NullPointerException DISPLAY_NOT_CREATED = new NullPointerException("Middle display is not yet created!");
-    private static Pane display;
-    private static BuyStreetDisplay buyStreetDisplay;
-    private static PayDisplay payDisplay;
+    //Displays
+    private final BuyStreetDisplay buyStreetDisplay;
+    private final PayDisplay payDisplay;
+    private final StreetInfoDisplay streetInfoDisplay;
 
-    private static Rectangle background;
+    //Variables
+    private Rectangle background;
 
-    private static double maxY = 0;
-    private static ScaleTransition waitTransition;
+    private final double MAX_Y;
+    private ScaleTransition waitTransition;
 
-    public static void createDisplay(double width, double height, double maxY, Color backgroundColor) {
-        if (display == null) {
-            MiddleGameDisplayController.maxY = maxY;
+    public MiddleGameDisplayController(double width, double height, double maxY, Color backgroundColor) {
+        MAX_Y = maxY;
 
-            display = new Pane();
-            display.setId("MiddleDisplay");
-            display.setMaxSize(width, height);
-            background = buildRectangle("middleDisplay_Background", width, height, backgroundColor, true, Color.BLACK, width * 0.01);
-            display.getChildren().add(background);
+        setId("MiddleDisplay");
+        setMaxSize(width, height);
+        background = buildRectangle("middleDisplay_Background", width, height, backgroundColor, true, Color.BLACK, width * 0.01);
+        getChildren().add(background);
 
-            waitTransition = new ScaleTransition(Duration.seconds(1), display);
-            waitTransition.setCycleCount(Animation.INDEFINITE);
-            waitTransition.setByX(width * 0.00006);
-            waitTransition.setByY(width * 0.00006);
-            waitTransition.setAutoReverse(true);
+        waitTransition = new ScaleTransition(Duration.seconds(1), this);
+        waitTransition.setCycleCount(Animation.INDEFINITE);
+        waitTransition.setByX(width * 0.00006);
+        waitTransition.setByY(width * 0.00006);
+        waitTransition.setAutoReverse(true);
 
-            buyStreetDisplay = new BuyStreetDisplay(width, height);
-            buyStreetDisplay.setVisible(false);
+        buyStreetDisplay = new BuyStreetDisplay(width, height, this);
+        buyStreetDisplay.setVisible(false);
 
-            payDisplay = new PayDisplay(width, height);
-            payDisplay.setVisible(false);
+        payDisplay = new PayDisplay(width, height, this);
+        payDisplay.setVisible(false);
 
-            display.getChildren().addAll(buyStreetDisplay, payDisplay);
-            display.setVisible(false);
-        } else throw new RuntimeException("Middle display is already created!");
+        streetInfoDisplay = new StreetInfoDisplay(width, height, this);
+        streetInfoDisplay.setVisible(true);
+
+        setLayoutX((Main.WINDOW_HEIGHT / 2) - (Main.WINDOW_HEIGHT * 0.40) / 2);
+        getChildren().addAll(buyStreetDisplay, payDisplay);
+        setVisible(true);
     }
 
-    public static Pane getDisplay() {
-        if (display != null)
-            return display;
-        else throw DISPLAY_NOT_CREATED;
+    public void displayBuyStreet(Street street) {
+        setVisible(true);
+
+        payDisplay.setVisible(false);
+
+        buyStreetDisplay.showStreet(street);
+        buyStreetDisplay.setVisible(true);
+        enterAnimation();
     }
 
-    public static void displayBuyStreet(Street street) {
-        if (display != null) {
+    public void displayPayDisplay(String message, int price) {
+        setVisible(true);
 
-            display.setVisible(true);
+        buyStreetDisplay.setVisible(false);
 
-            payDisplay.setVisible(false);
-
-            buyStreetDisplay.showStreet(street);
-            buyStreetDisplay.setVisible(true);
-            enterAnimation();
-        } else throw DISPLAY_NOT_CREATED;
+        payDisplay.showPayScreen(message, price);
+        payDisplay.setVisible(true);
+        enterAnimation();
     }
 
-    public static void displayPayDisplay(String message, int price) {
-        if (display != null) {
-
-            display.setVisible(true);
-
-            buyStreetDisplay.setVisible(false);
-
-            payDisplay.showPayScreen(message, price);
-            payDisplay.setVisible(true);
-            enterAnimation();
-        } else throw DISPLAY_NOT_CREATED;
-    }
-
-    public static void removeDisplay() {
+    public void removeDisplay() {
         waitTransition.stop();
 
-        TranslateTransition upTransition = new TranslateTransition(Duration.seconds(0.30), display);
+        TranslateTransition upTransition = new TranslateTransition(Duration.seconds(0.30), this);
         upTransition.setToY(-(Main.WINDOW_HEIGHT * 0.95));
 
-        TranslateTransition downTransition = new TranslateTransition(Duration.seconds(0.9), display);
+        TranslateTransition downTransition = new TranslateTransition(Duration.seconds(0.9), this);
         downTransition.setToY(Main.WINDOW_HEIGHT);
 
-        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(2), display);
+        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(2), this);
         fadeTransition.setFromValue(1);
         fadeTransition.setToValue(0);
 
@@ -104,7 +95,7 @@ public class MiddleGameDisplayController {
         });
 
         fadeTransition.setOnFinished(actionEvent -> {
-            display.setVisible(false);
+            setVisible(false);
 
             buyStreetDisplay.setVisible(false);
             payDisplay.setVisible(false);
@@ -112,15 +103,15 @@ public class MiddleGameDisplayController {
 
     }
 
-    public static void errorAnimation() {
+    public void errorAnimation() {
 
-        RotateTransition transitionPositiv = new RotateTransition(Duration.seconds(0.125), display);
+        RotateTransition transitionPositiv = new RotateTransition(Duration.seconds(0.125), this);
         transitionPositiv.setByAngle(4);
         transitionPositiv.setCycleCount(2);
         transitionPositiv.setInterpolator(Interpolator.LINEAR);
         transitionPositiv.setAutoReverse(true);
 
-        RotateTransition transitionNegativ = new RotateTransition(Duration.seconds(0.125), display);
+        RotateTransition transitionNegativ = new RotateTransition(Duration.seconds(0.125), this);
         transitionNegativ.setByAngle(-4);
         transitionNegativ.setCycleCount(2);
         transitionNegativ.setInterpolator(Interpolator.LINEAR);
@@ -134,29 +125,27 @@ public class MiddleGameDisplayController {
         background.setOnMouseExited(mouseEvent -> background.setStroke(Color.BLACK));
     }
 
-    private static void enterAnimation() {
-        if (display != null) {
+    private void enterAnimation() {
 
-            display.setLayoutY(Main.WINDOW_HEIGHT + 10);
+        setLayoutY(Main.WINDOW_HEIGHT + 10);
 
-            display.toFront();
+        toFront();
 
-            TranslateTransition moveTransition = new TranslateTransition(Duration.seconds(2), display);
-            moveTransition.setToY(-(Main.WINDOW_HEIGHT - maxY));
+        TranslateTransition moveTransition = new TranslateTransition(Duration.seconds(2),this);
+        moveTransition.setToY(-(Main.WINDOW_HEIGHT - MAX_Y));
 
-            FadeTransition fadeTransition = new FadeTransition(Duration.seconds(3), display);
-            fadeTransition.setFromValue(0);
-            fadeTransition.setToValue(1);
+        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(3), this);
+        fadeTransition.setFromValue(0);
+        fadeTransition.setToValue(1);
 
-            fadeTransition.play();
-            moveTransition.play();
+        fadeTransition.play();
+        moveTransition.play();
 
-            fadeTransition.setOnFinished(actionEvent -> startWaitAnimation());
+        fadeTransition.setOnFinished(actionEvent -> startWaitAnimation());
 
-        } else throw DISPLAY_NOT_CREATED;
     }
 
-    private static void startWaitAnimation() {
+    private void startWaitAnimation() {
         waitTransition.play();
     }
 }

@@ -26,43 +26,32 @@ import java.util.HashMap;
 import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.*;
 import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXUtilities.centeringChildInPane;
 
-public class GameDisplayControllerOne {
+public class GameDisplayControllerOne extends Pane {
 
-    private static final NullPointerException DISPLAY_NOT_CREATED = new NullPointerException("Display one is not yet created!");
-    private static Pane display;
-    private static PlayerDisplay playerDisplay;
-    private static TradingDisplay tradingDisplay;
-    private static BankDisplay bankDisplay;
-    private static ArrayList<Player> lastPlayerSave;
+    private final PlayerDisplay playerDisplay;
+    private final TradingDisplay tradingDisplay;
+    private final BankDisplay bankDisplay;
+    private ArrayList<Player> lastPlayerSave;
 
-    public static void createDisplayOne(double width, double height) {
-        if (display == null) {
-            display = new Pane();
-            display.setId("gameScene_DisplayOne");
-            display.setMaxSize(width, height);
-            display.getChildren().add(buildRectangle("gameScene_playerDisplay_Background", width, height, Color.rgb(97, 220, 43), true, Color.WHITE, width * 0.005));
+    public GameDisplayControllerOne(double width, double height) {
+        setId("gameScene_DisplayOne");
+        setMaxSize(width, height);
+        getChildren().add(buildRectangle("gameScene_playerDisplay_Background", width, height, Color.rgb(97, 220, 43), true, Color.WHITE, width * 0.005));
 
-            playerDisplay = new PlayerDisplay(width, height);
-            playerDisplay.setVisible(false);
+        playerDisplay = new PlayerDisplay(width, height, this);
+        playerDisplay.setVisible(false);
 
-            tradingDisplay = new TradingDisplay(width, height, Color.RED);
-            tradingDisplay.setVisible(false);
+        tradingDisplay = new TradingDisplay(width, height, Color.RED, this);
+        tradingDisplay.setVisible(false);
 
-            bankDisplay = new BankDisplay(width, height, Color.rgb(78, 138, 186));
-            bankDisplay.setVisible(false);
+        bankDisplay = new BankDisplay(width, height, Color.rgb(78, 138, 186));
+        bankDisplay.setVisible(false);
 
-            display.getChildren().addAll(playerDisplay, tradingDisplay, bankDisplay);
-        } else throw new RuntimeException("Display One is already created!");
+        getChildren().addAll(playerDisplay, tradingDisplay, bankDisplay);
+
     }
 
-    public static Pane getDisplay() {
-        if (display != null)
-            return display;
-        else
-            throw DISPLAY_NOT_CREATED;
-    }
-
-    public static void updateDisplay() throws PlayerNotFoundExceptions {
+    public void updateDisplay() throws PlayerNotFoundExceptions {
         if (playerDisplay.isVisible()) {
             if (lastPlayerSave != null)
                 playerDisplay.createPlayers(lastPlayerSave);
@@ -74,51 +63,40 @@ public class GameDisplayControllerOne {
         }
     }
 
-    public static void displayPlayers(ArrayList<Player> players) {
-        if (display != null) {
+    public void displayPlayers(ArrayList<Player> players) {
+        clearDisplay();
+
+        playerDisplay.setVisible(true);
+
+        playerDisplay.createPlayers(players);
+        lastPlayerSave = players;
+    }
+
+    public void displayTradingMenu(/*Player One und Player Two Objekte werden hier übergeben*/) {
+        clearDisplay();
+
+        tradingDisplay.setVisible(true);
+
+        tradingDisplay.startTrading();
+    }
+
+    public void displayPlayerDisplay() {
+        if (playerDisplay.arePlayersGenerated() && !playerDisplay.isVisible()) {
+
             clearDisplay();
 
             playerDisplay.setVisible(true);
-
-            playerDisplay.createPlayers(players);
-            lastPlayerSave = players;
-        } else throw DISPLAY_NOT_CREATED;
+        }
     }
 
-    public static void displayTradingMenu(/*Player One und Player Two Objekte werden hier übergeben*/) {
-        if (display != null) {
+    public void displayBankDisplay(Player p) {
+        clearDisplay();
 
-            clearDisplay();
-
-            tradingDisplay.setVisible(true);
-
-            tradingDisplay.startTrading();
-        } else throw DISPLAY_NOT_CREATED;
+        bankDisplay.displayPlayer(p);
+        bankDisplay.setVisible(true);
     }
 
-    public static void displayPlayerDisplay() {
-        if (display != null) {
-            if (playerDisplay.arePlayersGenerated() && !playerDisplay.isVisible()) {
-
-                clearDisplay();
-
-                playerDisplay.setVisible(true);
-            }
-        } else throw DISPLAY_NOT_CREATED;
-    }
-
-    public static void displayBankDisplay(Player p) {
-        if (display != null) {
-
-            clearDisplay();
-
-            bankDisplay.displayPlayer(p);
-            bankDisplay.setVisible(true);
-
-        } else throw DISPLAY_NOT_CREATED;
-    }
-
-    private static void clearDisplay() {
+    private void clearDisplay() {
         bankDisplay.setVisible(false);
         tradingDisplay.setVisible(false);
         playerDisplay.setVisible(false);

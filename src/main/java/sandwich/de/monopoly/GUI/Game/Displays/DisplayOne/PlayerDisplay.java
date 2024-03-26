@@ -33,13 +33,16 @@ import static sandwich.de.monopoly.GUI.Game.DisplayController.GameDisplayControl
 public class PlayerDisplay extends Pane{
 
     //Variables
+    private final GameDisplayControllerOne rootDisplay;
     private final double width, height;
     private boolean arePlayerGenerated = false;
     private final ImageView[] playerOrderFigures = new ImageView[5];
 
-    public PlayerDisplay(double width, double height) {
+    public PlayerDisplay(double width, double height, GameDisplayControllerOne rootDisplay) {
         setId("gameScene_PlayerDisplay");
         setMaxSize(width, height);
+
+        this.rootDisplay = rootDisplay;
 
         //Creates the player Displays without any images
         double playerSize = (((width * 0.225) / 3.725) / 2);
@@ -213,7 +216,7 @@ public class PlayerDisplay extends Pane{
         tradingButton.setLayoutY(height * 0.40);
         tradingButton.setLayoutX(width * 0.32);
 
-        tradingButton.setOnMouseClicked(event -> GameDisplayControllerOne.displayTradingMenu());
+        tradingButton.setOnMouseClicked(event -> Main.getGameOperator().getDisplayControllerOne().displayTradingMenu());
 
         Rectangle[] streets = buildStreetInventar(width, height, player);
 

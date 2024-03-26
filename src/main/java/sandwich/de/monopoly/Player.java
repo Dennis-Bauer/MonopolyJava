@@ -61,7 +61,7 @@ public class Player {
 
     public void addBankAccount(int transferNumber) {
         bankAccount = bankAccount + transferNumber;
-        try { GameDisplayControllerOne.updateDisplay(); } catch (PlayerNotFoundExceptions ignored) {}
+        try { Main.getGameOperator().getDisplayControllerOne().updateDisplay(); } catch (PlayerNotFoundExceptions ignored) {}
     }
 
     public void setInJail(boolean inJail) {

@@ -1,6 +1,8 @@
 package sandwich.de.monopoly;
 
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities;
 import sandwich.de.monopoly.Enums.CornerTyp;
@@ -11,7 +13,7 @@ import sandwich.de.monopoly.Fields.*;
 import sandwich.de.monopoly.GUI.Game.DisplayController.GameDisplayControllerOne;
 import sandwich.de.monopoly.GUI.Game.DisplayController.GameDisplayControllerTwo;
 import sandwich.de.monopoly.GUI.Game.DisplayController.MiddleGameDisplayController;
-import sandwich.de.monopoly.GUI.Game.GameField;
+import sandwich.de.monopoly.GUI.Game.GameBoard;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,22 +21,41 @@ import java.util.HashMap;
 import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPut;
 import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPutLine;
 import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.JavaUtilities.buildLongText;
+import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildRectangle;
 
 public class Game {
 
+    //Players
     private Player playerOne;
     private Player playerTwo;
     private Player playerThree;
     private Player playerFour;
     private Player playerFive;
+    private final ArrayList<Player> playerList = new ArrayList<>();
+
+    //Game Scene
+
+    //Displays
+
+    private final GameDisplayControllerOne displayControllerOne;
+    private final GameDisplayControllerTwo displayControllerTwo;
+    private final MiddleGameDisplayController middleDisplayController;
+
+    //Gameboard
+    private final Color BACKGROUND_COLOR = Color.rgb(112, 224, 88);
+    private static final HashMap<Integer, Field> FIELDS = createFields();
+    private final GameBoard gameBoard = new GameBoard(Main.WINDOW_HEIGHT * 0.98, Color.rgb(112, 224, 88), FIELDS);
+    private Scene gameScene;
+    private Pane root;
+
+    //Game variables
+    private int freeParkingMoney = 999;
+    private int playerInGame = 0;
+    private boolean turnPlayerIsMoving = false;
+
     private Player turnPlayer;
     private Player nextPlayer;
-    private int playerInGame = 0;
-    private int freeParkingMoney = 999;
-    private boolean turnPlayerIsMoving = false;
-    private final ArrayList<Player> playerList = new ArrayList<>();
-    private static final HashMap<Integer, Field> FIELDS = createFields();
-    private final GameField gameField;
+
 
     public Game(Player[] players) {
 
@@ -43,7 +64,35 @@ public class Game {
             consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
         }
 
-        gameField = new GameField(0, Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT, Color.rgb(112, 224, 88), FIELDS);
+        //Displays
+
+        displayControllerOne = new GameDisplayControllerOne((Main.WINDOW_WIDTH - Main.WINDOW_HEIGHT) / 1.1, Main.WINDOW_HEIGHT * 0.60);
+        displayControllerTwo = new GameDisplayControllerTwo((Main.WINDOW_WIDTH - Main.WINDOW_HEIGHT) / 1.1, Main.WINDOW_HEIGHT * 0.38, Color.rgb(56, 182, 255));
+        middleDisplayController = new MiddleGameDisplayController(Main.WINDOW_HEIGHT * 0.40, Main.WINDOW_HEIGHT * 0.20, Main.WINDOW_HEIGHT * 0.18, Color.rgb(13, 155, 35));
+
+
+        VBox sideDisplays = new VBox(Main.WINDOW_HEIGHT * 0.02);
+
+        sideDisplays.getChildren().addAll(
+                displayControllerOne,
+                displayControllerTwo
+        );
+        sideDisplays.setLayoutX(Main.WINDOW_HEIGHT + (((Main.WINDOW_WIDTH - Main.WINDOW_HEIGHT) / 2) - ((Main.WINDOW_WIDTH - Main.WINDOW_HEIGHT) / 1.1) / 2));
+        sideDisplays.setLayoutY(0);
+
+
+        //REMOVE
+        middleDisplayController.setLayoutY(Main.WINDOW_HEIGHT * 0.18);
+
+        root = new Pane(
+                buildRectangle("gameScene_Background", Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT, BACKGROUND_COLOR, true, null, 0, 0, 0),
+                gameBoard,
+                sideDisplays,
+                middleDisplayController
+        );
+
+        gameScene = new Scene(root);
+
 
         for (int i = 0, j = 1; i != 5; i++) {
             if (players[i] != null) {
@@ -114,11 +163,11 @@ public class Game {
         }
 
         //Zeigt die Spieler an
-        gameField.setPlayerToGameboard(playerList);
-        GameDisplayControllerOne.displayPlayers(playerList);
-        GameDisplayControllerTwo.displayDice();
+        gameBoard.addPlayers(playerList);
+        displayControllerOne.displayPlayers(playerList);
+        displayControllerTwo.displayDice();
         //Zeigt das Game Board an
-        Main.getPrimaryStage().setScene(new Scene(gameField));
+        Main.getPrimaryStage().setScene(gameScene);
     }
 
     //Starts the Animation and controls the postion from the player.
@@ -134,12 +183,12 @@ public class Game {
                 turnPlayer.removeOnInJailRemain();
                 if (turnPlayer.getInJailRemain() <= 0) {
                     turnPlayer.setInJail(false);
-                    gameField.removePlayerFromJail(turnPlayer);
+                    gameBoard.removePlayerFromJail(turnPlayer);
                 }
             }
         } else {
             turnPlayerIsMoving = true;
-            try { gameField.movePlayerOnGameBoard(turnPlayer, diceOne + diceTwo); } catch (PlayerNotFoundExceptions ignored) {}
+            try { gameBoard.movePlayer(turnPlayer, diceOne + diceTwo); } catch (PlayerNotFoundExceptions ignored) {}
             turnPlayer.moveFieldPostion(diceOne + diceTwo);
 
             if (diceOne == diceTwo)
@@ -157,15 +206,15 @@ public class Game {
     //Detects the field where the player is standing on, and then carries out the function of the field.
     public void playerHasMoved() {
         turnPlayerIsMoving = false;
-        GameDisplayControllerTwo.showPlayerAction();
+        displayControllerTwo.showPlayerAction();
 
         if (FIELDS.get(turnPlayer.getFieldPostion()) instanceof Street street) { //Is the player on a Street
             if (!street.isOwned()) {
                 if (street.getSalePrice() <= turnPlayer.getBankAccount()) {
-                    MiddleGameDisplayController.displayBuyStreet(street);
+                    middleDisplayController.displayBuyStreet(street);
                 }
             } else {
-                MiddleGameDisplayController.displayPayDisplay(buildLongText("Du schuldest den Spieler", street.getOwner().getName() + " " + (street.getRent() + "€")), street.getRent());
+                middleDisplayController.displayPayDisplay(buildLongText("Du schuldest den Spieler", street.getOwner().getName() + " " + (street.getRent() + "€")), street.getRent());
             }
         } else if (FIELDS.get(turnPlayer.getFieldPostion()) instanceof Corner corner) { //Is the player on a Corner
             switch (corner.getTyp()) {
@@ -174,11 +223,11 @@ public class Game {
                 }
                 case GO_TO_JAIL -> {
                     turnPlayer.setInJail(true);
-                    gameField.setPlayerInJail(turnPlayer);
+                    gameBoard.setPlayerInJail(turnPlayer);
                 }
             }
         } else if (FIELDS.get(turnPlayer.getFieldPostion()) instanceof PayExtra payField) { //Is the player on a pay extra field
-            MiddleGameDisplayController.displayPayDisplay(payField.getTyp().getMessage(), payField.getPrice());
+            middleDisplayController.displayPayDisplay(payField.getTyp().getMessage(), payField.getPrice());
         }
     }
 
@@ -210,35 +259,6 @@ public class Game {
             }
         }
         else throw new IllegalArgumentException("No negative amounts can be transfer!");
-    }
-
-    public Player getTurnPlayer() {
-        return turnPlayer;
-    }
-
-    public ArrayList<Player> getPlayers() {
-        ArrayList<Player> ps = new ArrayList<>();
-
-        if (playerOne != null)
-            ps.add(playerOne);
-        if (playerTwo != null)
-            ps.add(playerTwo);
-        if (playerThree != null)
-            ps.add(playerThree);
-        if (playerFour != null)
-            ps.add(playerFour);
-        if (playerFive != null)
-            ps.add(playerFive);
-
-        return ps;
-    }
-
-    public boolean isTurnPlayerIsMoving() {
-        return turnPlayerIsMoving;
-    }
-
-    public static HashMap<Integer, Field> getFields() {
-        return FIELDS;
     }
 
     private static HashMap<Integer, Field> createFields() {
@@ -287,10 +307,55 @@ public class Game {
 
         return s;
     }
+
+
+    //Getter
+    public Player getTurnPlayer() {
+        return turnPlayer;
+    }
+
+    public GameDisplayControllerOne getDisplayControllerOne() {
+        return displayControllerOne;
+    }
+
+    public GameDisplayControllerTwo getDisplayControllerTwo() {
+        return displayControllerTwo;
+    }
+
+    public MiddleGameDisplayController getMiddleDisplayController() {
+        return middleDisplayController;
+    }
+
+    public ArrayList<Player> getPlayers() {
+        ArrayList<Player> ps = new ArrayList<>();
+
+        if (playerOne != null)
+            ps.add(playerOne);
+        if (playerTwo != null)
+            ps.add(playerTwo);
+        if (playerThree != null)
+            ps.add(playerThree);
+        if (playerFour != null)
+            ps.add(playerFour);
+        if (playerFive != null)
+            ps.add(playerFive);
+
+        return ps;
+    }
+
+    public boolean isTurnPlayerIsMoving() {
+        return turnPlayerIsMoving;
+    }
+
+    public static HashMap<Integer, Field> getFields() {
+        return FIELDS;
+    }
+
 }
 
 /* @// TODO: 21.03.2024
- * Hier werden die Sachen aufglisstet die das Spiel am Technischen noch können muss, nichts Grafisches.</h1>
+ * Hier werden die Sachen aufglisstet die das Spiel am Technischen noch können muss, nichts Grafisches.
  * 1. Nach 3 mal Pash ins Gefängnis
+ * 2. Das Gameboard an sich ein biischen kleiner machen als die höhe des Fensters (Das heißt alle werte in dem einfach die Höhe anstat ein wert für die Gameboardgröße genommen wird ÄNDERN!!!)
  * ... (Hier stehen nur die Sachen die ich denke ich vergesse)
  */

@@ -27,13 +27,16 @@ import static sandwich.de.monopoly.GUI.Game.DisplayController.GameDisplayControl
 
 public class TradingDisplay extends Pane {
 
+    private final GameDisplayControllerOne rootDisplay;
     private final double WIDTH, HEIGHT, BORDER_WIDTH;
 
     private final Color colorRafa;
 
-    public TradingDisplay(double width, double height, Color colorRafa) {
+    public TradingDisplay(double width, double height, Color colorRafa, GameDisplayControllerOne rootDisplay) {
         setId("gameScene_playerDisplay_TradingMenu");
         setMaxSize(width, height);
+
+        this.rootDisplay = rootDisplay;
 
         this.WIDTH = width;
         this.HEIGHT = height;
@@ -190,7 +193,7 @@ public class TradingDisplay extends Pane {
         cancelButton.setLayoutX(x + WIDTH * 0.306 - buttonWidth);
         cancelButton.setLayoutY(y);
 
-        cancelButton.setOnMouseClicked(event -> GameDisplayControllerOne.displayPlayerDisplay());
+        cancelButton.setOnMouseClicked(event -> Main.getGameOperator().getDisplayControllerOne().displayPlayerDisplay());
 
         getChildren().addAll(confirmButton, cancelButton);
     }

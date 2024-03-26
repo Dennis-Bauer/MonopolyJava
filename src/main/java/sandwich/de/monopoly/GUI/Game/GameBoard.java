@@ -6,9 +6,7 @@ import javafx.geometry.Pos;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities;
@@ -18,15 +16,11 @@ import sandwich.de.monopoly.Exceptions.ToManyPlayersExceptions;
 import sandwich.de.monopoly.Fields.Corner;
 import sandwich.de.monopoly.Fields.Field;
 import sandwich.de.monopoly.Fields.Street;
-import sandwich.de.monopoly.GUI.Game.DisplayController.GameDisplayControllerOne;
-import sandwich.de.monopoly.GUI.Game.DisplayController.GameDisplayControllerTwo;
-import sandwich.de.monopoly.GUI.Game.DisplayController.MiddleGameDisplayController;
 import sandwich.de.monopoly.Main;
 import sandwich.de.monopoly.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPut;
@@ -34,9 +28,8 @@ import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities.
 import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.*;
 
 
-public class GameField extends Pane{
+public class GameBoard extends Pane{
     private final ImageView[] playerFigures = new ImageView[5];
-    private final Pane BOARD;
     private final double MIDDLE_RECTANGLE_RATION = 1.4;
     private final double FONT_SIZE, BORDER_WIDTH;
     private final double FIELD_HEIGHT;
@@ -44,33 +37,18 @@ public class GameField extends Pane{
     private final double PLAYER_FIGURE_SIZE;
     private final Color BACKGROUND_COLOR;
 
-    public GameField(double gameBoardRotate, double width, double height, Color backgroundColor, HashMap<Integer, Field> fields) {
+    public GameBoard(double size, Color backgroundColor, HashMap<Integer, Field> fields) {
 
         this.BACKGROUND_COLOR = backgroundColor;
 
-        FONT_SIZE = ((height / MIDDLE_RECTANGLE_RATION) / 9) / 8;
-        BORDER_WIDTH = ((height / MIDDLE_RECTANGLE_RATION) / 9) / 25;
-        FIELD_HEIGHT = (height - height / MIDDLE_RECTANGLE_RATION) / 2;
-        FIELD_WIDTH = (height / MIDDLE_RECTANGLE_RATION) / 9;
-        PLAYER_FIGURE_SIZE = height * 0.035;
+        FONT_SIZE = ((size / MIDDLE_RECTANGLE_RATION) / 9) / 8;
+        BORDER_WIDTH = ((size / MIDDLE_RECTANGLE_RATION) / 9) / 25;
+        FIELD_HEIGHT = (size - size / MIDDLE_RECTANGLE_RATION) / 2;
+        FIELD_WIDTH = (size / MIDDLE_RECTANGLE_RATION) / 9;
+        PLAYER_FIGURE_SIZE = size * 0.035;
 
-        Rectangle background = buildRectangle("gameScene_Background", width, height, backgroundColor, true, null, 0, height, 0);
 
-        VBox displays = new VBox(height * 0.02);
-
-        GameDisplayControllerOne.createDisplayOne((width - height) / 1.1, height * 0.60);
-        GameDisplayControllerTwo.createDisplayTwo((width - height) / 1.1, height * 0.38, Color.rgb(56, 182, 255));
-        MiddleGameDisplayController.createDisplay(height * 0.40, height * 0.20, height * 0.18, Color.rgb(13, 155, 35));
-
-        MiddleGameDisplayController.getDisplay().setLayoutX((height / 2) - (height * 0.40) / 2);
-        MiddleGameDisplayController.getDisplay().setLayoutY(200);
-
-        displays.getChildren().addAll(GameDisplayControllerOne.getDisplay(), GameDisplayControllerTwo.getDisplay());
-        displays.setLayoutX(height + (((width - height) / 2) - ((width - height) / 1.1) / 2));
-        displays.setLayoutY(0);
-
-        BOARD = buildGameBoard(height, gameBoardRotate, fields);
-        getChildren().add(BOARD);
+        buildGameBoard(size, fields);
 
         for (int i = 0; i != 5; i++) {
             playerFigures[i] = new ImageView();
@@ -82,15 +60,9 @@ public class GameField extends Pane{
 
             getChildren().add(playerFigures[i]);
         }
-
-        getChildren().addAll(background, displays, MiddleGameDisplayController.getDisplay());
-        background.toBack();
-        BOARD.toFront();
-        MiddleGameDisplayController.getDisplay().toFront();
-        setId("gameScreen_Root");
     }
 
-    public void setPlayerToGameboard(ArrayList<Player> playerList) {
+    public void addPlayers(ArrayList<Player> playerList) {
 
         if (Main.CONSOLE_OUT_PUT) {
             consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, "Spieler Figuren werden auf dem Spielbrett Positioniert:");
@@ -155,7 +127,7 @@ public class GameField extends Pane{
         }
     }
 
-    public void movePlayerOnGameBoard(Player player, int steps) throws PlayerNotFoundExceptions {
+    public void movePlayer(Player player, int steps) throws PlayerNotFoundExceptions {
 
         int playerArrayPostion = 0;
         for (ImageView i: playerFigures) {
@@ -202,10 +174,6 @@ public class GameField extends Pane{
             });
         } else throw new PlayerNotFoundExceptions();
 
-    }
-
-    public void rotateGameBoard(double rotate) {
-        BOARD.setRotate(rotate);
     }
 
     public Point2D calculateXYPostion(int playerOrderPostion, int setToPostion) {
@@ -301,9 +269,8 @@ public class GameField extends Pane{
         return new Point2D(calculationBaseX[playerOrderPostion], calculationBaseY[playerOrderPostion]);
     }
 
-    private Pane buildGameBoard(double size, double rotate, HashMap<Integer, Field> fieldObjects) {
-        Pane root = new Pane();
-        root.setId("gameBoard_Root");
+    private void buildGameBoard(double size, HashMap<Integer, Field> fieldObjects) {
+        setId("gameBoard_Root");
         StackPane board = new StackPane();
         board.setId("gameBoard");
         board.setAlignment(Pos.CENTER);
@@ -378,11 +345,7 @@ public class GameField extends Pane{
 
 
 
-        root.getChildren().addAll(board);
-
-        board.setRotate(rotate);
-
-        return root;
+        getChildren().addAll(board);
     }
 
 }

@@ -18,14 +18,17 @@ import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXUtilities
 public class BuyStreetDisplay extends Pane {
 
     private final Label infoText;
+    private final MiddleGameDisplayController rootDisplay;
     private Street displayedStreet;
 
-    public BuyStreetDisplay(double width, double height) {
+    public BuyStreetDisplay(double width, double height, MiddleGameDisplayController rootDisplay) {
         setId("BuyStreetDisplay");
         setMaxSize(width, height);
 
+        this.rootDisplay = rootDisplay;
+
         infoText = buildLabel("buyStreetDisplay_InfoText", buildLongText("NULL_STREET", "NULL_MONEY"), Font.font(Main.TEXT_FONT, width * 0.10), TextAlignment.CENTER, Color.WHITE);
-        centeringChildInPane(infoText, MiddleGameDisplayController.getDisplay());
+        centeringChildInPane(infoText, rootDisplay);
 
         double spaceEdge = width * 0.05;
 
@@ -52,19 +55,19 @@ public class BuyStreetDisplay extends Pane {
         getChildren().addAll(infoText, buyButton, refuseButton);
 
         buyButton.setOnMouseClicked(mouseEvent -> {
-            MiddleGameDisplayController.removeDisplay();
+            rootDisplay.removeDisplay();
             if (displayedStreet != null)
                 Main.getGameOperator().buyStreet(displayedStreet);
             else throw new NullPointerException("The street the player want to buy is null!");
         });
 
-        refuseButton.setOnMouseClicked(mouseEvent -> MiddleGameDisplayController.removeDisplay());
+        refuseButton.setOnMouseClicked(mouseEvent -> rootDisplay.removeDisplay());
 
     }
 
     public void showStreet(Street s) {
         infoText.setText(buildLongText(s.getName(), s.getSalePrice() + "€"));
-        centeringChildInPane(infoText, MiddleGameDisplayController.getDisplay());
+        centeringChildInPane(infoText, rootDisplay);
 
         displayedStreet = s;
     }

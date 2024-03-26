@@ -17,16 +17,19 @@ import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXUtilities
 
 public class PayDisplay extends Pane {
 
+    private final MiddleGameDisplayController rootDisplay;
     private final Label text;
     private final Label buttonText;
     private int price;
 
-    public PayDisplay(double width, double height) {
+    public PayDisplay(double width, double height, MiddleGameDisplayController rootDisplay) {
         setId("PayDisplay");
         setMaxSize(width, height);
 
+        this.rootDisplay = rootDisplay;
+
         text = buildLabel("payDisplay_Text", "NULL_TEXT", Font.font(Main.TEXT_FONT, width * 0.070), TextAlignment.CENTER, Color.WHITE);
-        centeringChildInPane(text, MiddleGameDisplayController.getDisplay());
+        centeringChildInPane(text, rootDisplay);
 
         StackPane payButton = new StackPane();
         payButton.setLayoutY(height * 0.60);
@@ -45,9 +48,9 @@ public class PayDisplay extends Pane {
             if (player.getBankAccount() >= price) {
                 player.addBankAccount(-(price));
                 Main.getGameOperator().transferMoney(price);
-                MiddleGameDisplayController.removeDisplay();
+                rootDisplay.removeDisplay();
             } else {
-                MiddleGameDisplayController.errorAnimation();
+                rootDisplay.errorAnimation();
             }
         });
 
@@ -57,7 +60,7 @@ public class PayDisplay extends Pane {
 
     public void showPayScreen(String message, int price) {
         text.setText(message);
-        centeringChildInPane(text, MiddleGameDisplayController.getDisplay());
+        centeringChildInPane(text, rootDisplay);
 
         buttonText.setText(price + "€ zahlen");
         this.price = price;

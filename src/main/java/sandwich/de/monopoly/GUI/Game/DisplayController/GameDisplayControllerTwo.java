@@ -14,49 +14,34 @@ import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXConstruct
 import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildRectangle;
 import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXUtilities.centeringChildInPane;
 
-public class GameDisplayControllerTwo {
+public class GameDisplayControllerTwo extends Pane {
+    private final Pane actionDisplay;
+    private final Pane diceDisplay;
 
-    private static Pane display;
-    private static Pane actionDisplay;
-    private static Pane diceDisplay;
+    public GameDisplayControllerTwo(double width, double height, Color backgroundColor) {
+        setId("gameScene_DisplayTwo");
+        setMaxSize(width, height);
+        getChildren().add(buildRectangle("gameScene_action_Background", width, height, backgroundColor, true, Color.WHITE, width * 0.006));
 
-    public static void createDisplayTwo(double width, double height, Color backgroundColor) {
-        if (display == null) {
-            display = new Pane();
-            display.setId("gameScene_DisplayTwo");
-            display.setMaxSize(width, height);
-            display.getChildren().add(buildRectangle("gameScene_action_Background", width, height, backgroundColor, true, Color.WHITE, width * 0.006));
+        Label header = buildLabel("gameScene_action_Header", "Aktionen", Font.font(Main.TEXT_FONT, FontWeight.BOLD, width * 0.10), TextAlignment.CENTER, Color.WHITE);
+        centeringChildInPane(header, this);
 
-            Label header = buildLabel("gameScene_action_Header", "Aktionen", Font.font(Main.TEXT_FONT, FontWeight.BOLD, width * 0.10), TextAlignment.CENTER, Color.WHITE);
-            centeringChildInPane(header, display);
+        actionDisplay = new ActionDisplay(width, height, this);
+        diceDisplay = new DiceDisplay(width, height, this);
+        actionDisplay.setVisible(false);
+        diceDisplay.setVisible(true);
 
-            actionDisplay = new ActionDisplay(width, height);
-            diceDisplay = new DiceDisplay(width, height);
-            actionDisplay.setVisible(false);
-            diceDisplay.setVisible(true);
-
-            display.getChildren().addAll(header, actionDisplay, diceDisplay);
-        } else throw new RuntimeException("Display two is already created!");
+        getChildren().addAll(header, actionDisplay, diceDisplay);
     }
 
-    public static Pane getDisplay() {
-        if (display != null)
-            return display;
-        else throw new RuntimeException("Display two is not yet created!");
+    public void displayDice() {
+        diceDisplay.setVisible(true);
+        actionDisplay.setVisible(false);
     }
 
-    public static void displayDice() {
-        if (display != null) {
-            diceDisplay.setVisible(true);
-            actionDisplay.setVisible(false);
-        } else throw new NullPointerException("Display two is not yet created!");
-    }
-
-    public static void showPlayerAction() {
-        if (display != null) {
-            diceDisplay.setVisible(false);
-            actionDisplay.setVisible(true);
-        } else throw new NullPointerException("Display two is not yet created!");
+    public void showPlayerAction() {
+        diceDisplay.setVisible(false);
+        actionDisplay.setVisible(true);
     }
 
 

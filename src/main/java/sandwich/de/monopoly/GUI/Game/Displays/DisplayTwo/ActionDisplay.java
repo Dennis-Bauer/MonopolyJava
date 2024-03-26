@@ -9,6 +9,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import sandwich.de.monopoly.GUI.Game.DisplayController.GameDisplayControllerOne;
+import sandwich.de.monopoly.GUI.Game.DisplayController.GameDisplayControllerTwo;
 import sandwich.de.monopoly.Main;
 
 import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.*;
@@ -16,12 +17,15 @@ import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXUtilities
 
 public class ActionDisplay extends Pane {
 
+    private final GameDisplayControllerTwo rootDisplay;
     private Pane aktionButtons;
     private Pane diceButton;
 
-    public ActionDisplay(double width, double height) {
+    public ActionDisplay(double width, double height, GameDisplayControllerTwo rootDisplay) {
         setId("gameScene_TradingDisplay");
         setMaxSize(width, height);
+
+        this.rootDisplay = rootDisplay;
 
         double middleX = (width / 2) - (width * 0.25) / 2;
         double y = height * 0.30;
@@ -29,7 +33,7 @@ public class ActionDisplay extends Pane {
 
         Pane bankButton = buildButton("Bank", width * 0.25, height * 0.45, "/sandwich/de/monopoly/aktionDisplay/bank.png", Color.DARKGRAY, "bank", middleX - space, y);
         bankButton.setOnMouseClicked(mouseEvent -> {
-            GameDisplayControllerOne.displayBankDisplay(Main.getGameOperator().getTurnPlayer());
+            Main.getGameOperator().getDisplayControllerOne().displayBankDisplay(Main.getGameOperator().getTurnPlayer());
         });
 
         Pane buildButton = buildButton("Bauen", width * 0.25, height * 0.45, "/sandwich/de/monopoly/aktionDisplay/build.png", Color.LIME, "build", middleX, y);

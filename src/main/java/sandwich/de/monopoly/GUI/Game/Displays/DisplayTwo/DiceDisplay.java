@@ -10,6 +10,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities;
+import sandwich.de.monopoly.GUI.Game.DisplayController.GameDisplayControllerTwo;
 import sandwich.de.monopoly.Main;
 import sandwich.de.monopoly.Threads.NumberAnimationThread;
 
@@ -21,13 +22,17 @@ import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXConstruct
 import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXUtilities.centeringChildInPane;
 
 public class DiceDisplay extends Pane {
+
+    private final GameDisplayControllerTwo rootDisplay;
     private final Random rn = new Random();
     private NumberAnimationThread rowOneAnimation;
     private NumberAnimationThread rowTwoAnimation;
 
-    public DiceDisplay(double width, double height) {
+    public DiceDisplay(double width, double height, GameDisplayControllerTwo rootDisplay) {
         setId("gameScene_DiceDisplay");
         setMaxSize(width, height);
+
+        this.rootDisplay = rootDisplay;
 
         Pane numberField = new Pane();
         numberField.setId("gameScene_diceDisplay_Pane");
@@ -72,7 +77,7 @@ public class DiceDisplay extends Pane {
                 rowTwoAnimation.start();
 
                 //Main.getGameOperator().playerRolledDice(rowOneAnimation.getLastNumber(), rowTwoAnimation.getLastNumber());
-                Main.getGameOperator().playerRolledDice(40, 10);
+                Main.getGameOperator().playerRolledDice(4, 0);
                 if (Main.CONSOLE_OUT_PUT) {
                     consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
                     consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Der erste Würfel hat eine");
