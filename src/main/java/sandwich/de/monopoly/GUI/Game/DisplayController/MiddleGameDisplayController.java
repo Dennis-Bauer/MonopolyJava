@@ -2,9 +2,9 @@ package sandwich.de.monopoly.GUI.Game.DisplayController;
 
 import javafx.animation.*;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+import sandwich.de.monopoly.Enums.ProgramColor;
 import sandwich.de.monopoly.GUI.Game.Displays.DisplayMiddle.BuyStreetDisplay;
 import sandwich.de.monopoly.GUI.Game.Displays.DisplayMiddle.PayDisplay;
 import sandwich.de.monopoly.GUI.Game.Displays.DisplayMiddle.StreetInfoDisplay;
@@ -26,12 +26,12 @@ public class MiddleGameDisplayController extends Pane{
     private final double MAX_Y;
     private ScaleTransition waitTransition;
 
-    public MiddleGameDisplayController(double width, double height, double maxY, Color backgroundColor) {
+    public MiddleGameDisplayController(double width, double height, double maxY) {
         MAX_Y = maxY;
 
         setId("MiddleDisplay");
         setMaxSize(width, height);
-        background = buildRectangle("middleDisplay_Background", width, height, backgroundColor, true, Color.BLACK, width * 0.01);
+        background = buildRectangle("middleDisplay_Background", width, height, ProgramColor.DISPLAY_MID_BACKGROUND.getColor() , true, ProgramColor.BORDER_COLOR_DARK.getColor(), width * 0.01);
         getChildren().add(background);
 
         waitTransition = new ScaleTransition(Duration.seconds(1), this);
@@ -121,8 +121,8 @@ public class MiddleGameDisplayController extends Pane{
 
         transitionPositiv.setOnFinished(actionEvent -> transitionNegativ.play());
 
-        background.setStroke(Color.RED);
-        background.setOnMouseExited(mouseEvent -> background.setStroke(Color.BLACK));
+        background.setStroke(ProgramColor.CHANCEL_BUTTONS.getColor());
+        background.setOnMouseExited(mouseEvent -> background.setStroke(ProgramColor.BORDER_COLOR_DARK.getColor()));
     }
 
     private void enterAnimation() {

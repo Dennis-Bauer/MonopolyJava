@@ -22,8 +22,6 @@ public class Main extends Application {
     public static final double WINDOW_HEIGHT = 950;
 
     //Game variables
-    public static HashMap<Integer, Color> streetColor = new HashMap<>();
-
     private static Game gameOperator;
 
     private static Stage primaryStage;
@@ -60,31 +58,6 @@ public class Main extends Application {
             consoleOutPutLine(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Infos über die Konsole sind eingeschaltet, und auf Deutsch.");
         else
             consoleOutPutLine(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Information about the program via the console is out");
-
-        streetColor.put(0, Color.DARKBLUE); //Straße
-        streetColor.put(1, Color.DARKBLUE); //Straße
-        streetColor.put(2, Color.AQUA);     //Straße
-        streetColor.put(3, Color.AQUA);     //Straße
-        streetColor.put(4, Color.AQUA);     //Straße
-        streetColor.put(5, Color.PURPLE);   //Straße
-        streetColor.put(6, Color.PURPLE);   //Straße
-        streetColor.put(7, Color.PURPLE);   //Straße
-        streetColor.put(8, Color.ORANGE);   //Straße
-        streetColor.put(9, Color.ORANGE);   //Straße
-        streetColor.put(10, Color.ORANGE);  //Straße
-        streetColor.put(11, Color.RED);     //Straße
-        streetColor.put(12, Color.RED);     //Straße
-        streetColor.put(13, Color.RED);     //Straße
-        streetColor.put(14, Color.YELLOW);  //Straße
-        streetColor.put(15, Color.YELLOW);  //Straße
-        streetColor.put(16, Color.YELLOW);  //Straße
-        streetColor.put(17, Color.LIME);    //Straße
-        streetColor.put(18, Color.LIME);    //Straße
-        streetColor.put(19, Color.LIME);    //Straße
-        streetColor.put(20, Color.rgb(112, 40, 0));    //Straße
-        streetColor.put(21, Color.rgb(112, 40, 0));    //Straße
-        streetColor.put(22, Color.GRAY);    //Anlagen
-        streetColor.put(23, Color.BLACK);   //Bahnhöfe
 
         launch();
     }

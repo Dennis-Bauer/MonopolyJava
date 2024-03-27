@@ -7,10 +7,7 @@ import javafx.scene.shape.Line;
 public abstract class Field {
 
     private final double POS;
-
     private Line[] borderLines;
-
-    protected final Color BORDER_COLOR = Color.BLACK;
 
     protected Pane field;
 
@@ -18,7 +15,7 @@ public abstract class Field {
         POS = postion;
     }
 
-    public Pane buildField(double width, double height, double borderWidth, double fontSize, Color backgroundColor) {
+    public Pane buildField(double width, double height, double borderWidth, double fontSize) {
         return new Pane();
     }
 

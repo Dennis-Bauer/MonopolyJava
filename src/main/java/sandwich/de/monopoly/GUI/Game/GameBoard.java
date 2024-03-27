@@ -6,10 +6,10 @@ import javafx.geometry.Pos;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities;
+import sandwich.de.monopoly.Enums.ProgramColor;
 import sandwich.de.monopoly.Exceptions.PlayerIsOutOfBoundsExceptions;
 import sandwich.de.monopoly.Exceptions.PlayerNotFoundExceptions;
 import sandwich.de.monopoly.Exceptions.ToManyPlayersExceptions;
@@ -35,11 +35,8 @@ public class GameBoard extends Pane{
     private final double FIELD_HEIGHT;
     private final double FIELD_WIDTH;
     private final double PLAYER_FIGURE_SIZE;
-    private final Color BACKGROUND_COLOR;
+    public GameBoard(double size, HashMap<Integer, Field> fields) {
 
-    public GameBoard(double size, Color backgroundColor, HashMap<Integer, Field> fields) {
-
-        this.BACKGROUND_COLOR = backgroundColor;
 
         FONT_SIZE = ((size / MIDDLE_RECTANGLE_RATION) / 9) / 8;
         BORDER_WIDTH = ((size / MIDDLE_RECTANGLE_RATION) / 9) / 25;
@@ -275,20 +272,14 @@ public class GameBoard extends Pane{
         board.setId("gameBoard");
         board.setAlignment(Pos.CENTER);
 
-        //Black Field
-        Rectangle f = buildRectangle("Test" ,size, size, Color.BLACK, true, Color.BLACK, 0);
-        Rectangle v = buildRectangle("Test" ,size / MIDDLE_RECTANGLE_RATION, size/ MIDDLE_RECTANGLE_RATION, BACKGROUND_COLOR, true, Color.BLACK, 0);
-
-        board.getChildren().addAll(f, v);
-
         Pane[] fields = new Pane[40];
 
         //Creating Fields
         for (int i = 0; i < fields.length; i++) {
             if (i != 0 && i != 10 && i != 20 && i != 30) {
-                fields[i] = fieldObjects.get(i).buildField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE, BACKGROUND_COLOR);
+                fields[i] = fieldObjects.get(i).buildField(FIELD_WIDTH, FIELD_HEIGHT, BORDER_WIDTH, FONT_SIZE);
             } else {
-                fields[i] = ( (Corner) fieldObjects.get(i)).buildCorner(BORDER_WIDTH, FONT_SIZE, FIELD_HEIGHT, BACKGROUND_COLOR);
+                fields[i] = ( (Corner) fieldObjects.get(i)).buildCorner(BORDER_WIDTH, FONT_SIZE, FIELD_HEIGHT);
             }
         }
 

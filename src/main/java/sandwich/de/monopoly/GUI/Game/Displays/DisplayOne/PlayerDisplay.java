@@ -9,6 +9,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
+import sandwich.de.monopoly.Enums.ProgramColor;
 import sandwich.de.monopoly.Exceptions.ToManyPlayersExceptions;
 import sandwich.de.monopoly.GUI.Game.DisplayController.GameDisplayControllerOne;
 import sandwich.de.monopoly.Main;
@@ -78,7 +79,7 @@ public class PlayerDisplay extends Pane{
         final double playerBoxWidth = width * 0.225;
         final double playerBoxHeight = height * 0.40;
 
-        Label header = buildLabel("gameScene_playerDisplay_Header", "Spieler", Font.font(Main.TEXT_FONT, FontWeight.BOLD, width / 15), TextAlignment.CENTER, Color.WHITE);
+        Label header = buildLabel("gameScene_playerDisplay_Header", "Spieler", Font.font(Main.TEXT_FONT, FontWeight.BOLD, width / 15), TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor());
 
         Pane playerOne = null;
         Pane playerTwo = null;
@@ -91,11 +92,11 @@ public class PlayerDisplay extends Pane{
             double bigger;
             if (players.size() > 3) {
                 switch (i) {
-                    case 0 -> playerOne = buildPlayerShowBox(playerBoxWidth, playerBoxHeight, Color.rgb(33, 203, 85), players.get(0));
-                    case 1 -> playerTwo = buildPlayerShowBox(playerBoxWidth, playerBoxHeight, Color.rgb(255, 49, 49), players.get(1));
-                    case 2 -> playerThree = buildPlayerShowBox(playerBoxWidth, playerBoxHeight, Color.rgb( 255, 97, 0), players.get(2));
-                    case 3 -> playerFour = buildPlayerShowBox(playerBoxWidth, playerBoxHeight, Color.rgb( 140, 82, 255), players.get(3));
-                    case 4 -> playerFive = buildPlayerShowBox(playerBoxWidth, playerBoxHeight, Color.rgb( 56, 182, 255), players.get(4));
+                    case 0 -> playerOne = buildPlayerShowBox(playerBoxWidth, playerBoxHeight, ProgramColor.PLAYER_ONE_BACKGROUND.getColor(), players.get(0));
+                    case 1 -> playerTwo = buildPlayerShowBox(playerBoxWidth, playerBoxHeight, ProgramColor.PLAYER_TWO_BACKGROUND.getColor(), players.get(1));
+                    case 2 -> playerThree = buildPlayerShowBox(playerBoxWidth, playerBoxHeight, ProgramColor.PLAYER_THREE_BACKGROUND.getColor(), players.get(2));
+                    case 3 -> playerFour = buildPlayerShowBox(playerBoxWidth, playerBoxHeight, ProgramColor.PLAYER_FOUR_BACKGROUND.getColor(), players.get(3));
+                    case 4 -> playerFive = buildPlayerShowBox(playerBoxWidth, playerBoxHeight, ProgramColor.PLAYER_FIVE_BACKGROUND.getColor(), players.get(4));
                 }
             } else {
                 if (players.size() == 3)
@@ -104,9 +105,9 @@ public class PlayerDisplay extends Pane{
                     bigger = 1.7;
 
                 switch (i) {
-                    case 0 -> playerOne = buildPlayerShowBox(playerBoxWidth * bigger, playerBoxHeight * bigger, Color.rgb(33, 203, 85), players.get(0));
-                    case 1 -> playerTwo = buildPlayerShowBox(playerBoxWidth * bigger, playerBoxHeight * bigger, Color.rgb(255, 49, 49), players.get(1));
-                    case 2 -> playerThree = buildPlayerShowBox(playerBoxWidth * bigger, playerBoxHeight * bigger, Color.rgb(255, 97, 0), players.get(2));
+                    case 0 -> playerOne = buildPlayerShowBox(playerBoxWidth * bigger, playerBoxHeight * bigger, ProgramColor.PLAYER_ONE_BACKGROUND.getColor(), players.get(0));
+                    case 1 -> playerTwo = buildPlayerShowBox(playerBoxWidth * bigger, playerBoxHeight * bigger, ProgramColor.PLAYER_TWO_BACKGROUND.getColor(), players.get(1));
+                    case 2 -> playerThree = buildPlayerShowBox(playerBoxWidth * bigger, playerBoxHeight * bigger, ProgramColor.PLAYER_THREE_BACKGROUND.getColor(), players.get(2));
                 }
             }
         }
@@ -172,7 +173,7 @@ public class PlayerDisplay extends Pane{
                 playerOne.setLayoutX(width / 2 - playerBoxWidth * bigger - width * 0.09);
                 playerOne.setLayoutY(height * 0.20);
 
-                Label vs = buildLabel("gameScene_playerDisplay_playerBoxes_VS", "VS", Font.font(Main.TEXT_FONT, FontWeight.BOLD, width / 10), TextAlignment.CENTER, Color.WHITE);
+                Label vs = buildLabel("gameScene_playerDisplay_playerBoxes_VS", "VS", Font.font(Main.TEXT_FONT, FontWeight.BOLD, width / 10), TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor());
                 centeringChildInPane(vs, this);
                 vs.setLayoutY(height * 0.375);
 
@@ -206,11 +207,11 @@ public class PlayerDisplay extends Pane{
 
         StackPane tradingButton = new StackPane();
 
-        Rectangle tradingButtonBackground = buildRectangle("gameScene_playerDisplay_tradingStartButton_Background", width * 0.36, height * 0.09, backgroundColor.desaturate(), true, Color.WHITE, width * 0.015);
+        Rectangle tradingButtonBackground = buildRectangle("gameScene_playerDisplay_tradingStartButton_Background", width * 0.36, height * 0.09, backgroundColor.desaturate(), true, ProgramColor.BORDER_COLOR_LIGHT.getColor(), width * 0.015);
         tradingButtonBackground.setArcHeight(width * 0.12);
         tradingButtonBackground.setArcWidth(width * 0.12);
 
-        Label tradingButtonLabel = buildLabel("gameScene_playerDisplay_tradingStartButton_Label", "Trading", Font.font(Main.TEXT_FONT,  FontWeight.BOLD, width * 0.08), TextAlignment.CENTER, Color.WHITE);
+        Label tradingButtonLabel = buildLabel("gameScene_playerDisplay_tradingStartButton_Label", "Trading", Font.font(Main.TEXT_FONT,  FontWeight.BOLD, width * 0.08), TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor());
 
         tradingButton.getChildren().setAll(tradingButtonBackground, tradingButtonLabel);
         tradingButton.setLayoutY(height * 0.40);

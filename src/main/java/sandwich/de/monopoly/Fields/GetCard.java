@@ -4,11 +4,11 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
+import sandwich.de.monopoly.Enums.ProgramColor;
 
 import java.util.Objects;
 
@@ -41,20 +41,20 @@ public class GetCard extends Field{
     }
 
     @Override
-    public Pane buildField(double width, double height, double borderWidth, double fontSize, Color backgroundColor) {
+    public Pane buildField(double width, double height, double borderWidth, double fontSize) {
         if (fieldIsChance)
-            return buildGetChanceCard(width, height, borderWidth, fontSize, backgroundColor);
+            return buildGetChanceCard(width, height, borderWidth, fontSize);
         else
-            return buildGetCommunityCard(width, height, borderWidth, fontSize, backgroundColor);
+            return buildGetCommunityCard(width, height, borderWidth, fontSize);
     }
 
-    private Pane buildGetChanceCard(double width, double height, double borderWidth, double fontSize, Color backgroundColor) {
+    private Pane buildGetChanceCard(double width, double height, double borderWidth, double fontSize) {
         Pane field = new Pane();
         field.setId("getChanceCard_field");
         field.setMaxSize(width, height);
 
-        Rectangle background = buildRectangle("chance_Background" ,width, height, backgroundColor, true, Color.BLACK, borderWidth);
-        Label header = buildLabel("chance_Header", "Chance", Font.font(TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, Color.BLACK, 0, height / 50);
+        Rectangle background = buildRectangle("chance_Background" ,width, height, ProgramColor.BACKGROUND.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), borderWidth);
+        Label header = buildLabel("chance_Header", "Chance", Font.font(TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, height / 50);
 
         Image i = null;
         switch (Objects.requireNonNull(color)) {
@@ -77,13 +77,13 @@ public class GetCard extends Field{
         return field;
     }
 
-    private Pane buildGetCommunityCard(double width, double height, double borderWidth, double fontSize, Color backgroundColor) {
+    private Pane buildGetCommunityCard(double width, double height, double borderWidth, double fontSize) {
         Pane field = new Pane();
         field.setId("getCommunityCard_field");
         field.setMaxSize(width, height);
 
-        Rectangle background = buildRectangle("community_Background" ,width, height, backgroundColor, true, Color.BLACK, borderWidth);
-        Label header = buildLabel("community_Header", buildLongText("Gesellschafts", "Feld"), Font.font(TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, Color.BLACK, 0, height / 50);
+        Rectangle background = buildRectangle("community_Background" ,width, height, ProgramColor.BACKGROUND.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), borderWidth);
+        Label header = buildLabel("community_Header", buildLongText("Gesellschafts", "Feld"), Font.font(TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, height / 50);
         ImageView image = createImageView("community_Image", "/sandwich/de/monopoly/gameBoard/communityChest.png", width / 1.1, height / 1.9,(width - width / 1.15) / 2, height / 3.5);
 
         centeringChildInPane(header, field);

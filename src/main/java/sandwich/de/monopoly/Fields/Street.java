@@ -7,6 +7,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
+import sandwich.de.monopoly.Enums.ProgramColor;
 import sandwich.de.monopoly.Player;
 
 import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildLabel;
@@ -70,15 +71,15 @@ public class Street extends Field{
     private Rectangle colorIndicator;
 
     @Override
-    public Pane buildField(double width, double height, double borderWidth, double fontSize, Color backgroundColor) {
+    public Pane buildField(double width, double height, double borderWidth, double fontSize) {
         Pane field = new Pane();
         field.setId("street_field");
         field.setMaxSize(width, height);
 
-        background = buildRectangle("street_Background" ,width, height, backgroundColor, true, Color.BLACK, borderWidth);
-        colorIndicator = buildRectangle("street_ColorIndicator" ,width, height/4, color, true, Color.BLACK, borderWidth);
-        Label nameIndicator =  buildLabel("street_NameIndicator", name, Font.font(TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, Color.BLACK, 0, height / 3);
-        Label priceIndicator = buildLabel("street_PriceIndicator", (salePrice + "€"), Font.font(TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, Color.BLACK, 0, 5 * (height / 6));
+        background = buildRectangle("street_Background" ,width, height, ProgramColor.BACKGROUND.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), borderWidth);
+        colorIndicator = buildRectangle("street_ColorIndicator" ,width, height/4, color, true, ProgramColor.BORDER_COLOR_DARK.getColor(), borderWidth);
+        Label nameIndicator =  buildLabel("street_NameIndicator", name, Font.font(TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, height / 3);
+        Label priceIndicator = buildLabel("street_PriceIndicator", (salePrice + "€"), Font.font(TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, 5 * (height / 6));
 
         centeringChildInPane(nameIndicator, field);
         centeringChildInPane(priceIndicator, field);
@@ -91,20 +92,20 @@ public class Street extends Field{
 
     public void highlightField() {
         background.setStrokeWidth(background.getStrokeWidth() * 2);
-        background.setStroke(Color.WHITE);
+        background.setStroke(ProgramColor.BORDER_COLOR_LIGHT.getColor());
 
         colorIndicator.setStrokeWidth(colorIndicator.getStrokeWidth() * 2);
-        colorIndicator.setStroke(Color.WHITE);
+        colorIndicator.setStroke(ProgramColor.BORDER_COLOR_LIGHT.getColor());
 
         field.toFront();
     }
 
     public void removeHighlight() {
         background.setStrokeWidth(background.getStrokeWidth() / 2);
-        background.setStroke(BORDER_COLOR);
+        background.setStroke(ProgramColor.BORDER_COLOR_DARK.getColor());
 
         colorIndicator.setStrokeWidth(colorIndicator.getStrokeWidth() / 2);
-        colorIndicator.setStroke(BORDER_COLOR);
+        colorIndicator.setStroke(ProgramColor.BORDER_COLOR_DARK.getColor());
     }
 
 }

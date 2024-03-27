@@ -7,6 +7,7 @@ import javafx.scene.paint.Color;
 import sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities;
 import sandwich.de.monopoly.Enums.CornerTyp;
 import sandwich.de.monopoly.Enums.ExtraFields;
+import sandwich.de.monopoly.Enums.ProgramColor;
 import sandwich.de.monopoly.Exceptions.PlayerNotFoundExceptions;
 import sandwich.de.monopoly.Exceptions.ToManyPlayersExceptions;
 import sandwich.de.monopoly.Fields.*;
@@ -42,9 +43,8 @@ public class Game {
     private final MiddleGameDisplayController middleDisplayController;
 
     //Gameboard
-    private final Color BACKGROUND_COLOR = Color.rgb(112, 224, 88);
     private static final HashMap<Integer, Field> FIELDS = createFields();
-    private final GameBoard gameBoard = new GameBoard(Main.WINDOW_HEIGHT * 0.98, Color.rgb(112, 224, 88), FIELDS);
+    private final GameBoard gameBoard = new GameBoard(Main.WINDOW_HEIGHT * 0.98, FIELDS);
     private Scene gameScene;
     private Pane root;
 
@@ -67,8 +67,8 @@ public class Game {
         //Displays
 
         displayControllerOne = new GameDisplayControllerOne((Main.WINDOW_WIDTH - Main.WINDOW_HEIGHT) / 1.1, Main.WINDOW_HEIGHT * 0.60);
-        displayControllerTwo = new GameDisplayControllerTwo((Main.WINDOW_WIDTH - Main.WINDOW_HEIGHT) / 1.1, Main.WINDOW_HEIGHT * 0.38, Color.rgb(56, 182, 255));
-        middleDisplayController = new MiddleGameDisplayController(Main.WINDOW_HEIGHT * 0.40, Main.WINDOW_HEIGHT * 0.20, Main.WINDOW_HEIGHT * 0.18, Color.rgb(13, 155, 35));
+        displayControllerTwo = new GameDisplayControllerTwo((Main.WINDOW_WIDTH - Main.WINDOW_HEIGHT) / 1.1, Main.WINDOW_HEIGHT * 0.38);
+        middleDisplayController = new MiddleGameDisplayController(Main.WINDOW_HEIGHT * 0.40, Main.WINDOW_HEIGHT * 0.20, Main.WINDOW_HEIGHT * 0.18);
 
 
         VBox sideDisplays = new VBox(Main.WINDOW_HEIGHT * 0.02);
@@ -85,7 +85,7 @@ public class Game {
         middleDisplayController.setLayoutY(Main.WINDOW_HEIGHT * 0.18);
 
         root = new Pane(
-                buildRectangle("gameScene_Background", Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT, BACKGROUND_COLOR, true, null, 0, 0, 0),
+                buildRectangle("gameScene_Background", Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT, ProgramColor.BACKGROUND.getColor(), true, null, 0, 0, 0),
                 gameBoard,
                 sideDisplays,
                 middleDisplayController

@@ -1,8 +1,8 @@
 package sandwich.de.monopoly.GUI.Game.Displays.DisplayOne;
 
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import sandwich.de.monopoly.Enums.ProgramColor;
 import sandwich.de.monopoly.GUI.Game.DisplayController.GameDisplayControllerOne;
 import sandwich.de.monopoly.Player;
 
@@ -10,15 +10,13 @@ public class BankDisplay extends Pane {
 
     private final double WIDTH;
     private final double HEIGHT;
-    private final Color color;
 
-    public BankDisplay (double width, double height, Color color) {
+    public BankDisplay (double width, double height) {
         setId("gameScene_playerDisplay_TradingMenu");
         setMaxSize(width, height);
 
         this.WIDTH = width;
         this.HEIGHT = height;
-        this.color = color;
     }
 
     public void displayPlayer(Player p) {
@@ -28,7 +26,7 @@ public class BankDisplay extends Pane {
 
         }
 
-        Pane playerDisplay = GameDisplayControllerOne.buildPlayer(WIDTH * 0.38, HEIGHT * 0.60, color, p);
+        Pane playerDisplay = GameDisplayControllerOne.buildPlayer(WIDTH * 0.38, HEIGHT * 0.60, ProgramColor.BANK_PLAYER_BACKGROUND.getColor(), p);
         playerDisplay.setLayoutY(HEIGHT / 2 - playerDisplay.getMaxHeight() / 2);
         playerDisplay.setLayoutX(WIDTH / 2 - playerDisplay.getMaxWidth() / 2);
 

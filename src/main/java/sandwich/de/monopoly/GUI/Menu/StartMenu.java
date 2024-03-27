@@ -19,6 +19,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 import sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities;
 import sandwich.de.monopoly.Enums.Figuren;
+import sandwich.de.monopoly.Enums.ProgramColor;
 import sandwich.de.monopoly.Game;
 import sandwich.de.monopoly.Main;
 import sandwich.de.monopoly.Player;
@@ -112,7 +113,7 @@ public class StartMenu extends Pane{
         startButton.setOnMousePressed(event -> startButton.setImage(startButtonPressed));
         startButton.setOnMouseReleased(event -> startButton.setImage(startButtonHover));
 
-        Label errorMessage = buildLabel("menu_ErrorLabel", "ERROR", Font.font(Main.TEXT_FONT, FontWeight.BOLD, width * 0.01), TextAlignment.CENTER, Color.RED, 0, height * 0.81);
+        Label errorMessage = buildLabel("menu_ErrorLabel", "ERROR", Font.font(Main.TEXT_FONT, FontWeight.BOLD, width * 0.01), TextAlignment.CENTER, ProgramColor.ERROR_MESSAGES.getColor(), 0, height * 0.81);
         errorMessage.toFront();
         errorMessage.setVisible(false);
 
@@ -203,7 +204,7 @@ public class StartMenu extends Pane{
         final double loopTransitionSize = 0.04;
 
         //Middle Player
-        Pane middlePlayer = buildPlayerBox(middlePlayerWidth, middlePlayerHeight, Color.rgb(126, 217, 87), middlePlayerX, middlePlayerY, 2, 2);
+        Pane middlePlayer = buildPlayerBox(middlePlayerWidth, middlePlayerHeight, ProgramColor.MENU_THIRD_PLAYER.getColor(), middlePlayerX, middlePlayerY, 2, 2);
         middlePlayer.setLayoutX(middlePlayerX);
         middlePlayer.setLayoutY(-middlePlayerHeight);
 
@@ -215,7 +216,7 @@ public class StartMenu extends Pane{
         middleTransition.setAutoReverse(true);
 
         //Left Player One
-        Pane leftPlayerOne = buildPlayerBox(middlePlayerWidth * 0.881, middlePlayerHeight * 0.881, Color.rgb(92, 225, 230), middlePlayerX * 0.533, middlePlayerY, 1, 1);
+        Pane leftPlayerOne = buildPlayerBox(middlePlayerWidth * 0.881, middlePlayerHeight * 0.881, ProgramColor.MENU_FIRST_PLAYER.getColor(), middlePlayerX * 0.533, middlePlayerY, 1, 1);
         leftPlayerOne.setLayoutX(middlePlayerX * 0.533 - 2 * (middlePlayerWidth * 0.881));
         leftPlayerOne.setLayoutY(-(middlePlayerHeight * 0.881));
 
@@ -225,7 +226,7 @@ public class StartMenu extends Pane{
         leftOneTransition.setAutoReverse(true);
 
         //Left Player Two
-        Pane leftPlayerTwo = buildPlayerBox(middlePlayerWidth * 0.756, middlePlayerHeight * 0.722, Color.rgb(217, 217, 217), middlePlayerX * 0.110, middlePlayerY, 3, 0);
+        Pane leftPlayerTwo = buildPlayerBox(middlePlayerWidth * 0.756, middlePlayerHeight * 0.722, ProgramColor.MENU_SECOND_PLAYER.getColor(), middlePlayerX * 0.110, middlePlayerY, 3, 0);
         leftPlayerTwo.setLayoutX(middlePlayerX * 0.110 - 2 * (middlePlayerWidth * 0.756));
         leftPlayerTwo.setLayoutY(-(middlePlayerHeight * 0.722));
 
@@ -235,7 +236,7 @@ public class StartMenu extends Pane{
         leftTwoTransition.setAutoReverse(true);
 
         //Right Player One
-        Pane rightPlayerOne = buildPlayerBox(middlePlayerWidth * 0.881, middlePlayerHeight * 0.881, Color.rgb(92, 225, 230), middlePlayerX * 1.500, middlePlayerY, 1, 3);
+        Pane rightPlayerOne = buildPlayerBox(middlePlayerWidth * 0.881, middlePlayerHeight * 0.881, ProgramColor.MENU_FIRST_PLAYER.getColor(), middlePlayerX * 1.500, middlePlayerY, 1, 3);
         rightPlayerOne.setLayoutX(middlePlayerX * 1.500 + 2 * (middlePlayerWidth * 0.881));
         rightPlayerOne.setLayoutY(-(middlePlayerHeight * 0.881));
 
@@ -245,7 +246,7 @@ public class StartMenu extends Pane{
         rightOneTransition.setAutoReverse(true);
 
         //Right Player Two
-        Pane rightPlayerTwo = buildPlayerBox(middlePlayerWidth * 0.756, middlePlayerHeight * 0.722, Color.rgb(217, 217, 217), middlePlayerX * 1.968, middlePlayerY, 3, 4);
+        Pane rightPlayerTwo = buildPlayerBox(middlePlayerWidth * 0.756, middlePlayerHeight * 0.722, ProgramColor.MENU_SECOND_PLAYER.getColor(), middlePlayerX * 1.968, middlePlayerY, 3, 4);
         rightPlayerTwo.setLayoutX(middlePlayerX * 1.968 + 2 * (middlePlayerWidth * 0.756));
         rightPlayerTwo.setLayoutY(-(middlePlayerHeight * 0.722));
 
@@ -287,11 +288,11 @@ public class StartMenu extends Pane{
         Rectangle background = buildRectangle("menu_playerSelector_Background", width, height, color, true, null, 0);
         Polygon backgroundBottom = buildTriangle("menu_playerSelector_background_Bottom", new Point2D(x, y + height), new Point2D(x + width / 2, y + height + height * 0.071), new Point2D(x + width, y + height),color, null, -x, -y - 0.5);
         //Name label
-        Label nameLabel = buildLabel("menu_playerSelector_Name", "", new Font(Main.TEXT_FONT, 100), TextAlignment.LEFT, Color.WHITE, 0, 0);
+        Label nameLabel = buildLabel("menu_playerSelector_Name", "", new Font(Main.TEXT_FONT, 100), TextAlignment.LEFT, ProgramColor.TEXT_COLOR.getColor(), 0, 0);
         centeringChildInPane(nameLabel, playerBox);
 
         //Cancel Button
-        StackPane removePlayerButton = buildPlus("menu_playerSelector_canceleButton", width / 4, width / 18, 45, 0, null, Color.RED, 0, 0);
+        StackPane removePlayerButton = buildPlus("menu_playerSelector_canceleButton", width / 4, width / 18, 45, 0, null, ProgramColor.CHANCEL_BUTTONS.getColor(), 0, 0);
         removePlayerButton.setLayoutX(width / 2 - width / 8);
         removePlayerButton.setLayoutY(height / 1.02);
 
@@ -300,7 +301,7 @@ public class StartMenu extends Pane{
         //Name Input screen
         VBox nameInputScreen = new VBox(height / 20);
         nameInputScreen.setId("menu_playerSelector_NameInput");
-        Border nameInputborder = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(15), new BorderWidths(3)));
+        Border nameInputborder = new Border(new BorderStroke(ProgramColor.BORDER_COLOR_DARK.getColor(), BorderStrokeStyle.SOLID, new CornerRadii(15), new BorderWidths(3)));
         Background nameInputBackground = new Background(new BackgroundFill(color, null, null));
 
         //NameInput input Box
@@ -312,9 +313,9 @@ public class StartMenu extends Pane{
         //Finish Button
         StackPane nameInputFinishButton = new StackPane();
 
-        Rectangle finishButtonBackground = buildRectangle("addPlayer_finishNameInput_Background", width / 5, width / 5, Color.LIME, true, Color.BLACK, width / 120);
-        Rectangle finishButtonCheckmarkOne = buildRectangle("addPlayer_finishNameInput_CheckmarkOne", width / 42.5, width / 14.5, Color.WHITE, true, null, 0);
-        Rectangle finishButtonCheckmarkTwo = buildRectangle("addPlayer_finishNameInput_CheckmarkOne", width / 42.5, width / 22.5, Color.WHITE, true, null, 0);
+        Rectangle finishButtonBackground = buildRectangle("addPlayer_finishNameInput_Background", width / 5, width / 5, ProgramColor.FINISH_BUTTONS.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), width / 120);
+        Rectangle finishButtonCheckmarkOne = buildRectangle("addPlayer_finishNameInput_CheckmarkOne", width / 42.5, width / 14.5, ProgramColor.SYMBOLE_COLOR.getColor(), true, null, 0);
+        Rectangle finishButtonCheckmarkTwo = buildRectangle("addPlayer_finishNameInput_CheckmarkOne", width / 42.5, width / 22.5, ProgramColor.SYMBOLE_COLOR.getColor(), true, null, 0);
 
         finishButtonCheckmarkOne.setRotate(45);
         finishButtonCheckmarkTwo.setRotate(-45);
@@ -324,9 +325,9 @@ public class StartMenu extends Pane{
         nameInputFinishButton.getChildren().addAll(finishButtonBackground, finishButtonCheckmarkTwo, finishButtonCheckmarkOne);
 
         //Cancel Button
-        StackPane nameInputChancelButton = buildPlus("addPlayer_finishNameInput_chancelButton", width / 42.5, width / 7.5, 45, 0, null, Color.WHITE, 0, 0);
+        StackPane nameInputChancelButton = buildPlus("addPlayer_finishNameInput_chancelButton", width / 42.5, width / 7.5, 45, 0, null, ProgramColor.SYMBOLE_COLOR.getColor(), 0, 0);
 
-        Rectangle cancelButtonBackground = buildRectangle("addPlayer_finishNameInput_chancelButton_Background", width / 5, width / 5, Color.RED, true, Color.BLACK, width / 120);
+        Rectangle cancelButtonBackground = buildRectangle("addPlayer_finishNameInput_chancelButton_Background", width / 5, width / 5, ProgramColor.CHANCEL_BUTTONS.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), width / 120);
 
         nameInputChancelButton.getChildren().addAll(cancelButtonBackground);
         cancelButtonBackground.toBack();
@@ -345,7 +346,7 @@ public class StartMenu extends Pane{
 
         createPlayerButton = buildPlus("menu_playerSelector_addButton_plus",  buttonRadius / 2.5, buttonRadius / 0.7, 0,0, null, color, (width / 2) - buttonRadius / 2, 0);
 
-        Circle addButtonBackground = buildCircle("menu_playerSelector_addButton_Background", buttonRadius, color.brighter(), true, Color.WHITE, 0);
+        Circle addButtonBackground = buildCircle("menu_playerSelector_addButton_Background", buttonRadius, color.brighter(), true,  ProgramColor.BORDER_COLOR_LIGHT.getColor(), 0);
 
         createPlayerButton.setLayoutX(width / 2 - buttonRadius);
         createPlayerButton.setLayoutY(height / 3 - buttonRadius);
@@ -374,12 +375,12 @@ public class StartMenu extends Pane{
         //Player is in Game Symbol
         StackPane playerSymbol = new StackPane();
 
-        Circle playerSymbolbackground = buildCircle("menu_playerSelector_playerSymbol_Background", buttonRadius, color.darker(), true, Color.BLACK, buttonRadius / 20);
-        Circle playerHead = buildCircle("menu_playerSelector_playerSymbol_Head", buttonRadius / 2.5, color.brighter(), true, Color.BLACK, buttonRadius / 20);
+        Circle playerSymbolbackground = buildCircle("menu_playerSelector_playerSymbol_Background", buttonRadius, color.darker(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), buttonRadius / 20);
+        Circle playerHead = buildCircle("menu_playerSelector_playerSymbol_Head", buttonRadius / 2.5, color.brighter(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), buttonRadius / 20);
 
         StackPane.setMargin(playerHead, new Insets(0, 0, height / 10, 0));
 
-        Rectangle playerBody = buildRectangle("menu_playerSelector_playerSymbol_Body", buttonRadius, buttonRadius / 1.2, color.brighter(), true, Color.BLACK, buttonRadius / 20);
+        Rectangle playerBody = buildRectangle("menu_playerSelector_playerSymbol_Body", buttonRadius, buttonRadius / 1.2, color.brighter(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), buttonRadius / 20);
         playerBody.setArcWidth(40);
         playerBody.setArcHeight(20);
 

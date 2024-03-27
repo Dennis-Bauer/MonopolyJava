@@ -8,7 +8,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
-import sandwich.de.monopoly.GUI.Game.DisplayController.GameDisplayControllerOne;
+import sandwich.de.monopoly.Enums.ProgramColor;
 import sandwich.de.monopoly.GUI.Game.DisplayController.GameDisplayControllerTwo;
 import sandwich.de.monopoly.Main;
 
@@ -31,17 +31,17 @@ public class ActionDisplay extends Pane {
         double y = height * 0.30;
         double space = width * 0.30;
 
-        Pane bankButton = buildButton("Bank", width * 0.25, height * 0.45, "/sandwich/de/monopoly/aktionDisplay/bank.png", Color.DARKGRAY, "bank", middleX - space, y);
+        Pane bankButton = buildButton("Bank", width * 0.25, height * 0.45, "/sandwich/de/monopoly/aktionDisplay/bank.png", ProgramColor.ACTION_BANK_BUTTON.getColor(), "bank", middleX - space, y);
         bankButton.setOnMouseClicked(mouseEvent -> {
             Main.getGameOperator().getDisplayControllerOne().displayBankDisplay(Main.getGameOperator().getTurnPlayer());
         });
 
-        Pane buildButton = buildButton("Bauen", width * 0.25, height * 0.45, "/sandwich/de/monopoly/aktionDisplay/build.png", Color.LIME, "build", middleX, y);
+        Pane buildButton = buildButton("Bauen", width * 0.25, height * 0.45, "/sandwich/de/monopoly/aktionDisplay/build.png", ProgramColor.ACTION_BUILD_BUTTON.getColor(), "build", middleX, y);
         buildButton.setOnMouseClicked(mouseEvent -> {
 
         });
 
-        Pane leaveButton = buildButton("Aufgeben", width * 0.25, height * 0.45, "/sandwich/de/monopoly/aktionDisplay/leave.png", Color.RED, "leave", middleX + space, y);
+        Pane leaveButton = buildButton("Aufgeben", width * 0.25, height * 0.45, "/sandwich/de/monopoly/aktionDisplay/leave.png", ProgramColor.ACTION_LEAVE_BUTTON.getColor(), "leave", middleX + space, y);
         leaveButton.setOnMouseClicked(mouseEvent -> {
 
         });
@@ -55,8 +55,8 @@ public class ActionDisplay extends Pane {
         button.setId("gameScene_action_button_" + id);
         button.setMaxWidth(width);
 
-        Label header = buildLabel("gameScene_action_button_" + id + "_Header", headerText, Font.font(Main.TEXT_FONT, FontWeight.BOLD, width / 4), TextAlignment.CENTER, Color.WHITE);
-        Rectangle background = buildRectangle("gameScene_action_button_" + id + "_Background", width, height, backgroundColor, true, Color.WHITE, width / 25, 0, height * 0.35);
+        Label header = buildLabel("gameScene_action_button_" + id + "_Header", headerText, Font.font(Main.TEXT_FONT, FontWeight.BOLD, width / 4), TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor());
+        Rectangle background = buildRectangle("gameScene_action_button_" + id + "_Background", width, height, backgroundColor, true, ProgramColor.BORDER_COLOR_LIGHT.getColor(), width / 25, 0, height * 0.35);
         ImageView symbol = createImageView("gameScene_action_button_" + id + "_Symbol", pathButtonSymbol, height * 0.90, height * 0.90, (width / 2) - (height * 0.90) / 2, (height * 0.35) + (height / 2) - (height * 0.90) / 2);
 
         centeringChildInPane(header, button);

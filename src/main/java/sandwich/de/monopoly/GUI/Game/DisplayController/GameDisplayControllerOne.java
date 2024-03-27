@@ -10,6 +10,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
+import sandwich.de.monopoly.Enums.ProgramColor;
 import sandwich.de.monopoly.Exceptions.PlayerNotFoundExceptions;
 import sandwich.de.monopoly.Fields.Field;
 import sandwich.de.monopoly.GUI.Game.Displays.DisplayOne.BankDisplay;
@@ -36,15 +37,15 @@ public class GameDisplayControllerOne extends Pane {
     public GameDisplayControllerOne(double width, double height) {
         setId("gameScene_DisplayOne");
         setMaxSize(width, height);
-        getChildren().add(buildRectangle("gameScene_playerDisplay_Background", width, height, Color.rgb(97, 220, 43), true, Color.WHITE, width * 0.005));
+        getChildren().add(buildRectangle("gameScene_playerDisplay_Background", width, height, ProgramColor.DISPLAY_ONE_BACKGROUND.getColor(), true, ProgramColor.BORDER_COLOR_LIGHT.getColor(), width * 0.005));
 
         playerDisplay = new PlayerDisplay(width, height, this);
         playerDisplay.setVisible(false);
 
-        tradingDisplay = new TradingDisplay(width, height, Color.RED, this);
+        tradingDisplay = new TradingDisplay(width, height, this);
         tradingDisplay.setVisible(false);
 
-        bankDisplay = new BankDisplay(width, height, Color.rgb(78, 138, 186));
+        bankDisplay = new BankDisplay(width, height);
         bankDisplay.setVisible(false);
 
         getChildren().addAll(playerDisplay, tradingDisplay, bankDisplay);
@@ -108,19 +109,19 @@ public class GameDisplayControllerOne extends Pane {
         playerBox.setId("gameScene_playerDisplay_PlayerBox");
         playerBox.setMaxSize(w, h);
 
-        Rectangle background = buildRectangle("gameScene_playerDisplay_playerBox_Background", w, h, backgroundColor, true, Color.WHITE, w * 0.005);
+        Rectangle background = buildRectangle("gameScene_playerDisplay_playerBox_Background", w, h, backgroundColor, true, ProgramColor.BORDER_COLOR_LIGHT.getColor(), w * 0.005);
 
-        Label headerName = buildLabel("gameScene_playerDisplay_playerBox_NameHeader", p.getName(), Font.font(Main.TEXT_FONT, FontWeight.BOLD, w / 8), TextAlignment.CENTER, Color.WHITE);
+        Label headerName = buildLabel("gameScene_playerDisplay_playerBox_NameHeader", p.getName(), Font.font(Main.TEXT_FONT, FontWeight.BOLD, w / 8), TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor());
         centeringChildInPane(headerName, playerBox);
 
         ImageView figureDisplay = createImageView("gameScene_playerDisplay_playerBox_FigureDisplay", p.getFigur().getFigureImage(), (w / 3.725) / 2, (w / 3.725) / 2, w - (w / 3.725) / 2 - (w * 0.001), h * 0.025);
 
-        Line headerSeparatingline = buildLine("gameScene_playerDisplay_playerBox_NameHeaderSeparatingLine", new Point2D(0, h * 0.15), new Point2D(w, h * 0.15), w * 0.005, Color.WHITE);
+        Line headerSeparatingline = buildLine("gameScene_playerDisplay_playerBox_NameHeaderSeparatingLine", new Point2D(0, h * 0.15), new Point2D(w, h * 0.15), w * 0.005, ProgramColor.BORDER_COLOR_LIGHT.getColor());
 
-        Label displayAccountBalance = buildLabel("gameScene_playerDisplay_playerBox_DisplayAccountBalance", ("Kontostand: " + p.getBankAccount()), Font.font(Main.TEXT_FONT, FontWeight.BOLD, w / 12), TextAlignment.CENTER, Color.WHITE, 0, h * 0.17);
+        Label displayAccountBalance = buildLabel("gameScene_playerDisplay_playerBox_DisplayAccountBalance", ("Kontostand: " + p.getBankAccount()), Font.font(Main.TEXT_FONT, FontWeight.BOLD, w / 12), TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor(), 0, h * 0.17);
         centeringChildInPane(displayAccountBalance, playerBox);
 
-        Line accountBalanceSeparatingline = buildLine("gameScene_playerDisplay_playerBox_AccountBalanceSeparatingLine", new Point2D(0, h * 0.30), new Point2D(w, h * 0.30), w * 0.005, Color.WHITE);
+        Line accountBalanceSeparatingline = buildLine("gameScene_playerDisplay_playerBox_AccountBalanceSeparatingLine", new Point2D(0, h * 0.30), new Point2D(w, h * 0.30), w * 0.005, ProgramColor.BORDER_COLOR_LIGHT.getColor());
 
         playerBox.getChildren().addAll( background, headerName, figureDisplay, headerSeparatingline, displayAccountBalance, accountBalanceSeparatingline);
 
@@ -145,7 +146,7 @@ public class GameDisplayControllerOne extends Pane {
         for (int i = 0, j = 0; i < 46; i++) {
 
             if (streetsR[j] == null)
-                streetsR[j] = buildRectangle("street:" + j + ", isOwner:", width, height, Color.rgb(173,173,173), true, Color.WHITE, (w * 0.005) / 2);
+                streetsR[j] = buildRectangle("street:" + j + ", isOwner:", width, height, ProgramColor.STREET_NOT_OWNED.getColor(), true, ProgramColor.BORDER_COLOR_LIGHT.getColor(), (w * 0.005) / 2);
 
             if (j == 22 || j == 23) {
                 streetsR[j].setFill(ANLAGEN);
@@ -177,7 +178,7 @@ public class GameDisplayControllerOne extends Pane {
                         }
                     } else {
                         streetsR[j].setId(streetsR[j].getId() + false);
-                        streetsR[j].setFill(Color.rgb(173,173,173));
+                        streetsR[j].setFill(ProgramColor.STREET_NOT_OWNED.getColor());
                     }
 
                     switch (j) {

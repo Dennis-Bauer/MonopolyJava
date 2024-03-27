@@ -3,9 +3,9 @@ package sandwich.de.monopoly.GUI.Game.Displays.DisplayMiddle;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
+import sandwich.de.monopoly.Enums.ProgramColor;
 import sandwich.de.monopoly.GUI.Game.DisplayController.MiddleGameDisplayController;
 import sandwich.de.monopoly.Main;
 import sandwich.de.monopoly.Fields.Street;
@@ -27,7 +27,7 @@ public class BuyStreetDisplay extends Pane {
 
         this.rootDisplay = rootDisplay;
 
-        infoText = buildLabel("buyStreetDisplay_InfoText", buildLongText("NULL_STREET", "NULL_MONEY"), Font.font(Main.TEXT_FONT, width * 0.10), TextAlignment.CENTER, Color.WHITE);
+        infoText = buildLabel("buyStreetDisplay_InfoText", buildLongText("NULL_STREET", "NULL_MONEY"), Font.font(Main.TEXT_FONT, width * 0.10), TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor());
         centeringChildInPane(infoText, rootDisplay);
 
         double spaceEdge = width * 0.05;
@@ -38,8 +38,8 @@ public class BuyStreetDisplay extends Pane {
         buyButton.setLayoutX(spaceEdge);
 
         buyButton.getChildren().addAll(
-                buildRectangle("buyStreetDisplay_buyButton_Background", width * 0.30, height * 0.15, Color.rgb(68, 214, 36), true, Color.BLACK, width * 0.01),
-                buildLabel("buyStreetDisplay_buyButton_Text", "Kaufen", Font.font(Main.TEXT_FONT, width * 0.05), TextAlignment.CENTER, Color.WHITE)
+                buildRectangle("buyStreetDisplay_buyButton_Background", width * 0.30, height * 0.15, ProgramColor.FINISH_BUTTONS.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), width * 0.01),
+                buildLabel("buyStreetDisplay_buyButton_Text", "Kaufen", Font.font(Main.TEXT_FONT, width * 0.05), TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor())
         );
 
         StackPane refuseButton = new StackPane();
@@ -48,8 +48,8 @@ public class BuyStreetDisplay extends Pane {
         refuseButton.setLayoutX(width - width * 0.30 - spaceEdge);
 
         refuseButton.getChildren().addAll(
-                buildRectangle("buyStreetDisplay_refuseButton_Background", width * 0.30, height * 0.15, Color.rgb(207, 17, 17), true, Color.BLACK, width * 0.01),
-                buildLabel("buyStreetDisplay_refuseButton_Text", "Nicht Kaufen", Font.font(Main.TEXT_FONT, width * 0.05), TextAlignment.CENTER, Color.WHITE)
+                buildRectangle("buyStreetDisplay_refuseButton_Background", width * 0.30, height * 0.15, ProgramColor.CHANCEL_BUTTONS.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), width * 0.01),
+                buildLabel("buyStreetDisplay_refuseButton_Text", "Nicht Kaufen", Font.font(Main.TEXT_FONT, width * 0.05), TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor())
         );
 
         getChildren().addAll(infoText, buyButton, refuseButton);

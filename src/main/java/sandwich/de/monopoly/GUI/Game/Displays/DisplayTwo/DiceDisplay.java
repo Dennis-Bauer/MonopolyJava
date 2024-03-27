@@ -3,13 +3,13 @@ package sandwich.de.monopoly.GUI.Game.Displays.DisplayTwo;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities;
+import sandwich.de.monopoly.Enums.ProgramColor;
 import sandwich.de.monopoly.GUI.Game.DisplayController.GameDisplayControllerTwo;
 import sandwich.de.monopoly.Main;
 import sandwich.de.monopoly.Threads.NumberAnimationThread;
@@ -40,14 +40,14 @@ public class DiceDisplay extends Pane {
         numberField.setLayoutX(width / 2 - (width * 0.80) / 2);
         numberField.setLayoutY(height * 0.30);
 
-        Rectangle numberBackground = buildRectangle("gameScene_diceDisplay_NumberBackground", numberField.getMaxWidth(), numberField.getMaxHeight(), Color.rgb(93, 150, 212), true, Color.BLACK, width * 0.0075);
-        Polygon arrowOne = buildTriangle("gameScene_diceDisplay_NumberArrowOne", new Point2D(0, 0), new Point2D(width * 0.05, 0), new Point2D(width * 0.025, height * 0.05), Color.BLACK, null, numberBackground.getWidth() / 2 - width * 0.025, 0);
-        Polygon arrowTwo = buildTriangle("gameScene_diceDisplay_NumberArrowTwo", new Point2D(0, height * 0.05), new Point2D(width * 0.05, height * 0.05), new Point2D(width * 0.025, 0), Color.BLACK, null, numberBackground.getWidth() / 2 - width * 0.025, numberBackground.getHeight() - height * 0.05);
+        Rectangle numberBackground = buildRectangle("gameScene_diceDisplay_NumberBackground", numberField.getMaxWidth(), numberField.getMaxHeight(), ProgramColor.DICE_BACKGROUND.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), width * 0.0075);
+        Polygon arrowOne = buildTriangle("gameScene_diceDisplay_NumberArrowOne", new Point2D(0, 0), new Point2D(width * 0.05, 0), new Point2D(width * 0.025, height * 0.05), ProgramColor.BORDER_COLOR_DARK.getColor(), null, numberBackground.getWidth() / 2 - width * 0.025, 0);
+        Polygon arrowTwo = buildTriangle("gameScene_diceDisplay_NumberArrowTwo", new Point2D(0, height * 0.05), new Point2D(width * 0.05, height * 0.05), new Point2D(width * 0.025, 0), ProgramColor.BORDER_COLOR_DARK.getColor(), null, numberBackground.getWidth() / 2 - width * 0.025, numberBackground.getHeight() - height * 0.05);
 
-        Label numberRowOne = buildLabel("gameScene_diceDisplay_NumberRowOne", "1-2-3-4-5-6-1-2-3-4-5-6-1-2-3-4-5", new Font(Main.TEXT_FONT, width * 0.05), TextAlignment.CENTER, Color.BLACK, 0, 0);
+        Label numberRowOne = buildLabel("gameScene_diceDisplay_NumberRowOne", "1-2-3-4-5-6-1-2-3-4-5-6-1-2-3-4-5", new Font(Main.TEXT_FONT, width * 0.05), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, 0);
         centeringChildInPane(numberRowOne, numberField);
 
-        Label numberRowTwo = buildLabel("gameScene_diceDisplay_NumberRowTwo", "1-2-3-4-5-6-1-2-3-4-5-6-1-2-3-4-5", new Font(Main.TEXT_FONT, width * 0.05), TextAlignment.CENTER, Color.BLACK, 0, numberBackground.getHeight() / 2);
+        Label numberRowTwo = buildLabel("gameScene_diceDisplay_NumberRowTwo", "1-2-3-4-5-6-1-2-3-4-5-6-1-2-3-4-5", new Font(Main.TEXT_FONT, width * 0.05), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, numberBackground.getHeight() / 2);
         centeringChildInPane(numberRowTwo, numberField);
 
         Pane roleDiceButton = new Pane();
@@ -56,8 +56,8 @@ public class DiceDisplay extends Pane {
         roleDiceButton.setLayoutX(width / 2 - (width * 0.80) / 2);
         roleDiceButton.setLayoutY(numberField.getLayoutY() + numberField.getMaxHeight() + height * 0.05);
 
-        Rectangle buttonBackground = buildRectangle("gameScene_roleDiceButton_Background", roleDiceButton.getMaxWidth(), roleDiceButton.getMaxHeight(), Color.rgb(93, 150, 212),true, Color.BLACK, width * 0.0075);
-        Label buttonText = buildLabel("gameScene_roleDiceButton_Text", "Würfel!", Font.font(Main.TEXT_FONT, FontWeight.BOLD, width * 0.05), TextAlignment.CENTER, Color.WHITE);
+        Rectangle buttonBackground = buildRectangle("gameScene_roleDiceButton_Background", roleDiceButton.getMaxWidth(), roleDiceButton.getMaxHeight(), ProgramColor.DICE_ROLE_BUTTON.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), width * 0.0075);
+        Label buttonText = buildLabel("gameScene_roleDiceButton_Text", "Würfel!", Font.font(Main.TEXT_FONT, FontWeight.BOLD, width * 0.05), TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor());
         centeringChildInPane(buttonText, roleDiceButton);
 
         numberField.getChildren().addAll(numberBackground, arrowOne, arrowTwo, numberRowOne, numberRowTwo);
