@@ -6,10 +6,8 @@ import javafx.geometry.Pos;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities;
-import sandwich.de.monopoly.Enums.ProgramColor;
 import sandwich.de.monopoly.Exceptions.PlayerIsOutOfBoundsExceptions;
 import sandwich.de.monopoly.Exceptions.PlayerNotFoundExceptions;
 import sandwich.de.monopoly.Exceptions.ToManyPlayersExceptions;
@@ -25,7 +23,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPut;
 import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPutLine;
-import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.*;
 
 
 public class GameBoard extends Pane{
@@ -324,13 +321,9 @@ public class GameBoard extends Pane{
         for (int i = 0; i < fields.length; i++) {
             if (fieldObjects.get(i) instanceof Street street) {
 
-                fields[i].setOnMouseEntered(mouseEvent0 -> {
-                    street.highlightField();
-                });
+                fields[i].setOnMouseEntered(mouseEvent0 -> street.highlightField());
 
-                fields[i].setOnMouseExited(mouseEvent -> {
-                   street.removeHighlight();
-                });
+                fields[i].setOnMouseExited(mouseEvent -> street.removeHighlight());
             }
         }
 

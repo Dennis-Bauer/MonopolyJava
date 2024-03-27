@@ -45,8 +45,8 @@ public class Game {
     //Gameboard
     private static final HashMap<Integer, Field> FIELDS = createFields();
     private final GameBoard gameBoard = new GameBoard(Main.WINDOW_HEIGHT * 0.98, FIELDS);
-    private Scene gameScene;
-    private Pane root;
+    private final Scene gameScene;
+    private final Pane root;
 
     //Game variables
     private int freeParkingMoney = 999;

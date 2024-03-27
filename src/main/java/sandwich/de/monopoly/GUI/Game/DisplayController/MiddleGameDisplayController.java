@@ -21,10 +21,10 @@ public class MiddleGameDisplayController extends Pane{
     private final StreetInfoDisplay streetInfoDisplay;
 
     //Variables
-    private Rectangle background;
+    private final Rectangle background;
 
     private final double MAX_Y;
-    private ScaleTransition waitTransition;
+    private final ScaleTransition waitTransition;
 
     public MiddleGameDisplayController(double width, double height, double maxY) {
         MAX_Y = maxY;
