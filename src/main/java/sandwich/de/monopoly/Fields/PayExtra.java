@@ -42,7 +42,7 @@ public class PayExtra extends Field{
         field.setId("extraPay_field");
         field.setMaxSize(width, height);
 
-        Rectangle background = buildRectangle("extraPay_Background" ,width, height, ProgramColor.BACKGROUND.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), borderWidth);
+        Rectangle background = buildRectangle("extraPay_Background" ,width, height, ProgramColor.GAMEBOARD_COLOR.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), borderWidth);
         Label header = buildLabel("extraPay_Header", "ERROR", Font.font(TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, height / 10);
         Label priceIndicator = buildLabel("station_PriceIndicator", (price + "€"), Font.font(TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, 5 * (height / 6));
 

@@ -14,11 +14,18 @@ public enum ProgramColor {
     MENU_FIRST_PLAYER(Color.rgb(92, 225, 230)),
 
     //Game
-    BACKGROUND(Color.rgb(112, 224, 88)),
-    DISPLAY_ONE_BACKGROUND(Color.rgb(97, 220, 43)),
-    DISPLAY_TWO_BACKGROUND(Color.rgb(56, 182, 255)),
-    DISPLAY_MID_BACKGROUND(Color.rgb(13, 155, 35)),
+    BACKGROUND(Color.rgb(164,164,164)),
+    GAMEBOARD_COLOR(Color.rgb(204, 227, 199)),
+    DISPLAY_ONE_BACKGROUND(Color.rgb(109, 232, 118)),
+    DISPLAY_TWO_BACKGROUND(Color.rgb(109, 171, 232)),
+    DISPLAY_MID_BACKGROUND(Color.rgb(125, 125, 125)),
     JAIL_COLOR(Color.rgb(255, 149, 0)),
+
+    //Streets
+    STREETS_HOUSE(Color.rgb(15, 209, 70)),
+    STREETS_HOTEL(Color.rgb(184, 4, 13)),
+
+    STREET_CARD_BACKGROUND(Color.rgb(27, 138, 17)),
 
     //Player display
     STREET_NOT_OWNED(Color.rgb(173,173,173)),
@@ -41,7 +48,6 @@ public enum ProgramColor {
     //Trading display
     TRADING_ARROW(Color.rgb(186, 41, 41)),
 
-
     //Bank display
     BANK_PLAYER_BACKGROUND(Color.rgb(78, 138, 186)),
 
@@ -50,7 +56,9 @@ public enum ProgramColor {
     CHANCEL_BUTTONS(Color.rgb(209, 8, 8)),
     FINISH_BUTTONS(Color.rgb(94, 222, 9)),
     SYMBOLE_COLOR(Color.rgb(217, 219, 215)),
+
     TEXT_COLOR(Color.rgb(255, 255, 255)),
+
     BORDER_COLOR_DARK(Color.rgb(0, 0, 0)),
     BORDER_COLOR_LIGHT(Color.rgb(255, 255, 255)),
     //Muss noch geguckt werden welche Farbe

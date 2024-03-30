@@ -54,7 +54,7 @@ public class Corner extends Field {
         field.setId("start_field");
         field.setMaxSize(size, size);
 
-        Rectangle background = buildRectangle("corner_start_Background", size, size, ProgramColor.BACKGROUND.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), borderWidth);
+        Rectangle background = buildRectangle("corner_start_Background", size, size, ProgramColor.GAMEBOARD_COLOR.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), borderWidth);
         ImageView arrow = createImageView("corner_start_Arrow" ,"/sandwich/de/monopoly/gameBoard/startArrow.png", size / 6, size / 1.25, (size -(size / 1.25)) / 2, (size -(size / 1.25)) / 2);
         Label text = buildLabel("corner_start_Text", buildLongText("LOS", "Bekomme 200", "beim drüber gehen"), Font.font(TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor());
 
@@ -73,7 +73,7 @@ public class Corner extends Field {
         field.setId("jail_field");
         field.setMaxSize(size, size);
 
-        Rectangle background = buildRectangle("corner_jail_Background", size, size, ProgramColor.BACKGROUND.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), borderWidth);
+        Rectangle background = buildRectangle("corner_jail_Background", size, size, ProgramColor.GAMEBOARD_COLOR.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), borderWidth);
         Rectangle backgroundJail = buildRectangle("corner_jail_JailBackground", size / 2, size / 2, ProgramColor.JAIL_COLOR.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), borderWidth, size - size / 2, 0);
         ImageView jailMan = createImageView("corner_jail_Man" ,"/sandwich/de/monopoly/gameBoard/jailMan.png", size / 3, size / 3, size - size / 2 + (((size / 2) - (size / 3) / 2) - size / 4), (((size / 2) - (size / 3) / 2) - size / 4));
         Label header = buildLabel("corner_jail_Header", "Im", Font.font(TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), size / 2 + size / 3, size / 18);
@@ -99,7 +99,7 @@ public class Corner extends Field {
         field.setId("freeParking_field");
         field.setMaxSize(size, size);
 
-        Rectangle background = buildRectangle("corner_freeParking_Background", size, size, ProgramColor.BACKGROUND.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), borderWidth);
+        Rectangle background = buildRectangle("corner_freeParking_Background", size, size, ProgramColor.GAMEBOARD_COLOR.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), borderWidth);
         Label header = buildLabel("corner_freeParking_Header", "Freies", Font.font(TEXT_FONT, FontWeight.BOLD, fontSize * 2), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), size / 5 + size / 3.25, size / 5.75);
         ImageView freeParking = createImageView("corner_freeParking_Picture", "/sandwich/de/monopoly/gameBoard/freeParking.png", size / 1.5, size / 1.75, size / 4.75,size / 5);
         Label footer = buildLabel("corner_freeParking_Footer", "Parken", Font.font(TEXT_FONT, FontWeight.BOLD, fontSize * 2), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), size / 8.25, size / 1.7);
@@ -119,7 +119,7 @@ public class Corner extends Field {
         field.setId("goToJail_field");
         field.setMaxSize(size, size);
 
-        Rectangle background = buildRectangle("corner_goToJail_Background", size, size, ProgramColor.BACKGROUND.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), borderWidth);
+        Rectangle background = buildRectangle("corner_goToJail_Background", size, size, ProgramColor.GAMEBOARD_COLOR.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), borderWidth);
         Label header = buildLabel("corner_goToJail_Header", "Geh ins", Font.font(TEXT_FONT, FontWeight.BOLD, fontSize * 2), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), size / 6 + size / 3.25, size / 5.75);
         ImageView freeParking = createImageView("corner_goToJail_Picture", "/sandwich/de/monopoly/gameBoard/goToJail.png", size / 1.5, size / 1.75, size / 4.75,size / 5);
         Label footer = buildLabel("corner_goToJail_Footer", "Gefängnis", Font.font(TEXT_FONT, FontWeight.BOLD, fontSize * 2), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), -(size / 15), size / 1.8);

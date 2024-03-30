@@ -31,7 +31,7 @@ public class Station extends Field {
         field.setId("station_field");
         field.setMaxSize(width, height);
 
-        Rectangle background = buildRectangle("station_Background" ,width, height, ProgramColor.BACKGROUND.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), borderWidth);
+        Rectangle background = buildRectangle("station_Background" ,width, height, ProgramColor.GAMEBOARD_COLOR.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), borderWidth);
         Label header = buildLabel("station_Header", name, Font.font(TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, height / 50);
         ImageView train = createImageView("station_Image", "/sandwich/de/monopoly/gameBoard/train.png", width / 1.15, height / 3.7,(width - width / 1.15) / 2, height / 3);
         Label priceIndicator = buildLabel("station_PriceIndicator", (price + "€"), Font.font(TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, 5 * (height / 6));

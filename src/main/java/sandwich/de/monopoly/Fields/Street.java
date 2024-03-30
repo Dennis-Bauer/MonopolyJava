@@ -20,21 +20,39 @@ public class Street extends Field{
     //Field (Visual) values
     private final Color color;
 
-    //Functional values
+    //Street values
     private final String name;
     private final int salePrice;
+    private final int rent;
+    private final int[] rentHouses;
+    private final int rentHotel;
+    private final int housePrice;
+    private final int hotelPrice;
+
+
+    //Functional values
+
     private boolean isOwned;
     private Player owner;
-    private int rent;
 
-    public Street(String name, int salePrice, Color color, double position) {
+
+    public Street(String name, int salePrice, int rent, int[] rentHouses, int rentHotel, int housePrice, int hotelPrice, Color color, double position) {
         super(position);
         this.name = name;
         this.salePrice = salePrice;
+        this.rent = rent;
+
+        if (rentHouses.length != 4)
+            throw new IllegalArgumentException("Rents must be stated for 4 houses, Street" + name + "has not sensed this");
+        else
+            this.rentHouses = rentHouses;
+
+        this.rentHotel = rentHotel;
+
+        this.housePrice = housePrice;
+        this.hotelPrice = hotelPrice;
+
         this.color = color;
-
-
-        rent = 200;
     }
 
     public void setOwner(Player owner) {
@@ -42,31 +60,6 @@ public class Street extends Field{
 
         this.owner = owner;
     }
-
-    public Player getOwner() {
-        return owner;
-    }
-
-    public boolean isOwned() {
-        return isOwned;
-    }
-
-    public int getSalePrice() {
-        return salePrice;
-    }
-
-    public int getRent() {
-        return rent;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Color getColor() {
-        return color;
-    }
-
     private Rectangle background;
     private Rectangle colorIndicator;
 
@@ -76,7 +69,7 @@ public class Street extends Field{
         field.setId("street_field");
         field.setMaxSize(width, height);
 
-        background = buildRectangle("street_Background" ,width, height, ProgramColor.BACKGROUND.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), borderWidth);
+        background = buildRectangle("street_Background" ,width, height, ProgramColor.GAMEBOARD_COLOR.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), borderWidth);
         colorIndicator = buildRectangle("street_ColorIndicator" ,width, height/4, color, true, ProgramColor.BORDER_COLOR_DARK.getColor(), borderWidth);
         Label nameIndicator =  buildLabel("street_NameIndicator", name, Font.font(TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, height / 3);
         Label priceIndicator = buildLabel("street_PriceIndicator", (salePrice + "€"), Font.font(TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, 5 * (height / 6));
@@ -108,4 +101,43 @@ public class Street extends Field{
         colorIndicator.setStroke(ProgramColor.BORDER_COLOR_DARK.getColor());
     }
 
+    public Player getOwner() {
+        return owner;
+    }
+
+    public boolean isOwned() {
+        return isOwned;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public int getSalePrice() {
+        return salePrice;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getRent() {
+        return rent;
+    }
+
+    public int[] getRentHouse() {
+        return rentHouses;
+    }
+
+    public int getRentHotel() {
+        return rentHotel;
+    }
+
+    public int getHousePrice() {
+        return housePrice;
+    }
+
+    public int getHotelPrice() {
+        return hotelPrice;
+    }
 }

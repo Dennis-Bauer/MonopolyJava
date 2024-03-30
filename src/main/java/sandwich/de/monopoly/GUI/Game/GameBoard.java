@@ -8,6 +8,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 import sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities;
+import sandwich.de.monopoly.Enums.ProgramColor;
 import sandwich.de.monopoly.Exceptions.PlayerIsOutOfBoundsExceptions;
 import sandwich.de.monopoly.Exceptions.PlayerNotFoundExceptions;
 import sandwich.de.monopoly.Exceptions.ToManyPlayersExceptions;
@@ -23,6 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPut;
 import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPutLine;
+import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildRectangle;
 
 
 public class GameBoard extends Pane{
@@ -41,6 +43,9 @@ public class GameBoard extends Pane{
         FIELD_WIDTH = (size / MIDDLE_RECTANGLE_RATION) / 9;
         PLAYER_FIGURE_SIZE = size * 0.035;
 
+        getChildren().add(
+            buildRectangle("gameBoard_Background", size, size, ProgramColor.GAMEBOARD_COLOR.getColor(),true, null, 0)
+        );
 
         buildGameBoard(size, fields);
 
@@ -321,7 +326,9 @@ public class GameBoard extends Pane{
         for (int i = 0; i < fields.length; i++) {
             if (fieldObjects.get(i) instanceof Street street) {
 
-                fields[i].setOnMouseEntered(mouseEvent0 -> street.highlightField());
+                fields[i].setOnMouseEntered(mouseEvent -> street.highlightField());
+
+                fields[i].setOnMouseClicked(mouseEvent -> Main.getGameOperator().getMiddleDisplayController().displayStreetInfoDisplay(street));
 
                 fields[i].setOnMouseExited(mouseEvent -> street.removeHighlight());
             }

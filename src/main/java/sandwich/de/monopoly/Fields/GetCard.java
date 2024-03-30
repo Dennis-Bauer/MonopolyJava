@@ -53,7 +53,7 @@ public class GetCard extends Field{
         field.setId("getChanceCard_field");
         field.setMaxSize(width, height);
 
-        Rectangle background = buildRectangle("chance_Background" ,width, height, ProgramColor.BACKGROUND.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), borderWidth);
+        Rectangle background = buildRectangle("chance_Background" ,width, height, ProgramColor.GAMEBOARD_COLOR.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), borderWidth);
         Label header = buildLabel("chance_Header", "Chance", Font.font(TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, height / 50);
 
         Image i = null;
@@ -82,7 +82,7 @@ public class GetCard extends Field{
         field.setId("getCommunityCard_field");
         field.setMaxSize(width, height);
 
-        Rectangle background = buildRectangle("community_Background" ,width, height, ProgramColor.BACKGROUND.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), borderWidth);
+        Rectangle background = buildRectangle("community_Background" ,width, height, ProgramColor.GAMEBOARD_COLOR.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), borderWidth);
         Label header = buildLabel("community_Header", buildLongText("Gesellschafts", "Feld"), Font.font(TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, height / 50);
         ImageView image = createImageView("community_Image", "/sandwich/de/monopoly/gameBoard/communityChest.png", width / 1.1, height / 1.9,(width - width / 1.15) / 2, height / 3.5);
 

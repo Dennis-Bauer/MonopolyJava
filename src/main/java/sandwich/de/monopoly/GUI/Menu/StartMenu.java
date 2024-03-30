@@ -20,6 +20,8 @@ import javafx.util.Duration;
 import sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities;
 import sandwich.de.monopoly.Enums.Figuren;
 import sandwich.de.monopoly.Enums.ProgramColor;
+import sandwich.de.monopoly.Fields.Street;
+import sandwich.de.monopoly.GUI.Game.DisplayController.MiddleGameDisplayController;
 import sandwich.de.monopoly.Game;
 import sandwich.de.monopoly.Main;
 import sandwich.de.monopoly.Player;
@@ -74,6 +76,13 @@ public class StartMenu extends Pane{
     }
 
     private void buildBackground() {
+
+        MiddleGameDisplayController m = new MiddleGameDisplayController(Main.WINDOW_HEIGHT * 0.40, Main.WINDOW_HEIGHT * 0.20, Main.WINDOW_HEIGHT * 0.18);
+        m.displayStreetInfoDisplay(new Street("Gelbe Straße", 130 ,241, new int[]{352, 463, 574, 685}, 796, 1, 2, Color.YELLOW, 1));
+
+        getChildren().add(m);
+        m.toFront();
+
         ImageView background = createImageView("menu_Background", "/sandwich/de/monopoly/menu/background.png", width, height, 0, 0);
         ImageView header = createImageView("menu_Header", "/sandwich/de/monopoly/menu/header.png", width / 2.196, (width / 2.196) * 0.18, width / 2 - (width / 2.196) / 2, 0);
 
@@ -108,10 +117,14 @@ public class StartMenu extends Pane{
         Image startButtonHover = creatImage("/sandwich/de/monopoly/menu/startButtonGif.gif");
         Image startButtonPressed = creatImage("/sandwich/de/monopoly/menu/startButtonPressed.gif");
         ImageView startButton = createImageView("menu_StartButton", startButtonNormal, width / 3.516, (width / 3.516) * 0.230, width / 2 - (width / 3.516) / 2, height * 0.84);
-        startButton.setOnMouseEntered(event -> startButton.setImage(startButtonHover));
+        startButton.setOnMouseEntered(event -> {
+            startButton.setImage(startButtonHover);
+            m.toFront();
+        });
         startButton.setOnMouseExited(event -> startButton.setImage(startButtonNormal));
         startButton.setOnMousePressed(event -> startButton.setImage(startButtonPressed));
         startButton.setOnMouseReleased(event -> startButton.setImage(startButtonHover));
+
 
         Label errorMessage = buildLabel("menu_ErrorLabel", "ERROR", Font.font(Main.TEXT_FONT, FontWeight.BOLD, width * 0.01), TextAlignment.CENTER, ProgramColor.ERROR_MESSAGES.getColor(), 0, height * 0.81);
         errorMessage.toFront();
