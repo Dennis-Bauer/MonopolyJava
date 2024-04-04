@@ -13,6 +13,7 @@ import javafx.scene.text.TextAlignment;
 import sandwich.de.monopoly.Enums.ProgramColor;
 import sandwich.de.monopoly.Exceptions.PlayerNotFoundExceptions;
 import sandwich.de.monopoly.Fields.Field;
+import sandwich.de.monopoly.Fields.Station;
 import sandwich.de.monopoly.GUI.Game.Displays.DisplayOne.BankDisplay;
 import sandwich.de.monopoly.GUI.Game.Displays.DisplayOne.PlayerDisplay;
 import sandwich.de.monopoly.GUI.Game.Displays.DisplayOne.TradingDisplay;
@@ -45,7 +46,7 @@ public class GameDisplayControllerOne extends Pane {
         tradingDisplay = new TradingDisplay(width, height, this);
         tradingDisplay.setVisible(false);
 
-        bankDisplay = new BankDisplay(width, height);
+        bankDisplay = new BankDisplay(width, height, this);
         bankDisplay.setVisible(false);
 
         getChildren().addAll(playerDisplay, tradingDisplay, bankDisplay);
@@ -143,31 +144,48 @@ public class GameDisplayControllerOne extends Pane {
         final double startY = h * 0.40;
         final double startX = w * 0.04;
 
-        for (int i = 0, j = 0; i < 46; i++) {
+        for (int i = 0, j = 0, b = 22; i < fields.size() + 2; i++) {
 
-            if (streetsR[j] == null)
-                streetsR[j] = buildRectangle("street:" + j + ", isOwner:", width, height, ProgramColor.STREET_NOT_OWNED.getColor(), true, ProgramColor.BORDER_COLOR_LIGHT.getColor(), (w * 0.005) / 2);
+            if (fields.get(i) instanceof Street) {
+                String id;
+                if (i < 10)
+                    id = "fieldNumber:0" + i + ", hasOwner:";
+                else
+                    id = "fieldNumber:" + i + ", hasOwner:";
 
-            if (j == 22 || j == 23) {
-                streetsR[j].setFill(ANLAGEN);
-                streetsR[j].setY(startY + height + space);
-                streetsR[j].setX(startX + (j - 16) * (width + space));
+                streetsR[j] = buildRectangle(id, width, height, ProgramColor.STREET_NOT_OWNED.getColor(), true, ProgramColor.BORDER_COLOR_LIGHT.getColor(), (w * 0.01) / 2);
+            } else if (fields.get(i) instanceof Station) {
+                String id;
+                if (i < 10)
+                    id = "fieldNumber:0" + i + ", hasOwner:";
+                else
+                    id = "fieldNumber:" + i + ", hasOwner:";
+                streetsR[b] = buildRectangle(id, width, height, ProgramColor.STREET_NOT_OWNED.getColor(), true, ProgramColor.BORDER_COLOR_LIGHT.getColor(), (w * 0.01) / 2);
+            }
 
-                j++;
+            if (i == 10) {
+                streetsR[26] = buildRectangle("fieldNumber:" + i + ", hasOwner:", width, height, ProgramColor.STREET_NOT_OWNED.getColor(), true, ProgramColor.BORDER_COLOR_LIGHT.getColor(), (w * 0.01) / 2);
+                streetsR[26].setFill(ANLAGEN);
+                streetsR[26].setY(startY + height + space);
+                streetsR[26].setX(startX + (22 - 16) * (width + space));
+            } else if (i == 20) {
+                streetsR[27] = buildRectangle("fieldNumber:" + i + ", hasOwner:", width, height, ProgramColor.STREET_NOT_OWNED.getColor(), true, ProgramColor.BORDER_COLOR_LIGHT.getColor(), (w * 0.01) / 2);
 
-            } else if (j >= 24) {
-                streetsR[j].setFill(BAHNHOEFE);
+                streetsR[27].setFill(ANLAGEN);
+                streetsR[27].setY(startY + height + space);
+                streetsR[27].setX(startX + (23 - 16) * (width + space));
+            }
+            else if (fields.get(i) instanceof Station) {
+                streetsR[b].setFill(BAHNHOEFE);
 
-                if (j == 24 || j == 25) {
-                    streetsR[j].setY(startY + 2 * (height + space));
-                    streetsR[j].setX(startX + (j - 18) * (width + space));
+                if (b == 22 || b == 23) {
+                    streetsR[b].setY(startY + 2 * (height + space));
+                    streetsR[b].setX(startX + (b - 16) * (width + space));
                 } else {
-                    streetsR[j].setY(startY + 3 * (height + space));
-                    streetsR[j].setX(startX + (j - 20) * (width + space));
+                    streetsR[b].setY(startY + 3 * (height + space));
+                    streetsR[b].setX(startX + (b - 18) * (width + space));
                 }
-
-                j++;
-
+                b++;
             } else {
                 if (fields.get(i) instanceof Street street) {
 
@@ -177,8 +195,10 @@ public class GameDisplayControllerOne extends Pane {
                             streetsR[j].setFill(street.getColor());
                         }
                     } else {
-                        streetsR[j].setId(streetsR[j].getId() + false);
-                        streetsR[j].setFill(ProgramColor.STREET_NOT_OWNED.getColor());
+                        //AUF FALSE ÄNDEREN!!!!
+                        streetsR[j].setId(streetsR[j].getId() + true);
+                        //streetsR[j].setFill(ProgramColor.STREET_NOT_OWNED.getColor());
+                        streetsR[j].setFill(street.getColor());
                     }
 
                     switch (j) {
@@ -215,7 +235,6 @@ public class GameDisplayControllerOne extends Pane {
                             streetsR[j].setX(startX + 5 * (width + space));
                         }
                     }
-
                     j++;
                 }
             }

@@ -55,6 +55,7 @@ public enum ProgramColor {
     ERROR_MESSAGES(Color.rgb(209, 8, 8)),
     CHANCEL_BUTTONS(Color.rgb(209, 8, 8)),
     FINISH_BUTTONS(Color.rgb(94, 222, 9)),
+    SELECT_COLOR(Color.rgb(209, 8, 8)),
     SYMBOLE_COLOR(Color.rgb(217, 219, 215)),
 
     TEXT_COLOR(Color.rgb(255, 255, 255)),

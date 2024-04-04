@@ -39,7 +39,7 @@ public class GameDisplayControllerTwo extends Pane {
         actionDisplay.setVisible(false);
     }
 
-    public void showPlayerAction() {
+    public void displayPlayerAction() {
         diceDisplay.setVisible(false);
         actionDisplay.setVisible(true);
     }

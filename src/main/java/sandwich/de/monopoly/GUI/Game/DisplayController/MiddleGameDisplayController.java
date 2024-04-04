@@ -77,31 +77,34 @@ public class MiddleGameDisplayController extends Pane{
         enterAnimation(true);
     }
     public void displayStreetInfoDisplay(Street street) {
-        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(0.5), this);
-        if (streetInfoDisplay.isVisible()) {
-            fadeTransition.setFromValue(1);
-            fadeTransition.setToValue(0);
-            fadeTransition.play();
-        } else {
-            fadeTransition.setDuration(Duration.seconds(0.1));
-            fadeTransition.setFromValue(1);
-            fadeTransition.setToValue(1);
-            fadeTransition.play();
-        }
+        if (!buyStreetDisplay.isVisible() && !payDisplay.isVisible()) {
+            FadeTransition fadeTransition = new FadeTransition(Duration.seconds(0.5), this);
+            if (streetInfoDisplay.isVisible()) {
+                fadeTransition.setFromValue(1);
+                fadeTransition.setToValue(0);
+                fadeTransition.play();
+            } else {
+                fadeTransition.setDuration(Duration.seconds(0.1));
+                fadeTransition.setFromValue(1);
+                fadeTransition.setToValue(1);
+                fadeTransition.play();
+            }
 
-        fadeTransition.setOnFinished(event -> {
-            resetDisplay();
-            setMaxSize(streetInfoDisplay.getWIDTH(), streetInfoDisplay.getHEIGHT());
-            setLayoutX(((Main.WINDOW_HEIGHT * 0.98) / 2) - streetInfoDisplay.getWIDTH() / 2);
-            background.setFill(ProgramColor.STREET_CARD_BACKGROUND.getColor());
-            background.setWidth(streetInfoDisplay.getWIDTH());
-            background.setHeight(streetInfoDisplay.getHEIGHT());
+            fadeTransition.setOnFinished(event -> {
+                resetDisplay();
+                setMaxSize(streetInfoDisplay.getWIDTH(), streetInfoDisplay.getHEIGHT());
+                setLayoutX(((Main.WINDOW_HEIGHT * 0.98) / 2) - streetInfoDisplay.getWIDTH() / 2);
+                background.setFill(ProgramColor.STREET_CARD_BACKGROUND.getColor());
+                background.setWidth(streetInfoDisplay.getWIDTH());
+                background.setHeight(streetInfoDisplay.getHEIGHT());
 
-            streetInfoDisplay.buildStreetDisplay(street);
-            streetInfoDisplay.setVisible(true);
+                streetInfoDisplay.buildStreetDisplay(street);
+                streetInfoDisplay.setVisible(true);
 
-            enterAnimation(false);
-        });
+                enterAnimation(false);
+            });
+        } else
+            Main.getGameOperator().displayErrorMessage("Du kannst im moment keine Straßen infos einsehen!");
     }
 
     public void removeDisplay() {

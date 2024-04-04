@@ -225,7 +225,9 @@ public class PlayerDisplay extends Pane{
 
         playerShowBox.getChildren().add(tradingButton);
 
-        for (Rectangle street : streets) {playerShowBox.getChildren().add(street);}
+        for (Rectangle street : streets) {
+            System.out.println("ID: " + street.getId());
+            playerShowBox.getChildren().add(street);}
 
         return playerShowBox;
     }

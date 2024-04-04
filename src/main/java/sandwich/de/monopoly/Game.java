@@ -1,9 +1,16 @@
 package sandwich.de.monopoly;
 
+import javafx.animation.FadeTransition;
+import javafx.animation.ScaleTransition;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.TextAlignment;
+import javafx.util.Duration;
 import sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities;
 import sandwich.de.monopoly.Enums.CornerTyp;
 import sandwich.de.monopoly.Enums.ExtraFields;
@@ -22,6 +29,7 @@ import java.util.HashMap;
 import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPut;
 import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPutLine;
 import static sandwich.de.monopoly.DennisUtilitiesPackage.Java.JavaUtilities.buildLongText;
+import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildLabel;
 import static sandwich.de.monopoly.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildRectangle;
 
 public class Game {
@@ -45,6 +53,7 @@ public class Game {
     //Gameboard
     private static final HashMap<Integer, Field> FIELDS = createFields();
     private final GameBoard gameBoard = new GameBoard(Main.WINDOW_HEIGHT * 0.98, FIELDS);
+    private final Label errorMessage = buildLabel("gameBoard_ErrorMessage", "NULL", Font.font( Main.TEXT_FONT, FontWeight.BOLD, Main.WINDOW_HEIGHT * 0.015), TextAlignment.CENTER, ProgramColor.ERROR_MESSAGES.getColor(), 0, 0);
     private final Scene gameScene;
     private final Pane root;
 
@@ -70,7 +79,6 @@ public class Game {
         displayControllerTwo = new GameDisplayControllerTwo((Main.WINDOW_WIDTH - Main.WINDOW_HEIGHT) / 1.1, Main.WINDOW_HEIGHT * 0.38);
         middleDisplayController = new MiddleGameDisplayController(Main.WINDOW_HEIGHT * 0.40, Main.WINDOW_HEIGHT * 0.20, Main.WINDOW_HEIGHT * 0.18);
 
-
         VBox sideDisplays = new VBox(Main.WINDOW_HEIGHT * 0.02);
 
         sideDisplays.getChildren().addAll(
@@ -80,15 +88,16 @@ public class Game {
         sideDisplays.setLayoutX(Main.WINDOW_HEIGHT + (((Main.WINDOW_WIDTH - Main.WINDOW_HEIGHT) / 2) - ((Main.WINDOW_WIDTH - Main.WINDOW_HEIGHT) / 1.1) / 2));
         sideDisplays.setLayoutY(0);
 
-
-        //REMOVE
-        middleDisplayController.setLayoutY(Main.WINDOW_HEIGHT * 0.18);
+        errorMessage.layoutXProperty().bind(Main.getPrimaryStage().heightProperty().divide(2).subtract(errorMessage.widthProperty().divide(2)));
+        errorMessage.setLayoutY(Main.WINDOW_HEIGHT * 0.81);
+        errorMessage.setVisible(false);
 
         root = new Pane(
                 buildRectangle("gameScene_Background", Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT, ProgramColor.BACKGROUND.getColor(), true, null, 0, 0, 0),
                 gameBoard,
                 sideDisplays,
-                middleDisplayController
+                middleDisplayController,
+                errorMessage
         );
 
         gameScene = new Scene(root);
@@ -165,7 +174,7 @@ public class Game {
         //Zeigt die Spieler an
         gameBoard.addPlayers(playerList);
         displayControllerOne.displayPlayers(playerList);
-        displayControllerTwo.displayDice();
+        displayControllerTwo.displayPlayerAction();
         //Zeigt das Game Board an
         Main.getPrimaryStage().setScene(gameScene);
     }
@@ -206,7 +215,7 @@ public class Game {
     //Detects the field where the player is standing on, and then carries out the function of the field.
     public void playerHasMoved() {
         turnPlayerIsMoving = false;
-        displayControllerTwo.showPlayerAction();
+        displayControllerTwo.displayPlayerAction();
 
         if (FIELDS.get(turnPlayer.getFieldPostion()) instanceof Street street) { //Is the player on a Street
             if (!street.isOwned()) {
@@ -261,6 +270,74 @@ public class Game {
         else throw new IllegalArgumentException("No negative amounts can be transfer!");
     }
 
+    public void displayErrorMessage(String message) {
+        errorMessage.setText(message);
+        errorMessage.setVisible(true);
+
+        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(0.5), errorMessage);
+        fadeTransition.setFromValue(1);
+        fadeTransition.setToValue(0);
+
+        ScaleTransition waitTransition = new ScaleTransition(Duration.seconds(1), errorMessage);
+        waitTransition.setCycleCount(3);
+        waitTransition.setByX(Main.WINDOW_WIDTH * 0.00003);
+        waitTransition.setByY(Main.WINDOW_WIDTH * 0.00003);
+        waitTransition.setAutoReverse(true);
+        waitTransition.play();
+
+        waitTransition.setOnFinished(actionEvent -> fadeTransition.play());
+        fadeTransition.setOnFinished(actionEvent -> {
+            if (errorMessage.isVisible()) {
+                errorMessage.setVisible(false);
+                fadeTransition.setToValue(1);
+                fadeTransition.play();
+            }
+        });
+    }
+
+    //Getter
+    public Player getTurnPlayer() {
+        return turnPlayer;
+    }
+
+    public GameDisplayControllerOne getDisplayControllerOne() {
+        return displayControllerOne;
+    }
+
+    public GameDisplayControllerTwo getDisplayControllerTwo() {
+        return displayControllerTwo;
+    }
+
+    public MiddleGameDisplayController getMiddleDisplayController() {
+        return middleDisplayController;
+    }
+
+    public ArrayList<Player> getPlayers() {
+        ArrayList<Player> ps = new ArrayList<>();
+
+        if (playerOne != null)
+            ps.add(playerOne);
+        if (playerTwo != null)
+            ps.add(playerTwo);
+        if (playerThree != null)
+            ps.add(playerThree);
+        if (playerFour != null)
+            ps.add(playerFour);
+        if (playerFive != null)
+            ps.add(playerFive);
+
+        return ps;
+    }
+
+    public boolean isTurnPlayerIsMoving() {
+        return turnPlayerIsMoving;
+    }
+
+    public static HashMap<Integer, Field> getFields() {
+        return FIELDS;
+    }
+
+    //Private
     private static HashMap<Integer, Field> createFields() {
         HashMap<Integer, Field> s = new HashMap<>();
 
@@ -308,48 +385,6 @@ public class Game {
         return s;
     }
 
-
-    //Getter
-    public Player getTurnPlayer() {
-        return turnPlayer;
-    }
-
-    public GameDisplayControllerOne getDisplayControllerOne() {
-        return displayControllerOne;
-    }
-
-    public GameDisplayControllerTwo getDisplayControllerTwo() {
-        return displayControllerTwo;
-    }
-
-    public MiddleGameDisplayController getMiddleDisplayController() {
-        return middleDisplayController;
-    }
-
-    public ArrayList<Player> getPlayers() {
-        ArrayList<Player> ps = new ArrayList<>();
-
-        if (playerOne != null)
-            ps.add(playerOne);
-        if (playerTwo != null)
-            ps.add(playerTwo);
-        if (playerThree != null)
-            ps.add(playerThree);
-        if (playerFour != null)
-            ps.add(playerFour);
-        if (playerFive != null)
-            ps.add(playerFive);
-
-        return ps;
-    }
-
-    public boolean isTurnPlayerIsMoving() {
-        return turnPlayerIsMoving;
-    }
-
-    public static HashMap<Integer, Field> getFields() {
-        return FIELDS;
-    }
 
 }
 
