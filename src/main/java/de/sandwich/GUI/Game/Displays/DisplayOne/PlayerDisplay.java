@@ -217,7 +217,7 @@ public class PlayerDisplay extends Pane{
         tradingButton.setLayoutY(height * 0.40);
         tradingButton.setLayoutX(width * 0.32);
 
-        tradingButton.setOnMouseClicked(event -> Main.getGameOperator().getDisplayControllerOne().displayTradingMenu());
+        tradingButton.setOnMouseClicked(event -> rootDisplay.displayTradingMenu());
 
         Rectangle[] streets = buildStreetInventar(width, height, player);
 

@@ -25,7 +25,7 @@ public class Main extends Application {
 
     private static Stage primaryStage;
     @Override
-    public void start(Stage stage) {
+    public void start(@SuppressWarnings("exports") Stage stage) {
 
         primaryStage = stage;
         stage.setTitle("-M---o-----n----o---p----o---l----y");
@@ -73,6 +73,7 @@ public class Main extends Application {
         else throw new NullPointerException("The game operator is already created!");
     }
 
+    @SuppressWarnings("exports")
     public static Stage getPrimaryStage() {
         return primaryStage;
     }

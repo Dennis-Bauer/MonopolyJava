@@ -2,7 +2,6 @@ package de.sandwich;
 
 import de.sandwich.DennisUtilitiesPackage.Java.ConsoleUtilities;
 import de.sandwich.Enums.Figuren;
-import de.sandwich.Exceptions.PlayerIsOutOfBoundsExceptions;
 import de.sandwich.Exceptions.PlayerNotFoundExceptions;
 
 import static de.sandwich.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPut;
@@ -21,7 +20,7 @@ public class Player {
     private int inJailRemain = 0;
 
 
-    public Player(String name, Figuren f, int orderNumber) {
+    public Player(String name, @SuppressWarnings("exports") Figuren f, int orderNumber) {
         this.name = name;
         this.figur = f;
         this.orderNumber = orderNumber;
@@ -39,6 +38,7 @@ public class Player {
         return bankAccount;
     }
 
+    @SuppressWarnings("exports")
     public Figuren getFigur() {
         return figur;
     }

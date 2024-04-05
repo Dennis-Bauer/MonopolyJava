@@ -1,12 +1,10 @@
 package de.sandwich.Fields;
 
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Line;
 
 public abstract class Field {
 
     private final double POS;
-    private Line[] borderLines;
 
     protected Pane field;
 

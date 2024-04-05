@@ -20,15 +20,13 @@ import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXUtilities.centerin
 
 public class ActionDisplay extends Pane {
 
-    private final GameDisplayControllerTwo rootDisplay;
-    private Pane aktionButtons;
-    private Pane diceButton;
+    //private final GameDisplayControllerTwo rootDisplay;
 
     public ActionDisplay(double width, double height, GameDisplayControllerTwo rootDisplay) {
         setId("gameScene_TradingDisplay");
         setMaxSize(width, height);
 
-        this.rootDisplay = rootDisplay;
+        //this.rootDisplay = rootDisplay;
 
         double middleX = (width / 2) - (width * 0.25) / 2;
         double y = height * 0.30;

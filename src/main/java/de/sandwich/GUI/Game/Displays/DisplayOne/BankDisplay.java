@@ -2,7 +2,6 @@ package de.sandwich.GUI.Game.Displays.DisplayOne;
 
 import de.sandwich.GUI.Game.DisplayController.GameDisplayControllerOne;
 import javafx.animation.ScaleTransition;
-import javafx.animation.TranslateTransition;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;

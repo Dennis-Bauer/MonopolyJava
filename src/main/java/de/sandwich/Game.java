@@ -240,6 +240,7 @@ public class Game {
                     turnPlayer.setInJail(true);
                     gameBoard.setPlayerInJail(turnPlayer);
                 }
+                default -> {break;} //Do nothing
             }
         } else if (FIELDS.get(turnPlayer.getFieldPostion()) instanceof PayExtra payField) { //Is the player on a pay extra field
             middleDisplayController.displayPayDisplay(payField.getTyp().getMessage(), payField.getPrice());
@@ -247,7 +248,7 @@ public class Game {
     }
 
     //Controls the Street buy System
-    public void buyStreet(Street street) {
+    public void buyStreet(@SuppressWarnings("exports") Street street) {
         street.setOwner(turnPlayer);
         turnPlayer.addBankAccount(-street.getSalePrice());
     }
@@ -306,14 +307,17 @@ public class Game {
         return turnPlayer;
     }
 
+    @SuppressWarnings("exports")
     public GameDisplayControllerOne getDisplayControllerOne() {
         return displayControllerOne;
     }
 
+    @SuppressWarnings("exports")
     public GameDisplayControllerTwo getDisplayControllerTwo() {
         return displayControllerTwo;
     }
 
+    @SuppressWarnings("exports")
     public MiddleGameDisplayController getMiddleDisplayController() {
         return middleDisplayController;
     }
@@ -339,6 +343,7 @@ public class Game {
         return turnPlayerIsMoving;
     }
 
+    @SuppressWarnings("exports")
     public static HashMap<Integer, Field> getFields() {
         return FIELDS;
     }

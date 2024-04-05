@@ -194,7 +194,7 @@ public class TradingDisplay extends Pane {
         cancelButton.setLayoutX(x + WIDTH * 0.306 - buttonWidth);
         cancelButton.setLayoutY(y);
 
-        cancelButton.setOnMouseClicked(event -> Main.getGameOperator().getDisplayControllerOne().displayPlayerDisplay());
+        cancelButton.setOnMouseClicked(event -> rootDisplay.displayPlayerDisplay());
 
         getChildren().addAll(confirmButton, cancelButton);
     }

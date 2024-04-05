@@ -65,6 +65,7 @@ public class ConsoleUtilities {
                     case REGULAR -> colorCode = colorCode + "0;";
                     case BOLD -> colorCode = colorCode + "1;";
                     case UNDERLINE -> colorCode = colorCode + "4;";
+                    default -> {break;} //Ignored, not possible!
                 }
 
                 switch (color) {
@@ -95,6 +96,7 @@ public class ConsoleUtilities {
                 switch (style) {
                     case HIGH_INTENSITY -> colorCode = colorCode + "0;";
                     case BOLD_HIGH_INTENSITY -> colorCode = colorCode + "1;";
+                    default -> {break;} //Ignored, not possible!
                 }
                 switch (color) {
                     case BLACK ->   colorCode = colorCode + "90m";
@@ -118,6 +120,9 @@ public class ConsoleUtilities {
                     case CYAN ->    colorCode = colorCode + "0;106m";
                     case WHITE ->   colorCode = colorCode + "0;107m";
                 }
+            }
+            default -> {
+                System.out.println("Errro, cannot print this typ!");
             }
         }
         return colorCode;

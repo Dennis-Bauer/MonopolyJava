@@ -25,7 +25,7 @@ import static de.sandwich.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOu
 
 public class DiceDisplay extends Pane {
 
-    private final GameDisplayControllerTwo rootDisplay;
+    //private final GameDisplayControllerTwo rootDisplay;
     private final Random rn = new Random();
     private NumberAnimationThread rowOneAnimation;
     private NumberAnimationThread rowTwoAnimation;
@@ -34,7 +34,7 @@ public class DiceDisplay extends Pane {
         setId("gameScene_DiceDisplay");
         setMaxSize(width, height);
 
-        this.rootDisplay = rootDisplay;
+        //this.rootDisplay = rootDisplay;
 
         Pane numberField = new Pane();
         numberField.setId("gameScene_diceDisplay_Pane");
