@@ -198,12 +198,13 @@ public class GameDisplayControllerOne extends Pane {
                         if (street.getOwner() == p) {
                             streetsR[j].setId(streetsR[j].getId() + true);
                             streetsR[j].setFill(street.getColor());
+
+                            if (street.isInBank()) 
+                                streetsR[j].setOpacity(0.4);
+                            
                         }
                     } else {
-                        //AUF FALSE ÄNDEREN!!!!
-                        streetsR[j].setId(streetsR[j].getId() + true);
-                        //streetsR[j].setFill(ProgramColor.STREET_NOT_OWNED.getColor());
-                        streetsR[j].setFill(street.getColor());
+                        streetsR[j].setId(streetsR[j].getId() + false);
                     }
 
                     switch (j) {

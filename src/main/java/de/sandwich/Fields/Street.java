@@ -22,6 +22,8 @@ public class Street extends Field{
     //Field (Visual) values
     private final Color color;
 
+    private boolean isInBank = false;
+
     //Street values
     private final String name;
     private final int salePrice;
@@ -62,6 +64,7 @@ public class Street extends Field{
 
         this.owner = owner;
     }
+    
     private Rectangle background;
     private Rectangle colorIndicator;
 
@@ -83,6 +86,20 @@ public class Street extends Field{
 
         super.field = field;
         return field;
+    }
+
+    public void sellToTheBank() {
+        if (!isInBank) {
+            isInBank = true;
+            owner.addBankAccount(salePrice / 2);
+        }
+    }
+
+    public void purchaseFromBank() {
+        if (isInBank) {
+            isInBank = false;
+            owner.addBankAccount(-(salePrice / 2));
+        }
     }
 
     public void highlightField() {
@@ -141,5 +158,9 @@ public class Street extends Field{
 
     public int getHotelPrice() {
         return hotelPrice;
+    }
+
+    public boolean isInBank() {
+        return isInBank;
     }
 }

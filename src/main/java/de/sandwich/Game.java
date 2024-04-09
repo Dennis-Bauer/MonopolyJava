@@ -5,6 +5,7 @@ import javafx.animation.ScaleTransition;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -59,6 +60,7 @@ public class Game {
     //Gameboard
     private static final HashMap<Integer, Field> FIELDS = createFields();
     private final GameBoard gameBoard = new GameBoard(Main.WINDOW_HEIGHT * 0.98, FIELDS);
+    private final StackPane turnFinishButton = new StackPane();
     private final Label errorMessage = buildLabel("gameBoard_ErrorMessage", "NULL", Font.font( Main.TEXT_FONT, FontWeight.BOLD, Main.WINDOW_HEIGHT * 0.015), TextAlignment.CENTER, ProgramColor.ERROR_MESSAGES.getColor(), 0, 0);
     private final Scene gameScene;
     private final Pane root;
@@ -88,8 +90,8 @@ public class Game {
         VBox sideDisplays = new VBox(Main.WINDOW_HEIGHT * 0.02);
 
         sideDisplays.getChildren().addAll(
-                displayControllerOne,
-                displayControllerTwo
+            displayControllerOne,
+            displayControllerTwo
         );
         sideDisplays.setLayoutX(Main.WINDOW_HEIGHT + (((Main.WINDOW_WIDTH - Main.WINDOW_HEIGHT) / 2) - ((Main.WINDOW_WIDTH - Main.WINDOW_HEIGHT) / 1.1) / 2));
         sideDisplays.setLayoutY(0);
@@ -98,12 +100,24 @@ public class Game {
         errorMessage.setLayoutY(Main.WINDOW_HEIGHT * 0.81);
         errorMessage.setVisible(false);
 
+        turnFinishButton.getChildren().addAll(
+            buildRectangle("gameScene_turnFinishButton_Background", Main.WINDOW_WIDTH * 0.18, Main.WINDOW_HEIGHT * 0.08, ProgramColor.SELECT_COLOR.getColor(), true, ProgramColor.BORDER_COLOR_LIGHT.getColor(), Main.WINDOW_WIDTH * 0.005),
+            buildLabel("gameScene_turnFinishButton_Text", "Beende Zug", Font.font(Main.TEXT_FONT, FontWeight.BOLD ,Main.WINDOW_WIDTH * 0.02), null, ProgramColor.TEXT_COLOR.getColor())
+        );
+        turnFinishButton.setLayoutX(Main.WINDOW_HEIGHT * 0.49 - Main.WINDOW_WIDTH * 0.09);
+        turnFinishButton.setLayoutY(Main.WINDOW_HEIGHT - Main.WINDOW_HEIGHT * 0.26);
+
+        turnFinishButton.setOnMouseClicked(mouseEvent -> {
+            turnFinish();
+        });
+
         root = new Pane(
-                buildRectangle("gameScene_Background", Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT, ProgramColor.BACKGROUND.getColor(), true, null, 0, 0, 0),
-                gameBoard,
-                sideDisplays,
-                middleDisplayController,
-                errorMessage
+            buildRectangle("gameScene_Background", Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT, ProgramColor.BACKGROUND.getColor(), true, null, 0, 0, 0),
+            gameBoard,
+            sideDisplays,
+            middleDisplayController,
+            errorMessage,
+            turnFinishButton
         );
 
         gameScene = new Scene(root);
@@ -181,6 +195,7 @@ public class Game {
         gameBoard.addPlayers(playerList);
         displayControllerOne.displayPlayers(playerList);
         displayControllerTwo.displayDice();
+        turnFinishButton.setVisible(false);
         //Zeigt das Game Board an
         Main.getPrimaryStage().setScene(gameScene);
     }
@@ -189,6 +204,7 @@ public class Game {
     public void playerRolledDice(int diceOne, int diceTwo) {
 
         turnPlayerIsMoving = true;
+        setNextPlayer();
 
         if (turnPlayer.isInJail()) {
             if (diceOne == diceTwo) {
@@ -227,6 +243,8 @@ public class Game {
             if (!street.isOwned()) {
                 if (street.getSalePrice() <= turnPlayer.getBankAccount()) {
                     middleDisplayController.displayBuyStreet(street);
+                } else {
+                    setVisibilityTurnFinButton(true);
                 }
             } else {
                 middleDisplayController.displayPayDisplay(buildLongText("Du schuldest den Spieler", street.getOwner().getName() + " " + (street.getRent() + "€")), street.getRent());
@@ -235,22 +253,38 @@ public class Game {
             switch (corner.getTyp()) {
                 case FREE_PARKING -> {
                     turnPlayer.addBankAccount(freeParkingMoney);
+                    setVisibilityTurnFinButton(true);
                 }
                 case GO_TO_JAIL -> {
                     turnPlayer.setInJail(true);
                     gameBoard.setPlayerInJail(turnPlayer);
                 }
-                default -> {break;} //Do nothing
+                default -> setVisibilityTurnFinButton(true);
             }
         } else if (FIELDS.get(turnPlayer.getFieldPostion()) instanceof PayExtra payField) { //Is the player on a pay extra field
             middleDisplayController.displayPayDisplay(payField.getTyp().getMessage(), payField.getPrice());
+        } else {
+            setVisibilityTurnFinButton(true);
         }
+    }
+
+    //Starts the new Round for a new Player
+    public void turnFinish() {
+        turnPlayer = nextPlayer;
+        nextPlayer = null;
+
+        middleDisplayController.removeDisplay();
+        setVisibilityTurnFinButton(false);
+        displayControllerOne.displayPlayers(playerList);
+        displayControllerTwo.displayDice();
     }
 
     //Controls the Street buy System
     public void buyStreet(@SuppressWarnings("exports") Street street) {
         street.setOwner(turnPlayer);
         turnPlayer.addBankAccount(-street.getSalePrice());
+
+        setVisibilityTurnFinButton(true);
     }
 
     public void transferMoney(int money) {
@@ -273,6 +307,8 @@ public class Game {
                     consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
                 }
             }
+
+            setVisibilityTurnFinButton(true);
         }
         else throw new IllegalArgumentException("No negative amounts can be transfer!");
     }
@@ -347,6 +383,49 @@ public class Game {
     public static HashMap<Integer, Field> getFields() {
         return FIELDS;
     }
+
+    public void setVisibilityTurnFinButton(boolean visible) {
+        int animationLenght = 2;
+        if (visible) {
+            if (!turnFinishButton.isVisible()) {
+                turnFinishButton.setVisible(true);
+
+                FadeTransition fadeTransition = new FadeTransition(Duration.seconds(animationLenght), turnFinishButton);
+                fadeTransition.setFromValue(0);
+                fadeTransition.setToValue(1);
+
+                fadeTransition.play();
+            }
+        } else {
+            if (turnFinishButton.isVisible()) {
+                turnFinishButton.setVisible(true);
+
+                FadeTransition fadeTransition = new FadeTransition(Duration.seconds(animationLenght), turnFinishButton);
+                fadeTransition.setFromValue(1);
+                fadeTransition.setToValue(0);
+
+                fadeTransition.play();
+
+                fadeTransition.setOnFinished(event -> turnFinishButton.setVisible(false));
+            }
+
+        }
+    }
+
+    private void setNextPlayer() {
+
+        switch (turnPlayer.getOrderNumber() + 1) {
+            case 2 -> nextPlayer = playerThree;
+            case 3 -> nextPlayer = playerFour;
+            case 4 -> nextPlayer = playerFive;
+            case 5 -> nextPlayer = playerOne;
+            default -> nextPlayer = playerOne;
+        }
+
+        if (nextPlayer == null)
+            nextPlayer = playerOne;
+
+    } 
 
     //Private
     private static HashMap<Integer, Field> createFields() {
