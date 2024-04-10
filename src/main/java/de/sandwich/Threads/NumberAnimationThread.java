@@ -21,7 +21,7 @@ public class NumberAnimationThread extends Thread {
     }
 
     public int getLastNumber() {
-        int n = Integer.parseInt(String.valueOf(animationRow.getText().charAt(16)));
+        int n = Integer.parseInt(String.valueOf(animationRow.getText().charAt(14)));
         for (int i = 0; i < length / 2; i++) {
             if (n >= 6)
                 n = 1;

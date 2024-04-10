@@ -46,10 +46,10 @@ public class DiceDisplay extends Pane {
         Polygon arrowOne = buildTriangle("gameScene_diceDisplay_NumberArrowOne", new Point2D(0, 0), new Point2D(width * 0.05, 0), new Point2D(width * 0.025, height * 0.05), ProgramColor.BORDER_COLOR_DARK.getColor(), null, numberBackground.getWidth() / 2 - width * 0.025, 0);
         Polygon arrowTwo = buildTriangle("gameScene_diceDisplay_NumberArrowTwo", new Point2D(0, height * 0.05), new Point2D(width * 0.05, height * 0.05), new Point2D(width * 0.025, 0), ProgramColor.BORDER_COLOR_DARK.getColor(), null, numberBackground.getWidth() / 2 - width * 0.025, numberBackground.getHeight() - height * 0.05);
 
-        Label numberRowOne = buildLabel("gameScene_diceDisplay_NumberRowOne", "1-2-3-4-5-6-1-2-3-4-5-6-1-2-3-4-5", new Font(Main.TEXT_FONT, width * 0.05), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, 0);
+        Label numberRowOne = buildLabel("gameScene_diceDisplay_NumberRowOne", "1-2-3-4-5-6-1-2-3-4-5-6-1-2-3", new Font(Main.TEXT_FONT, width * 0.05), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, height * 0.025);
         centeringChildInPane(numberRowOne, numberField);
 
-        Label numberRowTwo = buildLabel("gameScene_diceDisplay_NumberRowTwo", "1-2-3-4-5-6-1-2-3-4-5-6-1-2-3-4-5", new Font(Main.TEXT_FONT, width * 0.05), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, numberBackground.getHeight() / 2);
+        Label numberRowTwo = buildLabel("gameScene_diceDisplay_NumberRowTwo", "1-2-3-4-5-6-1-2-3-4-5-6-1-2-3", new Font(Main.TEXT_FONT, width * 0.05), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, numberBackground.getHeight() / 2);
         centeringChildInPane(numberRowTwo, numberField);
 
         Pane roleDiceButton = new Pane();
