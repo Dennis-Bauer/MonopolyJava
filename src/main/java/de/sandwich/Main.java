@@ -67,6 +67,10 @@ public class Main extends Application {
         else throw new NullPointerException("The game operator is null!");
     }
 
+    public static Boolean isGameOperatorCreated() {
+        return gameOperator != null;
+    }
+
     public static void setGameOperator(Game gameOperator) {
         if (Main.gameOperator == null)
             Main.gameOperator = gameOperator;

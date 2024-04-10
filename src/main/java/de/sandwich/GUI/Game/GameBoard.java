@@ -35,6 +35,7 @@ public class GameBoard extends Pane{
     private final double FIELD_HEIGHT;
     private final double FIELD_WIDTH;
     private final double PLAYER_FIGURE_SIZE;
+
     public GameBoard(double size, HashMap<Integer, Field> fields) {
 
 
@@ -141,13 +142,14 @@ public class GameBoard extends Pane{
 
         if (!(playerArrayPostion > 4)) {
 
-            TranslateTransition moveAnimation = new TranslateTransition(Duration.seconds(0.8), playerFigures[pArrayPos]);
-            moveAnimation.setToX((calculateXYPostion(pArrayPos, startPostion + 1).getX()) - (calculateXYPostion(pArrayPos, startPostion).getX()));
-            moveAnimation.setToY((calculateXYPostion(pArrayPos, startPostion + 1).getY()) - (calculateXYPostion(pArrayPos, startPostion).getY()));
+            TranslateTransition moveAnimation = new TranslateTransition(Duration.seconds(0.5), playerFigures[pArrayPos]);
+            moveAnimation.setByX((calculateXYPostion(pArrayPos, startPostion + 1).getX()) - (calculateXYPostion(pArrayPos, startPostion).getX()));
+            moveAnimation.setByY((calculateXYPostion(pArrayPos, startPostion + 1).getY()) - (calculateXYPostion(pArrayPos, startPostion).getY()));
             moveAnimation.play();
 
 
-            AtomicInteger i = new AtomicInteger();
+
+            AtomicInteger i = new AtomicInteger(1);
             AtomicInteger step = new AtomicInteger();
 
             moveAnimation.setOnFinished(event -> {
@@ -156,8 +158,8 @@ public class GameBoard extends Pane{
                         step.set(-(startPostion + 1));
                     step.getAndIncrement();
 
-                    moveAnimation.setToX((calculateXYPostion(pArrayPos, startPostion + step.get()).getX()) - (calculateXYPostion(pArrayPos, startPostion).getX()));
-                    moveAnimation.setToY((calculateXYPostion(pArrayPos, startPostion + step.get()).getY()) - (calculateXYPostion(pArrayPos, startPostion).getY()));
+                    moveAnimation.setByX(-((calculateXYPostion(pArrayPos, startPostion + step.get()).getX()) - (calculateXYPostion(pArrayPos, startPostion + step.get() + 1).getX())));
+                    moveAnimation.setByY(-((calculateXYPostion(pArrayPos, startPostion + step.get()).getY()) - (calculateXYPostion(pArrayPos, startPostion + step.get() + 1).getY())));
                     moveAnimation.play();
 
 
@@ -183,7 +185,7 @@ public class GameBoard extends Pane{
         double[] calculationBaseY = new double[5];
 
         //Calculate the left corner X Postion from each Player
-        //and thus also creates the base coordinate
+        //and this also creates the base coordinate
         //from which every calculation begins.
         calculationBaseX[0] = FIELD_HEIGHT / 2 - (PLAYER_FIGURE_SIZE * 3 + (FIELD_HEIGHT * 0.01) * 2) / 2;
         calculationBaseX[1] = calculationBaseX[0] + PLAYER_FIGURE_SIZE + FIELD_HEIGHT * 0.01;
@@ -192,7 +194,7 @@ public class GameBoard extends Pane{
         calculationBaseX[4] = calculationBaseX[3] + PLAYER_FIGURE_SIZE + FIELD_HEIGHT * 0.01;
 
         //Calculate the left corner Y Postion from each Player
-        //and thus also creates the base coordinate
+        //and this also creates the base coordinate
         //from which every calculation begins
         calculationBaseY[0] = FIELD_WIDTH * 9 + FIELD_HEIGHT + FIELD_HEIGHT * 0.35;
         calculationBaseY[1] = FIELD_WIDTH * 9 + FIELD_HEIGHT + FIELD_HEIGHT * 0.35;

@@ -177,9 +177,11 @@ public class StartMenu extends Pane{
 
                         Player[] players = new Player[5];
 
-                        for (int i = 0; i != 5; i++) {
-                            if (isPlayerBoxAktiv[i])
-                                players[i] = new Player(playerNames[i], playerBoxFigures[i], i);
+                        for (int i = 0, j = 0; i != 5; i++) {
+                            if (isPlayerBoxAktiv[i]) {
+                                players[i] = new Player(playerNames[i], playerBoxFigures[i], j);
+                                j++;
+                            }
                         }
 
                         if (Main.CONSOLE_OUT_PUT)

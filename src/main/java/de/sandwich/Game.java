@@ -270,6 +270,7 @@ public class Game {
 
     //Starts the new Round for a new Player
     public void turnFinish() {
+
         turnPlayer = nextPlayer;
         nextPlayer = null;
 
@@ -414,7 +415,10 @@ public class Game {
 
     private void setNextPlayer() {
 
+        
+
         switch (turnPlayer.getOrderNumber() + 1) {
+            case 1 -> nextPlayer = playerTwo;
             case 2 -> nextPlayer = playerThree;
             case 3 -> nextPlayer = playerFour;
             case 4 -> nextPlayer = playerFive;

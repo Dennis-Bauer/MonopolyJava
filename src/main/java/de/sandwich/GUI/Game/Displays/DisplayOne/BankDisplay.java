@@ -22,7 +22,7 @@ import de.sandwich.Game;
 import de.sandwich.Main;
 import de.sandwich.Player;
 import de.sandwich.Enums.ProgramColor;
-import de.sandwich.Exceptions.WrongIdExceptions;
+import de.sandwich.Exceptions.WrongNodeException;
 import de.sandwich.Fields.Field;
 import de.sandwich.Fields.Street;
 
@@ -103,8 +103,6 @@ public class BankDisplay extends Pane {
         streetDisplay.setLayoutY(HEIGHT / 2 - playerDisplay.getMaxHeight() / 2);
         streetDisplay.setLayoutX(WIDTH / 2 - playerDisplay.getMaxWidth() / 2);
 
-        System.out.println("Street nummbers: " + mortgageStreets);
-
         for (Rectangle sObject : streets) {
             streetDisplay.getChildren().add(sObject);
             int fieldNumber = Integer.parseInt(sObject.getId().substring(12, 14));
@@ -117,9 +115,6 @@ public class BankDisplay extends Pane {
                             sObject.setStroke(ProgramColor.SELECT_COLOR.getColor());
             
                             mortgageStreets.add(fieldNumber);
-
-                            System.out.println("Street nummbers: " + mortgageStreets);
-
 
                             ScaleTransition scaleTransitionBig = new ScaleTransition(Duration.seconds(0.15), sObject);
                             scaleTransitionBig.setByX(sObject.getWidth() * 0.02);
@@ -147,8 +142,6 @@ public class BankDisplay extends Pane {
 
                             mortgageStreets.add(fieldNumber);
 
-                            System.out.println("Street nummbers: " + mortgageStreets);
-
                             ScaleTransition scaleTransitionBig = new ScaleTransition(Duration.seconds(0.15), sObject);
                             scaleTransitionBig.setByX(sObject.getWidth() * 0.02);
                             scaleTransitionBig.setByY(sObject.getWidth() * 0.02);
@@ -162,7 +155,7 @@ public class BankDisplay extends Pane {
 
                             if (Game.getFields().get(fieldNumber) instanceof Street s)
                                 addMortgage(s.getSalePrice() / 2);
-                            else throw new WrongIdExceptions();
+                            else throw new WrongNodeException();
                         } else if (sObject.getId().endsWith("trueM")) {
                             sObject.setId(sObject.getId().substring(0, sObject.getId().length() - 1));
 
@@ -170,8 +163,6 @@ public class BankDisplay extends Pane {
                                 mortgageStreets.remove(fieldNumber);
                             else 
                                 mortgageStreets.clear();
-
-                            System.out.println("Street nummbers: " + mortgageStreets);
 
                             sObject.setStroke(ProgramColor.BORDER_COLOR_LIGHT.getColor());
 
@@ -182,7 +173,7 @@ public class BankDisplay extends Pane {
 
                             if (Game.getFields().get(fieldNumber) instanceof Street s)
                                 addMortgage(-(s.getSalePrice() / 2));
-                            else throw new WrongIdExceptions();
+                            else throw new WrongNodeException();
                         }
             
                     }

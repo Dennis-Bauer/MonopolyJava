@@ -8,6 +8,7 @@ import de.sandwich.Main;
 import de.sandwich.Player;
 import de.sandwich.Enums.ProgramColor;
 import de.sandwich.Exceptions.ToManyPlayersExceptions;
+import de.sandwich.Exceptions.WrongNodeException;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -205,6 +206,21 @@ public class PlayerDisplay extends Pane{
     private Pane buildPlayerShowBox(double width, double height, Color backgroundColor, Player player) {
         Pane playerShowBox = buildPlayer(width, height, backgroundColor, player);
 
+        if (Main.isGameOperatorCreated()) {
+            if (Main.getGameOperator().getTurnPlayer().getOrderNumber() == player.getOrderNumber()) {
+                if (playerShowBox.getChildren().get(0) instanceof Rectangle r) {
+                    r.setStrokeWidth(r.getStrokeWidth() * 6);
+                } else throw new WrongNodeException("PlayerShowBox");
+            }
+        } else {
+            System.out.println("Die Nummer des Spielers ist: " + player.getOrderNumber());
+            if (player.getOrderNumber() == 0) {
+                if (playerShowBox.getChildren().get(0) instanceof Rectangle r) {    
+                    r.setStrokeWidth(r.getStrokeWidth() * 6);
+                }
+            }
+        }
+
         StackPane tradingButton = new StackPane();
 
         Rectangle tradingButtonBackground = buildRectangle("gameScene_playerDisplay_tradingStartButton_Background", width * 0.36, height * 0.09, backgroundColor.desaturate(), true, ProgramColor.BORDER_COLOR_LIGHT.getColor(), width * 0.015);
@@ -225,9 +241,8 @@ public class PlayerDisplay extends Pane{
 
         playerShowBox.getChildren().add(tradingButton);
 
-        for (Rectangle street : streets) {
-            System.out.println("ID: " + street.getId());
-            playerShowBox.getChildren().add(street);}
+        for (Rectangle street : streets) 
+            playerShowBox.getChildren().add(street);
 
         return playerShowBox;
     }

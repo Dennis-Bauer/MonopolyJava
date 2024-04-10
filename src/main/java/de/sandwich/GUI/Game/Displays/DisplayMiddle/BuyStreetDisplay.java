@@ -63,7 +63,10 @@ public class BuyStreetDisplay extends Pane {
             else throw new NullPointerException("The street the player want to buy is null!");
         });
 
-        refuseButton.setOnMouseClicked(mouseEvent -> rootDisplay.removeDisplay());
+        refuseButton.setOnMouseClicked(mouseEvent -> {
+            rootDisplay.removeDisplay();
+            Main.getGameOperator().setVisibilityTurnFinButton(true);
+        });
 
     }
 
