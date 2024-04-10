@@ -14,11 +14,14 @@ import de.sandwich.Main;
 import de.sandwich.Enums.ProgramColor;
 import de.sandwich.GUI.Game.Displays.DisplayTwo.ActionDisplay;
 import de.sandwich.GUI.Game.Displays.DisplayTwo.DiceDisplay;
+import de.sandwich.GUI.Game.Displays.DisplayTwo.ReturnDisplay;
 
 
 public class GameDisplayControllerTwo extends Pane {
+
     private final Pane actionDisplay;
     private final Pane diceDisplay;
+    private final Pane returnDisplay;
 
     public GameDisplayControllerTwo(double width, double height) {
         setId("gameScene_DisplayTwo");
@@ -29,21 +32,36 @@ public class GameDisplayControllerTwo extends Pane {
         centeringChildInPane(header, this);
 
         actionDisplay = new ActionDisplay(width, height, this);
-        diceDisplay = new DiceDisplay(width, height, this);
         actionDisplay.setVisible(false);
-        diceDisplay.setVisible(true);
 
-        getChildren().addAll(header, actionDisplay, diceDisplay);
+        diceDisplay = new DiceDisplay(width, height, this);
+        diceDisplay.setVisible(false);
+
+        returnDisplay = new ReturnDisplay(width, height, this);
+        returnDisplay.setVisible(false);
+
+        getChildren().addAll(header, actionDisplay, diceDisplay, returnDisplay);
     }
 
     public void displayDice() {
-        diceDisplay.setVisible(true);
         actionDisplay.setVisible(false);
+        returnDisplay.setVisible(false);
+
+        diceDisplay.setVisible(true);
     }
 
     public void displayPlayerAction() {
         diceDisplay.setVisible(false);
+        returnDisplay.setVisible(false);
+
         actionDisplay.setVisible(true);
+    }
+
+    public void displayReturnButton() {
+        diceDisplay.setVisible(false);
+        actionDisplay.setVisible(false);
+
+        returnDisplay.setVisible(true);
     }
 
 

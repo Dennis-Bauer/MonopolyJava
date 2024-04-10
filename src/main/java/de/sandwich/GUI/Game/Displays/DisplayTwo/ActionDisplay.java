@@ -35,6 +35,7 @@ public class ActionDisplay extends Pane {
         Pane bankButton = buildButton("Bank", width * 0.25, height * 0.45, "/de/sandwich/monopoly/aktionDisplay/bank.png", ProgramColor.ACTION_BANK_BUTTON.getColor(), "bank", middleX - space, y);
         bankButton.setOnMouseClicked(mouseEvent -> {
             Main.getGameOperator().getDisplayControllerOne().displayBankDisplay(Main.getGameOperator().getTurnPlayer());
+            rootDisplay.displayReturnButton();
         });
 
         Pane buildButton = buildButton("Bauen", width * 0.25, height * 0.45, "/de/sandwich/monopoly/aktionDisplay/build.png", ProgramColor.ACTION_BUILD_BUTTON.getColor(), "build", middleX, y);

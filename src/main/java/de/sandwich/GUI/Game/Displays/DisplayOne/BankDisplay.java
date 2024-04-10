@@ -59,12 +59,10 @@ public class BankDisplay extends Pane {
         button.setLayoutY(height - height * 0.10);
 
         button.setOnMouseClicked(mouseEvent -> {
-            if (activPalyer != null) {
-
+            if (activPalyer != null && mortgage != 0) {
                 Main.getGameOperator();
                 HashMap<Integer, Field> fields = Game.getFields();
 
-                System.out.println("Street nummbers: " + mortgageStreets);
                 for (int i = 0; i < fields.size(); i++) {
                     if (fields.get(i) instanceof Street s) {
                         if (s.getOwner() == activPalyer) {
@@ -78,10 +76,7 @@ public class BankDisplay extends Pane {
                         }
                     }
                 }
-
-                rootDisplay.displayPlayers(Main.getGameOperator().getPlayers());
             }
-
         });
 
         getChildren().addAll(mortgageDisplay, button);

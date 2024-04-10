@@ -38,6 +38,7 @@ public class GameDisplayControllerOne extends Pane {
     private final PlayerDisplay playerDisplay;
     private final TradingDisplay tradingDisplay;
     private final BankDisplay bankDisplay;
+
     private ArrayList<Player> lastPlayerSave;
 
     public GameDisplayControllerOne(double width, double height) {
