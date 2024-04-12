@@ -2,6 +2,9 @@ package de.sandwich.GUI.Game.DisplayController;
 
 import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildRectangle;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 import de.sandwich.Main;
 import de.sandwich.Enums.ProgramColor;
 import de.sandwich.Fields.Street;
@@ -27,6 +30,8 @@ public class MiddleGameDisplayController extends Pane{
     private final double MAX_Y;
     private final double NORMAL_WIDTH;
     private final double NORMAL_HEIGHT;
+
+    private ArrayList<Transition> liveTransitions = new ArrayList<>();
 
     public MiddleGameDisplayController(double width, double height, double maxY) {
         this.MAX_Y = maxY;
@@ -71,12 +76,15 @@ public class MiddleGameDisplayController extends Pane{
     public void displayPayDisplay(String message, int price) {
         resetDisplay();
 
+        System.out.println("Das pay Display wird angezeigt");
+
         buyStreetDisplay.setVisible(false);
 
         payDisplay.showPayScreen(message, price);
         payDisplay.setVisible(true);
         enterAnimation(true);
     }
+    
     public void displayStreetInfoDisplay(Street street) {
         if (!buyStreetDisplay.isVisible() && !payDisplay.isVisible()) {
             FadeTransition fadeTransition = new FadeTransition(Duration.seconds(0.5), this);
@@ -84,15 +92,10 @@ public class MiddleGameDisplayController extends Pane{
                 fadeTransition.setFromValue(1);
                 fadeTransition.setToValue(0);
                 fadeTransition.play();
+                liveTransitions.add(fadeTransition);
             } else {
-                fadeTransition.setDuration(Duration.seconds(0.1));
-                fadeTransition.setFromValue(1);
-                fadeTransition.setToValue(1);
-                fadeTransition.play();
-            }
-
-            fadeTransition.setOnFinished(event -> {
                 resetDisplay();
+
                 setMaxSize(streetInfoDisplay.getWIDTH(), streetInfoDisplay.getHEIGHT());
                 setLayoutX(((Main.WINDOW_HEIGHT * 0.98) / 2) - streetInfoDisplay.getWIDTH() / 2);
                 background.setFill(ProgramColor.STREET_CARD_BACKGROUND.getColor());
@@ -103,33 +106,62 @@ public class MiddleGameDisplayController extends Pane{
                 streetInfoDisplay.setVisible(true);
 
                 enterAnimation(false);
+            }
+
+            fadeTransition.setOnFinished(event -> {
+                if (liveTransitions.contains(fadeTransition)) {
+                    fadeTransition.setFromValue(0);
+                    fadeTransition.setToValue(1);
+
+                    streetInfoDisplay.buildStreetDisplay(street);
+
+                    fadeTransition.play();
+
+                    liveTransitions.remove(fadeTransition);
+                }
             });
         } else
             Main.getGameOperator().displayErrorMessage("Du kannst im moment keine Straßen infos einsehen!");
     }
 
     public void removeDisplay() {
-        waitTransition.stop();
+        if (!(payDisplay.isVisible() && buyStreetDisplay.isVisible())) {
+            waitTransition.stop();
+            liveTransitions.remove(waitTransition);
 
-        TranslateTransition upTransition = new TranslateTransition(Duration.seconds(0.30), this);
-        upTransition.setToY(-(Main.WINDOW_HEIGHT * 0.95));
+            System.out.println("Das Mittlere Display wird removed!");
 
-        TranslateTransition downTransition = new TranslateTransition(Duration.seconds(0.9), this);
-        downTransition.setToY(Main.WINDOW_HEIGHT);
+            TranslateTransition upTransition = new TranslateTransition(Duration.seconds(0.30), this);
+            upTransition.setByY(-(Main.WINDOW_HEIGHT * 0.10));
 
-        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(2), this);
-        fadeTransition.setFromValue(1);
-        fadeTransition.setToValue(0);
+            TranslateTransition downTransition = new TranslateTransition(Duration.seconds(0.9), this);
+            downTransition.setByY(Main.WINDOW_HEIGHT);
 
-        upTransition.play();
+            FadeTransition fadeTransition = new FadeTransition(Duration.seconds(2), this);
+            fadeTransition.setFromValue(1);
+            fadeTransition.setToValue(0);
 
-        upTransition.setOnFinished(actionEvent -> {
-            downTransition.play();
-            fadeTransition.play();
-        });
+            upTransition.play();
+            liveTransitions.add(upTransition);
 
-        fadeTransition.setOnFinished(actionEvent -> resetDisplay());
+            upTransition.setOnFinished(actionEvent -> {
+                liveTransitions.remove(upTransition);
 
+                downTransition.play();
+                liveTransitions.add(downTransition);
+
+                fadeTransition.play();
+                liveTransitions.add(fadeTransition);
+            });
+
+            fadeTransition.setOnFinished(actionEvent -> {
+                liveTransitions.remove(downTransition);
+                liveTransitions.remove(fadeTransition);
+
+                resetDisplay();
+                System.out.println("Remove Display wurde beendet!");
+            });
+        }
     }
 
     public void errorAnimation() {
@@ -147,38 +179,61 @@ public class MiddleGameDisplayController extends Pane{
         transitionNegativ.setAutoReverse(true);
 
         transitionPositiv.play();
+        liveTransitions.add(transitionPositiv);
 
-        transitionPositiv.setOnFinished(actionEvent -> transitionNegativ.play());
+        transitionPositiv.setOnFinished(actionEvent -> {
+            liveTransitions.remove(transitionPositiv);
+            
+            transitionNegativ.play();
+            liveTransitions.add(transitionNegativ);
+        });
 
         background.setStroke(ProgramColor.CHANCEL_BUTTONS.getColor());
         background.setOnMouseExited(mouseEvent -> background.setStroke(ProgramColor.BORDER_COLOR_DARK.getColor()));
+    
+        transitionNegativ.setOnFinished(actionEvent -> liveTransitions.remove(transitionNegativ));
+
     }
 
     private void enterAnimation(boolean playWaitTransition) {
-
-        setLayoutY(Main.WINDOW_HEIGHT + 10);
-
         toFront();
 
         setVisible(true);
 
         TranslateTransition moveTransition = new TranslateTransition(Duration.seconds(2),this);
-        moveTransition.setToY(-(Main.WINDOW_HEIGHT - MAX_Y));
+        moveTransition.setFromY(Main.WINDOW_HEIGHT);
+        moveTransition.setByY(-(Main.WINDOW_HEIGHT - MAX_Y));
 
         FadeTransition fadeTransition = new FadeTransition(Duration.seconds(3), this);
         fadeTransition.setFromValue(0);
         fadeTransition.setToValue(1);
 
         fadeTransition.play();
-        moveTransition.play();
+        liveTransitions.add(fadeTransition);
 
-        if (playWaitTransition)
-            fadeTransition.setOnFinished(actionEvent -> waitTransition.play());
+        moveTransition.play();
+        liveTransitions.add(moveTransition);
+
+        if (playWaitTransition) {
+            fadeTransition.setOnFinished(actionEvent -> {
+                waitTransition.play();
+                liveTransitions.add(waitTransition);
+            });
+        }
+
+        fadeTransition.setOnFinished(actionEvent -> {
+            liveTransitions.remove(fadeTransition);
+            liveTransitions.remove(moveTransition);
+        });
 
     }
 
     private void resetDisplay() {
         setVisible(false);
+
+        for (Transition transition : liveTransitions) {
+            transition.stop();
+        }
 
         buyStreetDisplay.setVisible(false);
         payDisplay.setVisible(false);

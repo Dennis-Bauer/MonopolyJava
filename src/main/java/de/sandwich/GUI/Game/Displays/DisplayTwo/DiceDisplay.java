@@ -77,7 +77,6 @@ public class DiceDisplay extends Pane {
 
                 rowOneAnimation.start();
                 rowTwoAnimation.start();
-
                 //Main.getGameOperator().playerRolledDice(rowOneAnimation.getLastNumber(), rowTwoAnimation.getLastNumber());
                 Main.getGameOperator().playerRolledDice(4, 0);
                 if (Main.CONSOLE_OUT_PUT) {

@@ -386,9 +386,10 @@ public class Game {
     }
 
     public void setVisibilityTurnFinButton(boolean visible) {
-        int animationLenght = 2;
+        double animationLenght = 1;
         if (visible) {
             if (!turnFinishButton.isVisible()) {
+                System.out.println("Der Finish button wird visible");
                 turnFinishButton.setVisible(true);
 
                 FadeTransition fadeTransition = new FadeTransition(Duration.seconds(animationLenght), turnFinishButton);
@@ -399,6 +400,7 @@ public class Game {
             }
         } else {
             if (turnFinishButton.isVisible()) {
+                System.out.println("Der Finish button wird nicht mehr Visible");
                 turnFinishButton.setVisible(true);
 
                 FadeTransition fadeTransition = new FadeTransition(Duration.seconds(animationLenght), turnFinishButton);
@@ -411,6 +413,7 @@ public class Game {
             }
 
         }
+        turnFinishButton.setVisible(visible);
     }
 
     private void setNextPlayer() {

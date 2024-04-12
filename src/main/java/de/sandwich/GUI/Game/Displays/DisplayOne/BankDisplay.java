@@ -135,10 +135,12 @@ public class BankDisplay extends Pane {
 
                 if (Game.getFields().get(fieldNumber) instanceof Street street) {
                     if (street.getOwner() == activPalyer) {
-
+                        
                         if (sObject.getId().endsWith("true")) {
                             sObject.setId(sObject.getId() + "M");
                             sObject.setStroke(ProgramColor.SELECT_COLOR.getColor());
+
+                            Main.getGameOperator().getMiddleDisplayController().displayStreetInfoDisplay(street);
 
                             mortgageStreets.add(fieldNumber);
 
@@ -159,8 +161,10 @@ public class BankDisplay extends Pane {
                         } else if (sObject.getId().endsWith("trueM")) {
                             sObject.setId(sObject.getId().substring(0, sObject.getId().length() - 1));
 
+                            Main.getGameOperator().getMiddleDisplayController().removeDisplay();
+
                             if (!(mortgageStreets.size() <= 1))
-                                mortgageStreets.remove(fieldNumber);
+                                mortgageStreets.remove(Integer.valueOf(fieldNumber));
                             else 
                                 mortgageStreets.clear();
 
