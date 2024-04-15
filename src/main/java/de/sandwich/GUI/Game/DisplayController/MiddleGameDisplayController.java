@@ -3,7 +3,6 @@ package de.sandwich.GUI.Game.DisplayController;
 import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildRectangle;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 import de.sandwich.Main;
 import de.sandwich.Enums.ProgramColor;

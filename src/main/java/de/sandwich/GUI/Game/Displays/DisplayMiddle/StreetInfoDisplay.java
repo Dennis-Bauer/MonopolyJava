@@ -80,7 +80,7 @@ public class StreetInfoDisplay extends Pane {
         double houseHeight = WIDTH * 0.07;
 
         //Houses
-        VBox houses = new VBox(houseWidth * 0.20,
+        VBox houses = new VBox(houseWidth * 0.10,
                 createHouseRow(houseWidth, houseHeight, 1),
                 createHouseRow(houseWidth, houseHeight, 2),
                 createHouseRow(houseWidth, houseHeight, 3),
@@ -92,18 +92,18 @@ public class StreetInfoDisplay extends Pane {
         houses.setLayoutY(HEIGHT * 0.48);
 
         //Doppel points
-        VBox doppelPoints = new VBox(-(WIDTH * 0.002),
+        VBox doppelPoints = new VBox(WIDTH * 0.0225,
                 buildLabel("streetInfo_info_housesRent_Colon", ":", infoTextFont, TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor()),
                 buildLabel("streetInfo_info_housesRent_Colon", ":", infoTextFont, TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor()),
                 buildLabel("streetInfo_info_housesRent_Colon", ":", infoTextFont, TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor()),
                 buildLabel("streetInfo_info_housesRent_Colon", ":", infoTextFont, TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor()),
-                buildLabel("streetInfo_info_housesRent_Colon", ":", infoTextFont, TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor())
+                buildLabel("streetInfo_info_hotelRent_Colon", ":", infoTextFont, TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor())
         );
         doppelPoints.setLayoutY(HEIGHT * 0.45);
         doppelPoints.setLayoutX(WIDTH * 0.60);
 
         //Doppel numbers
-        VBox housesNumbers = new VBox(-(WIDTH * 0.002),
+        VBox housesNumbers = new VBox(WIDTH * 0.0225,
                 buildLabel("streetInfo_number_RentOneHouse",  street.getRentHouse()[0] + "€ ", infoFont, TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor()),
                 buildLabel("streetInfo_number_RentTowHouse", street.getRentHouse()[1] + "€ ", infoFont, TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor()),
                 buildLabel("streetInfo_number_RentThreeHouse", street.getRentHouse()[2] + "€ ", infoFont, TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor()),
@@ -147,10 +147,10 @@ public class StreetInfoDisplay extends Pane {
                 buildLine("streetInfo_separatingLine_RentOneStreet|RentFullStreet", new Point2D(0.01, HEIGHT * 0.36), new Point2D(WIDTH * 0.99, HEIGHT * 0.36), WIDTH * 0.02, ProgramColor.BORDER_COLOR_DARK.getColor()),
                 infoRentAll,
                 rentAll,
-                buildLine("streetInfo_separatingLine_RentFullStreet|NULL", new Point2D(0.01, HEIGHT * 0.44), new Point2D(WIDTH * 0.99, HEIGHT * 0.44), WIDTH * 0.02, ProgramColor.BORDER_COLOR_DARK.getColor()),
+                buildLine("streetInfo_separatingLine_RentFullStreet|RentHouses", new Point2D(0.01, HEIGHT * 0.44), new Point2D(WIDTH * 0.99, HEIGHT * 0.44), WIDTH * 0.02, ProgramColor.BORDER_COLOR_DARK.getColor()),
                 houses,
                 housesNumbers,
-                buildLine("streetInfo_separatingLine_NULL|HousePrice", new Point2D(0.01, HEIGHT * 0.85), new Point2D(WIDTH * 0.99, HEIGHT * 0.85), WIDTH * 0.02, ProgramColor.BORDER_COLOR_DARK.getColor()),
+                buildLine("streetInfo_separatingLine_RentHouses|HousePrice", new Point2D(0.01, HEIGHT * 0.85), new Point2D(WIDTH * 0.99, HEIGHT * 0.85), WIDTH * 0.02, ProgramColor.BORDER_COLOR_DARK.getColor()),
                 infoHousePrice,
                 housePrice,
                 doppelPoints,

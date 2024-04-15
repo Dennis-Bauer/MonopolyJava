@@ -40,7 +40,8 @@ public class ActionDisplay extends Pane {
 
         Pane buildButton = buildButton("Bauen", width * 0.25, height * 0.45, "/de/sandwich/monopoly/aktionDisplay/build.png", ProgramColor.ACTION_BUILD_BUTTON.getColor(), "build", middleX, y);
         buildButton.setOnMouseClicked(mouseEvent -> {
-
+            Main.getGameOperator().getDisplayControllerOne().displayBuildDisplay((Main.getGameOperator().getTurnPlayer()));
+            rootDisplay.displayReturnButton();
         });
 
         Pane leaveButton = buildButton("Aufgeben", width * 0.25, height * 0.45, "/de/sandwich/monopoly/aktionDisplay/leave.png", ProgramColor.ACTION_LEAVE_BUTTON.getColor(), "leave", middleX + space, y);

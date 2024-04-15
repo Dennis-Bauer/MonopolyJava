@@ -35,7 +35,9 @@ public class BankDisplay extends Pane {
     private final Label mortgageDisplay;
     private final StackPane button;
 
-    private Player activPalyer;
+    private Pane playerPane = new Pane();
+
+    private Player activePlayer;
 
     private int mortgage = 0;
     private ArrayList<Integer> mortgageStreets = new ArrayList<>();
@@ -59,13 +61,13 @@ public class BankDisplay extends Pane {
         button.setLayoutY(height - height * 0.10);
 
         button.setOnMouseClicked(mouseEvent -> {
-            if (activPalyer != null && mortgage != 0) {
+            if (activePlayer != null && mortgage != 0) {
                 Main.getGameOperator();
                 HashMap<Integer, Field> fields = Game.getFields();
 
                 for (int i = 0; i < fields.size(); i++) {
                     if (fields.get(i) instanceof Street s) {
-                        if (s.getOwner() == activPalyer) {
+                        if (s.getOwner() == activePlayer) {
                             if (s.isInBank()) {
                                 if (!mortgageStreets.contains(i)) {
                                     s.purchaseFromBank();
@@ -79,29 +81,25 @@ public class BankDisplay extends Pane {
             }
         });
 
-        getChildren().addAll(mortgageDisplay, button);
+        getChildren().addAll(mortgageDisplay, button, playerPane);
         this.WIDTH = width;
         this.HEIGHT = height;
     }
 
-    public void displayPlayer(Player p) {
-        if (getChildren().size() > 2) {
-            getChildren().remove(2);
+    public void display(Player p) {
+        if (!playerPane.getChildren().isEmpty()) {
+            playerPane.getChildren().clear();
         }
 
         addMortgage(-(mortgage));
         mortgageStreets.clear();
-        activPalyer = p;
+        activePlayer = p;
 
         Pane playerDisplay = GameDisplayControllerOne.buildPlayer(WIDTH * 0.38, HEIGHT * 0.60, ProgramColor.BANK_PLAYER_BACKGROUND.getColor(), p);
-        playerDisplay.setLayoutY(HEIGHT / 2 - playerDisplay.getMaxHeight() / 2);
-        playerDisplay.setLayoutX(WIDTH / 2 - playerDisplay.getMaxWidth() / 2);
 
         Rectangle[] streets = GameDisplayControllerOne.buildStreetInventar(WIDTH * 0.38, HEIGHT * 0.60, p);
 
         Pane streetDisplay = new Pane();
-        streetDisplay.setLayoutY(HEIGHT / 2 - playerDisplay.getMaxHeight() / 2);
-        streetDisplay.setLayoutX(WIDTH / 2 - playerDisplay.getMaxWidth() / 2);
 
         for (Rectangle sObject : streets) {
             streetDisplay.getChildren().add(sObject);
@@ -109,7 +107,7 @@ public class BankDisplay extends Pane {
 
             Main.getGameOperator();
             if (Game.getFields().get(fieldNumber) instanceof Street street) {
-                if (street.getOwner() == activPalyer) {
+                if (street.getOwner() == activePlayer) {
                     if (street.isInBank()) {
                         sObject.setId(sObject.getId() + "M");
                             sObject.setStroke(ProgramColor.SELECT_COLOR.getColor());
@@ -134,7 +132,7 @@ public class BankDisplay extends Pane {
             sObject.setOnMouseClicked(mouseEvent -> {
 
                 if (Game.getFields().get(fieldNumber) instanceof Street street) {
-                    if (street.getOwner() == activPalyer) {
+                    if (street.getOwner() == activePlayer) {
                         
                         if (sObject.getId().endsWith("true")) {
                             sObject.setId(sObject.getId() + "M");
@@ -186,7 +184,10 @@ public class BankDisplay extends Pane {
 
         }
 
-        getChildren().addAll(playerDisplay, streetDisplay);
+        playerPane.setLayoutX(WIDTH / 2 - playerDisplay.getMaxWidth() / 2);
+        playerPane.setLayoutY(HEIGHT / 2 - playerDisplay.getMaxHeight() / 2);
+
+        playerPane.getChildren().addAll(playerDisplay, streetDisplay);
     }
 
     private void addMortgage(int x) {

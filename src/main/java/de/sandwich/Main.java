@@ -17,7 +17,7 @@ public class Main extends Application {
     public static final String TEXT_FONT = "Clear Sans";
     public static final boolean CONSOLE_OUT_PUT = true;
     public static final String CONSOLE_OUT_PUT_LINEBREAK = "---------------";
-    public static final double WINDOW_WIDTH = 1300;
+    public static final double WINDOW_WIDTH = 1200;
     public static final double WINDOW_HEIGHT = 650;
 
     //Game variables
