@@ -29,6 +29,7 @@ import de.sandwich.Fields.Field;
 import de.sandwich.Fields.Station;
 import de.sandwich.Fields.Street;
 import de.sandwich.GUI.Game.Displays.DisplayOne.BankDisplay;
+import de.sandwich.GUI.Game.Displays.DisplayOne.BuildDisplay;
 import de.sandwich.GUI.Game.Displays.DisplayOne.PlayerDisplay;
 import de.sandwich.GUI.Game.Displays.DisplayOne.TradingDisplay;
 
@@ -36,8 +37,12 @@ import de.sandwich.GUI.Game.Displays.DisplayOne.TradingDisplay;
 public class GameDisplayControllerOne extends Pane {
 
     private final PlayerDisplay playerDisplay;
+
     private final TradingDisplay tradingDisplay;
+
     private final BankDisplay bankDisplay;
+
+    private final BuildDisplay buildDisplay;
 
     private ArrayList<Player> lastPlayerSave;
 
@@ -55,7 +60,10 @@ public class GameDisplayControllerOne extends Pane {
         bankDisplay = new BankDisplay(width, height, this);
         bankDisplay.setVisible(false);
 
-        getChildren().addAll(playerDisplay, tradingDisplay, bankDisplay);
+        buildDisplay = new BuildDisplay(width, height, this);
+        buildDisplay.setVisible(false);
+
+        getChildren().addAll(playerDisplay, tradingDisplay, bankDisplay, buildDisplay);
 
     }
 
@@ -65,7 +73,7 @@ public class GameDisplayControllerOne extends Pane {
                 playerDisplay.createPlayers(lastPlayerSave);
             else throw new PlayerNotFoundExceptions();
         } else if (bankDisplay.isVisible())
-            bankDisplay.displayPlayer(Main.getGameOperator().getTurnPlayer());
+            bankDisplay.display(Main.getGameOperator().getTurnPlayer());
         else {
             System.out.println("ACHTUNG, DIE UPDATE METHODE FÜR DAS TRADING DISPLAY IST NOCH NICHT GEMACHT!!!");
         }
@@ -100,8 +108,15 @@ public class GameDisplayControllerOne extends Pane {
     public void displayBankDisplay(Player p) {
         clearDisplay();
 
-        bankDisplay.displayPlayer(p);
+        bankDisplay.display(p);
         bankDisplay.setVisible(true);
+    }
+
+    public void displayBuildDisplay(Player p) {
+        clearDisplay();
+
+        buildDisplay.display(p);
+        buildDisplay.setVisible(true);
     }
 
     private void clearDisplay() {

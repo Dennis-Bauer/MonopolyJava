@@ -54,6 +54,10 @@ public enum ProgramColor {
     BANK_MORTGAGE_BUTTON_PLUS(Color.rgb(133, 219, 99)),
     BANK_MORTGAGE_BUTTON_MINUS(Color.rgb(171, 34, 34)),
 
+    //Build display
+    BUILD_STREET_INFO(Color.rgb(5, 106, 110)),
+    BUILD_STREET_INFO_HOUSEINDICATOR(Color.rgb(255, 255, 255)),
+
     //Whole program
     ERROR_MESSAGES(Color.rgb(209, 8, 8)),
     CHANCEL_BUTTONS(Color.rgb(209, 8, 8)),
