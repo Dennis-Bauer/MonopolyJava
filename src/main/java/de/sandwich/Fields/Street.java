@@ -35,7 +35,7 @@ public class Street extends Field{
 
 
     //Functional values
-
+    private int houseNumber = 1;
     private boolean isOwned;
     private Player owner;
 
@@ -118,6 +118,18 @@ public class Street extends Field{
 
         colorIndicator.setStrokeWidth(colorIndicator.getStrokeWidth() / 2);
         colorIndicator.setStroke(ProgramColor.BORDER_COLOR_DARK.getColor());
+    }
+
+    public void addHouse() {
+        if (houseNumber != -1) {
+            houseNumber++;
+            if (houseNumber >= 4)
+                houseNumber = -1;
+        }
+    }
+
+    public int getHouseNumber() {
+        return houseNumber;
     }
 
     public Player getOwner() {
