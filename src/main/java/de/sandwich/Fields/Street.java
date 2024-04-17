@@ -7,6 +7,9 @@ import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtiliti
 import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildRectangle;
 import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXUtilities.centeringChildInPane;
 
+import java.util.HashMap;
+
+import de.sandwich.Game;
 import de.sandwich.Main;
 
 import javafx.scene.control.Label;
@@ -35,7 +38,8 @@ public class Street extends Field{
 
 
     //Functional values
-    private int houseNumber = 1;
+    private int houseNumber = 0;
+    private boolean ownerHasFullColor = false;
     private boolean isOwned;
     private Player owner;
 
@@ -61,6 +65,8 @@ public class Street extends Field{
 
     public void setOwner(Player owner) {
         isOwned = owner != null;
+
+        ownerHasFullColor = isFullColorGroup(owner);
 
         this.owner = owner;
     }
@@ -140,6 +146,10 @@ public class Street extends Field{
         return isOwned;
     }
 
+    public boolean ownerHasFullColor() {
+        return ownerHasFullColor;
+    }
+
     public Color getColor() {
         return color;
     }
@@ -174,5 +184,25 @@ public class Street extends Field{
 
     public boolean isInBank() {
         return isInBank;
+    }
+
+    private boolean isFullColorGroup(Player owner) {
+        Main.getGameOperator();
+        HashMap<Integer, Field> fields = Game.getFields();
+
+        if (isOwned) {
+            for (int i = 0; i < fields.size(); i++) {
+                if (fields.get(i) instanceof Street s) {
+                    if (s.getColor() == color) {
+                        if (s.isOwned) {
+                            if (s.getOwner() == owner) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 }
