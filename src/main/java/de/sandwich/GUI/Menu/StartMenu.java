@@ -89,7 +89,7 @@ public class StartMenu extends Pane{
     private void buildBackground() {
 
         MiddleGameDisplayController m = new MiddleGameDisplayController(Main.WINDOW_HEIGHT * 0.40, Main.WINDOW_HEIGHT * 0.20, Main.WINDOW_HEIGHT * 0.18);
-        m.displayStreetInfoDisplay(new Street("Gelbe Straße", 130 ,241, new int[]{352, 463, 574, 685}, 796, 1, 2, Color.YELLOW, 1));
+        m.displayStreetInfoDisplay(new Street("Gelbe Straße", 130 ,241, new int[]{352, 463, 574, 685}, 796, 1, 2, Color.YELLOW, 0, 1));
 
         getChildren().add(m);
         m.toFront();

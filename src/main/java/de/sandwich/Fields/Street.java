@@ -30,6 +30,7 @@ public class Street extends Field{
     //Street values
     private final String name;
     private final int salePrice;
+    private final int group;
     private final int rent;
     private final int[] rentHouses;
     private final int rentHotel;
@@ -44,10 +45,11 @@ public class Street extends Field{
     private Player owner;
 
 
-    public Street(String name, int salePrice, int rent, int[] rentHouses, int rentHotel, int housePrice, int hotelPrice, Color color, double position) {
+    public Street(String name, int salePrice, int rent, int[] rentHouses, int rentHotel, int housePrice, int hotelPrice, Color color, int group, double position) {
         super(position);
         this.name = name;
         this.salePrice = salePrice;
+        this.group = group;
         this.rent = rent;
 
         if (rentHouses.length != 4)
@@ -180,6 +182,10 @@ public class Street extends Field{
 
     public int getHotelPrice() {
         return hotelPrice;
+    }
+
+    public int getGroup() {
+        return group;
     }
 
     public boolean isInBank() {
