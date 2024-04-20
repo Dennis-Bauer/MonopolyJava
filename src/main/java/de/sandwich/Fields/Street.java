@@ -68,9 +68,9 @@ public class Street extends Field{
     public void setOwner(Player owner) {
         isOwned = owner != null;
 
-        ownerHasFullColor = isFullColorGroup(owner);
-
         this.owner = owner;
+
+        ownerHasFullColor = isFullColorGroup(owner);
     }
     
     private Rectangle background;
@@ -192,23 +192,46 @@ public class Street extends Field{
         return isInBank;
     }
 
+    public void setOwnerHasFullColor(boolean ownerHasFullColor) {
+        this.ownerHasFullColor = ownerHasFullColor;
+    }
+
     private boolean isFullColorGroup(Player owner) {
         Main.getGameOperator();
         HashMap<Integer, Field> fields = Game.getFields();
 
+        System.out.println("Die Straße hat die Gruppe: " + getGroup());
+
         if (isOwned) {
             for (int i = 0; i < fields.size(); i++) {
                 if (fields.get(i) instanceof Street s) {
-                    if (s.getColor() == color) {
-                        if (s.isOwned) {
-                            if (s.getOwner() == owner) {
-                                return true;
+                    if (s != this) {
+                        System.out.println("Die Grade Bearbeitet Straße hat die Gruppe: " + s.getGroup() + " und den Namen: " + s.getName());
+                        if (s.getGroup() == group) {
+                            System.out.println("Es wurde die Gleiche Farbe gefunden!!!!!");
+                            if (s.isOwned) {
+                                if (s.getOwner() != owner) {
+                                    return false;
+                                }
+                            } else {
+                                return false;
                             }
                         }
                     }
                 }
             }
+        } else {
+            return false;
         }
-        return false;
+
+        for (int i = 0; i < fields.size(); i++) {
+            if (fields.get(i) instanceof Street s) {
+                if (s.getGroup() == group) {
+                    s.setOwnerHasFullColor(true);
+                }
+            }
+        }
+
+        return true;
     }
 }
