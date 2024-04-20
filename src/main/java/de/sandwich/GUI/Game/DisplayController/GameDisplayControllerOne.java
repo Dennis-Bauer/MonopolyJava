@@ -72,9 +72,11 @@ public class GameDisplayControllerOne extends Pane {
             if (lastPlayerSave != null)
                 playerDisplay.createPlayers(lastPlayerSave);
             else throw new PlayerNotFoundExceptions();
-        } else if (bankDisplay.isVisible())
+        } else if (bankDisplay.isVisible()) {
             bankDisplay.display(Main.getGameOperator().getTurnPlayer());
-        else {
+        } else if (buildDisplay.isVisible()) {
+            buildDisplay.display(Main.getGameOperator().getTurnPlayer());
+        } else {
             System.out.println("ACHTUNG, DIE UPDATE METHODE FÜR DAS TRADING DISPLAY IST NOCH NICHT GEMACHT!!!");
         }
     }
@@ -123,6 +125,7 @@ public class GameDisplayControllerOne extends Pane {
         bankDisplay.setVisible(false);
         tradingDisplay.setVisible(false);
         playerDisplay.setVisible(false);
+        buildDisplay.setVisible(false);
     }
 
     //Creates the base from the player boxes

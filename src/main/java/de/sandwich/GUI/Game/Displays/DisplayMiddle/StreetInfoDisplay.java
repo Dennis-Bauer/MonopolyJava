@@ -8,9 +8,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
@@ -18,9 +15,10 @@ import javafx.scene.text.TextAlignment;
 import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildLabel;
 import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildLine;
 import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildRectangle;
-import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildTriangle;
 import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXUtilities.centeringChildInPane;
 import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXUtilities.buildPlus;
+import static de.sandwich.Fields.Street.buildHotelSymbole;
+import static de.sandwich.Fields.Street.buildHouseSymbole;
 
 import de.sandwich.Main;
 import de.sandwich.Enums.ProgramColor;
@@ -146,7 +144,7 @@ public class StreetInfoDisplay extends Pane {
         hotelPriceNumberHouses.setLayoutY(h * 0.92);
         hotelPriceNumberHouses.setLayoutX(w * 0.46);
 
-        Pane hotelHouseSymbole = buildHouseSymbole(w * 0.08, w * 0.06);
+        Pane hotelHouseSymbole = buildHouseSymbole(w * 0.08, w * 0.06, 0, 0);
         hotelHouseSymbole.setLayoutY(h * 0.94);
         hotelHouseSymbole.setLayoutX(w * 0.52);
 
@@ -246,38 +244,12 @@ public class StreetInfoDisplay extends Pane {
             houseRow.setAlignment(Pos.CENTER);
 
             for (int i = 0; i < houseNumber; i++)
-                houseRow.getChildren().add(buildHouseSymbole(houseWidth, houseHeight));
+                houseRow.getChildren().add(buildHouseSymbole(houseWidth, houseHeight, 0, 0));
 
             houseRow.setLayoutY(y);
             houseRow.setLayoutX(x);
 
             return houseRow;
         } else throw new IllegalArgumentException("You cannot create a row of houses with " + houseNumber + " houses");
-    }
-    private static Pane buildHouseSymbole(double houseWidth, double houseHeight) {
-        Pane house = new Pane();
-        house.setId("streetInfo_HouseSymbole");
-
-        Polygon houseTop = buildTriangle("streetInfo_houseSymbole_Top", new Point2D(-(houseWidth * 0.025), 0), new Point2D(houseWidth * 0.525, -(houseHeight * 0.30)), new Point2D(houseWidth * 1.025, 0), ProgramColor.STREETS_HOUSE.getColor(), ProgramColor.BORDER_COLOR_DARK.getColor());
-        Rectangle houseBotton = buildRectangle("streetInfo_houseSymbole_Botton", houseWidth, houseHeight * 0.70, ProgramColor.STREETS_HOUSE.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), 0);
-
-        house.getChildren().addAll(houseTop, houseBotton);
-        return house;
-    }
-
-    private static HBox buildHotelSymbole(double houseWidth, double houseHeight, double x, double y) {
-        HBox hotel = new HBox();
-        hotel.setId("streetInfo_HouseSymbole");
-        hotel.setAlignment(Pos.CENTER);
-
-        hotel.getChildren().add(new Pane(
-                buildTriangle("streetInfo_hotelSymbole_Top", new Point2D(-(houseWidth * 0.025), 0), new Point2D(houseWidth * 0.525, -(houseHeight * 0.30)), new Point2D(houseWidth * 1.025, 0), ProgramColor.STREETS_HOTEL.getColor(), ProgramColor.BORDER_COLOR_DARK.getColor()),
-                buildRectangle("streetInfo_hotelSymbole_Botton", houseWidth, houseHeight * 0.70, ProgramColor.STREETS_HOTEL.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), 0)
-        ));
-
-        hotel.setLayoutY(y);
-        hotel.setLayoutX(x);
-
-        return hotel;
     }
 }

@@ -6,15 +6,17 @@ import de.sandwich.Enums.ProgramColor;
 import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildLabel;
 import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildRectangle;
 import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXUtilities.centeringChildInPane;
+import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildTriangle;
 
 import java.util.HashMap;
 
 import de.sandwich.Game;
 import de.sandwich.Main;
-
+import javafx.geometry.Point2D;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -75,6 +77,8 @@ public class Street extends Field{
     
     private Rectangle background;
     private Rectangle colorIndicator;
+    private Pane[] houses = new Pane[4];
+    private Pane hotel;
 
     @Override
     public Pane buildField(double width, double height, double borderWidth, double fontSize) {
@@ -90,7 +94,23 @@ public class Street extends Field{
         centeringChildInPane(nameIndicator, field);
         centeringChildInPane(priceIndicator, field);
 
-        field.getChildren().addAll(background, colorIndicator, nameIndicator, priceIndicator);
+        double hosueWidht = width * 0.18;
+        double houseHeight = height * 0.16;
+        double houseY = houseHeight / 2;
+        double houseSpacing = (width - (hosueWidht * 4)) / 5;
+        houses[0] = buildHouseSymbole(hosueWidht, houseHeight, houseSpacing, houseY);
+        houses[1] = buildHouseSymbole(hosueWidht, houseHeight, hosueWidht + (houseSpacing * 2), houseY);
+        houses[2] = buildHouseSymbole(hosueWidht, houseHeight, (hosueWidht * 2) + (houseSpacing * 3), houseY);
+        houses[3] = buildHouseSymbole(hosueWidht, houseHeight, (hosueWidht * 3) + (houseSpacing * 4), houseY);
+        hotel = buildHotelSymbole(hosueWidht, houseHeight, (width / 2) - (hosueWidht / 2), houseY);
+
+        field.getChildren().addAll(background, colorIndicator, nameIndicator, priceIndicator, hotel);
+
+        for (Pane h : houses) {
+            h.setVisible(false);
+            field.getChildren().add(h);
+        }
+        hotel.setVisible(false);
 
         super.field = field;
         return field;
@@ -131,8 +151,21 @@ public class Street extends Field{
     public void addHouse() {
         if (houseNumber != -1) {
             houseNumber++;
-            if (houseNumber > 4)
+
+            for (int i = 0; i < houses.length; i++) {
+                if (i <= houseNumber - 1) {
+                    houses[i].setVisible(true);
+                }
+            }
+
+            if (houseNumber > 4) {
                 houseNumber = -1;
+
+                for (Pane house : houses) 
+                    house.setVisible(false);
+                
+                hotel.setVisible(true);
+            }
         }
     }
 
@@ -250,4 +283,33 @@ public class Street extends Field{
 
         return true;
     }
+
+    public static Pane buildHouseSymbole(double houseWidth, double houseHeight, double x, double y) {
+        Pane house = new Pane();
+        house.setId("streetInfo_HouseSymbole");
+
+        Polygon houseTop = buildTriangle("streetInfo_houseSymbole_Top", new Point2D(-(houseWidth * 0.025), 0), new Point2D(houseWidth * 0.525, -(houseHeight * 0.30)), new Point2D(houseWidth * 1.025, 0), ProgramColor.STREETS_HOUSE.getColor(), ProgramColor.BORDER_COLOR_DARK.getColor());
+        Rectangle houseBotton = buildRectangle("streetInfo_houseSymbole_Botton", houseWidth, houseHeight * 0.70, ProgramColor.STREETS_HOUSE.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), 0);
+
+        house.setLayoutX(x);
+        house.setLayoutY(y);
+
+        house.getChildren().addAll(houseTop, houseBotton);
+        return house;
+    }
+
+    public static Pane buildHotelSymbole(double hotelWidth, double hotelHeight, double x, double y) {
+        Pane hotel = new Pane();
+        hotel.setId("streetInfo_HotelSymbole");
+
+        Polygon hotelTop = buildTriangle("streetInfo_hotelSymbole_Top", new Point2D(-(hotelWidth * 0.025), 0), new Point2D(hotelWidth * 0.525, -(hotelHeight * 0.30)), new Point2D(hotelWidth * 1.025, 0), ProgramColor.STREETS_HOTEL.getColor(), ProgramColor.BORDER_COLOR_DARK.getColor());
+        Rectangle hotelBotton = buildRectangle("streetInfo_hotelSymbole_Botton", hotelWidth, hotelHeight * 0.70, ProgramColor.STREETS_HOTEL.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), 0);
+
+        hotel.setLayoutX(x);
+        hotel.setLayoutY(y);
+
+        hotel.getChildren().addAll(hotelTop, hotelBotton);
+        return hotel;
+    }
+    
 }
