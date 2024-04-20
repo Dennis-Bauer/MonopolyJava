@@ -6,6 +6,7 @@ import de.sandwich.GUI.Menu.StartMenu;
 
 
 import static de.sandwich.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPutLine;
+import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXUtilities.creatImage;
 import static de.sandwich.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPut;
 
 import javafx.application.Application;
@@ -28,6 +29,7 @@ public class Main extends Application {
     public void start(@SuppressWarnings("exports") Stage stage) {
 
         primaryStage = stage;
+        stage.getIcons().add(creatImage("/de/sandwich/monopoly/icon.png"));
         stage.setTitle("-M---o-----n----o---p----o---l----y");
         stage.setResizable(true);
         stage.setScene(new Scene(new StartMenu(WINDOW_WIDTH, WINDOW_HEIGHT)));
