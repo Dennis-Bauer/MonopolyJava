@@ -133,51 +133,53 @@ public class BankDisplay extends Pane {
 
                 if (Game.getFields().get(fieldNumber) instanceof Street street) {
                     if (street.getOwner() == activePlayer) {
-                        
-                        if (sObject.getId().endsWith("true")) {
-                            sObject.setId(sObject.getId() + "M");
-                            sObject.setStroke(ProgramColor.SELECT_COLOR.getColor());
-
-                            Main.getGameOperator().getMiddleDisplayController().displayStreetInfoDisplay(street);
-
-                            mortgageStreets.add(fieldNumber);
-
-                            ScaleTransition scaleTransitionBig = new ScaleTransition(Duration.seconds(0.15), sObject);
-                            scaleTransitionBig.setByX(sObject.getWidth() * 0.02);
-                            scaleTransitionBig.setByY(sObject.getWidth() * 0.02);
-                            scaleTransitionBig.play();
-
-                            ScaleTransition scaleTransitionSmall = new ScaleTransition(Duration.seconds(0.05), sObject);
-                            scaleTransitionSmall.setByX(-(sObject.getWidth() * 0.01));
-                            scaleTransitionSmall.setByY(-(sObject.getWidth() * 0.01));
-
-                            scaleTransitionBig.setOnFinished(actionEvent -> scaleTransitionSmall.play());
-
-                            if (Game.getFields().get(fieldNumber) instanceof Street s)
-                                addMortgage(s.getSalePrice() / 2);
-                            else throw new WrongNodeException();
-                        } else if (sObject.getId().endsWith("trueM")) {
-                            sObject.setId(sObject.getId().substring(0, sObject.getId().length() - 1));
-
-                            Main.getGameOperator().getMiddleDisplayController().removeDisplay();
-
-                            if (!(mortgageStreets.size() <= 1))
-                                mortgageStreets.remove(Integer.valueOf(fieldNumber));
-                            else 
-                                mortgageStreets.clear();
-
-                            sObject.setStroke(ProgramColor.BORDER_COLOR_LIGHT.getColor());
-
-                            ScaleTransition scaleTransitionBig = new ScaleTransition(Duration.seconds(0.15), sObject);
-                            scaleTransitionBig.setByX((-sObject.getWidth() * 0.01));
-                            scaleTransitionBig.setByY(-(sObject.getWidth() * 0.01));
-                            scaleTransitionBig.play();
-
-                            if (Game.getFields().get(fieldNumber) instanceof Street s)
-                                addMortgage(-(s.getSalePrice() / 2));
-                            else throw new WrongNodeException();
+                        if (street.getHouseNumber() == 0) {
+                            if (sObject.getId().endsWith("true")) {
+                                sObject.setId(sObject.getId() + "M");
+                                sObject.setStroke(ProgramColor.SELECT_COLOR.getColor());
+    
+                                Main.getGameOperator().getMiddleDisplayController().displayStreetInfoDisplay(street);
+    
+                                mortgageStreets.add(fieldNumber);
+    
+                                ScaleTransition scaleTransitionBig = new ScaleTransition(Duration.seconds(0.15), sObject);
+                                scaleTransitionBig.setByX(sObject.getWidth() * 0.02);
+                                scaleTransitionBig.setByY(sObject.getWidth() * 0.02);
+                                scaleTransitionBig.play();
+    
+                                ScaleTransition scaleTransitionSmall = new ScaleTransition(Duration.seconds(0.05), sObject);
+                                scaleTransitionSmall.setByX(-(sObject.getWidth() * 0.01));
+                                scaleTransitionSmall.setByY(-(sObject.getWidth() * 0.01));
+    
+                                scaleTransitionBig.setOnFinished(actionEvent -> scaleTransitionSmall.play());
+    
+                                if (Game.getFields().get(fieldNumber) instanceof Street s)
+                                    addMortgage(s.getSalePrice() / 2);
+                                else throw new WrongNodeException();
+                            } else if (sObject.getId().endsWith("trueM")) {
+                                sObject.setId(sObject.getId().substring(0, sObject.getId().length() - 1));
+    
+                                Main.getGameOperator().getMiddleDisplayController().removeDisplay();
+    
+                                if (!(mortgageStreets.size() <= 1))
+                                    mortgageStreets.remove(Integer.valueOf(fieldNumber));
+                                else 
+                                    mortgageStreets.clear();
+    
+                                sObject.setStroke(ProgramColor.BORDER_COLOR_LIGHT.getColor());
+    
+                                ScaleTransition scaleTransitionBig = new ScaleTransition(Duration.seconds(0.15), sObject);
+                                scaleTransitionBig.setByX((-sObject.getWidth() * 0.01));
+                                scaleTransitionBig.setByY(-(sObject.getWidth() * 0.01));
+                                scaleTransitionBig.play();
+    
+                                if (Game.getFields().get(fieldNumber) instanceof Street s)
+                                    addMortgage(-(s.getSalePrice() / 2));
+                                else throw new WrongNodeException();
+                            }
+                        } else {
+                            Main.getGameOperator().displayErrorMessage("Du kannst diese Straße nicht an die Bank verkaufen, weil da was drauf gebaut ist!");
                         }
-            
                     }
                 }
             });
