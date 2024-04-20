@@ -3,6 +3,7 @@ package de.sandwich.GUI.Game.Displays.DisplayTwo;
 import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildLabel;
 import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildRectangle;
 import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.createImageView;
+import static de.sandwich.DennisUtilitiesPackage.Java.JavaUtilities.buildLongText;
 
 import de.sandwich.Main;
 import de.sandwich.Enums.ProgramColor;
@@ -38,7 +39,7 @@ public class ActionDisplay extends Pane {
             rootDisplay.displayReturnButton();
         });
 
-        Pane buildButton = buildButton("Bauen", width * 0.25, height * 0.45, "/de/sandwich/monopoly/aktionDisplay/build.png", ProgramColor.ACTION_BUILD_BUTTON.getColor(), "build", middleX, y);
+        Pane buildButton = buildButton(buildLongText("Bauen/", "Abbreißen"), width * 0.25, height * 0.45, "/de/sandwich/monopoly/aktionDisplay/build.png", ProgramColor.ACTION_BUILD_BUTTON.getColor(), "build", middleX, y);
         buildButton.setOnMouseClicked(mouseEvent -> {
             Main.getGameOperator().getDisplayControllerOne().displayBuildDisplay((Main.getGameOperator().getTurnPlayer()));
             rootDisplay.displayReturnButton();

@@ -155,6 +155,8 @@ public class Street extends Field{
             for (int i = 0; i < houses.length; i++) {
                 if (i <= houseNumber - 1) {
                     houses[i].setVisible(true);
+                } else {
+                    houses[i].setVisible(false);
                 }
             }
 
@@ -167,6 +169,25 @@ public class Street extends Field{
                 hotel.setVisible(true);
             }
         }
+    }
+
+    public void removeHouse() {
+        if (houseNumber == -1) {
+            houseNumber = 4;
+            hotel.setVisible(false);
+        } else {
+            houseNumber--;
+
+            for (int i = 0; i < houses.length; i++) {
+                if (i <= houseNumber - 1) {
+                    houses[i].setVisible(true);
+                } else {
+                    houses[i].setVisible(false);
+                }
+            }
+
+        }
+
     }
 
     public int getPlayerRent() {

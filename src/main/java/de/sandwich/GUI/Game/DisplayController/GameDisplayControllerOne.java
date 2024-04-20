@@ -4,6 +4,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
@@ -30,6 +31,7 @@ import de.sandwich.Fields.Station;
 import de.sandwich.Fields.Street;
 import de.sandwich.GUI.Game.Displays.DisplayOne.BankDisplay;
 import de.sandwich.GUI.Game.Displays.DisplayOne.BuildDisplay;
+import de.sandwich.GUI.Game.Displays.DisplayOne.DestroyDisplay;
 import de.sandwich.GUI.Game.Displays.DisplayOne.PlayerDisplay;
 import de.sandwich.GUI.Game.Displays.DisplayOne.TradingDisplay;
 
@@ -43,6 +45,8 @@ public class GameDisplayControllerOne extends Pane {
     private final BankDisplay bankDisplay;
 
     private final BuildDisplay buildDisplay;
+
+    private final DestroyDisplay destroyDisplay;
 
     private ArrayList<Player> lastPlayerSave;
 
@@ -63,7 +67,10 @@ public class GameDisplayControllerOne extends Pane {
         buildDisplay = new BuildDisplay(width, height, this);
         buildDisplay.setVisible(false);
 
-        getChildren().addAll(playerDisplay, tradingDisplay, bankDisplay, buildDisplay);
+        destroyDisplay = new DestroyDisplay(width, height, this);
+        destroyDisplay.setVisible(false);
+
+        getChildren().addAll(playerDisplay, tradingDisplay, bankDisplay, buildDisplay, destroyDisplay);
 
     }
 
@@ -76,6 +83,8 @@ public class GameDisplayControllerOne extends Pane {
             bankDisplay.display(Main.getGameOperator().getTurnPlayer());
         } else if (buildDisplay.isVisible()) {
             buildDisplay.display(Main.getGameOperator().getTurnPlayer());
+        }  else if (destroyDisplay.isVisible()) {
+            destroyDisplay.display(Main.getGameOperator().getTurnPlayer());
         } else {
             System.out.println("ACHTUNG, DIE UPDATE METHODE FÜR DAS TRADING DISPLAY IST NOCH NICHT GEMACHT!!!");
         }
@@ -121,11 +130,19 @@ public class GameDisplayControllerOne extends Pane {
         buildDisplay.setVisible(true);
     }
 
+    public void displayDestroyDisplay(Player p) {
+        clearDisplay();
+
+        destroyDisplay.display(p);
+        destroyDisplay.setVisible(true);
+    }
+
     private void clearDisplay() {
         bankDisplay.setVisible(false);
         tradingDisplay.setVisible(false);
         playerDisplay.setVisible(false);
         buildDisplay.setVisible(false);
+        destroyDisplay.setVisible(false);
     }
 
     //Creates the base from the player boxes

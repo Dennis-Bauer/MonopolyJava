@@ -27,6 +27,8 @@ import javafx.util.Duration;
 
 public class BuildDisplay extends Pane {
 
+    private static int housesRemain = 32;
+
     private final double WIDTH;
     private final double HEIGHT;
 
@@ -34,7 +36,6 @@ public class BuildDisplay extends Pane {
 
     private final Label errorMessage;
 
-    private int housesRemain = 32;
     private final Label housesRemainLabel;
 
     private Pane playerPane = new Pane();
@@ -56,6 +57,21 @@ public class BuildDisplay extends Pane {
 
         streetInfo.setLayoutX(WIDTH / 2);
         streetInfo.setLayoutY(HEIGHT * 0.05);
+
+        Rectangle destroyDisplayButtonBackground = buildRectangle("gameScene_displayOne_buildDisplay_toDestroyDisplayButton_Background", WIDTH * 0.25, HEIGHT * 0.10, ProgramColor.BUTTON_DISABLED.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), width * 0.008);
+
+        destroyDisplayButtonBackground.setArcWidth(width * 0.01);
+        destroyDisplayButtonBackground.setArcHeight(width * 0.01);
+
+        StackPane toDestroyDisplayButton = new StackPane(
+            destroyDisplayButtonBackground,
+            buildLabel("gameScene_displayOne_buildDisplay_toDestroyDisplayButton_Text", "Zum abbreißen ->", Font.font(Main.TEXT_FONT, FontWeight.BOLD, width * 0.03), null, ProgramColor.TEXT_COLOR.getColor())
+        );
+
+        toDestroyDisplayButton.setLayoutX(width * 0.74);
+        toDestroyDisplayButton.setLayoutY(HEIGHT * 0.005);
+
+        toDestroyDisplayButton.setOnMouseClicked(mouseEnvent -> rootDisplay.displayDestroyDisplay(activePlayer));
 
         errorMessage = buildLabel("gameScene_displayOne_buildDisplay_ErrorMessage", "NULL", Font.font(Main.TEXT_FONT, FontWeight.BOLD ,WIDTH * 0.03), null, ProgramColor.ERROR_MESSAGES.getColor());
         centeringChildInPane(errorMessage, rootDisplay);
@@ -178,7 +194,8 @@ public class BuildDisplay extends Pane {
             button,
             errorMessage,
             houseRemainSymbole,
-            housesRemainLabel
+            housesRemainLabel,
+            toDestroyDisplayButton
         );
 
     }
@@ -268,4 +285,12 @@ public class BuildDisplay extends Pane {
 
     }
     
+    public static int getHousesRemain() {
+        return housesRemain;
+    }
+
+    public static void setHousesRemain(int housesRemain) {
+        BuildDisplay.housesRemain = housesRemain;
+    }
+
 }
