@@ -50,7 +50,6 @@ public enum ProgramColor {
 
     //Bank display
     BANK_PLAYER_BACKGROUND(Color.rgb(78, 138, 186)),
-    BANK_MORTGAGE_BUTTON_ZERO(Color.rgb( 130, 126, 126)),
     BANK_MORTGAGE_BUTTON_PLUS(Color.rgb(133, 219, 99)),
     BANK_MORTGAGE_BUTTON_MINUS(Color.rgb(171, 34, 34)),
 
@@ -64,6 +63,7 @@ public enum ProgramColor {
     FINISH_BUTTONS(Color.rgb(94, 222, 9)),
     SELECT_COLOR(Color.rgb(209, 8, 8)),
     SYMBOLE_COLOR(Color.rgb(217, 219, 215)),
+    BUTTON_DISABLED(Color.rgb( 130, 126, 126)),
 
     TEXT_COLOR(Color.rgb(255, 255, 255)),
 

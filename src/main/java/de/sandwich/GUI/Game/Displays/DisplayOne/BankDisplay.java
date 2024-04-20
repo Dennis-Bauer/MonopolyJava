@@ -202,7 +202,7 @@ public class BankDisplay extends Pane {
             } else if (mortgage > 0) {
                 b.setFill(ProgramColor.BANK_MORTGAGE_BUTTON_MINUS.getColor());
             } else {
-                b.setFill(ProgramColor.BANK_MORTGAGE_BUTTON_ZERO.getColor());
+                b.setFill(ProgramColor.BUTTON_DISABLED.getColor());
             }
         } else throw wrongNode;
 
@@ -221,7 +221,7 @@ public class BankDisplay extends Pane {
         StackPane pane = new StackPane();
         pane.setId("gameScene_displayOne_bankDisplay_MortgageButton");
 
-        Rectangle background = buildRectangle("gameScene_displayOne_bankDisplay_mortgageButton_Background", width, height, ProgramColor.BANK_MORTGAGE_BUTTON_ZERO.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), width * 0.01);
+        Rectangle background = buildRectangle("gameScene_displayOne_bankDisplay_mortgageButton_Background", width, height, ProgramColor.BUTTON_DISABLED.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), width * 0.01);
         background.setArcWidth(width * 0.25);
         background.setArcHeight(width * 0.25);
 
