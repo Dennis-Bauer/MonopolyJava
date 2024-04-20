@@ -131,8 +131,24 @@ public class Street extends Field{
     public void addHouse() {
         if (houseNumber != -1) {
             houseNumber++;
-            if (houseNumber >= 4)
+            if (houseNumber > 4)
                 houseNumber = -1;
+        }
+    }
+
+    public int getPlayerRent() {
+        if (ownerHasFullColor) {
+            switch (houseNumber) {
+                case 0 -> {return rent * 2;}
+                case 1 -> {return rentHouses[0];}
+                case 2 -> {return rentHouses[1];}
+                case 3 -> {return rentHouses[2];}
+                case 4 -> {return rentHouses[3];}
+                case -1 -> {return rentHotel;}
+                default -> throw new IllegalArgumentException("An unexpected number of houses were discovered");
+            }
+        } else {
+            return rent;
         }
     }
 

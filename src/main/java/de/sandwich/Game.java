@@ -247,7 +247,7 @@ public class Game {
                     setVisibilityTurnFinButton(true);
                 }
             } else {
-                middleDisplayController.displayPayDisplay(buildLongText("Du schuldest den Spieler", street.getOwner().getName() + " " + (street.getRent() + "€")), street.getRent());
+                middleDisplayController.displayPayDisplay(buildLongText("Du schuldest den Spieler", street.getOwner().getName() + " " + (street.getPlayerRent() + "€")), street.getPlayerRent());
             }
         } else if (FIELDS.get(turnPlayer.getFieldPostion()) instanceof Corner corner) { //Is the player on a Corner
             switch (corner.getTyp()) {
