@@ -3,6 +3,7 @@ package de.sandwich.GUI.Game.Displays.DisplayOne;
 import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildLabel;
 import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildRectangle;
 import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXUtilities.centeringChildInPane;
+import static de.sandwich.Fields.Street.buildHouseSymbole;
 
 import java.util.HashMap;
 
@@ -33,6 +34,9 @@ public class BuildDisplay extends Pane {
 
     private final Label errorMessage;
 
+    private int housesRemain = 32;
+    private final Label housesRemainLabel;
+
     private Pane playerPane = new Pane();
     private Pane streetInfo = new Pane();
 
@@ -57,6 +61,9 @@ public class BuildDisplay extends Pane {
         centeringChildInPane(errorMessage, rootDisplay);
         errorMessage.layoutYProperty().bind(rootDisplay.heightProperty().subtract(errorMessage.heightProperty()));
         errorMessage.setVisible(false);
+
+        housesRemainLabel = buildLabel("gameScene_displayOne_buildDisplay_HousesRemainText", "" + housesRemain, Font.font(Main.TEXT_FONT, FontWeight.BOLD ,WIDTH * 0.08), null, ProgramColor.TEXT_COLOR.getColor(), width * 0.86, height * 0.82);
+        Pane houseRemainSymbole = buildHouseSymbole(width * 0.12, height * 0.18, width * 0.85, height * 0.82);
 
         buttonBackground = buildRectangle("gameScene_displayOne_buildDisplay_buyButton_Background", width * 0.45, height * 0.13, ProgramColor.BUTTON_DISABLED.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), WIDTH * 0.008);
         buttonBackground.setArcHeight(WIDTH * 0.05);
@@ -108,14 +115,36 @@ public class BuildDisplay extends Pane {
 
                     if (activStreet.getHouseNumber() < 4) {
                         if (activePlayer.getBankAccount() >= activStreet.getHotelPrice()) {
-                            activStreet.addHouse();
-                            activePlayer.addBankAccount(-(activStreet.getHousePrice()));
+                            if (housesRemain != 0) {
+                                activStreet.addHouse();
+
+                                housesRemain--;
+                                housesRemainLabel.setText("" + housesRemain);
+
+                                activePlayer.addBankAccount(-(activStreet.getHousePrice()));
+                            } else {
+                                errorMessage.setText("Es gibt keine Häuser mehr die zum Bauen genutzt werden können!");
+
+                                errorMessage.setVisible(true);
+                            }
+                        
+                        } else {
+                            errorMessage.setText("Du hast nicht genug Geld um ein Haus zu bauen!");
+
+                            errorMessage.setVisible(true);
                         }
                     } else {
                         if (activePlayer.getBankAccount() >= activStreet.getHotelPrice()) {
                             activStreet.addHouse();
-                            activStreet.addHouse();
+
+                            housesRemain = housesRemain + 4;
+                            housesRemainLabel.setText("" + housesRemain);
+
                             activePlayer.addBankAccount(-(activStreet.getHotelPrice()));
+                        } else {
+                            errorMessage.setText("Du hast nicht genug Geld um ein Hotel zu bauen!");
+
+                            errorMessage.setVisible(true);
                         }
                     }
 
@@ -147,7 +176,9 @@ public class BuildDisplay extends Pane {
             buildRectangle("gameScene_displayOne_buildDisplay_Background", width, height, ProgramColor.BACKGROUND.getColor(), false, null, 0), playerPane,
             streetInfo,
             button,
-            errorMessage
+            errorMessage,
+            houseRemainSymbole,
+            housesRemainLabel
         );
 
     }
