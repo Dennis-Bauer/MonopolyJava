@@ -13,7 +13,7 @@ public abstract class Field {
     }
 
     public Pane buildField(double width, double height, double borderWidth, double fontSize) {
-        return new Pane();
+        throw new NoSuchMethodError("An attempt was made to execute a method that actually needs to be overwritten");
     }
 
     public double getPosition() {
