@@ -19,7 +19,6 @@ public enum ProgramColor {
     DISPLAY_ONE_BACKGROUND(Color.rgb(109, 232, 118)),
     DISPLAY_TWO_BACKGROUND(Color.rgb(109, 171, 232)),
     DISPLAY_MID_BACKGROUND(Color.rgb(125, 125, 125)),
-    JAIL_COLOR(Color.rgb(255, 149, 0)),
 
     //Streets
     STREETS_HOUSE(Color.rgb(15, 209, 70)),
@@ -56,6 +55,10 @@ public enum ProgramColor {
     //Build display
     BUILD_STREET_INFO(Color.rgb(5, 106, 110)),
     BUILD_STREET_INFO_HOUSEINDICATOR(Color.rgb(255, 255, 255)),
+
+    //Jail
+    USE_FREE_JAIL_CARD(Color.rgb(109, 171, 232)),
+    JAIL_COLOR(Color.rgb(255, 149, 0)),
 
     //Whole program
     ERROR_MESSAGES(Color.rgb(209, 8, 8)),

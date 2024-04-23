@@ -32,6 +32,7 @@ import de.sandwich.GUI.Game.GameBoard;
 import de.sandwich.GUI.Game.DisplayController.GameDisplayControllerOne;
 import de.sandwich.GUI.Game.DisplayController.GameDisplayControllerTwo;
 import de.sandwich.GUI.Game.DisplayController.MiddleGameDisplayController;
+import de.sandwich.GUI.Game.Displays.DisplayTwo.DiceDisplay;
 
 import static de.sandwich.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPut;
 import static de.sandwich.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPutLine;
@@ -68,7 +69,6 @@ public class Game {
     //Game variables
     private int freeParkingMoney = 999;
     private int playerInGame = 0;
-    private boolean turnPlayerIsMoving = false;
 
     private Player turnPlayer;
     private Player nextPlayer;
@@ -203,22 +203,22 @@ public class Game {
     //Starts the Animation and controls the postion from the player.
     public void playerRolledDice(int diceOne, int diceTwo) {
 
-        turnPlayerIsMoving = true;
+        DiceDisplay.lockeDices();
         setNextPlayer();
 
         if (turnPlayer.isInJail()) {
             if (diceOne == diceTwo) {
-                nextPlayer = turnPlayer;
+                
+                try { gameBoard.movePlayer(turnPlayer, diceOne + diceTwo); } catch (PlayerNotFoundExceptions ignored) {}
+                turnPlayer.moveFieldPostion(diceOne + diceTwo);
+                
                 turnPlayer.setInJail(false);
             } else {
                 turnPlayer.removeOnInJailRemain();
-                if (turnPlayer.getInJailRemain() <= 0) {
-                    turnPlayer.setInJail(false);
-                    gameBoard.removePlayerFromJail(turnPlayer);
-                }
+                middleDisplayController.displayInJailDisplay(turnPlayer, false);
             }
+
         } else {
-            turnPlayerIsMoving = true;
             try { gameBoard.movePlayer(turnPlayer, diceOne + diceTwo); } catch (PlayerNotFoundExceptions ignored) {}
             turnPlayer.moveFieldPostion(diceOne + diceTwo);
 
@@ -236,7 +236,6 @@ public class Game {
 
     //Detects the field where the player is standing on, and then carries out the function of the field.
     public void playerHasMoved() {
-        turnPlayerIsMoving = false;
         displayControllerTwo.displayPlayerAction();
 
         if (FIELDS.get(turnPlayer.getFieldPostion()) instanceof Street street) { //Is the player on a Street
@@ -257,7 +256,8 @@ public class Game {
                 }
                 case GO_TO_JAIL -> {
                     turnPlayer.setInJail(true);
-                    gameBoard.setPlayerInJail(turnPlayer);
+                    try {gameBoard.setPlayerInJail(turnPlayer);} catch(Exception e) {System.out.println(e);}
+                    setVisibilityTurnFinButton(true);
                 }
                 default -> setVisibilityTurnFinButton(true);
             }
@@ -274,10 +274,17 @@ public class Game {
         turnPlayer = nextPlayer;
         nextPlayer = null;
 
+        DiceDisplay.unlockDices();
+
         middleDisplayController.removeDisplay();
         setVisibilityTurnFinButton(false);
         displayControllerOne.displayPlayers(playerList);
         displayControllerTwo.displayDice();
+
+        if (turnPlayer.isInJail()) {
+            middleDisplayController.displayInJailDisplay(turnPlayer, true);
+        }
+
     }
 
     //Controls the Street buy System
@@ -374,10 +381,6 @@ public class Game {
             ps.add(playerFive);
 
         return ps;
-    }
-
-    public boolean isTurnPlayerIsMoving() {
-        return turnPlayerIsMoving;
     }
 
     @SuppressWarnings("exports")

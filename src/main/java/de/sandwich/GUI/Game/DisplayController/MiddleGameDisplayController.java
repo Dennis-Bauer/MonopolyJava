@@ -1,13 +1,16 @@
 package de.sandwich.GUI.Game.DisplayController;
 
 import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildRectangle;
+import static de.sandwich.DennisUtilitiesPackage.Java.JavaUtilities.buildLongText;
 
 import java.util.ArrayList;
 
 import de.sandwich.Main;
+import de.sandwich.Player;
 import de.sandwich.Enums.ProgramColor;
 import de.sandwich.Fields.Street;
 import de.sandwich.GUI.Game.Displays.DisplayMiddle.BuyStreetDisplay;
+import de.sandwich.GUI.Game.Displays.DisplayMiddle.InJailDisplay;
 import de.sandwich.GUI.Game.Displays.DisplayMiddle.PayDisplay;
 import de.sandwich.GUI.Game.Displays.DisplayMiddle.StreetInfoDisplay;
 import javafx.animation.*;
@@ -22,6 +25,7 @@ public class MiddleGameDisplayController extends Pane{
     private final BuyStreetDisplay buyStreetDisplay;
     private final PayDisplay payDisplay;
     private final StreetInfoDisplay streetInfoDisplay;
+    private final InJailDisplay inJailDisplay;
 
     //Variables
     private final Rectangle background;
@@ -57,8 +61,11 @@ public class MiddleGameDisplayController extends Pane{
         streetInfoDisplay = new StreetInfoDisplay(width * 0.50, height * 1.55, this);
         streetInfoDisplay.setVisible(false);
 
+        inJailDisplay = new InJailDisplay(width, height * 1.60, this);
+        inJailDisplay.setVisible(false);
+
         setLayoutX(((Main.WINDOW_HEIGHT * 0.98) / 2) - width / 2);
-        getChildren().addAll(buyStreetDisplay, payDisplay, streetInfoDisplay);
+        getChildren().addAll(buyStreetDisplay, payDisplay, streetInfoDisplay, inJailDisplay);
         setVisible(false);
     }
 
@@ -85,7 +92,7 @@ public class MiddleGameDisplayController extends Pane{
     }
     
     public void displayStreetInfoDisplay(Street street) {
-        if (!buyStreetDisplay.isVisible() && !payDisplay.isVisible()) {
+        if (!buyStreetDisplay.isVisible() && !payDisplay.isVisible() && !inJailDisplay.isVisible()) {
             FadeTransition fadeTransition = new FadeTransition(Duration.seconds(0.5), this);
             if (streetInfoDisplay.isVisible()) {
                 fadeTransition.setFromValue(1);
@@ -121,6 +128,46 @@ public class MiddleGameDisplayController extends Pane{
             });
         } else
             Main.getGameOperator().displayErrorMessage("Du kannst im moment keine Straßen infos einsehen!");
+    }
+
+    public void displayInJailDisplay(Player p, boolean beforeDice) {
+        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.5), this);
+        if (inJailDisplay.isVisible() && !beforeDice) {
+            fadeTransition.setFromValue(1);
+            fadeTransition.setToValue(0);
+            fadeTransition.play();
+            liveTransitions.add(fadeTransition);
+        } else {
+            resetDisplay();
+
+            setMaxHeight(inJailDisplay.getHEIGHT());
+            background.setHeight(inJailDisplay.getHEIGHT());
+
+            inJailDisplay.displayBeforDice(p);
+            inJailDisplay.setVisible(true);
+
+            enterAnimation(false);
+        }
+
+        fadeTransition.setOnFinished(event -> {
+            if (liveTransitions.contains(fadeTransition)) {
+                fadeTransition.setFromValue(0);
+                fadeTransition.setToValue(1);
+
+                inJailDisplay.displayAfterDice(p);
+
+                fadeTransition.play();
+
+                liveTransitions.remove(fadeTransition);
+            } else {
+                //(Übersetzt mich noch) Hier werden die Würfel ausgeblendet
+                //passiert hier aus dem Grund weil wo anderes sie sonst sofort
+                //verschwinden würde, weil eigentlich verschwinden sie nach dem
+                //bewegen, was es im Gefängnis nicht gibt. So hat man hier noch
+                //die Zeit spanne der Transition
+                Main.getGameOperator().getDisplayControllerTwo().displayPlayerAction();
+            }
+        });
     }
 
     public void removeDisplay() {
@@ -237,6 +284,7 @@ public class MiddleGameDisplayController extends Pane{
         buyStreetDisplay.setVisible(false);
         payDisplay.setVisible(false);
         streetInfoDisplay.setVisible(false);
+        inJailDisplay.setVisible(false);
 
         setMaxSize(NORMAL_WIDTH, NORMAL_HEIGHT);
         setLayoutX((Main.WINDOW_HEIGHT / 2) - (Main.WINDOW_HEIGHT * 0.40) / 2);

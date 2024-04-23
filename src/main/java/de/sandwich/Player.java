@@ -2,6 +2,7 @@ package de.sandwich;
 
 import de.sandwich.DennisUtilitiesPackage.Java.ConsoleUtilities;
 import de.sandwich.Enums.Figuren;
+import de.sandwich.Exceptions.NumberIsToBigLowExceptions;
 import de.sandwich.Exceptions.PlayerNotFoundExceptions;
 
 import static de.sandwich.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPut;
@@ -17,6 +18,7 @@ public class Player {
 
     //Game Variables
     private boolean isInJail = false;
+    private int freeJailCards = 0;
     private int inJailRemain = 0;
 
 
@@ -27,7 +29,7 @@ public class Player {
 
         //Start account
         bankAccount = 2000;
-        fieldPostion = 0;
+        fieldPostion = 28;
     }
 
     public String getName() {
@@ -55,6 +57,16 @@ public class Player {
         return inJailRemain;
     }
 
+    public int getFreeJailCardNumber() {
+        return freeJailCards;
+    }
+
+    public void useFreeJailCard() {
+        if (freeJailCards > 0) {
+            freeJailCards--;
+        } else throw new NumberIsToBigLowExceptions(false, "UsFreeJailCard, not enough Cards!");
+    }
+ 
     public boolean isInJail() {
         return isInJail;
     }
@@ -64,10 +76,17 @@ public class Player {
         try { Main.getGameOperator().getDisplayControllerOne().updateDisplay(); } catch (PlayerNotFoundExceptions ignored) {}
     }
 
+    public void addFreeJailCard() {
+        //Denk dran, das sollte nie passieren. Es sollte bei einer gebung immer erst überpüft werden, ob er zu viele hat. Wenn ja, sollte er garkeine bekommen
+        if (freeJailCards < 4) {
+            freeJailCards++;
+        } else throw new NumberIsToBigLowExceptions(true, "addFreeJailCard");
+    }
+
     public void setInJail(boolean inJail) {
         isInJail = inJail;
         if (inJail) {
-            inJailRemain = 3;
+            inJailRemain = 4;
             fieldPostion = 10;
         }
     }

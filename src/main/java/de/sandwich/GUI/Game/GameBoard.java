@@ -100,7 +100,7 @@ public class GameBoard extends Pane{
 
     }
 
-    public void setPlayerInJail(Player p) {
+    public void setPlayerInJail(Player p) throws PlayerNotFoundExceptions {
         int playerArrayPostion = 0;
         for (ImageView i: playerFigures) {
             if (i.getImage() == p.getFigur().getFigureImage())
@@ -109,9 +109,9 @@ public class GameBoard extends Pane{
         }
 
         if (!(playerArrayPostion > 4)) {
-            playerFigures[playerArrayPostion].setX(FIELD_HEIGHT * 0.6 - (FIELD_HEIGHT + FIELD_WIDTH * 9));
-            playerFigures[playerArrayPostion].setY(FIELD_HEIGHT * 0.6);
-        }
+            playerFigures[playerArrayPostion].setX(FIELD_WIDTH);
+            playerFigures[playerArrayPostion].setY(10);
+        } else throw new PlayerNotFoundExceptions();
     }
 
     public void removePlayerFromJail(Player p) {
@@ -129,6 +129,10 @@ public class GameBoard extends Pane{
     }
 
     public void movePlayer(Player player, int steps) throws PlayerNotFoundExceptions {
+
+        if (steps == 0) {
+            Main.getGameOperator().playerHasMoved();
+        }
 
         int playerArrayPostion = 0;
         for (ImageView i: playerFigures) {

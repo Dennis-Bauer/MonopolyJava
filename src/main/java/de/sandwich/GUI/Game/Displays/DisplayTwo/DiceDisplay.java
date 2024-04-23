@@ -30,6 +30,8 @@ public class DiceDisplay extends Pane {
     private NumberAnimationThread rowOneAnimation;
     private NumberAnimationThread rowTwoAnimation;
 
+    private static boolean dicesLocked = false;
+
     public DiceDisplay(double width, double height, GameDisplayControllerTwo rootDisplay) {
         setId("gameScene_DiceDisplay");
         setMaxSize(width, height);
@@ -71,14 +73,14 @@ public class DiceDisplay extends Pane {
             rowOneAnimation = new NumberAnimationThread(numberRowOne);
             rowTwoAnimation = new NumberAnimationThread(numberRowTwo);
 
-            if (!rowOneAnimation.isAlive() && !rowTwoAnimation.isAlive() && !Main.getGameOperator().isTurnPlayerIsMoving()) {
+            if (!rowOneAnimation.isAlive() && !rowTwoAnimation.isAlive() && !dicesLocked) {
                 rowOneAnimation.setLength(rn.nextInt(60 - 20 + 1) + 20);
                 rowTwoAnimation.setLength(rn.nextInt(60 - 20 + 1) + 20);
 
                 rowOneAnimation.start();
                 rowTwoAnimation.start();
                 //Main.getGameOperator().playerRolledDice(rowOneAnimation.getLastNumber(), rowTwoAnimation.getLastNumber());
-                Main.getGameOperator().playerRolledDice(1, 0);
+                Main.getGameOperator().playerRolledDice(2, 0);
                 if (Main.CONSOLE_OUT_PUT) {
                     consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
                     consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Der erste Würfel hat eine");
@@ -95,5 +97,13 @@ public class DiceDisplay extends Pane {
         getChildren().addAll(numberField, roleDiceButton);
     }
 
+
+    public static void lockeDices() {
+        dicesLocked = true;
+    }
+
+    public static void unlockDices() {
+        dicesLocked = false;
+    }
 
 }
