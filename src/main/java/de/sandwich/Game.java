@@ -255,7 +255,6 @@ public class Game {
                     setVisibilityTurnFinButton(true);
                 }
                 case GO_TO_JAIL -> {
-                    turnPlayer.setInJail(true);
                     try {gameBoard.setPlayerInJail(turnPlayer);} catch(Exception e) {System.out.println(e);}
                     setVisibilityTurnFinButton(true);
                 }
