@@ -2,6 +2,7 @@ package de.sandwich.GUI.Game;
 
 import javafx.animation.FadeTransition;
 import javafx.animation.TranslateTransition;
+import javafx.animation.Animation.Status;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Point2D;
@@ -31,7 +32,8 @@ import de.sandwich.Fields.Field;
 import de.sandwich.Fields.Street;
 
 
-public class GameBoard extends Pane{
+public class GameBoard extends Pane {
+
     private final ImageView[] playerFigures = new ImageView[5];
     private final double MIDDLE_RECTANGLE_RATION = 1.4;
     private final double FONT_SIZE, BORDER_WIDTH;
@@ -39,7 +41,7 @@ public class GameBoard extends Pane{
     private final double FIELD_WIDTH;
     private final double PLAYER_FIGURE_SIZE;
 
-    private final double SIZE_DELET_ME;
+    private TranslateTransition playerMoveTransition = new TranslateTransition();
 
     public GameBoard(double size, HashMap<Integer, Field> fields) {
 
@@ -49,8 +51,6 @@ public class GameBoard extends Pane{
         FIELD_HEIGHT = (size - size / MIDDLE_RECTANGLE_RATION) / 2;
         FIELD_WIDTH = (size / MIDDLE_RECTANGLE_RATION) / 9;
         PLAYER_FIGURE_SIZE = size * 0.035;
-
-        SIZE_DELET_ME = size;
 
         getChildren().add(
             buildRectangle("gameBoard_Background", size, size, ProgramColor.GAMEBOARD_COLOR.getColor(),true, null, 0)
@@ -152,7 +152,7 @@ public class GameBoard extends Pane{
             transition.play();
 
             transition.setOnFinished(actionEvent -> {
-                if (transition.getToValue() == 0) {
+                if (p.getFieldPostion() != 10) {
                     playerFigures[pArrayPos].setLayoutX((calculateXYPath(0, 10).getX()) - (calculateXYPath(pArrayPos, p.getFieldPostion()).getX()) + FIELD_HEIGHT * 0.5);
                     playerFigures[pArrayPos].setLayoutY((calculateXYPath(0, 10).getY()) - (calculateXYPath(pArrayPos, p.getFieldPostion()).getY()) + FIELD_HEIGHT * 0.5);
                     p.setInJail(true);
@@ -175,63 +175,67 @@ public class GameBoard extends Pane{
         }
 
         if (!(playerArrayPostion > 4)) {
-            playerFigures[playerArrayPostion].setX(calculateXYPath(p.getOrderNumber(), 10).getX());
-            playerFigures[playerArrayPostion].setY(calculateXYPath(p.getOrderNumber(), 10).getY());
+            playerMoveTransition = new TranslateTransition(Duration.seconds(0.3), playerFigures[playerArrayPostion]);
+
+            playerMoveTransition.setByX(-(FIELD_HEIGHT * 0.5) - (calculateXYPath(0, 10).getX() - calculateXYPath(playerArrayPostion, 10).getX()));
+            playerMoveTransition.setByY(-(FIELD_HEIGHT * 0.5) - (calculateXYPath(0, 10).getY() - calculateXYPath(playerArrayPostion, 10).getY()));
+            
+            playerMoveTransition.play();
         } else throw new PlayerNotFoundExceptions();
     }
 
     public void movePlayer(Player player, int steps) throws PlayerNotFoundExceptions {
+        if (playerMoveTransition.getStatus() == Status.PAUSED || playerMoveTransition.getStatus() == Status.STOPPED || playerMoveTransition == null) {
+            if (steps == 0) {
+                Main.getGameOperator().playerHasMoved();
+            }
 
-        if (steps == 0) {
-            Main.getGameOperator().playerHasMoved();
-        }
+            int playerArrayPostion = 0;
+            for (ImageView i: playerFigures) {
+                if (i.getImage() == player.getFigur().getFigureImage())
+                    break;
+                else playerArrayPostion++;
+            }
 
-        int playerArrayPostion = 0;
-        for (ImageView i: playerFigures) {
-            if (i.getImage() == player.getFigur().getFigureImage())
-                break;
-            else playerArrayPostion++;
-        }
+            final int pArrayPos = playerArrayPostion;
+            final int startPostion = player.getFieldPostion();
 
-        final int pArrayPos = playerArrayPostion;
-        final int startPostion = player.getFieldPostion();
+            if (!(playerArrayPostion > 4)) {
 
-        if (!(playerArrayPostion > 4)) {
+                playerMoveTransition = new TranslateTransition(Duration.seconds(0.5), playerFigures[pArrayPos]);
+                playerMoveTransition.setByX((calculateXYPath(pArrayPos, startPostion + 1).getX()) - (calculateXYPath(pArrayPos, startPostion).getX()));
+                playerMoveTransition.setByY((calculateXYPath(pArrayPos, startPostion + 1).getY()) - (calculateXYPath(pArrayPos, startPostion).getY()));
+                playerMoveTransition.play();
 
-            TranslateTransition moveAnimation = new TranslateTransition(Duration.seconds(0.5), playerFigures[pArrayPos]);
-            moveAnimation.setByX((calculateXYPath(pArrayPos, startPostion + 1).getX()) - (calculateXYPath(pArrayPos, startPostion).getX()));
-            moveAnimation.setByY((calculateXYPath(pArrayPos, startPostion + 1).getY()) - (calculateXYPath(pArrayPos, startPostion).getY()));
-            moveAnimation.play();
+                System.out.println("Der Spieler wird jetzt bewegt. Er startet an der Position: " + startPostion);
 
+                AtomicInteger i = new AtomicInteger(1);
+                AtomicInteger step = new AtomicInteger();
 
+                playerMoveTransition.setOnFinished(event -> {
+                    if (!(i.get() >= steps)) {
+                        if ((startPostion + step.get()) >= 39)
+                            step.set(-(startPostion + 1));
+                        step.getAndIncrement();
 
-            AtomicInteger i = new AtomicInteger(1);
-            AtomicInteger step = new AtomicInteger();
-
-            moveAnimation.setOnFinished(event -> {
-                if (!(i.get() >= steps)) {
-                    if ((startPostion + step.get()) >= 39)
-                        step.set(-(startPostion + 1));
-                    step.getAndIncrement();
-
-                    moveAnimation.setByX(-((calculateXYPath(pArrayPos, startPostion + step.get()).getX()) - (calculateXYPath(pArrayPos, startPostion + step.get() + 1).getX())));
-                    moveAnimation.setByY(-((calculateXYPath(pArrayPos, startPostion + step.get()).getY()) - (calculateXYPath(pArrayPos, startPostion + step.get() + 1).getY())));
-                    moveAnimation.play();
+                        playerMoveTransition.setByX(-((calculateXYPath(pArrayPos, startPostion + step.get()).getX()) - (calculateXYPath(pArrayPos, startPostion + step.get() + 1).getX())));
+                        playerMoveTransition.setByY(-((calculateXYPath(pArrayPos, startPostion + step.get()).getY()) - (calculateXYPath(pArrayPos, startPostion + step.get() + 1).getY())));
+                        playerMoveTransition.play();
 
 
-                    if (Main.CONSOLE_OUT_PUT) {
-                        consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Die Figur vom " + pArrayPos + ". Spieler wurde auf diese Position gesetzt: ");
-                        consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.BOLD, "[" + (calculateXYPath(pArrayPos, player.getFieldPostion()).getX()) + "/" + (calculateXYPath(pArrayPos, player.getFieldPostion()).getY()) + "]");
-                        System.out.println();
+                        if (Main.CONSOLE_OUT_PUT) {
+                            consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Die Figur vom " + pArrayPos + ". Spieler wurde auf diese Position gesetzt: ");
+                            consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.BOLD, "[" + (calculateXYPath(pArrayPos, player.getFieldPostion()).getX()) + "/" + (calculateXYPath(pArrayPos, player.getFieldPostion()).getY()) + "], Field[" + player.getFieldPostion() + "]");
+                            System.out.println();
+                        }
+                    } else {
+                        playerMoveTransition.stop();
+                        Main.getGameOperator().playerHasMoved();
                     }
-                } else {
-                    moveAnimation.stop();
-                    Main.getGameOperator().playerHasMoved();
-                }
-                i.getAndIncrement();
-            });
-        } else throw new PlayerNotFoundExceptions();
-
+                    i.getAndIncrement();
+                });
+            } else throw new PlayerNotFoundExceptions();
+        } else throw new NullPointerException("The player can not move because he is moving!");
     }
 
     public Point2D calculateXYPath(int playerOrderPostion, int setToPostion) {
@@ -398,6 +402,9 @@ public class GameBoard extends Pane{
         getChildren().addAll(board);
     }
 
+    public TranslateTransition getPlayerMoveTransition() {
+        return playerMoveTransition;
+    }
 }
 
 /*

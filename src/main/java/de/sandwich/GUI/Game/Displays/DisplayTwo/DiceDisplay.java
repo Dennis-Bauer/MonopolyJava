@@ -32,6 +32,8 @@ public class DiceDisplay extends Pane {
 
     private static boolean dicesLocked = false;
 
+    private static int[] diceNumbers =  new int[2];
+
     public DiceDisplay(double width, double height, GameDisplayControllerTwo rootDisplay) {
         setId("gameScene_DiceDisplay");
         setMaxSize(width, height);
@@ -79,8 +81,14 @@ public class DiceDisplay extends Pane {
 
                 rowOneAnimation.start();
                 rowTwoAnimation.start();
-                //Main.getGameOperator().playerRolledDice(rowOneAnimation.getLastNumber(), rowTwoAnimation.getLastNumber());
-                Main.getGameOperator().playerRolledDice(2, 0);
+
+                diceNumbers[0] = rowOneAnimation.getLastNumber();
+                diceNumbers[1] = rowTwoAnimation.getLastNumber();
+
+                diceNumbers[0] = 2;
+                diceNumbers[1] = 0;
+
+                Main.getGameOperator().playerRolledDice(diceNumbers[0], diceNumbers[1]);
                 if (Main.CONSOLE_OUT_PUT) {
                     consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
                     consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Der erste Würfel hat eine");
@@ -104,6 +112,12 @@ public class DiceDisplay extends Pane {
 
     public static void unlockDices() {
         dicesLocked = false;
+    }
+
+    public static int[] getDiceNumbers() {
+        if (diceNumbers != null)
+            return diceNumbers;
+        else throw new NullPointerException();
     }
 
 }

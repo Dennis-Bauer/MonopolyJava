@@ -44,10 +44,6 @@ import de.sandwich.Player;
 import de.sandwich.DennisUtilitiesPackage.Java.ConsoleUtilities;
 import de.sandwich.Enums.Figuren;
 import de.sandwich.Enums.ProgramColor;
-import de.sandwich.Fields.Street;
-import de.sandwich.GUI.Game.DisplayController.MiddleGameDisplayController;
-
-
 
 public class StartMenu extends Pane{
 
@@ -87,13 +83,6 @@ public class StartMenu extends Pane{
     }
 
     private void buildBackground() {
-
-        MiddleGameDisplayController m = new MiddleGameDisplayController(Main.WINDOW_HEIGHT * 0.40, Main.WINDOW_HEIGHT * 0.20, Main.WINDOW_HEIGHT * 0.18);
-        m.displayStreetInfoDisplay(new Street("Gelbe Straße", 130 ,241, new int[]{352, 463, 574, 685}, 796, 1, 2, Color.YELLOW, 0, 1));
-
-        getChildren().add(m);
-        m.toFront();
-
         ImageView background = createImageView("menu_Background", "/de/sandwich/monopoly/menu/background.png", width, height, 0, 0);
         ImageView header = createImageView("menu_Header", "/de/sandwich/monopoly/menu/header.png", width / 2.196, (width / 2.196) * 0.18, width / 2 - (width / 2.196) / 2, 0);
 
@@ -130,7 +119,6 @@ public class StartMenu extends Pane{
         ImageView startButton = createImageView("menu_StartButton", startButtonNormal, width / 3.516, (width / 3.516) * 0.230, width / 2 - (width / 3.516) / 2, height * 0.84);
         startButton.setOnMouseEntered(event -> {
             startButton.setImage(startButtonHover);
-            m.toFront();
         });
         startButton.setOnMouseExited(event -> startButton.setImage(startButtonNormal));
         startButton.setOnMousePressed(event -> startButton.setImage(startButtonPressed));

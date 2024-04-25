@@ -119,14 +119,14 @@ public class Street extends Field{
     public void sellToTheBank() {
         if (!isInBank) {
             isInBank = true;
-            owner.addBankAccount(salePrice / 2);
+            owner.transferMoneyToBankAccount(salePrice / 2);
         }
     }
 
     public void purchaseFromBank() {
         if (isInBank) {
             isInBank = false;
-            owner.addBankAccount(-(salePrice / 2));
+            owner.transferMoneyToBankAccount(-(salePrice / 2));
         }
     }
 

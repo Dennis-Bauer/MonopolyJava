@@ -18,7 +18,7 @@ public class Player {
 
     //Game Variables
     private boolean isInJail = false;
-    private int freeJailCards = 0;
+    private int freeJailCards = 1;
     private int inJailRemain = 0;
 
 
@@ -30,6 +30,11 @@ public class Player {
         //Start account
         bankAccount = 2000;
         fieldPostion = 28;
+    }
+
+    public void transferMoneyToBankAccount(int transferNumber) {
+        bankAccount = bankAccount + transferNumber;
+        try { Main.getGameOperator().getDisplayControllerOne().updateDisplay(); } catch (PlayerNotFoundExceptions ignored) {}
     }
 
     public String getName() {
@@ -64,16 +69,12 @@ public class Player {
     public void useFreeJailCard() {
         if (freeJailCards > 0) {
             freeJailCards--;
+            removePlayerFromJail();
         } else throw new NumberIsToBigLowExceptions(false, "UsFreeJailCard, not enough Cards!");
     }
  
     public boolean isInJail() {
         return isInJail;
-    }
-
-    public void addBankAccount(int transferNumber) {
-        bankAccount = bankAccount + transferNumber;
-        try { Main.getGameOperator().getDisplayControllerOne().updateDisplay(); } catch (PlayerNotFoundExceptions ignored) {}
     }
 
     public void addFreeJailCard() {
@@ -86,7 +87,9 @@ public class Player {
     public void setInJail(boolean inJail) {
         isInJail = inJail;
         if (inJail) {
-            inJailRemain = 4;
+            try { Main.getGameOperator().getBoard().setPlayerInJail(this); } catch (PlayerNotFoundExceptions e) { e.printStackTrace(); }
+
+            inJailRemain = 0;
             fieldPostion = 10;
         }
     }
@@ -95,12 +98,19 @@ public class Player {
         this.inJailRemain--;
     }
 
+    public void removePlayerFromJail() {
+        try { Main.getGameOperator().getBoard().removePlayerFromJail(this); } catch (PlayerNotFoundExceptions e) { e.printStackTrace(); }
+
+        inJailRemain = 0;
+        isInJail = false;
+    }
+
     public void moveFieldPostion(int postions) {
         fieldPostion = fieldPostion + postions;
         if (fieldPostion >= 40) {
             fieldPostion = fieldPostion - 40;
 
-            addBankAccount(200);
+            transferMoneyToBankAccount(200);
 
             if (Main.CONSOLE_OUT_PUT) {
                 consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);

@@ -208,11 +208,19 @@ public class Game {
 
         if (turnPlayer.isInJail()) {
             if (diceOne == diceTwo) {
-                
-                try { gameBoard.movePlayer(turnPlayer, diceOne + diceTwo); } catch (PlayerNotFoundExceptions ignored) {}
-                turnPlayer.moveFieldPostion(diceOne + diceTwo);
-                
-                turnPlayer.setInJail(false);
+                turnPlayer.removePlayerFromJail();
+
+                try { 
+                    gameBoard.movePlayer(turnPlayer, diceOne + diceTwo); 
+                    turnPlayer.moveFieldPostion(diceOne + diceTwo);
+                }catch (NullPointerException notUse) {
+
+                    gameBoard.getPlayerMoveTransition().setOnFinished(actionEvent -> {
+                        try {gameBoard.movePlayer(turnPlayer, diceOne + diceTwo);} catch (PlayerNotFoundExceptions e) { e.printStackTrace(); }
+                        turnPlayer.moveFieldPostion(diceOne + diceTwo);
+                    });
+
+                } catch (PlayerNotFoundExceptions e) { e.printStackTrace(); }
             } else {
                 turnPlayer.removeOnInJailRemain();
                 middleDisplayController.displayInJailDisplay(turnPlayer, false);
@@ -251,7 +259,7 @@ public class Game {
         } else if (FIELDS.get(turnPlayer.getFieldPostion()) instanceof Corner corner) { //Is the player on a Corner
             switch (corner.getTyp()) {
                 case FREE_PARKING -> {
-                    turnPlayer.addBankAccount(freeParkingMoney);
+                    turnPlayer.transferMoneyToBankAccount(freeParkingMoney);
                     setVisibilityTurnFinButton(true);
                 }
                 case GO_TO_JAIL -> {
@@ -289,7 +297,7 @@ public class Game {
     //Controls the Street buy System
     public void buyStreet(@SuppressWarnings("exports") Street street) {
         street.setOwner(turnPlayer);
-        turnPlayer.addBankAccount(-street.getSalePrice());
+        turnPlayer.transferMoneyToBankAccount(-street.getSalePrice());
 
         setVisibilityTurnFinButton(true);
     }
@@ -299,7 +307,7 @@ public class Game {
 
             if (FIELDS.get(turnPlayer.getFieldPostion()) instanceof Street street) {
                 if (street.isOwned())
-                    street.getOwner().addBankAccount(money);
+                    street.getOwner().transferMoneyToBankAccount(money);
             } else if (FIELDS.get(turnPlayer.getFieldPostion()) instanceof PayExtra) {
                 freeParkingMoney = freeParkingMoney + money;
 
@@ -363,6 +371,11 @@ public class Game {
     @SuppressWarnings("exports")
     public MiddleGameDisplayController getMiddleDisplayController() {
         return middleDisplayController;
+    }
+
+    @SuppressWarnings("exports")
+    public GameBoard getBoard() {
+        return gameBoard;
     }
 
     public ArrayList<Player> getPlayers() {

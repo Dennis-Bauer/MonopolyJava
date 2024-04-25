@@ -46,7 +46,7 @@ public class PayDisplay extends Pane {
             Player player = Main.getGameOperator().getTurnPlayer();
 
             if (player.getBankAccount() >= price) {
-                player.addBankAccount(-(price));
+                player.transferMoneyToBankAccount(-(price));
                 Main.getGameOperator().transferMoney(price);
                 rootDisplay.removeDisplay();
             } else {

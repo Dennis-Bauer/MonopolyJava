@@ -137,7 +137,7 @@ public class BuildDisplay extends Pane {
                                 housesRemain--;
                                 housesRemainLabel.setText("" + housesRemain);
 
-                                activePlayer.addBankAccount(-(activStreet.getHousePrice()));
+                                activePlayer.transferMoneyToBankAccount(-(activStreet.getHousePrice()));
                             } else {
                                 errorMessage.setText("Es gibt keine Häuser mehr die zum Bauen genutzt werden können!");
 
@@ -156,7 +156,7 @@ public class BuildDisplay extends Pane {
                             housesRemain = housesRemain + 4;
                             housesRemainLabel.setText("" + housesRemain);
 
-                            activePlayer.addBankAccount(-(activStreet.getHotelPrice()));
+                            activePlayer.transferMoneyToBankAccount(-(activStreet.getHotelPrice()));
                         } else {
                             errorMessage.setText("Du hast nicht genug Geld um ein Hotel zu bauen!");
 

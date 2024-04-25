@@ -1,7 +1,6 @@
 package de.sandwich.GUI.Game.DisplayController;
 
 import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildRectangle;
-import static de.sandwich.DennisUtilitiesPackage.Java.JavaUtilities.buildLongText;
 
 import java.util.ArrayList;
 
@@ -33,7 +32,7 @@ public class MiddleGameDisplayController extends Pane{
     private final double MAX_Y;
     private final double NORMAL_WIDTH;
     private final double NORMAL_HEIGHT;
-
+    
     private ArrayList<Transition> liveTransitions = new ArrayList<>();
 
     public MiddleGameDisplayController(double width, double height, double maxY) {

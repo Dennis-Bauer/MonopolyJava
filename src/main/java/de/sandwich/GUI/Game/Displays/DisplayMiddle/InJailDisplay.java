@@ -3,7 +3,9 @@ package de.sandwich.GUI.Game.Displays.DisplayMiddle;
 import de.sandwich.Main;
 import de.sandwich.Player;
 import de.sandwich.Enums.ProgramColor;
+import de.sandwich.Exceptions.PlayerNotFoundExceptions;
 import de.sandwich.Exceptions.WrongNodeException;
+import de.sandwich.GUI.Game.GameBoard;
 import de.sandwich.GUI.Game.DisplayController.MiddleGameDisplayController;
 import de.sandwich.GUI.Game.Displays.DisplayTwo.DiceDisplay;
 import javafx.scene.control.Label;
@@ -24,10 +26,12 @@ public class InJailDisplay extends Pane {
 
     private final double HEIGHT, WIDTH;
 
+    private final int PAY_PRICE = 1000;
+
     private final Label infoText;
 
     private final Pane afterDicePane;
-    private final Pane beforeDicePane;
+    private final Pane payPane;
 
     private Player activPlayer;
 
@@ -42,19 +46,19 @@ public class InJailDisplay extends Pane {
         infoText = buildLabel("inJailDisplay_InfoText", "NULL", Font.font(Main.TEXT_FONT, width * 0.08),TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor());
         centeringChildInPane(infoText, rootDisplay);
 
-        beforeDicePane = buildBeforeDicePane();
-        beforeDicePane.setVisible(false);
+        payPane = buildPayPane();
+        payPane.setVisible(false);
 
         afterDicePane = buildAfterDicePane();
         afterDicePane.setVisible(false);
 
-        getChildren().addAll(beforeDicePane, afterDicePane, infoText);
+        getChildren().addAll(payPane, afterDicePane, infoText);
     }
 
     public void displayAfterDice(Player p) {
         activPlayer = p;
 
-        beforeDicePane.setVisible(false);
+        payPane.setVisible(false);
         afterDicePane.setVisible(true);
 
         infoText.setLayoutY(0);
@@ -74,7 +78,7 @@ public class InJailDisplay extends Pane {
         infoText.setText(
                 buildLongText("Leider kein Pash gewürfelt. Du",
                         ("kannst noch " + activPlayer.getInJailRemain() + " Tage warten,"),
-                        "sonst musst du 1.000 zahlen.",
+                        "sonst musst du " + PAY_PRICE + "€ zahlen.",
                         "Du kannst auch jetzt zahlen",
                         "oder eine Frei-karte nutzen.")
         );
@@ -84,7 +88,7 @@ public class InJailDisplay extends Pane {
     public void displayBeforDice(Player p) {
         activPlayer = p;
 
-        beforeDicePane.setVisible(true);
+        payPane.setVisible(false);
         afterDicePane.setVisible(false);
 
         infoText.setLayoutY(HEIGHT * 0.10);
@@ -96,15 +100,13 @@ public class InJailDisplay extends Pane {
             // Umformertieren!!!
             infoText.setText(
                 buildLongText("Du bist leider zu lange",
-                        "im Gefängnis gewesen und musst",
-                        "jetzt 1.000€ zahlen. (Tipp",
-                        "falls du nicht genung Geld hast",
-                        "geh zur Bank und verkaufe deine",
-                        "Straßen.")
+                        "im Gefängnis gewesen und",
+                        "musst jetzt " + PAY_PRICE + "€",
+                        "zahlen!"
+                        )
             );
 
-            //Button hinzufügen!!!
-
+            payPane.setVisible(true);
 
         } else {
             // Umformertieren!!!
@@ -125,8 +127,39 @@ public class InJailDisplay extends Pane {
         return HEIGHT;
     }
 
-    private Pane buildBeforeDicePane() {
-        return new Pane();
+    private Pane buildPayPane() {
+        StackPane payButton = new StackPane();
+        payButton.setId("inJailDisplay_PayButton");
+        payButton.setLayoutY(HEIGHT * 0.75);
+        payButton.layoutXProperty().bind(widthProperty().divide(2).subtract(payButton.widthProperty().divide(2)));
+
+        payButton.getChildren().addAll(
+            buildRectangle("inJailDisplay_payButton_Background", WIDTH * 0.35, WIDTH * 0.18, ProgramColor.FINISH_BUTTONS.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(),WIDTH * 0.01),
+            buildLabel("inJailDisplay_payButton_Text", PAY_PRICE + "€ Zahlen", Font.font(Main.TEXT_FONT, WIDTH * 0.05),TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor())
+        );
+
+        payButton.setOnMouseClicked(mouseEvent -> {
+
+            if (activPlayer.getBankAccount() >= PAY_PRICE) {
+                activPlayer.transferMoneyToBankAccount(-(PAY_PRICE));
+
+                activPlayer.removePlayerFromJail();
+
+                rootDisplay.removeDisplay();
+
+                DiceDisplay.unlockDices();
+                
+            } else {
+                Main.getGameOperator().displayErrorMessage("Du brauchst mindestens " + PAY_PRICE + " auf deinem Bankaccount!");
+            }
+            
+        });
+
+        Pane p = new Pane(payButton);
+
+        p.setMaxSize(WIDTH, HEIGHT);
+
+        return payButton;
     }
 
     private Pane buildAfterDicePane() {
@@ -148,6 +181,32 @@ public class InJailDisplay extends Pane {
 
         payButton.setOnMouseClicked(mouseEvent -> {
 
+            if (activPlayer.getBankAccount() >= PAY_PRICE) {
+                activPlayer.transferMoneyToBankAccount(-(PAY_PRICE));
+
+                activPlayer.removePlayerFromJail();
+
+                rootDisplay.removeDisplay();
+
+                int[] dices = DiceDisplay.getDiceNumbers();
+                GameBoard gameBoard = Main.getGameOperator().getBoard();
+
+                try { 
+                    gameBoard.movePlayer(activPlayer, dices[0] + dices[1]); 
+                    activPlayer.moveFieldPostion(dices[0] + dices[1]);
+                }catch (NullPointerException notUse) {
+
+                    gameBoard.getPlayerMoveTransition().setOnFinished(actionEvent -> {
+                        try {gameBoard.movePlayer(activPlayer, dices[0] + dices[1]);} catch (PlayerNotFoundExceptions e) { e.printStackTrace(); }
+                        activPlayer.moveFieldPostion(dices[0] + dices[1]);
+                    });
+
+                } catch (PlayerNotFoundExceptions e) { e.printStackTrace(); }
+                
+            } else {
+                Main.getGameOperator().displayErrorMessage("Du brauchst mindestens " + PAY_PRICE + " auf deinem Bankaccount!");
+            }
+            
         });
 
         StackPane useButton = new StackPane();
@@ -162,7 +221,25 @@ public class InJailDisplay extends Pane {
 
         useButton.setOnMouseClicked(mouseEvent -> {
             if (activPlayer.getFreeJailCardNumber() > 0) {
+                activPlayer.useFreeJailCard();
 
+                rootDisplay.removeDisplay();
+
+                int[] dices = DiceDisplay.getDiceNumbers();
+                GameBoard gameBoard = Main.getGameOperator().getBoard();
+
+                try { 
+                    gameBoard.movePlayer(activPlayer, dices[0] + dices[1]); 
+                    activPlayer.moveFieldPostion(dices[0] + dices[1]);
+                }catch (NullPointerException notUse) {
+
+                    gameBoard.getPlayerMoveTransition().setOnFinished(actionEvent -> {
+                        try {gameBoard.movePlayer(activPlayer, dices[0] + dices[1]);} catch (PlayerNotFoundExceptions e) { e.printStackTrace(); }
+                        activPlayer.moveFieldPostion(dices[0] + dices[1]);
+                    });
+
+                } catch (PlayerNotFoundExceptions e) { e.printStackTrace(); }
+                
             } else {
                 Main.getGameOperator().displayErrorMessage("Du brauchs eine <Komm aus dem Gefängs frei> Karte!");
             }
