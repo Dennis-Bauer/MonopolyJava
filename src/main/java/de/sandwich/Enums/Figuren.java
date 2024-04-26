@@ -12,7 +12,8 @@ public enum Figuren {
     PINGUIN(creatImage("/de/sandwich/monopoly/figuren/pinguin.png")),
     SANDWICH(creatImage("/de/sandwich/monopoly/figuren/sandwich.png")),
     ENTE(creatImage("/de/sandwich/monopoly/figuren/ente.png")),
-    MAUS(creatImage("/de/sandwich/monopoly/figuren/maus.png"));
+    MAUS(creatImage("/de/sandwich/monopoly/figuren/maus.png")),
+    AMONGUS(creatImage("/de/sandwich/monopoly/figuren/amongus.png"));
 
     private final Image figureImage;
 
