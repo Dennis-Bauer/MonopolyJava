@@ -33,7 +33,7 @@ public class GetCard extends Field{
     //Cards
     private final CommunityCards[] communityCards = CommunityCards.values();
     private int communityCardPositon = 0;
-    private final ChanceCards[] chanceCard = ChanceCards.values();
+    private final ChanceCards[] chanceCards = ChanceCards.values();
     private int chanceCardPositon = 0;
 
     public GetCard(ChanceColors c, double position) {
@@ -50,12 +50,12 @@ public class GetCard extends Field{
             communityCards[i] = temp;
         }
 
-        for (int i = chanceCard.length - 1; i > 0; i--) {
+        for (int i = chanceCards.length - 1; i > 0; i--) {
             int index = random.nextInt(i + 1);
 
-            ChanceCards temp = chanceCard[index];
-            chanceCard[index] = chanceCard[i];
-            chanceCard[i] = temp;
+            ChanceCards temp = chanceCards[index];
+            chanceCards[index] = chanceCards[i];
+            chanceCards[i] = temp;
         }
 
         fieldIsChance = true;
@@ -132,6 +132,17 @@ public class GetCard extends Field{
         communityCardPositon++;
         if (communityCardPositon >= communityCards.length - 1)
             communityCardPositon = 0;
+
+        return c;
+    }
+
+    public ChanceCards getChanceCard() {
+        
+        ChanceCards c = chanceCards[chanceCardPositon];
+
+        chanceCardPositon++;
+        if (chanceCardPositon >= chanceCards.length - 1)
+            chanceCardPositon = 0;
 
         return c;
     }
