@@ -1,62 +1,43 @@
 package de.sandwich.Enums;
 
+import static de.sandwich.DennisUtilitiesPackage.Java.JavaUtilities.buildLongText;
+
 public enum CommunityCards {
 
     //Extra
-    FREE_JAIL("Du kommst aus dem Gefängnis frei!", -1),
+    FREE_JAIL(buildLongText("Du bekommst eine", "Gefängnis frei Karte. Behalte", "sie und nutze sie", "beim nächsten mal."), -1),
     TO_START("Rücke vor bis auf Los.", -2),
-    GO_TO_JAIL("Gehe in das Gefängins!", -3),
-    BIRTHDAY("Es ist dein Geburtstag. Ziehe von jedem Spieler (+1000) ein.", -4),
-    HOUSES_MONEY("Du wirst zu Strassenausbesserungsarbeiteb herangezogen. Zahle für deine Häuse und Hotels (+800) je Haus und (+2300) je Hotel and die Bank", -5),
+    GO_TO_JAIL("Du wurdest festgenommen!", -3),
+    BIRTHDAY(buildLongText("Du hast heute Gebursttag.", "Bekomme von jedem Spieler", "1000€!"), -4), //Fixed number (1000)
+    HOUSES_MONEY(buildLongText("Deine Straßen werden Renoviert.", "Zahle für jedes Haus 800€", "und für jedes Hotel 2300€"), -5), //Fixed number (800,2300)
 
     //Normal
-    PAY_HOSPITAL("Zahle an das Krankenhaus (-2000).", -2000),
-    STORAGE_GET_MONEY("Aus Lagerverkäufen erhälst du (+5000).", 5000),
-    SCHOOL_MONEY("Zahle Schulgeld. (-3000)", -3000),
-    SHARE_MONEY("Du erhältst auf Vorzugs-Aktien 7% Dividende. (+900)", 900),
-    PENSION_MONEY("Deine Jahresrente wird fällig. (+2000)", 2000),
-    BANK_MISTAK("Bank-Irrtum zu deinem Gunsten. (+4000)", 4000),
-    COMPOTION_WON("Du hast in einem Kreuzworträtsel-Wettbewerb gewonnen. (+2000)", 2000),
-    DOCTOR_COST("Artzt-Kosten. (-1000)", -1000),
-    TAX_REPAYMENT("Einkommensteuer-Rückzahlung. (+400)", 400),
-    HERITAGE("Du erbst. (+2000)", 2000),
-    BEAUTIFUL("Du hast den 2. Preis in einer Schönheitskonkurrenz gewonnen. (+200)", 200);
-
+    PAY_PENIS(buildLongText("Du musst für eine Penis", "verlängerung zahlen!"), -2000),
+    CARDS_GET_MONEY(buildLongText("Du verkaufst deine", "Minecraft Karten."), 5000),
+    PUFF_MONEY(buildLongText("Du musst deine Puf-Schulden", "zahlen!"), -3000),
+    SHARE_MONEY(buildLongText("Du erhältst auf",  "Apple-aktien 7% Dividende."), 900),
+    CLUB_MONEY(buildLongText("Deine Jahres abo beim", "Golf-Club wird fällig."), -2000),
+    BANK_HEIST(buildLongText("Du machst an einem", "Bankraub mit."), 4000),
+    COMPOTION_WON(buildLongText("Du hast in einem", "Tanenbaum-weitwurf-Wettbewerb", "gewonnen."), 2000),
+    FRIEND_COST("Collin-Aldi-Kosten.", -1000),
+    TAX_REPAYMENT("Du begehst Steuerhinterziehung.", 400),
+    HERITAGE("Mumy died.", 2000),
+    IQ(buildLongText("Du hast den 20. Preis in", "einem IQ Wettbewerb gewonnen."), 200);
 
     private final String MESSAGE;
     private final int MONEY_TRANSFER;
 
     CommunityCards(String m, int moneyTransfer) {
         this.MESSAGE = m;
-
-        switch (moneyTransfer) {
-            case -1 -> {
-                //Komm aus dem Gefängins
-            }
-            case -2 -> {
-                //Geh zu los
-            }
-            case -3 -> {
-                //Ins gefängnis
-            }
-            case -4 -> {
-                //Jeder Spieler muss dem Activen Spieler 1000 bekommen
-            }
-            case -5 -> {
-                //Zahle je Haus 800 und je hotel 2300
-            }
-        }
         this.MONEY_TRANSFER = moneyTransfer;
     }
 
     public int getMoneyTransfer() {
-        if (!(MONEY_TRANSFER <= -1 && MONEY_TRANSFER >= -5))
-            return MONEY_TRANSFER;
-        else throw new NullPointerException("The program tried to access money transfer on a card that don't have any.");
+        return MONEY_TRANSFER;
     }
 
-    public void getAction() {
-        
+    public String getMessage() {
+        return MESSAGE;
     }
 
 }

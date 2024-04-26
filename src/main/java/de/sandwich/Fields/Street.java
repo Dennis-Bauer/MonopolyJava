@@ -41,7 +41,7 @@ public class Street extends Field{
 
 
     //Functional values
-    private int houseNumber = 0;
+    private int houseNumber = -1;
     private boolean ownerHasFullColor = false;
     private boolean isOwned;
     private Player owner;

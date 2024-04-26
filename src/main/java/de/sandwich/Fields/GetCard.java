@@ -8,8 +8,11 @@ import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXUtilities.creatIma
 import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXUtilities.centeringChildInPane;
 
 import java.util.Objects;
+import java.util.Random;
 
 import de.sandwich.Main;
+import de.sandwich.Enums.ChanceCards;
+import de.sandwich.Enums.CommunityCards;
 import de.sandwich.Enums.ProgramColor;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -27,9 +30,33 @@ public class GetCard extends Field{
 
     private final ChanceColors color;
 
+    //Cards
+    private final CommunityCards[] communityCards = CommunityCards.values();
+    private int communityCardPositon = 0;
+    private final ChanceCards[] chanceCard = ChanceCards.values();
+    private int chanceCardPositon = 0;
+
     public GetCard(ChanceColors c, double position) {
         super(position);
         this.color = c;
+
+        //Cards
+        Random random = new Random();
+        for (int i = communityCards.length - 1; i > 0; i--) {
+            int index = random.nextInt(i + 1);
+
+            CommunityCards temp = communityCards[index];
+            communityCards[index] = communityCards[i];
+            communityCards[i] = temp;
+        }
+
+        for (int i = chanceCard.length - 1; i > 0; i--) {
+            int index = random.nextInt(i + 1);
+
+            ChanceCards temp = chanceCard[index];
+            chanceCard[index] = chanceCard[i];
+            chanceCard[i] = temp;
+        }
 
         fieldIsChance = true;
     }
@@ -39,6 +66,10 @@ public class GetCard extends Field{
         this.color = null;
 
         fieldIsChance = false;
+    }
+
+    public boolean isFieldChance() {
+        return fieldIsChance;
     }
 
     @Override
@@ -92,6 +123,17 @@ public class GetCard extends Field{
 
         field.getChildren().addAll(background, header, image);
         return field;
+    }
+
+    public CommunityCards getCommunityCard() {
+        
+        CommunityCards c = communityCards[communityCardPositon];
+
+        communityCardPositon++;
+        if (communityCardPositon >= communityCards.length - 1)
+            communityCardPositon = 0;
+
+        return c;
     }
 
     public enum ChanceColors {

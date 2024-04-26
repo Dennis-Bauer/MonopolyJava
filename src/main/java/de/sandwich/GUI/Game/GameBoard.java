@@ -218,7 +218,6 @@ public class GameBoard extends Pane {
                             step.set(-(startPostion + 1));
                         step.getAndIncrement();
 
-                        System.out.println("Spieler soll jetzt zu position gehen: " + (startPostion + step.get()));
                         if ((startPostion + step.get() + 1) == 40) {
                             playerMoveTransition.setByX(-((calculateXYPath(pArrayPos, startPostion + step.get()).getX()) - (calculateXYPath(pArrayPos, 0).getX())));
                             playerMoveTransition.setByY(-((calculateXYPath(pArrayPos, startPostion + step.get()).getY()) - (calculateXYPath(pArrayPos, 0).getY())));

@@ -30,13 +30,15 @@ public class PayDisplay extends Pane {
 
         text = buildLabel("payDisplay_Text", "NULL_TEXT", Font.font(Main.TEXT_FONT, width * 0.070), TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor());
         centeringChildInPane(text, rootDisplay);
+        text.layoutYProperty().bind(heightProperty().multiply(0.30).subtract(text.heightProperty().divide(2)));
+
 
         StackPane payButton = new StackPane();
         payButton.setLayoutY(height * 0.60);
         payButton.setLayoutX(width / 2 - (width * 0.80) / 2);
 
         buttonText = buildLabel("payDisplay_button_Text", "NULL_€ Zahlen", Font.font(Main.TEXT_FONT, width * 0.05), TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor());
-        Rectangle buttonBackground = buildRectangle("payDisplay_button_Background", width * 0.80, height * 0.30, ProgramColor.CHANCEL_BUTTONS.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), width * 0.01);
+        Rectangle buttonBackground = buildRectangle("payDisplay_button_Background", width * 0.80, height * 0.25, ProgramColor.CHANCEL_BUTTONS.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), width * 0.01);
 
 
         payButton.getChildren().addAll(buttonBackground, buttonText);
@@ -45,12 +47,17 @@ public class PayDisplay extends Pane {
 
             Player player = Main.getGameOperator().getTurnPlayer();
 
-            if (player.getBankAccount() >= price) {
-                player.transferMoneyToBankAccount(-(price));
-                Main.getGameOperator().transferMoney(price);
-                rootDisplay.removeDisplay();
+            if (price < 0) {
+                if (player.getBankAccount() >= price * -1) {
+                    player.transferMoneyToBankAccount(price);
+                    Main.getGameOperator().transferMoney(price * -1);
+                    rootDisplay.removeDisplay();
+                } else {
+                    rootDisplay.errorAnimation();
+                }
             } else {
-                rootDisplay.errorAnimation();
+                player.transferMoneyToBankAccount(price);
+                rootDisplay.removeDisplay();
             }
         });
 
@@ -62,7 +69,11 @@ public class PayDisplay extends Pane {
         text.setText(message);
         centeringChildInPane(text, rootDisplay);
 
-        buttonText.setText(price + "€ zahlen");
+        if (price < 0)
+            buttonText.setText(price + "€ zahlen");
+        else if (price > 0) 
+            buttonText.setText("+" + price + "€");
+        else throw new NullPointerException("You can not pay or get 0 oney!");
         this.price = price;
     }
 

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import de.sandwich.DennisUtilitiesPackage.Java.ConsoleUtilities;
+import de.sandwich.Enums.CommunityCards;
 import de.sandwich.Enums.CornerTyp;
 import de.sandwich.Enums.ExtraFields;
 import de.sandwich.Enums.ProgramColor;
@@ -50,10 +51,7 @@ public class Game {
     private Player playerFive;
     private final ArrayList<Player> playerList = new ArrayList<>();
 
-    //Game Scene
-
     //Displays
-
     private final GameDisplayControllerOne displayControllerOne;
     private final GameDisplayControllerTwo displayControllerTwo;
     private final MiddleGameDisplayController middleDisplayController;
@@ -82,10 +80,9 @@ public class Game {
         }
 
         //Displays
-
         displayControllerOne = new GameDisplayControllerOne((Main.WINDOW_WIDTH - Main.WINDOW_HEIGHT) / 1.1, Main.WINDOW_HEIGHT * 0.60);
         displayControllerTwo = new GameDisplayControllerTwo((Main.WINDOW_WIDTH - Main.WINDOW_HEIGHT) / 1.1, Main.WINDOW_HEIGHT * 0.38);
-        middleDisplayController = new MiddleGameDisplayController(Main.WINDOW_HEIGHT * 0.40, Main.WINDOW_HEIGHT * 0.20, Main.WINDOW_HEIGHT * 0.18);
+        middleDisplayController = new MiddleGameDisplayController(Main.WINDOW_HEIGHT * 0.40, Main.WINDOW_HEIGHT * 0.25, Main.WINDOW_HEIGHT * 0.18);   
 
         VBox sideDisplays = new VBox(Main.WINDOW_HEIGHT * 0.02);
 
@@ -196,6 +193,7 @@ public class Game {
         displayControllerOne.displayPlayers(playerList);
         displayControllerTwo.displayDice();
         turnFinishButton.setVisible(false);
+
         //Zeigt das Game Board an
         Main.getPrimaryStage().setScene(gameScene);
     }
@@ -270,7 +268,88 @@ public class Game {
             }
         } else if (FIELDS.get(turnPlayer.getFieldPostion()) instanceof PayExtra payField) { //Is the player on a pay extra field
             middleDisplayController.displayPayDisplay(payField.getTyp().getMessage(), payField.getPrice());
-        } else {
+        } else if (FIELDS.get(turnPlayer.getFieldPostion()) instanceof GetCard getCardField) {
+            if (getCardField.isFieldChance()) {
+                //Field ist eine Chance Card
+
+                
+
+            } else {
+                //Field ist eine Comunitty
+                CommunityCards card = getCardField.getCommunityCard();
+
+                if (card.getMoneyTransfer() <= -1 && card.getMoneyTransfer() >= -5) {
+
+                    switch (card.getMoneyTransfer()) {
+                        case -1 -> {
+                            //Überprüfen
+                            //Give player a free jail card
+                            turnPlayer.addFreeJailCard();
+                            middleDisplayController.displayInfoDisplay(card.getMessage());
+                        }
+                        case -2 -> {
+                            //Got to start
+                            if (turnPlayer.getFieldPostion() != 0) {
+                                try { gameBoard.movePlayer(turnPlayer, 40 - turnPlayer.getFieldPostion()); } catch (PlayerNotFoundExceptions ignored) {}
+                                turnPlayer.moveFieldPostion(40 - turnPlayer.getFieldPostion());
+
+                                if (Main.CONSOLE_OUT_PUT) {
+                                    consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
+                                    consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Spieler nummer " + turnPlayer.getOrderNumber() + ", wurde bewegt auf die Feld Postion Nummer:");
+                                    consoleOutPutLine(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.BOLD, " " + turnPlayer.getFieldPostion());
+                                    consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
+                                }
+                            }
+
+                            middleDisplayController.displayInfoDisplay(card.getMessage());
+                        }
+                        case -3 -> {
+                            //Set player to jail
+                            try {gameBoard.setPlayerInJail(turnPlayer);} catch(Exception e) {System.out.println(e);}
+                            
+                            middleDisplayController.displayInfoDisplay(card.getMessage());
+                        }
+                        case -4 -> {
+                            //Get from every player 1000
+                            turnPlayer.transferMoneyToBankAccount(playerInGame * 1000);
+
+                            for (Player p : playerList) {
+                                p.transferMoneyToBankAccount(-1000);
+                            }
+
+                            middleDisplayController.displayInfoDisplay(card.getMessage());
+                        }
+                        case -5 -> {
+                            //Player pay for each hous 800 and for each hotel 2300
+                            int payment = 0;
+                            for (int i = 0; i < FIELDS.size(); i++) {
+                                if (FIELDS.get(i) instanceof Street s) {
+                                    if (s.getOwner() == turnPlayer) {
+                                        if (s.getHouseNumber() == -1) {
+                                            payment = payment + 2300;
+                                        } else {
+                                            payment = payment + (s.getHouseNumber() * 800);
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (payment != 0) {
+                                middleDisplayController.displayPayDisplay(card.getMessage(), -payment);
+                            } else {
+                                middleDisplayController.displayInfoDisplay(card.getMessage());;
+                            }
+
+                        }
+                    }
+
+                } else {
+                    middleDisplayController.displayPayDisplay(card.getMessage(), card.getMoneyTransfer());
+                }
+
+            }
+        }
+         {
             setVisibilityTurnFinButton(true);
         }
     }
@@ -286,10 +365,17 @@ public class Game {
         middleDisplayController.removeDisplay();
         setVisibilityTurnFinButton(false);
         displayControllerOne.displayPlayers(playerList);
+        
         displayControllerTwo.displayDice();
 
-        if (turnPlayer.isInJail()) {
-            middleDisplayController.displayInJailDisplay(turnPlayer, true);
+        if (!(turnPlayer.getBankAccount() < 0)) {
+            if (turnPlayer.isInJail()) {
+                middleDisplayController.displayInJailDisplay(turnPlayer, true);
+            }
+        } else {
+            DiceDisplay.lockeDices();
+
+            middleDisplayController.displayPlayerIsInMinusDisplay();
         }
 
     }

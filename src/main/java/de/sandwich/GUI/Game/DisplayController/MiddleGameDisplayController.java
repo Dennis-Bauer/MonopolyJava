@@ -10,7 +10,9 @@ import de.sandwich.Enums.ProgramColor;
 import de.sandwich.Fields.Street;
 import de.sandwich.GUI.Game.Displays.DisplayMiddle.BuyStreetDisplay;
 import de.sandwich.GUI.Game.Displays.DisplayMiddle.InJailDisplay;
+import de.sandwich.GUI.Game.Displays.DisplayMiddle.InfoDisplay;
 import de.sandwich.GUI.Game.Displays.DisplayMiddle.PayDisplay;
+import de.sandwich.GUI.Game.Displays.DisplayMiddle.PlayerIsInMinusDisplay;
 import de.sandwich.GUI.Game.Displays.DisplayMiddle.StreetInfoDisplay;
 import javafx.animation.*;
 import javafx.scene.layout.Pane;
@@ -25,6 +27,8 @@ public class MiddleGameDisplayController extends Pane{
     private final PayDisplay payDisplay;
     private final StreetInfoDisplay streetInfoDisplay;
     private final InJailDisplay inJailDisplay;
+    private final InfoDisplay infoDisplay;
+    private final PlayerIsInMinusDisplay playerIsInMinusDisplay;
 
     //Variables
     private final Rectangle background;
@@ -63,8 +67,14 @@ public class MiddleGameDisplayController extends Pane{
         inJailDisplay = new InJailDisplay(width, height * 1.60, this);
         inJailDisplay.setVisible(false);
 
+        infoDisplay = new InfoDisplay(width, height, this);
+        inJailDisplay.setVisible(false);
+
+        playerIsInMinusDisplay = new PlayerIsInMinusDisplay(width, height, this);
+        playerIsInMinusDisplay.setVisible(false);
+
         setLayoutX(((Main.WINDOW_HEIGHT * 0.98) / 2) - width / 2);
-        getChildren().addAll(buyStreetDisplay, payDisplay, streetInfoDisplay, inJailDisplay);
+        getChildren().addAll(buyStreetDisplay, payDisplay, streetInfoDisplay, inJailDisplay, infoDisplay, playerIsInMinusDisplay);
         setVisible(false);
     }
 
@@ -169,12 +179,28 @@ public class MiddleGameDisplayController extends Pane{
         });
     }
 
+    public void displayInfoDisplay(String message) {
+        resetDisplay();
+
+        infoDisplay.display(message);
+        infoDisplay.setVisible(true);
+
+        enterAnimation(false);
+    }
+
+    public void displayPlayerIsInMinusDisplay() {
+        resetDisplay();
+
+        playerIsInMinusDisplay.setVisible(true);
+        playerIsInMinusDisplay.display();
+
+        enterAnimation(true);
+    }
+
     public void removeDisplay() {
         if (!(payDisplay.isVisible() && buyStreetDisplay.isVisible())) {
             waitTransition.stop();
             liveTransitions.remove(waitTransition);
-
-            System.out.println("Das Mittlere Display wird removed!");
 
             TranslateTransition upTransition = new TranslateTransition(Duration.seconds(0.30), this);
             upTransition.setByY(-(Main.WINDOW_HEIGHT * 0.10));
@@ -204,7 +230,6 @@ public class MiddleGameDisplayController extends Pane{
                 liveTransitions.remove(fadeTransition);
 
                 resetDisplay();
-                System.out.println("Remove Display wurde beendet!");
             });
         }
     }
@@ -284,6 +309,8 @@ public class MiddleGameDisplayController extends Pane{
         payDisplay.setVisible(false);
         streetInfoDisplay.setVisible(false);
         inJailDisplay.setVisible(false);
+        infoDisplay.setVisible(false);
+        playerIsInMinusDisplay.setVisible(false);
 
         setMaxSize(NORMAL_WIDTH, NORMAL_HEIGHT);
         setLayoutX((Main.WINDOW_HEIGHT / 2) - (Main.WINDOW_HEIGHT * 0.40) / 2);
@@ -292,4 +319,5 @@ public class MiddleGameDisplayController extends Pane{
         background.setWidth(NORMAL_WIDTH);
         background.setHeight(NORMAL_HEIGHT);
     }
+
 }

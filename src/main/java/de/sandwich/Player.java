@@ -29,7 +29,7 @@ public class Player {
 
         //Start account
         bankAccount = 2000;
-        fieldPostion = 28;
+        fieldPostion = 0;
     }
 
     public void transferMoneyToBankAccount(int transferNumber) {

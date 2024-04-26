@@ -75,12 +75,13 @@ public enum ProgramColor {
     //Muss noch geguckt werden welche Farbe
     NULL_COLOR(Color.rgb(255, 0, 212));
 
-    private final Color color;
+    private final Color COLOR;
+
     ProgramColor(Color color) {
-        this.color = color;
+        this.COLOR = color;
     }
 
     public Color getColor() {
-        return color;
+        return COLOR;
     }
 }
