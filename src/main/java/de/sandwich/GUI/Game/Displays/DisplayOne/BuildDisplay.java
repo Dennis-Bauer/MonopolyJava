@@ -273,7 +273,7 @@ public class BuildDisplay extends Pane {
     private void setStreetDisplay(Street street) {
 
         streetInfo.getChildren().clear();
-        streetInfo.getChildren().add(StreetInfoDisplay.getInfoBox(street, WIDTH * 0.25, HEIGHT * 0.50));
+        streetInfo.getChildren().add(StreetInfoDisplay.getStreetInfoBox(street, WIDTH * 0.25, HEIGHT * 0.50));
 
         streetInfo.setVisible(true);
 

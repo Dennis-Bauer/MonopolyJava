@@ -26,6 +26,10 @@ public enum ProgramColor {
 
     STREET_CARD_BACKGROUND(Color.rgb(27, 138, 17)),
 
+    //Station, utilities
+    STATION_COLOR(Color.rgb(41, 41, 41)),
+    UTILITIES_COLOR(Color.rgb(138, 138, 138)),
+
     //Player display
     STREET_NOT_OWNED(Color.rgb(173,173,173)),
     PLAYER_ONE_BACKGROUND(Color.rgb(33, 203, 85)),

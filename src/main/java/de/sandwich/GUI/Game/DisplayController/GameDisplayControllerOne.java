@@ -177,11 +177,6 @@ public class GameDisplayControllerOne extends Pane {
         Rectangle[] streetsR = new Rectangle[28];
         HashMap<Integer, Field> fields = Game.getFields();
 
-        //ÄDNEREN!!!
-        System.out.println("HIER MUSS WAS IM BUILD STREET INVENTAR GEÄNDERT WERDEN");
-        Color ANLAGEN = Color.GRAY;
-        Color BAHNHOEFE = Color.BLACK;
-
         final double space = w * 0.04;
         final double width = w * 0.08;
         final double height = h * 0.10;
@@ -209,18 +204,21 @@ public class GameDisplayControllerOne extends Pane {
 
             if (i == 10) {
                 streetsR[26] = buildRectangle("fieldNumber:" + i + ", hasOwner:", width, height, ProgramColor.STREET_NOT_OWNED.getColor(), true, ProgramColor.BORDER_COLOR_LIGHT.getColor(), (w * 0.01) / 2);
-                streetsR[26].setFill(ANLAGEN);
+                streetsR[26].setFill(ProgramColor.UTILITIES_COLOR.getColor());
                 streetsR[26].setY(startY + height + space);
                 streetsR[26].setX(startX + (22 - 16) * (width + space));
             } else if (i == 20) {
                 streetsR[27] = buildRectangle("fieldNumber:" + i + ", hasOwner:", width, height, ProgramColor.STREET_NOT_OWNED.getColor(), true, ProgramColor.BORDER_COLOR_LIGHT.getColor(), (w * 0.01) / 2);
 
-                streetsR[27].setFill(ANLAGEN);
+                streetsR[27].setFill(ProgramColor.UTILITIES_COLOR.getColor());
                 streetsR[27].setY(startY + height + space);
                 streetsR[27].setX(startX + (23 - 16) * (width + space));
             }
-            else if (fields.get(i) instanceof Station) {
-                streetsR[b].setFill(BAHNHOEFE);
+            else if (fields.get(i) instanceof Station s) {
+                if (s.getOwner() == p) {
+                    streetsR[b].setFill(ProgramColor.STATION_COLOR.getColor());
+                    streetsR[b].setId(streetsR[b].getId() + true);   
+                }
 
                 if (b == 22 || b == 23) {
                     streetsR[b].setY(startY + 2 * (height + space));

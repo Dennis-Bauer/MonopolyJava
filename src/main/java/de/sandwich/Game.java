@@ -251,12 +251,12 @@ public class Game {
         if (FIELDS.get(turnPlayer.getFieldPostion()) instanceof Street street) { //Is the player on a Street
             if (!street.isOwned()) {
                 if (street.getSalePrice() <= turnPlayer.getBankAccount()) {
-                    middleDisplayController.displayBuyStreet(street);
+                    middleDisplayController.displayBuyStreetDisplay(street);
                 } else {
                     setVisibilityTurnFinButton(true);
                 }
             } else {
-                middleDisplayController.displayPayDisplay(buildLongText("Du schuldest den Spieler", street.getOwner().getName() + " " + (street.getPlayerRent() + "€")), street.getPlayerRent());
+                middleDisplayController.displayPayDisplay(buildLongText("Du schuldest den Spieler", street.getOwner().getName() + " " + (street.getPlayerRent() + "€")), -(street.getPlayerRent()));
             }
         } else if (FIELDS.get(turnPlayer.getFieldPostion()) instanceof Corner corner) { //Is the player on a Corner
             switch (corner.getTyp()) {
@@ -272,6 +272,18 @@ public class Game {
             }
         } else if (FIELDS.get(turnPlayer.getFieldPostion()) instanceof PayExtra payField) { //Is the player on a pay extra field
             middleDisplayController.displayPayDisplay(payField.getTyp().getMessage(), payField.getPrice());
+        } else if (FIELDS.get(turnPlayer.getFieldPostion()) instanceof Station station) {
+
+            if (!station.isOwned()) {
+                if (station.getPrice() <= turnPlayer.getBankAccount()) {
+                    middleDisplayController.displayBuyStationDisplay(station);
+                } else {
+                    setVisibilityTurnFinButton(true);
+                }
+            } else {
+                middleDisplayController.displayPayDisplay(buildLongText("Du schuldest den Spieler", station.getOwner().getName() + " " + (station.getRent() + "€")), -(station.getRent()));
+            }
+
         } else if (FIELDS.get(turnPlayer.getFieldPostion()) instanceof GetCard getCardField) {
             if (getCardField.isFieldChance()) {
                 //Field ist eine Chance Card
@@ -462,14 +474,6 @@ public class Game {
 
     }
 
-    //Controls the Street buy System
-    public void buyStreet(@SuppressWarnings("exports") Street street) {
-        street.setOwner(turnPlayer);
-        turnPlayer.transferMoneyToBankAccount(-street.getSalePrice());
-
-        setVisibilityTurnFinButton(true);
-    }
-
     public void transferMoney(int money) {
         if (!(money <= 0)) {
 
@@ -636,7 +640,7 @@ public class Game {
         s.put(2, new GetCard(2));
         s.put(3, new Street("Badstrasse", 1200 ,40, new int[]{200, 600, 1800, 3200}, 5000, 1000, 1000,  Color.rgb(112, 40, 0), 0, 3));
         s.put(4, new PayExtra(200, ExtraFields.SPOTIFY_PREMIUM, 4));
-        s.put(5, new Station("Bahnhof", 200, 5));
+        s.put(5, new Station("Südbahnhof", 5));
         s.put(6, new Street("Chausseestrasse", 2000 ,120, new int[]{600, 1800, 5400, 8000}, 11000, 1000, 1000, Color.AQUA, 1, 6));
         s.put(7, new GetCard(GetCard.ChanceColors.GREEN, 7));
         s.put(8, new Street("Elisenstrasse", 2000 ,120, new int[]{600, 1800, 5400, 8000}, 11000, 1000, 1000, Color.AQUA, 1, 8));
@@ -646,7 +650,7 @@ public class Game {
         s.put(12, new PayExtra(200, ExtraFields.HESSLER_SCHULDEN, 12));
         s.put(13, new Street("Hafenstrasse", 2800 ,200, new int[]{1000, 3000, 9000, 12500}, 15000, 2000, 2000, Color.PURPLE, 2, 13));
         s.put(14, new Street("Neue Strasse", 3200 ,240, new int[]{1200, 3600, 10000, 14000}, 18000, 2000, 2000, Color.PURPLE, 2, 14));
-        s.put(15, new Station("Bahnhof", 200, 15));
+        s.put(15, new Station("Westbahnhof", 15));
         s.put(16, new Street("Müncher Strasse", 3600 ,280, new int[]{1400, 4000, 11000, 15000}, 19000, 2000, 2000, Color.ORANGE, 3, 16));
         s.put(17, new Street("Wiener Strasse", 3600 ,280, new int[]{1400, 4000, 11000, 15000}, 19000, 2000, 2000, Color.ORANGE, 3, 17));
         s.put(18, new GetCard(18));
@@ -656,7 +660,7 @@ public class Game {
         s.put(22, new Street("Museumstrasse", 4400 ,360, new int[]{1800, 5000, 14000, 17500}, 21000, 3000, 3000, Color.RED, 4, 22));
         s.put(23, new GetCard(GetCard.ChanceColors.BLUE, 23));
         s.put(24, new Street("Opernplatz", 4800 ,400, new int[]{2000, 6000, 15000, 18500}, 22000, 3000, 3000, Color.RED, 4, 24));
-        s.put(25, new Station("Bahnhoff", 200, 25));
+        s.put(25, new Station("Nordbahnhof", 25));
         s.put(26, new Street("Lessingstrasse", 5200 ,480, new int[]{2200, 6600, 16000, 19500}, 23000, 3000, 3000, Color.YELLOW, 5, 26));
         s.put(27, new Street("Schillerstrasse", 5200 ,480, new int[]{2200, 6600, 16000, 19500}, 23000, 3000, 3000, Color.YELLOW, 5, 27));
         s.put(28, new PayExtra(200, ExtraFields.NAME_THREE, 28));
@@ -666,7 +670,7 @@ public class Game {
         s.put(32, new Street("Hauptstrasse", 6000 ,520, new int[]{2600, 7800, 18000, 22000}, 25500, 4000, 4000, Color.LIME, 6, 32));
         s.put(33, new GetCard(33));
         s.put(34, new Street("Bahnhofstrasse", 6400 ,560, new int[]{3000, 9000, 20000, 24000}, 28000, 4000, 4000, Color.LIME, 6, 34));
-        s.put(35, new Station("Bhanhoff", 200, 35));
+        s.put(35, new Station("Hauptbahnhof", 35));
         s.put(36, new GetCard(GetCard.ChanceColors.RED, 36));
         s.put(37, new Street("Parkstrasse", 7000 ,700, new int[]{3500, 10000, 22000, 26000}, 30000, 4000, 4000, Color.DARKBLUE, 7, 37));
         s.put(38, new PayExtra(200, ExtraFields.NAME_FOUR, 38));

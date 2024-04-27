@@ -29,6 +29,7 @@ import de.sandwich.Exceptions.PlayerNotFoundExceptions;
 import de.sandwich.Exceptions.ToManyPlayersExceptions;
 import de.sandwich.Fields.Corner;
 import de.sandwich.Fields.Field;
+import de.sandwich.Fields.Station;
 import de.sandwich.Fields.Street;
 
 
@@ -407,6 +408,16 @@ public class GameBoard extends Pane {
                 fields[i].setOnMouseClicked(mouseEvent -> Main.getGameOperator().getMiddleDisplayController().displayStreetInfoDisplay(street));
 
                 fields[i].setOnMouseExited(mouseEvent -> street.removeHighlight());
+            } else if (fieldObjects.get(i) instanceof Station station) {
+
+                fields[i].setOnMouseEntered(mouseEvent -> station.highlightField());
+
+                fields[i].setOnMouseClicked(mouseEvent -> {
+
+                    Main.getGameOperator().getMiddleDisplayController().displayStationInfoDisplay(station);
+                });
+
+                fields[i].setOnMouseExited(mouseEvent -> station.removeHighlight());
             }
         }
 

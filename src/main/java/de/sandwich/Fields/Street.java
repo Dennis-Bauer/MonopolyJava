@@ -270,15 +270,11 @@ public class Street extends Field{
         Main.getGameOperator();
         HashMap<Integer, Field> fields = Game.getFields();
 
-        System.out.println("Die Straße hat die Gruppe: " + getGroup());
-
         if (isOwned) {
             for (int i = 0; i < fields.size(); i++) {
                 if (fields.get(i) instanceof Street s) {
                     if (s != this) {
-                        System.out.println("Die Grade Bearbeitet Straße hat die Gruppe: " + s.getGroup() + " und den Namen: " + s.getName());
                         if (s.getGroup() == group) {
-                            System.out.println("Es wurde die Gleiche Farbe gefunden!!!!!");
                             if (s.isOwned) {
                                 if (s.getOwner() != owner) {
                                     return false;

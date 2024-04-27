@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import de.sandwich.Main;
 import de.sandwich.Player;
 import de.sandwich.Enums.ProgramColor;
+import de.sandwich.Fields.Station;
 import de.sandwich.Fields.Street;
+import de.sandwich.GUI.Game.Displays.DisplayMiddle.BuyStationDisplay;
 import de.sandwich.GUI.Game.Displays.DisplayMiddle.BuyStreetDisplay;
 import de.sandwich.GUI.Game.Displays.DisplayMiddle.InJailDisplay;
 import de.sandwich.GUI.Game.Displays.DisplayMiddle.InfoDisplay;
@@ -29,6 +31,7 @@ public class MiddleGameDisplayController extends Pane{
     private final InJailDisplay inJailDisplay;
     private final InfoDisplay infoDisplay;
     private final PlayerIsInMinusDisplay playerIsInMinusDisplay;
+    private final BuyStationDisplay buyStationDisplay;
 
     //Variables
     private final Rectangle background;
@@ -63,7 +66,7 @@ public class MiddleGameDisplayController extends Pane{
         payDisplay = new PayDisplay(width, height, this);
         payDisplay.setVisible(false);
 
-        streetInfoDisplay = new StreetInfoDisplay(width * 0.50, height * 1.55, this);
+        streetInfoDisplay = new StreetInfoDisplay(width * 0.50, height * 1.40, this);
         streetInfoDisplay.setVisible(false);
 
         inJailDisplay = new InJailDisplay(width, height * 1.60, this);
@@ -75,15 +78,16 @@ public class MiddleGameDisplayController extends Pane{
         playerIsInMinusDisplay = new PlayerIsInMinusDisplay(width, height, this);
         playerIsInMinusDisplay.setVisible(false);
 
+        buyStationDisplay = new BuyStationDisplay(width, height, this);
+        buyStationDisplay.setVisible(false);
+
         setLayoutX(((Main.WINDOW_HEIGHT * 0.98) / 2) - width / 2);
-        getChildren().addAll(buyStreetDisplay, payDisplay, streetInfoDisplay, inJailDisplay, infoDisplay, playerIsInMinusDisplay);
+        getChildren().addAll(buyStreetDisplay, payDisplay, streetInfoDisplay, inJailDisplay, infoDisplay, playerIsInMinusDisplay, buyStationDisplay);
         setVisible(false);
     }
 
-    public void displayBuyStreet(Street street) {
+    public void displayBuyStreetDisplay(Street street) {
         resetDisplay();
-
-        payDisplay.setVisible(false);
 
         buyStreetDisplay.showStreet(street);
         buyStreetDisplay.setVisible(true);
@@ -102,8 +106,47 @@ public class MiddleGameDisplayController extends Pane{
         enterAnimation(true);
     }
     
+    public void displayStationInfoDisplay(Station station) {
+        if (!buyStreetDisplay.isVisible() && !payDisplay.isVisible() && !inJailDisplay.isVisible() && !buyStationDisplay.isVisible()) {
+            FadeTransition fadeTransition = new FadeTransition(Duration.seconds(0.5), this);
+            if (streetInfoDisplay.isVisible()) {
+                fadeTransition.setFromValue(1);
+                fadeTransition.setToValue(0);
+                fadeTransition.play();
+                liveTransitions.add(fadeTransition);
+            } else {
+                resetDisplay();
+
+                setMaxSize(streetInfoDisplay.getWIDTH(), streetInfoDisplay.getHEIGHT());
+                setLayoutX(((Main.WINDOW_HEIGHT * 0.98) / 2) - streetInfoDisplay.getWIDTH() / 2);
+                background.setFill(ProgramColor.STREET_CARD_BACKGROUND.getColor());
+                background.setWidth(streetInfoDisplay.getWIDTH());
+                background.setHeight(streetInfoDisplay.getHEIGHT());
+
+                streetInfoDisplay.buildStationDisplay(station);;
+                streetInfoDisplay.setVisible(true);
+
+                enterAnimation(false);
+            }
+
+            fadeTransition.setOnFinished(event -> {
+                if (liveTransitions.contains(fadeTransition)) {
+                    fadeTransition.setFromValue(0);
+                    fadeTransition.setToValue(1);
+
+                    streetInfoDisplay.buildStationDisplay(station);;
+
+                    fadeTransition.play();
+
+                    liveTransitions.remove(fadeTransition);
+                }
+            });
+        } else
+            Main.getGameOperator().displayErrorMessage("Du kannst im moment keine Straßen infos einsehen!");
+    }
+
     public void displayStreetInfoDisplay(Street street) {
-        if (!buyStreetDisplay.isVisible() && !payDisplay.isVisible() && !inJailDisplay.isVisible()) {
+        if (!buyStreetDisplay.isVisible() && !payDisplay.isVisible() && !inJailDisplay.isVisible() && !buyStationDisplay.isVisible()) {
             FadeTransition fadeTransition = new FadeTransition(Duration.seconds(0.5), this);
             if (streetInfoDisplay.isVisible()) {
                 fadeTransition.setFromValue(1);
@@ -199,8 +242,16 @@ public class MiddleGameDisplayController extends Pane{
         enterAnimation(true);
     }
 
+    public void displayBuyStationDisplay(Station station) {
+        resetDisplay();
+
+        buyStationDisplay.showStation(station);
+        buyStationDisplay.setVisible(true);
+        enterAnimation(true);
+    }
+
     public void removeDisplay() {
-        if (!(payDisplay.isVisible() && buyStreetDisplay.isVisible())) {
+        if (!(payDisplay.isVisible() && buyStreetDisplay.isVisible() && buyStationDisplay.isVisible())) {
             if (!displayIsInRemoveAnimation) {
                 displayIsInRemoveAnimation = true;
 
@@ -327,6 +378,7 @@ public class MiddleGameDisplayController extends Pane{
         inJailDisplay.setVisible(false);
         infoDisplay.setVisible(false);
         playerIsInMinusDisplay.setVisible(false);
+        buyStationDisplay.setVisible(false);
 
         setMaxSize(NORMAL_WIDTH, NORMAL_HEIGHT);
         setLayoutX((Main.WINDOW_HEIGHT / 2) - (Main.WINDOW_HEIGHT * 0.40) / 2);
