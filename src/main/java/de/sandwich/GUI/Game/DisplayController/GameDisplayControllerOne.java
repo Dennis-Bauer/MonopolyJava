@@ -85,8 +85,6 @@ public class GameDisplayControllerOne extends Pane {
             buildDisplay.display(Main.getGameOperator().getTurnPlayer());
         }  else if (destroyDisplay.isVisible()) {
             destroyDisplay.display(Main.getGameOperator().getTurnPlayer());
-        } else {
-            System.out.println("ACHTUNG, DIE UPDATE METHODE FÜR DAS TRADING DISPLAY IST NOCH NICHT GEMACHT!!!");
         }
     }
 

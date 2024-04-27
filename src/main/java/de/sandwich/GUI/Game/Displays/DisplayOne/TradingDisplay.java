@@ -4,11 +4,19 @@ import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtiliti
 import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildRectangle;
 import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildTriangle;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import de.sandwich.Game;
 import de.sandwich.Main;
 import de.sandwich.Player;
 import de.sandwich.Enums.ProgramColor;
+import de.sandwich.Exceptions.WrongNodeException;
+import de.sandwich.Fields.Field;
+import de.sandwich.Fields.Station;
+import de.sandwich.Fields.Street;
+import de.sandwich.Fields.Utilitie;
 import de.sandwich.GUI.Game.DisplayController.GameDisplayControllerOne;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
@@ -30,8 +38,13 @@ import static de.sandwich.GUI.Game.DisplayController.GameDisplayControllerOne.bu
 
 public class TradingDisplay extends Pane {
 
-    private final GameDisplayControllerOne rootDisplay;
+    //Default variables
+    private final double PLAYER_BOX_WIDTH, PLAYER_BOX_HEIGHT;
     private final double WIDTH, HEIGHT, BORDER_WIDTH;
+
+    private final GameDisplayControllerOne rootDisplay;
+
+    private ArrayList<Field> chosenFields = new ArrayList<>();
 
     public TradingDisplay(double width, double height, GameDisplayControllerOne rootDisplay) {
         setId("gameScene_playerDisplay_TradingMenu");
@@ -42,23 +55,28 @@ public class TradingDisplay extends Pane {
         this.WIDTH = width;
         this.HEIGHT = height;
         this.BORDER_WIDTH = width * 0.005;
+        this.PLAYER_BOX_WIDTH = WIDTH * 0.306;
+        this.PLAYER_BOX_HEIGHT = HEIGHT * 0.6035;
     }
+
 
     public void startTrading(Player playerOne, Player playerTwo) {
         resetTrading();
 
         final int MONEY_STEPS = 100;
+        final double BUTTON_Y = HEIGHT * 0.825;
+        final double BUTTON_HEIGHT = HEIGHT * 0.075;
 
         AtomicInteger tradeOfferLeft = new AtomicInteger();
         AtomicInteger tradeOfferRight = new AtomicInteger();
 
         //Left
-        Pane playerTradeBoxLeft = buildPlayerTradeBox(WIDTH * 0.306, HEIGHT * 0.6035, ProgramColor.PLAYER_TWO_BACKGROUND.getColor(), playerOne);
+        Pane playerTradeBoxLeft = buildPlayerTradeBox(PLAYER_BOX_WIDTH, PLAYER_BOX_HEIGHT, ProgramColor.PLAYER_TWO_BACKGROUND.getColor(), playerOne);
         playerTradeBoxLeft.setLayoutX(WIDTH * 0.014);
         playerTradeBoxLeft.setLayoutY(HEIGHT * 0.20);
 
         //Buttons
-        createButtons((WIDTH * 0.306) * 0.35, HEIGHT * 0.075, WIDTH / 2 + WIDTH * 0.18, HEIGHT * 0.825, "left");
+        createCancelButton((WIDTH * 0.306) * 0.35, BUTTON_HEIGHT, WIDTH / 2 + WIDTH * 0.18, BUTTON_Y, "left");
 
         //Left Money transfer
         Pane setLeftCash = new Pane();
@@ -71,12 +89,11 @@ public class TradingDisplay extends Pane {
         centeringChildInPane(leftCashLabel, setLeftCash);
         leftCashLabel.setLayoutY((HEIGHT * 0.6035) * 0.0125);
 
-        StackPane removeLeftCash = new StackPane();
+        StackPane removeLeftCash = new StackPane(
+            buildRectangle("gameScene_playerDisplay_tradingMenu_minusCashLeft", (WIDTH * 0.306) * 0.08, (WIDTH * 0.306) * 0.015, ProgramColor.SYMBOLE_COLOR.getColor(), true, null, 0),
+            buildRectangle("gameScene_playerDisplay_tradingMenu_clickBoxLeft", (WIDTH * 0.306) * 0.08, (WIDTH * 0.306) * 0.08, ProgramColor.SYMBOLE_COLOR.getColor(), false, null, 0)
+        );
 
-        Rectangle removeLeftCashSymbole = buildRectangle("gameScene_playerDisplay_tradingMenu_minusCashLeft", (WIDTH * 0.306) * 0.08, (WIDTH * 0.306) * 0.015, ProgramColor.SYMBOLE_COLOR.getColor(), true, null, 0);
-        Rectangle removeLeftCashClickBox = buildRectangle("gameScene_playerDisplay_tradingMenu_clickBoxLeft", (WIDTH * 0.306) * 0.08, (WIDTH * 0.306) * 0.08, ProgramColor.SYMBOLE_COLOR.getColor(), false, null, 0);
-
-        removeLeftCash.getChildren().addAll(removeLeftCashSymbole, removeLeftCashClickBox);
         removeLeftCash.setLayoutY(((WIDTH * 0.306) * 0.08) / 2);
         removeLeftCash.setLayoutX((WIDTH * 0.306) * 0.32);
 
@@ -90,8 +107,8 @@ public class TradingDisplay extends Pane {
         playerTradeBoxRight.setLayoutX(WIDTH / 2 + WIDTH * 0.18);
         playerTradeBoxRight.setLayoutY(HEIGHT * 0.20);
 
-        //Buttons
-        createButtons((WIDTH * 0.306) * 0.35, HEIGHT * 0.075, WIDTH / 2 - WIDTH * 0.306 - WIDTH * 0.18, HEIGHT * 0.825, "right");
+        //Button
+        createCancelButton((WIDTH * 0.306) * 0.35, BUTTON_HEIGHT, WIDTH / 2 - WIDTH * 0.306 - WIDTH * 0.18, BUTTON_Y, "right");
 
         //Right Money transfer
         Pane setRightCash = new Pane();
@@ -104,19 +121,29 @@ public class TradingDisplay extends Pane {
         centeringChildInPane(rightCashLabel, setRightCash);
         rightCashLabel.setLayoutY((HEIGHT * 0.6035) * 0.0125);
 
-        StackPane removeRightCash = new StackPane();
-
-        Rectangle removeRightCashSymbole = buildRectangle("gameScene_playerDisplay_tradingMenu_minusCashRight", (WIDTH * 0.306) * 0.08, (WIDTH * 0.306) * 0.015, ProgramColor.SYMBOLE_COLOR.getColor(), true, null, 0);
-        Rectangle removeRightCashClickBox = buildRectangle("gameScene_playerDisplay_tradingMenu_clickBoxRight", (WIDTH * 0.306) * 0.08, (WIDTH * 0.306) * 0.08, ProgramColor.SYMBOLE_COLOR.getColor(), false, null, 0);
-
-
+        StackPane removeRightCash = new StackPane(
+            buildRectangle("gameScene_playerDisplay_tradingMenu_minusCashRight", (WIDTH * 0.306) * 0.08, (WIDTH * 0.306) * 0.015, ProgramColor.SYMBOLE_COLOR.getColor(), true, null, 0),
+            buildRectangle("gameScene_playerDisplay_tradingMenu_clickBoxRight", (WIDTH * 0.306) * 0.08, (WIDTH * 0.306) * 0.08, ProgramColor.SYMBOLE_COLOR.getColor(), false, null, 0)
+        );
+     
         removeRightCash.setLayoutY(((WIDTH * 0.306) * 0.08) / 2);
         removeRightCash.setLayoutX((WIDTH * 0.306) * 0.32);
-        removeRightCash.getChildren().addAll(removeRightCashSymbole, removeRightCashClickBox);
 
         setRightCash.setLayoutX(WIDTH / 2 + WIDTH * 0.18 + WIDTH * 0.014 + (WIDTH * 0.306) * 0.28);
         setRightCash.setLayoutY(HEIGHT * 0.20 + (HEIGHT * 0.6035) * 0.40);
         setRightCash.getChildren().addAll(addRightCash, rightCashLabel, removeRightCash);
+
+        //Trade button
+        StackPane tradeButton = new StackPane(buildLabel("gameScene_playerDisplay_tradingMenu_tradeButton_Text", "Traden", Font.font(Main.TEXT_FONT, FontWeight.BOLD, WIDTH * 0.024), TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor()));
+
+        Rectangle backgroundCancelButton = buildRectangle("gameScene_playerDisplay_tradingMenu_tradeButton_Background", WIDTH * 0.30, BUTTON_HEIGHT, ProgramColor.TRADING_BUTTON_COLOR.getColor(), true, ProgramColor.BORDER_COLOR_LIGHT.getColor(), BORDER_WIDTH);
+        backgroundCancelButton.setArcWidth(backgroundCancelButton.getHeight());
+        backgroundCancelButton.setArcHeight(backgroundCancelButton.getHeight());
+
+        tradeButton.getChildren().add(backgroundCancelButton);
+        backgroundCancelButton.toBack();
+        tradeButton.setLayoutY(BUTTON_Y);
+        tradeButton.layoutXProperty().bind(widthProperty().divide(2).subtract(tradeButton.widthProperty().divide(2)));
 
         //Buttons
         addLeftCash.setOnMouseClicked(mouseEvent -> {
@@ -141,7 +168,7 @@ public class TradingDisplay extends Pane {
 
         addRightCash.setOnMouseClicked(mouseEvent -> {
             if (tradeOfferRight.get() + MONEY_STEPS < playerTwo.getBankAccount())
-                tradeOfferRight.addAndGet(50);
+                tradeOfferRight.addAndGet(MONEY_STEPS);
             else
                 tradeOfferRight.set(playerTwo.getBankAccount());
 
@@ -159,11 +186,43 @@ public class TradingDisplay extends Pane {
             rightCashLabel.setText(tradeOfferRight.toString());
         });
 
+        tradeButton.setOnMouseClicked(mouseEvent -> {
+            playerOne.transferMoneyToBankAccount(-(tradeOfferLeft.get()));
+            playerTwo.transferMoneyToBankAccount(tradeOfferLeft.get());
 
-        getChildren().addAll(playerTradeBoxLeft, setLeftCash, playerTradeBoxRight, setRightCash);
+            playerOne.transferMoneyToBankAccount(tradeOfferRight.get());
+            playerTwo.transferMoneyToBankAccount(-(tradeOfferRight.get()));
+
+            for (int i = 0; i < chosenFields.size(); i++) {
+                if (chosenFields.get(i) instanceof Street f) {
+                    if (f.getOwner() == playerOne) {
+                        f.setOwner(playerTwo);
+                    } else {
+                        f.setOwner(playerOne);
+                    }
+                } else if (chosenFields.get(i) instanceof Station f) {
+                    if (f.getOwner() == playerOne) {
+                        f.setOwner(playerTwo);
+                    } else {
+                        f.setOwner(playerOne);
+                    }
+                } else if (chosenFields.get(i) instanceof Utilitie f) {
+                    if (f.getOwner() == playerOne) {
+                        f.setOwner(playerTwo);
+                    } else {
+                        f.setOwner(playerOne);
+                    }
+                } else throw new WrongNodeException("chosenFields");
+            }
+
+            rootDisplay.displayPlayers(Main.getGameOperator().getPlayers());
+
+        });
+
+        getChildren().addAll(playerTradeBoxLeft, setLeftCash, playerTradeBoxRight, setRightCash, tradeButton);
     }
 
-    private void createButtons(double buttonWidth, double buttonHeight, double x, double y, String id) {
+    private void createCancelButton(double buttonWidth, double buttonHeight, double x, double y, String id) {
 
         //Cancel Button
         StackPane cancelButton = new StackPane();
@@ -180,7 +239,7 @@ public class TradingDisplay extends Pane {
 
         cancelButton.setOnMouseClicked(event -> rootDisplay.displayPlayerDisplay());
 
-        getChildren().addAll(cancelButton);
+        getChildren().add(cancelButton);
     }
 
     private void resetTrading() {
@@ -211,14 +270,30 @@ public class TradingDisplay extends Pane {
 
         Rectangle[] streets = buildStreetInventar(width, height, player);
 
+        Main.getGameOperator();
+        HashMap<Integer, Field> fields = Game.getFields();
+
         for (Rectangle street : streets) {
+
+            int fieldNumber = Integer.parseInt(street.getId().substring(12, 14));
+            
             street.setOnMouseClicked(event -> {
                 if (street.getId().endsWith("true")) {
                     street.setId(street.getId() + "C");
                     street.setStrokeWidth(street.getStrokeWidth() * 3);
+
+                    if (fields.get(fieldNumber) instanceof Street || fields.get(fieldNumber) instanceof Station || fields.get(fieldNumber) instanceof Utilitie) 
+                        chosenFields.add(fields.get(fieldNumber));
+                    else throw new WrongNodeException("Fields");
+
                 } else if (street.getId().endsWith("trueC")) {
                     street.setId(street.getId().replace("C", ""));
                     street.setStrokeWidth(street.getStrokeWidth() / 3);
+
+                    if (fields.get(fieldNumber) instanceof Street || fields.get(fieldNumber) instanceof Station || fields.get(fieldNumber) instanceof Utilitie) 
+                        chosenFields.remove(fields.get(fieldNumber));
+                    else throw new WrongNodeException("Fields");
+
                 }
             });
             playerTradingBox.getChildren().addAll(street);
