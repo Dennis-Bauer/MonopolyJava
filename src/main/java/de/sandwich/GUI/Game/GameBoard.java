@@ -202,7 +202,13 @@ public class GameBoard extends Pane {
 
             if (!(playerArrayPostion > 4)) {
 
-                playerMoveTransition = new TranslateTransition(Duration.seconds(0.5), playerFigures[pArrayPos]);
+                double seconds = 0;
+                if (steps > 10) 
+                    seconds = 0.25;
+                else 
+                    seconds = 0.5;
+
+                playerMoveTransition = new TranslateTransition(Duration.seconds(seconds), playerFigures[pArrayPos]);
                 playerMoveTransition.setByX((calculateXYPath(pArrayPos, startPostion + 1).getX()) - (calculateXYPath(pArrayPos, startPostion).getX()));
                 playerMoveTransition.setByY((calculateXYPath(pArrayPos, startPostion + 1).getY()) - (calculateXYPath(pArrayPos, startPostion).getY()));
                 playerMoveTransition.play();
