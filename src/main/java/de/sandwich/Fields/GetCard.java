@@ -31,32 +31,14 @@ public class GetCard extends Field{
     private final ChanceColors color;
 
     //Cards
-    private final CommunityCards[] communityCards = CommunityCards.values();
-    private int communityCardPositon = 0;
-    private final ChanceCards[] chanceCards = ChanceCards.values();
-    private int chanceCardPositon = 0;
+    private static final CommunityCards[] communityCards = CommunityCards.values();
+    private static int communityCardPositon = 0;
+    private static final ChanceCards[] chanceCards = ChanceCards.values();
+    private static int chanceCardPositon = 0;
 
     public GetCard(ChanceColors c, double position) {
         super(position);
         this.color = c;
-
-        //Cards
-        Random random = new Random();
-        for (int i = communityCards.length - 1; i > 0; i--) {
-            int index = random.nextInt(i + 1);
-
-            CommunityCards temp = communityCards[index];
-            communityCards[index] = communityCards[i];
-            communityCards[i] = temp;
-        }
-
-        for (int i = chanceCards.length - 1; i > 0; i--) {
-            int index = random.nextInt(i + 1);
-
-            ChanceCards temp = chanceCards[index];
-            chanceCards[index] = chanceCards[i];
-            chanceCards[i] = temp;
-        }
 
         fieldIsChance = true;
     }
@@ -91,11 +73,11 @@ public class GetCard extends Field{
         Image i = null;
         switch (Objects.requireNonNull(color)) {
             case RED ->
-                    i = creatImage("/de/sandwich/monopoly/gameBoard/chance_red.png");
+                    i = creatImage("/de/sandwich/monopoly/gameBoard/chanceRed.png");
             case BLUE ->
-                    i = creatImage("/de/sandwich/monopoly/gameBoard/chance_blue.png");
+                    i = creatImage("/de/sandwich/monopoly/gameBoard/chanceBlue.png");
             case GREEN ->
-                    i = creatImage("/de/sandwich/monopoly/gameBoard/chance_green.png");
+                    i = creatImage("/de/sandwich/monopoly/gameBoard/chanceGreen.png");
         }
 
         ImageView image = createImageView("chance_Image", i, width / 1.1, height / 1.6,(width - width / 1.15) / 2, height / 3.5);
@@ -125,7 +107,27 @@ public class GetCard extends Field{
         return field;
     }
 
-    public CommunityCards getCommunityCard() {
+    public static void randomizeCards() {
+        //Cards
+        Random random = new Random();
+        for (int i = communityCards.length - 1; i > 0; i--) {
+            int index = random.nextInt(i + 1);
+
+            CommunityCards temp = communityCards[index];
+            communityCards[index] = communityCards[i];
+            communityCards[i] = temp;
+        }
+        
+        for (int i = chanceCards.length - 1; i > 0; i--) {
+            int index = random.nextInt(i + 1);
+
+            ChanceCards temp = chanceCards[index];
+            chanceCards[index] = chanceCards[i];
+            chanceCards[i] = temp;
+        }
+    }
+
+    public static CommunityCards getCommunityCard() {
         
         CommunityCards c = communityCards[communityCardPositon];
 
@@ -136,7 +138,7 @@ public class GetCard extends Field{
         return c;
     }
 
-    public ChanceCards getChanceCard() {
+    public static ChanceCards getChanceCard() {
         
         ChanceCards c = chanceCards[chanceCardPositon];
 
