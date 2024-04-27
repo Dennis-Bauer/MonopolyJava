@@ -155,16 +155,20 @@ public class GameDisplayControllerOne extends Pane {
         Label headerName = buildLabel("gameScene_playerDisplay_playerBox_NameHeader", p.getName(), Font.font(Main.TEXT_FONT, FontWeight.BOLD, w / 8), TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor());
         centeringChildInPane(headerName, playerBox);
 
+        ImageView freeJailDisplay = createImageView("gameScene_playerDisplay_playerBox_FreeJailImage", "/de/sandwich/monopoly/gameBoard/free_jail_symbole.png", w * 0.10, w * 0.10, w - (w * 0.18), h * 0.19);
+        freeJailDisplay.setRotate(-45);
+
+        Label freeJailCount = buildLabel("gameScene_palyerDisplay_playerBox_FreeJailCardsCount", p.getFreeJailCardNumber() + "X", Font.font(Main.TEXT_FONT, FontWeight.BOLD, w / 16), null, ProgramColor.TEXT_COLOR.getColor(), w - (w * 0.12), h * 0.23);
+
         ImageView figureDisplay = createImageView("gameScene_playerDisplay_playerBox_FigureDisplay", p.getFigur().getFigureImage(), (w / 3.725) / 2, (w / 3.725) / 2, w - (w / 3.725) / 2 - (w * 0.001), h * 0.025);
 
         Line headerSeparatingline = buildLine("gameScene_playerDisplay_playerBox_NameHeaderSeparatingLine", new Point2D(0, h * 0.15), new Point2D(w, h * 0.15), w * 0.005, ProgramColor.BORDER_COLOR_LIGHT.getColor());
 
-        Label displayAccountBalance = buildLabel("gameScene_playerDisplay_playerBox_DisplayAccountBalance", ("Kontostand: " + p.getBankAccount()), Font.font(Main.TEXT_FONT, FontWeight.BOLD, w / 12), TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor(), 0, h * 0.17);
-        centeringChildInPane(displayAccountBalance, playerBox);
+        Label displayAccountBalance = buildLabel("gameScene_playerDisplay_playerBox_DisplayAccountBalance", ("Kontostand: " + p.getBankAccount()), Font.font(Main.TEXT_FONT, FontWeight.BOLD, w / 12), TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor(), w * 0.01, h * 0.19);
 
         Line accountBalanceSeparatingline = buildLine("gameScene_playerDisplay_playerBox_AccountBalanceSeparatingLine", new Point2D(0, h * 0.30), new Point2D(w, h * 0.30), w * 0.005, ProgramColor.BORDER_COLOR_LIGHT.getColor());
 
-        playerBox.getChildren().addAll( background, headerName, figureDisplay, headerSeparatingline, displayAccountBalance, accountBalanceSeparatingline);
+        playerBox.getChildren().addAll( background, headerName, figureDisplay, headerSeparatingline, displayAccountBalance, accountBalanceSeparatingline, freeJailDisplay, freeJailCount);
 
         return playerBox;
     }

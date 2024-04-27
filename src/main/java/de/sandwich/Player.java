@@ -18,7 +18,7 @@ public class Player {
 
     //Game Variables
     private boolean isInJail = false;
-    private int freeJailCards = 1;
+    private int freeJailCards = 0;
     private int inJailRemain = 0;
 
 
