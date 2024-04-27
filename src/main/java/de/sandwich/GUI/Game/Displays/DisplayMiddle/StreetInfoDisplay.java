@@ -5,6 +5,7 @@ import de.sandwich.GUI.Game.DisplayController.MiddleGameDisplayController;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -22,6 +23,7 @@ import static de.sandwich.Fields.Street.buildHouseSymbole;
 
 import de.sandwich.Main;
 import de.sandwich.Enums.ProgramColor;
+import de.sandwich.Exceptions.WrongNodeException;
 
 public class StreetInfoDisplay extends Pane {
 
@@ -118,7 +120,7 @@ public class StreetInfoDisplay extends Pane {
                 buildLabel("streetInfo_info_housesRent_Colon", ":", infoTextFont, TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, h * (3 * heightMultiplicator)),
                 buildLabel("streetInfo_info_housesRent_Colon", ":", infoTextFont, TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, h * (4 * heightMultiplicator))
         );
-        doppelPoints.setLayoutX(w * 0.70);
+        doppelPoints.setLayoutX(w * 0.57);
         doppelPoints.setLayoutY(h * (0.26 + (2 * heightMultiplicator)));
 
         //Doppel numbers
@@ -131,6 +133,12 @@ public class StreetInfoDisplay extends Pane {
         );
         housesNumbers.setLayoutY(h * (0.26 + (2 * heightMultiplicator)));
         housesNumbers.layoutXProperty().bind(box.widthProperty().subtract(housesNumbers.widthProperty()));
+
+        for (int i = 0; i < housesNumbers.getChildren().size(); i++) {
+            if (housesNumbers.getChildren().get(i) instanceof Label l) {
+                l.layoutXProperty().bind(box.widthProperty().subtract(l.widthProperty()));
+            } else throw new WrongNodeException("houseNumbers");
+        }
 
         //Info house price
         Label infoHousePrice = buildLabel("streetInfo_info_HousePrice", "Haus kostet:", infoTextFont, TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, h * 0.841);

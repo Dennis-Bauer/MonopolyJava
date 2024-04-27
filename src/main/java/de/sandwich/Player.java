@@ -28,7 +28,7 @@ public class Player {
         this.orderNumber = orderNumber;
 
         //Start account
-        bankAccount = 2000;
+        bankAccount = 30000; //Standard
         fieldPostion = 0;
     }
 
