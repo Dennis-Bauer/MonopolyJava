@@ -80,6 +80,9 @@ public class Game {
             consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
         }
 
+        //Randomize Cards
+        GetCard.randomizeCards();
+
         //Displays
         displayControllerOne = new GameDisplayControllerOne((Main.WINDOW_WIDTH - Main.WINDOW_HEIGHT) / 1.1, Main.WINDOW_HEIGHT * 0.60);
         displayControllerTwo = new GameDisplayControllerTwo((Main.WINDOW_WIDTH - Main.WINDOW_HEIGHT) / 1.1, Main.WINDOW_HEIGHT * 0.38);
@@ -94,7 +97,7 @@ public class Game {
         sideDisplays.setLayoutX(Main.WINDOW_HEIGHT + (((Main.WINDOW_WIDTH - Main.WINDOW_HEIGHT) / 2) - ((Main.WINDOW_WIDTH - Main.WINDOW_HEIGHT) / 1.1) / 2));
         sideDisplays.setLayoutY(0);
 
-        errorMessage.layoutXProperty().bind(Main.getPrimaryStage().heightProperty().divide(2).subtract(errorMessage.widthProperty().divide(2)));
+        errorMessage.layoutXProperty().bind(gameBoard.widthProperty().subtract(gameBoard.widthProperty().subtract(gameBoard.widthProperty().divide(1.4)).divide(2)).divide(2).add(gameBoard.widthProperty().subtract(gameBoard.widthProperty().divide(1.4)).divide(4)).subtract(errorMessage.widthProperty().divide(2)));
         errorMessage.setLayoutY(Main.WINDOW_HEIGHT * 0.81);
         errorMessage.setVisible(false);
 
@@ -102,8 +105,8 @@ public class Game {
             buildRectangle("gameScene_turnFinishButton_Background", Main.WINDOW_WIDTH * 0.18, Main.WINDOW_HEIGHT * 0.08, ProgramColor.SELECT_COLOR.getColor(), true, ProgramColor.BORDER_COLOR_LIGHT.getColor(), Main.WINDOW_WIDTH * 0.005),
             buildLabel("gameScene_turnFinishButton_Text", "Beende Zug", Font.font(Main.TEXT_FONT, FontWeight.BOLD ,Main.WINDOW_WIDTH * 0.02), null, ProgramColor.TEXT_COLOR.getColor())
         );
-        turnFinishButton.setLayoutX(Main.WINDOW_HEIGHT * 0.49 - Main.WINDOW_WIDTH * 0.09);
-        turnFinishButton.setLayoutY(Main.WINDOW_HEIGHT - Main.WINDOW_HEIGHT * 0.26);
+        turnFinishButton.layoutXProperty().bind(gameBoard.widthProperty().subtract(gameBoard.widthProperty().subtract(gameBoard.widthProperty().divide(1.4)).divide(2)).divide(2).add(gameBoard.widthProperty().subtract(gameBoard.widthProperty().divide(1.4)).divide(4)).subtract(turnFinishButton.widthProperty().divide(2)));
+        turnFinishButton.setLayoutY(Main.WINDOW_HEIGHT - Main.WINDOW_HEIGHT * 0.285);
 
         turnFinishButton.setOnMouseClicked(mouseEvent -> {
             turnFinish();
@@ -272,7 +275,7 @@ public class Game {
         } else if (FIELDS.get(turnPlayer.getFieldPostion()) instanceof GetCard getCardField) {
             if (getCardField.isFieldChance()) {
                 //Field ist eine Chance Card
-                ChanceCards card = getCardField.getChanceCard();
+                ChanceCards card = GetCard.getChanceCard();
 
                 //Spieler bewegt sich zu einem Feld das nicht der Start ist
                 if (card.getMoneyTransfer() <= -101 && card.getMoneyTransfer() >= -105) {
@@ -355,7 +358,7 @@ public class Game {
 
             } else {
                 //Field ist eine Comunitty
-                CommunityCards card = getCardField.getCommunityCard();
+                CommunityCards card = GetCard.getCommunityCard();
 
                 if (card.getMoneyTransfer() <= -1 && card.getMoneyTransfer() >= -5) {
 
@@ -494,28 +497,38 @@ public class Game {
     }
 
     public void displayErrorMessage(String message) {
-        errorMessage.setText(message);
-        errorMessage.setVisible(true);
+        if (errorMessage.getText().equals("NULL")) {
+            errorMessage.setText(message);
+            errorMessage.setVisible(true);
+            errorMessage.toFront();
 
-        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(0.5), errorMessage);
-        fadeTransition.setFromValue(1);
-        fadeTransition.setToValue(0);
+            FadeTransition fadeTransition = new FadeTransition(Duration.seconds(0.5), errorMessage);
+            fadeTransition.setFromValue(0);
+            fadeTransition.setToValue(1);
+            fadeTransition.play();
 
-        ScaleTransition waitTransition = new ScaleTransition(Duration.seconds(1), errorMessage);
-        waitTransition.setCycleCount(3);
-        waitTransition.setByX(Main.WINDOW_WIDTH * 0.00003);
-        waitTransition.setByY(Main.WINDOW_WIDTH * 0.00003);
-        waitTransition.setAutoReverse(true);
-        waitTransition.play();
+            ScaleTransition waitTransition = new ScaleTransition(Duration.seconds(1), errorMessage);
+            waitTransition.setCycleCount(3);
+            waitTransition.setByX(Main.WINDOW_WIDTH * 0.00003);
+            waitTransition.setByY(Main.WINDOW_WIDTH * 0.00003);
+            waitTransition.setAutoReverse(true);
+            waitTransition.play();
 
-        waitTransition.setOnFinished(actionEvent -> fadeTransition.play());
-        fadeTransition.setOnFinished(actionEvent -> {
-            if (errorMessage.isVisible()) {
-                errorMessage.setVisible(false);
-                fadeTransition.setToValue(1);
-                fadeTransition.play();
-            }
-        });
+
+            waitTransition.setOnFinished(actionEvent -> fadeTransition.play());
+
+            fadeTransition.setOnFinished(actionEvent -> {
+                if (fadeTransition.getToValue() == 1) {
+                    waitTransition.play();
+
+                    fadeTransition.setToValue(0);
+                    fadeTransition.setFromValue(1);
+                } else {
+                    errorMessage.setVisible(false);
+                    errorMessage.setText("NULL");
+                }
+            });
+        }
     }
 
     //Getter
