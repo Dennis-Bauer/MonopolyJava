@@ -31,6 +31,7 @@ import de.sandwich.Fields.Corner;
 import de.sandwich.Fields.Field;
 import de.sandwich.Fields.Station;
 import de.sandwich.Fields.Street;
+import de.sandwich.Fields.Utilitie;
 
 
 public class GameBoard extends Pane {
@@ -412,12 +413,16 @@ public class GameBoard extends Pane {
 
                 fields[i].setOnMouseEntered(mouseEvent -> station.highlightField());
 
-                fields[i].setOnMouseClicked(mouseEvent -> {
-
-                    Main.getGameOperator().getMiddleDisplayController().displayStationInfoDisplay(station);
-                });
+                fields[i].setOnMouseClicked(mouseEvent -> Main.getGameOperator().getMiddleDisplayController().displayStationInfoDisplay(station));
 
                 fields[i].setOnMouseExited(mouseEvent -> station.removeHighlight());
+            } else if (fieldObjects.get(i) instanceof Utilitie utilitie) {
+
+                fields[i].setOnMouseEntered(mouseEvent -> utilitie.highlightField());
+
+                fields[i].setOnMouseClicked(mouseEvent -> Main.getGameOperator().getMiddleDisplayController().displayUtilitieInfoDisplay(utilitie));
+
+                fields[i].setOnMouseExited(mouseEvent -> utilitie.removeHighlight());
             }
         }
 

@@ -30,6 +30,7 @@ import de.sandwich.Fields.GetCard;
 import de.sandwich.Fields.PayExtra;
 import de.sandwich.Fields.Station;
 import de.sandwich.Fields.Street;
+import de.sandwich.Fields.Utilitie;
 import de.sandwich.GUI.Game.GameBoard;
 import de.sandwich.GUI.Game.DisplayController.GameDisplayControllerOne;
 import de.sandwich.GUI.Game.DisplayController.GameDisplayControllerTwo;
@@ -282,6 +283,18 @@ public class Game {
                 }
             } else {
                 middleDisplayController.displayPayDisplay(buildLongText("Du schuldest den Spieler", station.getOwner().getName() + " " + (station.getRent() + "€")), -(station.getRent()));
+            }
+
+        } else if (FIELDS.get(turnPlayer.getFieldPostion()) instanceof Utilitie utilitie) {
+
+            if (!utilitie.isOwned()) {
+                if (utilitie.getPrice() <= turnPlayer.getBankAccount()) {
+                    middleDisplayController.displayBuyUtilitieDisplay(utilitie);
+                } else {
+                    setVisibilityTurnFinButton(true);
+                }
+            } else {
+                middleDisplayController.displayPayDisplay(buildLongText("Du schuldest den Spieler", utilitie.getOwner().getName() + " " + ((utilitie.getMultiplicator() * (DiceDisplay.getDiceNumbers()[0] + DiceDisplay.getDiceNumbers()[1])) + "€")), -(utilitie.getMultiplicator() * (DiceDisplay.getDiceNumbers()[0] + DiceDisplay.getDiceNumbers()[1])));
             }
 
         } else if (FIELDS.get(turnPlayer.getFieldPostion()) instanceof GetCard getCardField) {
@@ -647,7 +660,7 @@ public class Game {
         s.put(9, new Street("Poststrasse", 2400 ,160, new int[]{800, 2000, 6000, 9000}, 12000, 1000, 1000, Color.AQUA, 1, 9));
         s.put(10, new Corner(CornerTyp.JAIL, 10));
         s.put(11, new Street("Seestrasse", 2800 ,200, new int[]{1000, 3000, 9000, 12500}, 15000, 2000, 2000, Color.PURPLE, 2, 11));
-        s.put(12, new PayExtra(200, ExtraFields.HESSLER_SCHULDEN, 12));
+        s.put(12, new Utilitie("Elektrizitäts- Werk", 12));
         s.put(13, new Street("Hafenstrasse", 2800 ,200, new int[]{1000, 3000, 9000, 12500}, 15000, 2000, 2000, Color.PURPLE, 2, 13));
         s.put(14, new Street("Neue Strasse", 3200 ,240, new int[]{1200, 3600, 10000, 14000}, 18000, 2000, 2000, Color.PURPLE, 2, 14));
         s.put(15, new Station("Westbahnhof", 15));
@@ -663,7 +676,7 @@ public class Game {
         s.put(25, new Station("Nordbahnhof", 25));
         s.put(26, new Street("Lessingstrasse", 5200 ,480, new int[]{2200, 6600, 16000, 19500}, 23000, 3000, 3000, Color.YELLOW, 5, 26));
         s.put(27, new Street("Schillerstrasse", 5200 ,480, new int[]{2200, 6600, 16000, 19500}, 23000, 3000, 3000, Color.YELLOW, 5, 27));
-        s.put(28, new PayExtra(200, ExtraFields.NAME_THREE, 28));
+        s.put(28, new Utilitie("Wasser- Werk", 28));
         s.put(29, new Street("Goethestrasse", 5600 ,580, new int[]{2400, 7200, 17000, 20500}, 24000, 3000, 3000, Color.YELLOW, 5, 29));
         s.put(30, new Corner(CornerTyp.GO_TO_JAIL, 30));
         s.put(31, new Street("Rathausplatz", 6000 ,520, new int[]{2600, 7800, 18000, 22000}, 25500, 4000, 4000, Color.LIME, 6, 31));

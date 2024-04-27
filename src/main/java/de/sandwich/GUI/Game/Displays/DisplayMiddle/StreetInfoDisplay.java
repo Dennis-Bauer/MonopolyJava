@@ -2,6 +2,7 @@ package de.sandwich.GUI.Game.Displays.DisplayMiddle;
 
 import de.sandwich.Fields.Station;
 import de.sandwich.Fields.Street;
+import de.sandwich.Fields.Utilitie;
 import de.sandwich.GUI.Game.DisplayController.MiddleGameDisplayController;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
@@ -13,6 +14,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 
+import static de.sandwich.DennisUtilitiesPackage.Java.JavaUtilities.buildLongText;
 import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildLabel;
 import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildLine;
 import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildRectangle;
@@ -41,6 +43,22 @@ public class StreetInfoDisplay extends Pane {
         this.WIDTH = width;
         this.HEIGHT = height;
         this.rootDisplay = rootDisplay;
+    }
+
+    public void buildUtilitieDisplay(Utilitie utilitie) {
+        if (!getChildren().isEmpty())
+        getChildren().clear();
+
+        //Remove info
+        StackPane removeButton = buildPlus("streetInfo_removeButton_", WIDTH * 0.01, WIDTH * 0.10, 45, WIDTH * 0.01, ProgramColor.CHANCEL_BUTTONS.getColor(), ProgramColor.SYMBOLE_COLOR.getColor(), 0, 0);
+        removeButton.setLayoutX(WIDTH - WIDTH * 0.08);
+
+        removeButton.setOnMouseClicked(mouseEvent -> rootDisplay.removeDisplay());
+
+        infoBox = getUtilitieInfoBox(utilitie, WIDTH, HEIGHT);
+        infoBox.getChildren().add(removeButton);
+        
+        getChildren().add(infoBox);
     }
 
     public void buildStationDisplay(Station station) {
@@ -237,26 +255,6 @@ public class StreetInfoDisplay extends Pane {
             hotelPrice,
             indicatorHouse
         );
-        
-        
-        //Lienen für die verschieden Abteile. Bei fertigstellung löschen!
-        /*
-        box.getChildren().addAll(
-            buildLine("streetInfo_separatingLine_PropertyPrice|RentOneStreet", new Point2D(0.01, h * 0.25), new Point2D(w * 0.99, h * 0.25), w * 0.02, ProgramColor.NULL_COLOR.getColor()),
-            buildLine("streetInfo_separatingLine_PropertyPrice|RentOneStreet", new Point2D(0.01, h * (0.25 + heightMultiplicator)), new Point2D(w * 0.99, h * (0.25 + heightMultiplicator)), w * 0.02, ProgramColor.NULL_COLOR.getColor()),
-            buildLine("streetInfo_separatingLine_PropertyPrice|RentOneStreet", new Point2D(0.01, h * (0.25 + (heightMultiplicator * 2))), new Point2D(w * 0.99, h * (0.25 + (heightMultiplicator * 2))), w * 0.02, ProgramColor.NULL_COLOR.getColor()),
-            
-            buildLine("streetInfo_separatingLine_PropertyPrice|RentOneStreet", new Point2D(0.01, h * (0.25 + (heightMultiplicator * 3))), new Point2D(w * 0.99, h * (0.25 + (heightMultiplicator * 3))), w * 0.02, ProgramColor.NULL_COLOR.getColor()),
-            
-            buildLine("streetInfo_separatingLine_PropertyPrice|RentOneStreet", new Point2D(0.01, h * (0.25 + (heightMultiplicator * 4))), new Point2D(w * 0.99, h * (0.25 + (heightMultiplicator * 4))), w * 0.02, ProgramColor.NULL_COLOR.getColor()),
-            buildLine("streetInfo_separatingLine_PropertyPrice|RentOneStreet", new Point2D(0.01, h * (0.25 + (heightMultiplicator * 5))), new Point2D(w * 0.99, h * (0.25 + (heightMultiplicator * 5))), w * 0.02, ProgramColor.NULL_COLOR.getColor()),
-            buildLine("streetInfo_separatingLine_PropertyPrice|RentOneStreet", new Point2D(0.01, h * (0.25 + (heightMultiplicator * 6))), new Point2D(w * 0.99, h * (0.25 + (heightMultiplicator * 6))), w * 0.02, ProgramColor.NULL_COLOR.getColor()),
-            buildLine("streetInfo_separatingLine_PropertyPrice|RentOneStreet", new Point2D(0.01, h * (0.25 + (heightMultiplicator * 7))), new Point2D(w * 0.99, h * (0.25 + (heightMultiplicator * 7))), w * 0.02, ProgramColor.NULL_COLOR.getColor()),
-            buildLine("streetInfo_separatingLine_PropertyPrice|RentOneStreet", new Point2D(0.01, h * (0.25 + (heightMultiplicator * 8))), new Point2D(w * 0.99, h * (0.25 + (heightMultiplicator * 8))), w * 0.02, ProgramColor.NULL_COLOR.getColor()),
-            buildLine("streetInfo_separatingLine_PropertyPrice|RentOneStreet", new Point2D(0.01, h * (0.25 + (heightMultiplicator * 9))), new Point2D(w * 0.99, h * (0.25 + (heightMultiplicator * 9))), w * 0.02, ProgramColor.NULL_COLOR.getColor())        
-        );
-         */
-         
              
         return box;
 
@@ -341,25 +339,61 @@ public class StreetInfoDisplay extends Pane {
             infoRentThis,
             rentThis
         );
+             
+        return box;
+
+    }
+
+    public static Pane getUtilitieInfoBox(Utilitie utilitie, double w, double h) {
+        final double heightMultiplicator = 0.35;
+
+        Pane box = new Pane();
+        box.setMaxSize(w, h);
+
+        //Station name
+        Label name = buildLabel("utilitieInfo_Name", utilitie.getName(), Font.font(Main.TEXT_FONT, FontWeight.BOLD, w * 0.125), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor());
+        centeringChildInPane(name, box);
+        name.setLayoutY(h * 0.03);
+
+        //Fonts
+        Font infoTextFont = Font.font(Main.TEXT_FONT, w * 0.075);
+
+        Label textOne = buildLabel("utilitieInfo_info_MultiplicatorOne", buildLongText("Wenn der Besitzter nur einer", "der Werke besitzt, ist die Mite", "bei seinem Werk 80mal die", "Augenzahl der Würfel!"), infoTextFont, TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, h * 0.17);
+        centeringChildInPane(textOne, box);
+
+        Label textTwo = buildLabel("utilitieInfo_info_MultiplicatorTwo", buildLongText("Wenn der Besitzter beide", "der Werke besitzt, ist die Mite", "bei beiden Werken 200mal die", "Augenzahl der Würfel!"), infoTextFont, TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, h * 0.52);
+        centeringChildInPane(textTwo, box);
+
+        if (utilitie.isOwned()) {
+            if (!utilitie.hasOwnerBoth()) {
+                textOne.setTextFill(ProgramColor.TEXT_COLOR.getColor());
+                textTwo.setTextFill(ProgramColor.BORDER_COLOR_DARK.getColor());
+            } else {
+                textTwo.setTextFill(ProgramColor.TEXT_COLOR.getColor());
+                textOne.setTextFill(ProgramColor.BORDER_COLOR_DARK.getColor());
+            }
+        }
         
-        
-        //Lienen für die verschieden Abteile. Bei fertigstellung löschen!
-        /*
+        //Property price info
+        Label infoPropertyPrice = buildLabel("utilitieInfo_info_PropertyPrice", "Grundstückswert:", Font.font(Main.TEXT_FONT, w * 0.095), TextAlignment.RIGHT, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, h * 0.87);
+        centeringChildInPane(infoPropertyPrice, box);
+        Label propertyPrice = buildLabel("utilitieInfo_number_PropertyPrice", utilitie.getPrice() + "€ ", Font.font(Main.TEXT_FONT, FontWeight.BOLD, w * 0.095), TextAlignment.LEFT, ProgramColor.TEXT_COLOR.getColor(), 0 ,h * 0.92);
+        centeringChildInPane(propertyPrice, box);
+
+        double startLineY = 0.17;
+    
+        //Adding all nodes
         box.getChildren().addAll(
-            buildLine("streetInfo_separatingLine_PropertyPrice|RentOneStreet", new Point2D(0.01, h * 0.25), new Point2D(w * 0.99, h * 0.25), w * 0.02, ProgramColor.NULL_COLOR.getColor()),
-            buildLine("streetInfo_separatingLine_PropertyPrice|RentOneStreet", new Point2D(0.01, h * (0.25 + heightMultiplicator)), new Point2D(w * 0.99, h * (0.25 + heightMultiplicator)), w * 0.02, ProgramColor.NULL_COLOR.getColor()),
-            buildLine("streetInfo_separatingLine_PropertyPrice|RentOneStreet", new Point2D(0.01, h * (0.25 + (heightMultiplicator * 2))), new Point2D(w * 0.99, h * (0.25 + (heightMultiplicator * 2))), w * 0.02, ProgramColor.NULL_COLOR.getColor()),
-            
-            buildLine("streetInfo_separatingLine_PropertyPrice|RentOneStreet", new Point2D(0.01, h * (0.25 + (heightMultiplicator * 3))), new Point2D(w * 0.99, h * (0.25 + (heightMultiplicator * 3))), w * 0.02, ProgramColor.NULL_COLOR.getColor()),
-            
-            buildLine("streetInfo_separatingLine_PropertyPrice|RentOneStreet", new Point2D(0.01, h * (0.25 + (heightMultiplicator * 4))), new Point2D(w * 0.99, h * (0.25 + (heightMultiplicator * 4))), w * 0.02, ProgramColor.NULL_COLOR.getColor()),
-            buildLine("streetInfo_separatingLine_PropertyPrice|RentOneStreet", new Point2D(0.01, h * (0.25 + (heightMultiplicator * 5))), new Point2D(w * 0.99, h * (0.25 + (heightMultiplicator * 5))), w * 0.02, ProgramColor.NULL_COLOR.getColor()),
-            buildLine("streetInfo_separatingLine_PropertyPrice|RentOneStreet", new Point2D(0.01, h * (0.25 + (heightMultiplicator * 6))), new Point2D(w * 0.99, h * (0.25 + (heightMultiplicator * 6))), w * 0.02, ProgramColor.NULL_COLOR.getColor()),
-            buildLine("streetInfo_separatingLine_PropertyPrice|RentOneStreet", new Point2D(0.01, h * (0.25 + (heightMultiplicator * 7))), new Point2D(w * 0.99, h * (0.25 + (heightMultiplicator * 7))), w * 0.02, ProgramColor.NULL_COLOR.getColor()),
-            buildLine("streetInfo_separatingLine_PropertyPrice|RentOneStreet", new Point2D(0.01, h * (0.25 + (heightMultiplicator * 8))), new Point2D(w * 0.99, h * (0.25 + (heightMultiplicator * 8))), w * 0.02, ProgramColor.NULL_COLOR.getColor()),
-            buildLine("streetInfo_separatingLine_PropertyPrice|RentOneStreet", new Point2D(0.01, h * (0.25 + (heightMultiplicator * 9))), new Point2D(w * 0.99, h * (0.25 + (heightMultiplicator * 9))), w * 0.02, ProgramColor.NULL_COLOR.getColor())        
-        );
-         */
+            buildRectangle("stationInfo_Background", w, h, ProgramColor.BUILD_STREET_INFO.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), w * 0.02),
+            name,
+            buildLine("stationInfo_separatingLine_Header|Rent", new Point2D(0.01, h * startLineY), new Point2D(w * 0.99, h * startLineY), w * 0.02, ProgramColor.BORDER_COLOR_DARK.getColor()),
+            textOne,
+            buildLine("stationInfo_separatingLine_PropertyPrice|RentOneStation", new Point2D(0.01, h * (startLineY + heightMultiplicator)), new Point2D(w * 0.99, h * (startLineY + heightMultiplicator)), w * 0.02, ProgramColor.BORDER_COLOR_DARK.getColor()),
+            textTwo,
+            buildLine("stationInfo_separatingLine_RentOneStation|RentTwoStations", new Point2D(0.01, h * (startLineY + (heightMultiplicator * 2))), new Point2D(w * 0.99, h * (startLineY + (heightMultiplicator * 2))), w * 0.02, ProgramColor.BORDER_COLOR_DARK.getColor()),
+            infoPropertyPrice,
+            propertyPrice
+        );  
          
              
         return box;
