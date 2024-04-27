@@ -50,6 +50,7 @@ public enum ProgramColor {
 
     //Trading display
     TRADING_ARROW(Color.rgb(186, 41, 41)),
+    TRADING_BUTTON_COLOR(Color.rgb(255, 0, 212)),
 
     //Bank display
     BANK_PLAYER_BACKGROUND(Color.rgb(78, 138, 186)),

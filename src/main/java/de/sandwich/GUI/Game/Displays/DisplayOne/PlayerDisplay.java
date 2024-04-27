@@ -213,7 +213,6 @@ public class PlayerDisplay extends Pane{
                 } else throw new WrongNodeException("PlayerShowBox");
             }
         } else {
-            System.out.println("Die Nummer des Spielers ist: " + player.getOrderNumber());
             if (player.getOrderNumber() == 0) {
                 if (playerShowBox.getChildren().get(0) instanceof Rectangle r) {    
                     r.setStrokeWidth(r.getStrokeWidth() * 6);
@@ -233,7 +232,11 @@ public class PlayerDisplay extends Pane{
         tradingButton.setLayoutY(height * 0.40);
         tradingButton.setLayoutX(width * 0.32);
 
-        tradingButton.setOnMouseClicked(event -> rootDisplay.displayTradingMenu());
+        tradingButton.setOnMouseClicked(event -> {
+            if (Main.getGameOperator().getTurnPlayer() != player)
+                rootDisplay.displayTradingMenu(Main.getGameOperator().getTurnPlayer(), player);
+            
+        });
 
         Rectangle[] streets = buildStreetInventar(width, height, player);
 

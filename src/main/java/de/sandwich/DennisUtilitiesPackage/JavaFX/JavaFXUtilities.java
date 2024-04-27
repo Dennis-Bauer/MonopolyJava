@@ -148,7 +148,7 @@ public class JavaFXUtilities {
 
         transition.setByY(byY);
         transition.setByX(byX);
-
+        transition.setCycleCount(cycleCount);
 
         return transition;
     }

@@ -85,7 +85,7 @@ public class DiceDisplay extends Pane {
                 diceNumbers[0] = rowOneAnimation.getLastNumber();
                 diceNumbers[1] = rowTwoAnimation.getLastNumber();
 
-                diceNumbers[0] = 2;
+                diceNumbers[0] = 12;
                 diceNumbers[1] = 0;
 
                 Main.getGameOperator().playerRolledDice(diceNumbers[0], diceNumbers[1]);

@@ -8,7 +8,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import de.sandwich.Main;
 import de.sandwich.Player;
-import de.sandwich.Enums.Figuren;
 import de.sandwich.Enums.ProgramColor;
 import de.sandwich.GUI.Game.DisplayController.GameDisplayControllerOne;
 import javafx.geometry.Insets;
@@ -45,18 +44,16 @@ public class TradingDisplay extends Pane {
         this.BORDER_WIDTH = width * 0.005;
     }
 
-    public void startTrading(/*später werden hier die beiden Spieler übergeben*/) {
+    public void startTrading(Player playerOne, Player playerTwo) {
         resetTrading();
 
-        // ACHTUNG!!! Temporäre Variablen!!!
-        int kontoPlayerOne = 207;
-        int kontoPlayerTwo = 5463;
+        final int MONEY_STEPS = 100;
 
         AtomicInteger tradeOfferLeft = new AtomicInteger();
         AtomicInteger tradeOfferRight = new AtomicInteger();
 
         //Left
-        Pane playerTradeBoxLeft = buildPlayerTradeBox(WIDTH * 0.306, HEIGHT * 0.6035, ProgramColor.PLAYER_TWO_BACKGROUND.getColor(), new Player("NAME", Figuren.AFFE, 0));
+        Pane playerTradeBoxLeft = buildPlayerTradeBox(WIDTH * 0.306, HEIGHT * 0.6035, ProgramColor.PLAYER_TWO_BACKGROUND.getColor(), playerOne);
         playerTradeBoxLeft.setLayoutX(WIDTH * 0.014);
         playerTradeBoxLeft.setLayoutY(HEIGHT * 0.20);
 
@@ -89,7 +86,7 @@ public class TradingDisplay extends Pane {
 
 
         //Right
-        Pane playerTradeBoxRight = buildPlayerTradeBox(WIDTH * 0.306, HEIGHT * 0.6035, ProgramColor.PLAYER_THREE_BACKGROUND.getColor(), new Player("NAME", Figuren.AFFE, 0));
+        Pane playerTradeBoxRight = buildPlayerTradeBox(WIDTH * 0.306, HEIGHT * 0.6035, ProgramColor.PLAYER_THREE_BACKGROUND.getColor(), playerTwo);
         playerTradeBoxRight.setLayoutX(WIDTH / 2 + WIDTH * 0.18);
         playerTradeBoxRight.setLayoutY(HEIGHT * 0.20);
 
@@ -123,41 +120,41 @@ public class TradingDisplay extends Pane {
 
         //Buttons
         addLeftCash.setOnMouseClicked(mouseEvent -> {
-            if (tradeOfferLeft.get() + 50 < kontoPlayerOne)
-                tradeOfferLeft.addAndGet(50);
+            if (tradeOfferLeft.get() + MONEY_STEPS < playerOne.getBankAccount())
+                tradeOfferLeft.addAndGet(MONEY_STEPS);
             else
-                tradeOfferLeft.set(kontoPlayerOne);
+                tradeOfferLeft.set(playerOne.getBankAccount());
 
             leftCashLabel.setText(tradeOfferLeft.toString());
         });
 
         removeLeftCash.setOnMouseClicked(mouseEvent -> {
-            if ((tradeOfferLeft.get() - 50) <= 0)
+            if ((tradeOfferLeft.get() - MONEY_STEPS) <= 0)
                 tradeOfferLeft.set(0);
-            else if (tradeOfferLeft.get() % 50 != 0)
-                tradeOfferLeft.addAndGet(-(tradeOfferLeft.get() % 50));
+            else if (tradeOfferLeft.get() % MONEY_STEPS != 0)
+                tradeOfferLeft.addAndGet(-(tradeOfferLeft.get() % MONEY_STEPS));
             else
-                tradeOfferLeft.addAndGet(-50);
+                tradeOfferLeft.addAndGet(-MONEY_STEPS);
 
             leftCashLabel.setText(tradeOfferLeft.toString());
         });
 
         addRightCash.setOnMouseClicked(mouseEvent -> {
-            if (tradeOfferRight.get() + 50 < kontoPlayerTwo)
+            if (tradeOfferRight.get() + MONEY_STEPS < playerTwo.getBankAccount())
                 tradeOfferRight.addAndGet(50);
             else
-                tradeOfferRight.set(kontoPlayerTwo);
+                tradeOfferRight.set(playerTwo.getBankAccount());
 
             rightCashLabel.setText(tradeOfferRight.toString());
         });
 
         removeRightCash.setOnMouseClicked(mouseEvent -> {
-            if ((tradeOfferRight.get() - 50) <= 0)
+            if ((tradeOfferRight.get() - MONEY_STEPS) <= 0)
                 tradeOfferRight.set(0);
-            else if (tradeOfferRight.get() % 50 != 0)
-                tradeOfferRight.addAndGet(-(tradeOfferRight.get() % 50));
+            else if (tradeOfferRight.get() % MONEY_STEPS != 0)
+                tradeOfferRight.addAndGet(-(tradeOfferRight.get() % MONEY_STEPS));
             else
-                tradeOfferRight.addAndGet(-50);
+                tradeOfferRight.addAndGet(-MONEY_STEPS);
 
             rightCashLabel.setText(tradeOfferRight.toString());
         });
@@ -168,41 +165,26 @@ public class TradingDisplay extends Pane {
 
     private void createButtons(double buttonWidth, double buttonHeight, double x, double y, String id) {
 
-        //Confirm Button
-        StackPane confirmButton = new StackPane();
-
-        Rectangle backgroundConfirmButton = buildRectangle("gameScene_playerDisplay_tradingMenu_" + id + "ConfirmButton_Background", buttonWidth, buttonHeight, ProgramColor.NULL_COLOR.getColor(), true, ProgramColor.BORDER_COLOR_LIGHT.getColor(), BORDER_WIDTH);
-        backgroundConfirmButton.setArcWidth(backgroundConfirmButton.getHeight());
-        backgroundConfirmButton.setArcHeight(backgroundConfirmButton.getHeight());
-
-        Label confirmButtonLabel = buildLabel("gameScene_playerDisplay_tradingMenu_" + id + "ConfirmButton_Label", "Fertig", Font.font(Main.TEXT_FONT, FontWeight.BOLD, WIDTH * 0.025), TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor());
-
-        confirmButton.getChildren().addAll(backgroundConfirmButton, confirmButtonLabel);
-        confirmButton.setLayoutX(x);
-        confirmButton.setLayoutY(y);
-
         //Cancel Button
         StackPane cancelButton = new StackPane();
 
-        Rectangle backgroundCancelButton = buildRectangle("gameScene_playerDisplay_tradingMenu_" + id + "CancelButton_Background", buttonWidth, buttonHeight, ProgramColor.NULL_COLOR.getColor(), true, ProgramColor.BORDER_COLOR_LIGHT.getColor(), BORDER_WIDTH);
+        Rectangle backgroundCancelButton = buildRectangle("gameScene_playerDisplay_tradingMenu_" + id + "CancelButton_Background", buttonWidth, buttonHeight, ProgramColor.TRADING_BUTTON_COLOR.getColor(), true, ProgramColor.BORDER_COLOR_LIGHT.getColor(), BORDER_WIDTH);
         backgroundCancelButton.setArcWidth(backgroundCancelButton.getHeight());
         backgroundCancelButton.setArcHeight(backgroundCancelButton.getHeight());
 
         Label cancelCancelLabel = buildLabel("gameScene_playerDisplay_tradingMenu_" + id + "CancelButton_Label", "Abbruch", Font.font(Main.TEXT_FONT, FontWeight.BOLD, WIDTH * 0.024), TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor());
 
         cancelButton.getChildren().addAll(backgroundCancelButton, cancelCancelLabel);
-        cancelButton.setLayoutX(x + WIDTH * 0.306 - buttonWidth);
+        cancelButton.layoutXProperty().bind(widthProperty().multiply(0.153).subtract(cancelButton.widthProperty().divide(2)).add(x));
         cancelButton.setLayoutY(y);
 
         cancelButton.setOnMouseClicked(event -> rootDisplay.displayPlayerDisplay());
 
-        getChildren().addAll(confirmButton, cancelButton);
+        getChildren().addAll(cancelButton);
     }
 
     private void resetTrading() {
         getChildren().clear();
-
-        //Farben der Buttons und des Pfeiles werden vom Spieler her gegeben, Rafa fragen
 
         //Header
         Label header = buildLabel("gameScene_playerDisplay_tradingMenu_Header", "Trading", Font.font(Main.TEXT_FONT, FontWeight.BOLD, WIDTH / 15), TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor());

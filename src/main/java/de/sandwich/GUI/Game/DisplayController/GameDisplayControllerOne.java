@@ -28,6 +28,7 @@ import de.sandwich.Exceptions.PlayerNotFoundExceptions;
 import de.sandwich.Fields.Field;
 import de.sandwich.Fields.Station;
 import de.sandwich.Fields.Street;
+import de.sandwich.Fields.Utilitie;
 import de.sandwich.GUI.Game.Displays.DisplayOne.BankDisplay;
 import de.sandwich.GUI.Game.Displays.DisplayOne.BuildDisplay;
 import de.sandwich.GUI.Game.Displays.DisplayOne.DestroyDisplay;
@@ -98,12 +99,12 @@ public class GameDisplayControllerOne extends Pane {
         lastPlayerSave = players;
     }
 
-    public void displayTradingMenu(/*Player One und Player Two Objekte werden hier übergeben*/) {
+    public void displayTradingMenu(Player playerOne, Player playerTwo) {
         clearDisplay();
 
         tradingDisplay.setVisible(true);
 
-        tradingDisplay.startTrading();
+        tradingDisplay.startTrading(playerOne, playerTwo);
     }
 
     public void displayPlayerDisplay() {
@@ -155,7 +156,7 @@ public class GameDisplayControllerOne extends Pane {
         Label headerName = buildLabel("gameScene_playerDisplay_playerBox_NameHeader", p.getName(), Font.font(Main.TEXT_FONT, FontWeight.BOLD, w / 8), TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor());
         centeringChildInPane(headerName, playerBox);
 
-        ImageView freeJailDisplay = createImageView("gameScene_playerDisplay_playerBox_FreeJailImage", "/de/sandwich/monopoly/gameBoard/free_jail_symbole.png", w * 0.10, w * 0.10, w - (w * 0.18), h * 0.19);
+        ImageView freeJailDisplay = createImageView("gameScene_playerDisplay_playerBox_FreeJailImage", "/de/sandwich/monopoly/gameBoard/freeJailSymbole.png", w * 0.10, w * 0.10, w - (w * 0.18), h * 0.19);
         freeJailDisplay.setRotate(-45);
 
         Label freeJailCount = buildLabel("gameScene_palyerDisplay_playerBox_FreeJailCardsCount", p.getFreeJailCardNumber() + "X", Font.font(Main.TEXT_FONT, FontWeight.BOLD, w / 16), null, ProgramColor.TEXT_COLOR.getColor(), w - (w * 0.12), h * 0.23);
@@ -202,15 +203,23 @@ public class GameDisplayControllerOne extends Pane {
                 streetsR[b] = buildRectangle(id, width, height, ProgramColor.STREET_NOT_OWNED.getColor(), true, ProgramColor.BORDER_COLOR_LIGHT.getColor(), (w * 0.01) / 2);
             }
 
-            if (i == 10) {
+            if (fields.get(i) instanceof Utilitie utilitie && i == 12) {
                 streetsR[26] = buildRectangle("fieldNumber:" + i + ", hasOwner:", width, height, ProgramColor.STREET_NOT_OWNED.getColor(), true, ProgramColor.BORDER_COLOR_LIGHT.getColor(), (w * 0.01) / 2);
-                streetsR[26].setFill(ProgramColor.UTILITIES_COLOR.getColor());
+
+                if (utilitie.getOwner() == p) {
+                    streetsR[26].setFill(ProgramColor.UTILITIES_COLOR.getColor());
+                    streetsR[26].setId(streetsR[26].getId() + true);   
+                }
+
                 streetsR[26].setY(startY + height + space);
                 streetsR[26].setX(startX + (22 - 16) * (width + space));
-            } else if (i == 20) {
+            } else if (fields.get(i) instanceof Utilitie utilitie && i == 28) {
                 streetsR[27] = buildRectangle("fieldNumber:" + i + ", hasOwner:", width, height, ProgramColor.STREET_NOT_OWNED.getColor(), true, ProgramColor.BORDER_COLOR_LIGHT.getColor(), (w * 0.01) / 2);
 
-                streetsR[27].setFill(ProgramColor.UTILITIES_COLOR.getColor());
+                if (utilitie.getOwner() == p) {
+                    streetsR[27].setFill(ProgramColor.UTILITIES_COLOR.getColor());
+                    streetsR[27].setId(streetsR[27].getId() + true);   
+                }
                 streetsR[27].setY(startY + height + space);
                 streetsR[27].setX(startX + (23 - 16) * (width + space));
             }

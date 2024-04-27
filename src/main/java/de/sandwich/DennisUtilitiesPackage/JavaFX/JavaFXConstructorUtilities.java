@@ -525,7 +525,7 @@ public class JavaFXConstructorUtilities {
     public static ImageView createImageView(String id ,String sourcePath, double postionX, double postionY) {
         if(Main.class.getResourceAsStream(sourcePath) != null)
             return createImageView(id, new Image(Objects.requireNonNull(Main.class.getResourceAsStream(sourcePath))), postionX, postionY);
-        else return null;
+        else throw new NullPointerException("The source path " + sourcePath + " is not a picture!");
     }
 
     /**
