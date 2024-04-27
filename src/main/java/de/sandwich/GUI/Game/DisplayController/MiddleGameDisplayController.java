@@ -38,6 +38,8 @@ public class MiddleGameDisplayController extends Pane{
     private final double NORMAL_HEIGHT;
     
     private ArrayList<Transition> liveTransitions = new ArrayList<>();
+    private boolean displayIsInRemoveAnimation = false;
+    private boolean displayIsInErrorAnimation = false;
 
     public MiddleGameDisplayController(double width, double height, double maxY) {
         this.MAX_Y = maxY;
@@ -199,70 +201,84 @@ public class MiddleGameDisplayController extends Pane{
 
     public void removeDisplay() {
         if (!(payDisplay.isVisible() && buyStreetDisplay.isVisible())) {
-            waitTransition.stop();
-            liveTransitions.remove(waitTransition);
+            if (!displayIsInRemoveAnimation) {
+                displayIsInRemoveAnimation = true;
 
-            TranslateTransition upTransition = new TranslateTransition(Duration.seconds(0.30), this);
-            upTransition.setByY(-(Main.WINDOW_HEIGHT * 0.10));
+                waitTransition.stop();
+                liveTransitions.remove(waitTransition);
 
-            TranslateTransition downTransition = new TranslateTransition(Duration.seconds(0.9), this);
-            downTransition.setByY(Main.WINDOW_HEIGHT);
+                TranslateTransition upTransition = new TranslateTransition(Duration.seconds(0.30), this);
+                upTransition.setByY(-(Main.WINDOW_HEIGHT * 0.10));
 
-            FadeTransition fadeTransition = new FadeTransition(Duration.seconds(2), this);
-            fadeTransition.setFromValue(1);
-            fadeTransition.setToValue(0);
+                TranslateTransition downTransition = new TranslateTransition(Duration.seconds(0.9), this);
+                downTransition.setByY(Main.WINDOW_HEIGHT);
 
-            upTransition.play();
-            liveTransitions.add(upTransition);
+                FadeTransition fadeTransition = new FadeTransition(Duration.seconds(2), this);
+                fadeTransition.setFromValue(1);
+                fadeTransition.setToValue(0);
 
-            upTransition.setOnFinished(actionEvent -> {
-                liveTransitions.remove(upTransition);
+                upTransition.play();
+                liveTransitions.add(upTransition);
 
-                downTransition.play();
-                liveTransitions.add(downTransition);
+                upTransition.setOnFinished(actionEvent -> {
+                    liveTransitions.remove(upTransition);
 
-                fadeTransition.play();
-                liveTransitions.add(fadeTransition);
-            });
+                    downTransition.play();
+                    liveTransitions.add(downTransition);
 
-            fadeTransition.setOnFinished(actionEvent -> {
-                liveTransitions.remove(downTransition);
-                liveTransitions.remove(fadeTransition);
+                    fadeTransition.play();
+                    liveTransitions.add(fadeTransition);
+                });
 
-                resetDisplay();
-            });
+                fadeTransition.setOnFinished(actionEvent -> {
+                    liveTransitions.remove(downTransition);
+                    liveTransitions.remove(fadeTransition);
+
+                    resetDisplay();
+                    displayIsInRemoveAnimation = false;
+                });
+            }
         }
     }
 
     public void errorAnimation() {
 
-        RotateTransition transitionPositiv = new RotateTransition(Duration.seconds(0.125), this);
-        transitionPositiv.setByAngle(4);
-        transitionPositiv.setCycleCount(2);
-        transitionPositiv.setInterpolator(Interpolator.LINEAR);
-        transitionPositiv.setAutoReverse(true);
+        if (!displayIsInErrorAnimation) {
+            displayIsInErrorAnimation = true;
 
-        RotateTransition transitionNegativ = new RotateTransition(Duration.seconds(0.125), this);
-        transitionNegativ.setByAngle(-4);
-        transitionNegativ.setCycleCount(2);
-        transitionNegativ.setInterpolator(Interpolator.LINEAR);
-        transitionNegativ.setAutoReverse(true);
-
-        transitionPositiv.play();
-        liveTransitions.add(transitionPositiv);
-
-        transitionPositiv.setOnFinished(actionEvent -> {
-            liveTransitions.remove(transitionPositiv);
-            
-            transitionNegativ.play();
-            liveTransitions.add(transitionNegativ);
-        });
-
-        background.setStroke(ProgramColor.CHANCEL_BUTTONS.getColor());
-        background.setOnMouseExited(mouseEvent -> background.setStroke(ProgramColor.BORDER_COLOR_DARK.getColor()));
+            RotateTransition transitionPositiv = new RotateTransition(Duration.seconds(0.125), this);
+            transitionPositiv.setByAngle(4);
+            transitionPositiv.setCycleCount(2);
+            transitionPositiv.setInterpolator(Interpolator.LINEAR);
+            transitionPositiv.setAutoReverse(true);
     
-        transitionNegativ.setOnFinished(actionEvent -> liveTransitions.remove(transitionNegativ));
+            RotateTransition transitionNegativ = new RotateTransition(Duration.seconds(0.125), this);
+            transitionNegativ.setByAngle(-4);
+            transitionNegativ.setCycleCount(2);
+            transitionNegativ.setInterpolator(Interpolator.LINEAR);
+            transitionNegativ.setAutoReverse(true);
+    
+            transitionPositiv.play();
+            liveTransitions.add(transitionPositiv);
+    
+            transitionPositiv.setOnFinished(actionEvent -> {
+                liveTransitions.remove(transitionPositiv);
+                
+                transitionNegativ.play();
+                liveTransitions.add(transitionNegativ);
+            });
+    
+            background.setStroke(ProgramColor.CHANCEL_BUTTONS.getColor());
+            background.setOnMouseExited(mouseEvent -> background.setStroke(ProgramColor.BORDER_COLOR_DARK.getColor()));
+        
+            transitionNegativ.setOnFinished(actionEvent -> {
+                liveTransitions.remove(transitionNegativ);
+                displayIsInErrorAnimation = false;
+            });
+    
 
+        } 
+        
     }
 
     private void enterAnimation(boolean playWaitTransition) {
