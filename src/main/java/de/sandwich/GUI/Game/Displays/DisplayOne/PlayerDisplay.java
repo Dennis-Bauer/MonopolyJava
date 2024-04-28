@@ -19,24 +19,17 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 
-import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXUtilities.centeringChildInPane;
 import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildLabel;
 import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildRectangle;
 import static de.sandwich.GUI.Game.DisplayController.GameDisplayControllerOne.buildPlayer;
 import static de.sandwich.GUI.Game.DisplayController.GameDisplayControllerOne.buildStreetInventar;
-
-/*
- *  ACHTUNG:
- *  Im moment sind das einfach vorgefertigte Spieler, wie die Spieler
- *  daten gelesen werden oder ähnliches ist nicht mit ein Implementiert!
- */
 
 
 public class PlayerDisplay extends Pane{
 
     //Variables
     private final GameDisplayControllerOne rootDisplay;
-    private final double width, height;
+    private final double WIDTH, HEIGHT;
     private boolean arePlayerGenerated = false;
     private final ImageView[] playerOrderFigures = new ImageView[5];
 
@@ -46,7 +39,7 @@ public class PlayerDisplay extends Pane{
 
         this.rootDisplay = rootDisplay;
 
-        //Creates the player Displays without any images
+        //Creates the player displays without any images
         double playerSize = (((width * 0.225) / 3.725) / 2);
         for (int i = 0; i != 5; i++) {
             playerOrderFigures[i] = new ImageView();
@@ -61,11 +54,13 @@ public class PlayerDisplay extends Pane{
             getChildren().add(playerOrderFigures[i]);
         }
 
-        this.width = width;
-        this.height = height;
+        this.WIDTH = width;
+        this.HEIGHT = height;
     }
 
     public void createPlayers(ArrayList<Player> players) {
+        getChildren().clear();
+
         Pane display = new Pane();
         display.setId("gameScene_playerDisplay_Players");
 
@@ -77,10 +72,10 @@ public class PlayerDisplay extends Pane{
 
         arePlayerGenerated = true;
 
-        final double playerBoxWidth = width * 0.225;
-        final double playerBoxHeight = height * 0.40;
+        final double playerBoxWidth = WIDTH * 0.225;
+        final double playerBoxHeight = HEIGHT * 0.40;
 
-        Label header = buildLabel("gameScene_playerDisplay_Header", "Spieler", Font.font(Main.TEXT_FONT, FontWeight.BOLD, width / 15), TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor());
+        Label header = buildLabel("gameScene_playerDisplay_Header", "Spieler", Font.font(Main.TEXT_FONT, FontWeight.BOLD, WIDTH / 15), TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor());
 
         Pane playerOne = null;
         Pane playerTwo = null;
@@ -116,71 +111,71 @@ public class PlayerDisplay extends Pane{
         //Set the postions from the Player boxes that are displayed in game
         if (!(players.size() > 5)) {
             if (players.size() == 5) {
-                playerOne.setLayoutX((width / 2 - playerBoxWidth / 2) - (playerBoxWidth + width * 0.05));
-                playerOne.setLayoutY(width * 0.10);
+                playerOne.setLayoutX((WIDTH / 2 - playerBoxWidth / 2) - (playerBoxWidth + WIDTH * 0.05));
+                playerOne.setLayoutY(WIDTH * 0.10);
 
                 assert playerTwo != null;
-                playerTwo.setLayoutX((width / 2) - (playerBoxWidth / 2));
-                playerTwo.setLayoutY(width * 0.10);
+                playerTwo.setLayoutX((WIDTH / 2) - (playerBoxWidth / 2));
+                playerTwo.setLayoutY(WIDTH * 0.10);
 
                 assert playerThree != null;
-                playerThree.setLayoutX((width / 2 - playerBoxWidth / 2) + playerBoxWidth + width * 0.05);
-                playerThree.setLayoutY(width * 0.10);
+                playerThree.setLayoutX((WIDTH / 2 - playerBoxWidth / 2) + playerBoxWidth + WIDTH * 0.05);
+                playerThree.setLayoutY(WIDTH * 0.10);
 
                 assert playerFour != null;
-                playerFour.setLayoutX((width / 2 - playerBoxWidth) - width * 0.025);
-                playerFour.setLayoutY(width * 0.10 + playerBoxHeight + height * 0.025);
+                playerFour.setLayoutX((WIDTH / 2 - playerBoxWidth) - WIDTH * 0.025);
+                playerFour.setLayoutY(WIDTH * 0.10 + playerBoxHeight + HEIGHT * 0.025);
 
                 assert playerFive != null;
-                playerFive.setLayoutX((width / 2) + width * 0.025);
-                playerFive.setLayoutY(width * 0.10 + playerBoxHeight + height * 0.025);
+                playerFive.setLayoutX((WIDTH / 2) + WIDTH * 0.025);
+                playerFive.setLayoutY(WIDTH * 0.10 + playerBoxHeight + HEIGHT * 0.025);
 
                 display.getChildren().addAll(playerOne, playerTwo, playerThree, playerFour, playerFive);
             } else if (players.size() == 4) {
-                playerOne.setLayoutX((width / 2 - playerBoxWidth) - width * 0.0125);
-                playerOne.setLayoutY(width * 0.10);
+                playerOne.setLayoutX((WIDTH / 2 - playerBoxWidth) - WIDTH * 0.0125);
+                playerOne.setLayoutY(WIDTH * 0.10);
 
                 assert playerTwo != null;
-                playerTwo.setLayoutX((width / 2) + width * 0.0125);
-                playerTwo.setLayoutY(width * 0.10);
+                playerTwo.setLayoutX((WIDTH / 2) + WIDTH * 0.0125);
+                playerTwo.setLayoutY(WIDTH * 0.10);
 
                 assert playerThree != null;
-                playerThree.setLayoutX((width / 2 - playerBoxWidth) - width * 0.0125);
-                playerThree.setLayoutY(width * 0.10 + playerBoxHeight + width * 0.025);
+                playerThree.setLayoutX((WIDTH / 2 - playerBoxWidth) - WIDTH * 0.0125);
+                playerThree.setLayoutY(WIDTH * 0.10 + playerBoxHeight + WIDTH * 0.025);
 
                 assert playerFour != null;
-                playerFour.setLayoutX((width / 2) + width * 0.0125);
-                playerFour.setLayoutY(width * 0.10 + playerBoxHeight +  width * 0.025);
+                playerFour.setLayoutX((WIDTH / 2) + WIDTH * 0.0125);
+                playerFour.setLayoutY(WIDTH * 0.10 + playerBoxHeight +  WIDTH * 0.025);
 
                 display.getChildren().addAll(playerOne, playerTwo, playerThree, playerFour);
             } else if (players.size() == 3) {
                 final double bigger = 1.3;
 
-                playerOne.setLayoutX(((width / 2) - ((playerBoxWidth * bigger) / 2)) - ((playerBoxWidth * bigger) + width * 0.025));
-                playerOne.setLayoutY(height * 0.03);
+                playerOne.setLayoutX(((WIDTH / 2) - ((playerBoxWidth * bigger) / 2)) - ((playerBoxWidth * bigger) + WIDTH * 0.025));
+                playerOne.setLayoutY(HEIGHT * 0.03);
 
                 assert playerTwo != null;
-                playerTwo.setLayoutX((width / 2) - ((playerBoxWidth * bigger) / 2));
-                playerTwo.setLayoutY(height * 0.03 + (playerBoxWidth * bigger));
+                playerTwo.setLayoutX((WIDTH / 2) - ((playerBoxWidth * bigger) / 2));
+                playerTwo.setLayoutY(HEIGHT * 0.03 + (playerBoxWidth * bigger));
 
                 assert playerThree != null;
-                playerThree.setLayoutX(((width / 2) - ((playerBoxWidth * bigger) / 2)) + (playerBoxWidth * bigger) + width * 0.025);
-                playerThree.setLayoutY(height * 0.03);
+                playerThree.setLayoutX(((WIDTH / 2) - ((playerBoxWidth * bigger) / 2)) + (playerBoxWidth * bigger) + WIDTH * 0.025);
+                playerThree.setLayoutY(HEIGHT * 0.03);
 
                 display.getChildren().addAll(playerOne, playerTwo, playerThree);
             } else if (players.size() == 2) {
                 final double bigger = 1.7;
 
-                playerOne.setLayoutX(width / 2 - playerBoxWidth * bigger - width * 0.09);
-                playerOne.setLayoutY(height * 0.20);
+                playerOne.setLayoutX(WIDTH / 2 - playerBoxWidth * bigger - WIDTH * 0.09);
+                playerOne.setLayoutY(HEIGHT * 0.20);
 
-                Label vs = buildLabel("gameScene_playerDisplay_playerBoxes_VS", "VS", Font.font(Main.TEXT_FONT, FontWeight.BOLD, width / 10), TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor());
-                centeringChildInPane(vs, this);
-                vs.setLayoutY(height * 0.375);
+                Label vs = buildLabel("gameScene_playerDisplay_playerBoxes_VS", "VS", Font.font(Main.TEXT_FONT, FontWeight.BOLD, WIDTH / 10), TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor());
+                vs.setLayoutX( WIDTH * 0.43);
+                vs.setLayoutY(HEIGHT * 0.375);
 
                 assert playerTwo != null;
-                playerTwo.setLayoutX(width / 2 + width * 0.09);
-                playerTwo.setLayoutY(height * 0.20);
+                playerTwo.setLayoutX(WIDTH / 2 + WIDTH * 0.09);
+                playerTwo.setLayoutY(HEIGHT * 0.20);
 
 
                 display.getChildren().addAll(playerOne, vs, playerTwo);
@@ -189,7 +184,7 @@ public class PlayerDisplay extends Pane{
 
         display.getChildren().add(header);
 
-        centeringChildInPane(header, this);
+        header.layoutXProperty().bind(maxWidthProperty().divide(2).subtract(header.widthProperty().divide(2)));
 
         getChildren().add(display);
     }
@@ -197,10 +192,6 @@ public class PlayerDisplay extends Pane{
     public void deletePlayers() {
         getChildren().clear();
         arePlayerGenerated = false;
-    }
-
-    public boolean arePlayersGenerated() {
-        return arePlayerGenerated;
     }
 
     private Pane buildPlayerShowBox(double width, double height, Color backgroundColor, Player player) {
@@ -226,21 +217,19 @@ public class PlayerDisplay extends Pane{
         tradingButtonBackground.setArcHeight(width * 0.12);
         tradingButtonBackground.setArcWidth(width * 0.12);
 
-        Label tradingButtonLabel = buildLabel("gameScene_playerDisplay_tradingStartButton_Label", "Trading", Font.font(Main.TEXT_FONT,  FontWeight.BOLD, width * 0.08), TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor());
-
-        tradingButton.getChildren().setAll(tradingButtonBackground, tradingButtonLabel);
+        tradingButton.getChildren().setAll(
+            tradingButtonBackground,
+            buildLabel("gameScene_playerDisplay_tradingStartButton_Label", "Trading", Font.font(Main.TEXT_FONT,  FontWeight.BOLD, width * 0.08), TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor())
+        );
         tradingButton.setLayoutY(height * 0.40);
         tradingButton.setLayoutX(width * 0.32);
 
         tradingButton.setOnMouseClicked(event -> {
             if (Main.getGameOperator().getTurnPlayer() != player)
                 rootDisplay.displayTradingMenu(Main.getGameOperator().getTurnPlayer(), player);
-            
         });
 
         Rectangle[] streets = buildStreetInventar(width, height, player);
-
-
 
         playerShowBox.getChildren().add(tradingButton);
 
@@ -250,5 +239,7 @@ public class PlayerDisplay extends Pane{
         return playerShowBox;
     }
 
-
+    public boolean arePlayersGenerated() {
+        return arePlayerGenerated;
+    }
 }

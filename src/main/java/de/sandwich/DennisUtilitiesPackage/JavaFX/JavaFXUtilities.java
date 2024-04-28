@@ -4,11 +4,13 @@ import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.scene.Node;
 import javafx.scene.control.Control;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.util.Duration;
 import de.sandwich.Main;
 
@@ -43,6 +45,28 @@ public class JavaFXUtilities {
      */
     public static void centeringChildInPane(Control child, Pane pane) {
         child.layoutXProperty().bind(pane.widthProperty().subtract(child.widthProperty()).divide(2));
+    }
+
+    /**
+     * This method calculates how large the font must be so that 
+     * the label fits into the specified size. What happens is that 
+     * the label is made smaller all the time until it fitse
+     * @param labelo The label to be resized.
+     * @param availableWidth The width that the label should have.
+     * @param startSize The Size where the program starts to test if the Label fits.
+     * @param precision The number that is calculated per run minus the font size. The 
+     *                  larger the size, the faster the calculation will be, but the more 
+     *                  accurate it will be. The smaller the more precise but the slower.
+     */
+    public static void fitLabel(Label label, double availableWidth, double startSize, double precision) {
+        double fontSize = startSize;
+        label.setFont(new Font(fontSize));
+
+        label.widthProperty().addListener(changeListener -> {
+            if (label.widthProperty().get() > availableWidth) {
+                label.setFont(new Font(label.getFont().getSize() - precision));
+            }
+        });
     }
 
     /**

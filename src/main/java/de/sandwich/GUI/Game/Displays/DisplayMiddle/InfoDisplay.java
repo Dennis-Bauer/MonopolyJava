@@ -30,7 +30,7 @@ public class InfoDisplay extends Pane {
 
         StackPane returnButton = new StackPane(
             buildRectangle("infoDisplay_button_Background", width * 0.80, height * 0.25, ProgramColor.CHANCEL_BUTTONS.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), width * 0.01),
-            buildLabel("infoDisplay_button_Text", "Schlißen", Font.font(Main.TEXT_FONT, width * 0.05), TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor())
+            buildLabel("infoDisplay_button_Text", "Schließen", Font.font(Main.TEXT_FONT, width * 0.05), TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor())
         );
         returnButton.setLayoutY(height * 0.60);
         returnButton.setLayoutX(width / 2 - (width * 0.80) / 2);

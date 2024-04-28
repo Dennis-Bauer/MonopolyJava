@@ -14,7 +14,7 @@ import de.sandwich.Enums.ProgramColor;
 import de.sandwich.Fields.Field;
 import de.sandwich.Fields.Street;
 import de.sandwich.GUI.Game.DisplayController.GameDisplayControllerOne;
-import de.sandwich.GUI.Game.Displays.DisplayMiddle.StreetInfoDisplay;
+import de.sandwich.GUI.Game.Displays.DisplayMiddle.FieldInfoDisplay;
 import javafx.animation.FadeTransition;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
@@ -27,15 +27,12 @@ import javafx.util.Duration;
 
 public class BuildDisplay extends Pane {
 
-    private static int housesRemain = 32;
+    private static int housesRemain = 32; //Default 32
 
     private final double WIDTH;
     private final double HEIGHT;
 
-    private final GameDisplayControllerOne rootDisplay;
-
     private final Label errorMessage;
-
     private final Label housesRemainLabel;
 
     private Pane playerPane = new Pane();
@@ -45,21 +42,19 @@ public class BuildDisplay extends Pane {
     private Label buttonText;
 
     private Street activStreet = null;
-
     private Player activePlayer;
 
     public BuildDisplay(double width, double height, GameDisplayControllerOne rootDisplay) {
         setId("gameScene_displayOne_BuildDisplay");
+        setMaxSize(width, height);
 
         this.WIDTH = width;
         this.HEIGHT = height;
-        this.rootDisplay = rootDisplay;
 
-        streetInfo.setLayoutX(WIDTH / 2);
-        streetInfo.setLayoutY(HEIGHT * 0.05);
+        streetInfo.layoutXProperty().bind(widthProperty().divide(2));
+        streetInfo.layoutYProperty().bind(heightProperty().multiply(0.05));
 
         Rectangle destroyDisplayButtonBackground = buildRectangle("gameScene_displayOne_buildDisplay_toDestroyDisplayButton_Background", WIDTH * 0.25, HEIGHT * 0.10, ProgramColor.BUTTON_DISABLED.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), width * 0.008);
-
         destroyDisplayButtonBackground.setArcWidth(width * 0.01);
         destroyDisplayButtonBackground.setArcHeight(width * 0.01);
 
@@ -70,13 +65,13 @@ public class BuildDisplay extends Pane {
 
         toDestroyDisplayButton.setLayoutX(width * 0.74);
         toDestroyDisplayButton.setLayoutY(HEIGHT * 0.005);
-
         toDestroyDisplayButton.setOnMouseClicked(mouseEnvent -> rootDisplay.displayDestroyDisplay(activePlayer));
 
         errorMessage = buildLabel("gameScene_displayOne_buildDisplay_ErrorMessage", "NULL", Font.font(Main.TEXT_FONT, FontWeight.BOLD ,WIDTH * 0.03), null, ProgramColor.ERROR_MESSAGES.getColor());
-        centeringChildInPane(errorMessage, rootDisplay);
-        errorMessage.layoutYProperty().bind(rootDisplay.heightProperty().subtract(errorMessage.heightProperty()));
         errorMessage.setVisible(false);
+
+        errorMessage.layoutYProperty().bind(rootDisplay.heightProperty().subtract(errorMessage.heightProperty()));
+        centeringChildInPane(errorMessage, rootDisplay);
 
         housesRemainLabel = buildLabel("gameScene_displayOne_buildDisplay_HousesRemainText", "" + housesRemain, Font.font(Main.TEXT_FONT, FontWeight.BOLD ,WIDTH * 0.08), null, ProgramColor.TEXT_COLOR.getColor(), width * 0.86, height * 0.82);
         Pane houseRemainSymbole = buildHouseSymbole(width * 0.12, height * 0.18, width * 0.85, height * 0.82);
@@ -95,22 +90,18 @@ public class BuildDisplay extends Pane {
 
         button.setOnMouseClicked(mouseEnvent -> {
             if (activStreet == null) {
-
                 errorMessage.setText("Wähle eine Straße aus, um was zu bauen!");
 
                 errorMessage.setVisible(true);
             } else if (!activStreet.ownerHasFullColor()) {
-                
-                errorMessage.setText("Du brauchst eine ganze Farb-gruppe um was bauen zu können!");
+                errorMessage.setText("Du brauchst eine ganze Farb-Gruppe, um was bauen zu können!");
 
                 errorMessage.setVisible(true);
             } else if (activStreet.getHouseNumber() == -1) {
-
                 errorMessage.setText("Mehr als ein Hotel kannst du nicht bauen!");
 
                 errorMessage.setVisible(true);
             } else {
-
                 Main.getGameOperator();
                 HashMap<Integer, Field> fields = Game.getFields();
 
@@ -128,7 +119,6 @@ public class BuildDisplay extends Pane {
                 }
 
                 if (playerCanBuild) {
-
                     if (activStreet.getHouseNumber() < 4) {
                         if (activePlayer.getBankAccount() >= activStreet.getHotelPrice()) {
                             if (housesRemain != 0) {
@@ -164,7 +154,6 @@ public class BuildDisplay extends Pane {
                         }
                     }
 
-
                     setStreetDisplay(activStreet);
 
                     if (activStreet.getHouseNumber() == 4) {
@@ -179,7 +168,6 @@ public class BuildDisplay extends Pane {
                         buttonText.setText("Haus Bauen");
                     }
                 } else {
-
                     errorMessage.setText("Du kannst nur Bauen, wenn du auf der Farbgruppe überall gleich viel Gebaut hast!");
 
                     errorMessage.setVisible(true);
@@ -224,7 +212,6 @@ public class BuildDisplay extends Pane {
 
                 if (Game.getFields().get(fieldNumber) instanceof Street street) {
                     if (street.getOwner() == activePlayer) {
-                        
                         activStreet = street;
 
                         if (street.ownerHasFullColor() && street.getHouseNumber() != -1) {
@@ -271,9 +258,8 @@ public class BuildDisplay extends Pane {
     }
 
     private void setStreetDisplay(Street street) {
-
         streetInfo.getChildren().clear();
-        streetInfo.getChildren().add(StreetInfoDisplay.getStreetInfoBox(street, WIDTH * 0.25, HEIGHT * 0.50));
+        streetInfo.getChildren().add(FieldInfoDisplay.getStreetInfoBox(street, WIDTH * 0.25, HEIGHT * 0.50));
 
         streetInfo.setVisible(true);
 

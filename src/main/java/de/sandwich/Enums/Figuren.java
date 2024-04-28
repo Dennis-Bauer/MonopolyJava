@@ -6,7 +6,7 @@ import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXUtilities.creatIma
 
 public enum Figuren {
 
-    AFFE(creatImage("/de/sandwich/monopoly/figuren/affe.png")),
+    PAUL(creatImage("/de/sandwich/monopoly/figuren/paul.png")),
     BURGER(creatImage("/de/sandwich/monopoly/figuren/burger.png")),
     DOENER(creatImage("/de/sandwich/monopoly/figuren/doener.png")),
     PINGUIN(creatImage("/de/sandwich/monopoly/figuren/pinguin.png")),
@@ -14,7 +14,8 @@ public enum Figuren {
     ENTE(creatImage("/de/sandwich/monopoly/figuren/ente.png")),
     MAUS(creatImage("/de/sandwich/monopoly/figuren/maus.png")),
     AMONGUS(creatImage("/de/sandwich/monopoly/figuren/amongus.png")),
-    OCTOPUS(creatImage("/de/sandwich/monopoly/figuren/octopus.png"));
+    OCTOPUS(creatImage("/de/sandwich/monopoly/figuren/octopus.png")),
+    FROG(creatImage("/de/sandwich/monopoly/figuren/frog.png"));
 
     private final Image figureImage;
 

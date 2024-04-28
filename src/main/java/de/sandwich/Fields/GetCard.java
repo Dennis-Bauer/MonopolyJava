@@ -125,6 +125,10 @@ public class GetCard extends Field{
             chanceCards[index] = chanceCards[i];
             chanceCards[i] = temp;
         }
+
+        //4
+        chanceCards[0] = ChanceCards.BANK_MONEY_2;
+
     }
 
     public static CommunityCards getCommunityCard() {

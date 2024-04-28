@@ -24,6 +24,7 @@ import de.sandwich.Enums.ExtraFields;
 import de.sandwich.Enums.ProgramColor;
 import de.sandwich.Exceptions.PlayerNotFoundExceptions;
 import de.sandwich.Exceptions.ToManyPlayersExceptions;
+import de.sandwich.Exceptions.WrongNodeException;
 import de.sandwich.Fields.Corner;
 import de.sandwich.Fields.Field;
 import de.sandwich.Fields.GetCard;
@@ -35,6 +36,7 @@ import de.sandwich.GUI.Game.GameBoard;
 import de.sandwich.GUI.Game.DisplayController.GameDisplayControllerOne;
 import de.sandwich.GUI.Game.DisplayController.GameDisplayControllerTwo;
 import de.sandwich.GUI.Game.DisplayController.MiddleGameDisplayController;
+import de.sandwich.GUI.Game.Displays.DisplayOne.BuildDisplay;
 import de.sandwich.GUI.Game.Displays.DisplayTwo.DiceDisplay;
 
 import static de.sandwich.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPut;
@@ -67,8 +69,7 @@ public class Game {
     private final Pane root;
 
     //Game variables
-    private int freeParkingMoney = 999;
-    private int playerInGame = 0;
+    private int freeParkingMoney = 0;
 
     private Player turnPlayer;
     private Player nextPlayer;
@@ -127,8 +128,6 @@ public class Game {
 
         for (int i = 0, j = 1; i != 5; i++) {
             if (players[i] != null) {
-                playerInGame++;
-
                 assert false;
                 playerList.add(players[i]);
 
@@ -147,7 +146,7 @@ public class Game {
 
         if (Main.CONSOLE_OUT_PUT) {
             consoleOutPutLine(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.BOLD, "Game Operator wurde erstellt!");
-            consoleOutPutLine(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, playerInGame + " Player Objects: ");
+            consoleOutPutLine(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, playerList.size() + " Player Objects: ");
 
             for (int i = 0; i != 5; i++) {
                 switch (i) {
@@ -303,31 +302,47 @@ public class Game {
                 ChanceCards card = GetCard.getChanceCard();
 
                 //Spieler bewegt sich zu einem Feld das nicht der Start ist
-                if (card.getMoneyTransfer() <= -101 && card.getMoneyTransfer() >= -105) {
-                    switch (card.getMoneyTransfer()) {
-                        case -101 -> {
+                if (card.getMoneyTransfer() <= -101 && card.getMoneyTransfer() >= -104) {
+                    final int TO_FIELD = Integer.parseInt(card.getMessage());
+                    final String MOVE_MESSAGE = "Rück vor bis ";
 
-                        }
-                        case -102 -> {
+                    if (FIELDS.get(TO_FIELD) instanceof Street s) {
+                        if (turnPlayer.getFieldPostion() != TO_FIELD) {
+                            if (turnPlayer.getFieldPostion() < TO_FIELD) {
+                                try { gameBoard.movePlayer(turnPlayer, TO_FIELD - turnPlayer.getFieldPostion()); } catch (PlayerNotFoundExceptions ignored) {}
+                                turnPlayer.moveFieldPostion(TO_FIELD - turnPlayer.getFieldPostion());
+    
+                                if (Main.CONSOLE_OUT_PUT) {
+                                    consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
+                                    consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Spieler nummer " + turnPlayer.getOrderNumber() + ", wurde bewegt auf die Feld Postion Nummer:");
+                                    consoleOutPutLine(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.BOLD, " " + turnPlayer.getFieldPostion());
+                                    consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
+                                }
+                            } else {
+                                try { gameBoard.movePlayer(turnPlayer, 40 - (turnPlayer.getFieldPostion() - TO_FIELD)); } catch (PlayerNotFoundExceptions ignored) {}
+                                turnPlayer.moveFieldPostion(40 - (turnPlayer.getFieldPostion() - TO_FIELD));
 
+                                if (Main.CONSOLE_OUT_PUT) {
+                                    consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
+                                    consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Spieler nummer " + turnPlayer.getOrderNumber() + ", wurde bewegt auf die Feld Postion Nummer:");
+                                    consoleOutPutLine(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.BOLD, " " + turnPlayer.getFieldPostion());
+                                    consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
+                                }
+                            }
                         }
-                        case -103 -> {
+    
+                        middleDisplayController.displayInfoDisplay(MOVE_MESSAGE + s.getName());
+                    } else throw new WrongNodeException("ChanceCards given Field");
+                    
 
-                        }
-                        case -104 -> {
-
-                        }
-                        case -105 -> {
-
-                        }
-                    }
-                } else if (card.getMoneyTransfer() <= -1 && card.getMoneyTransfer() >= -6) {
+                } else if (card.getMoneyTransfer() <= -1 && card.getMoneyTransfer() >= -8) {
                     switch (card.getMoneyTransfer()) {
                         case -1 -> {
-                            //Überprüfen
                             //Give player a free jail card
                             turnPlayer.addFreeJailCard();
                             middleDisplayController.displayInfoDisplay(card.getMessage());
+
+                            displayControllerOne.displayPlayers(playerList);
                         }
                         case -2 -> {
                             //Set player to jail
@@ -337,6 +352,16 @@ public class Game {
                         }
                         case -3 -> {
                             //Move 3 steps back
+                            try { gameBoard.movePlayer(turnPlayer, -3); } catch (PlayerNotFoundExceptions ignored) {}
+                            turnPlayer.moveFieldPostion(-3);
+
+                            if (Main.CONSOLE_OUT_PUT) {
+                                consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
+                                consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Spieler nummer " + turnPlayer.getOrderNumber() + ", wurde bewegt auf die Feld Postion Nummer:");
+                                consoleOutPutLine(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.BOLD, " " + turnPlayer.getFieldPostion());
+                                consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
+                            }
+                            middleDisplayController.displayInfoDisplay(card.getMessage());
                         }
                         case -4 -> {
                             //Got to start
@@ -356,6 +381,30 @@ public class Game {
                         }
                         case -5 -> {
                             //Go to next Station
+                            final int PLAYER_POS = turnPlayer.getFieldPostion();
+                            int moveTo = 0;
+
+                            if (PLAYER_POS <= 5 || PLAYER_POS > 35) 
+                                moveTo = 5;
+                            else if (PLAYER_POS <= 15) 
+                                moveTo = 15;
+                            else if (PLAYER_POS <= 25) 
+                                moveTo = 25;
+                            else if (PLAYER_POS <= 35) 
+                                moveTo = 35;
+                            
+                            if (moveTo != 0) {
+                                try { gameBoard.movePlayer(turnPlayer, moveTo - PLAYER_POS); } catch (PlayerNotFoundExceptions ignored) {}
+                                turnPlayer.moveFieldPostion(moveTo - PLAYER_POS);
+
+                                if (Main.CONSOLE_OUT_PUT) {
+                                    consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
+                                    consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Spieler nummer " + turnPlayer.getOrderNumber() + ", wurde bewegt auf die Feld Postion Nummer:");
+                                    consoleOutPutLine(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.BOLD, " " + turnPlayer.getFieldPostion());
+                                    consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
+                                }
+                            }
+                            middleDisplayController.displayInfoDisplay(card.getMessage());
                         }
                         case -6 -> {
                             //Player pay for each hous 500 and for each hotel 2000
@@ -378,7 +427,48 @@ public class Game {
                                 middleDisplayController.displayInfoDisplay(card.getMessage());;
                             }
                         }
+                        case -7 -> {
+                            //Got to south station
+                            if (turnPlayer.getFieldPostion() != 5) {
+                                if (turnPlayer.getFieldPostion() < 5) {
+                                    try { gameBoard.movePlayer(turnPlayer, 5 - turnPlayer.getFieldPostion()); } catch (PlayerNotFoundExceptions ignored) {}
+                                    turnPlayer.moveFieldPostion(5 - turnPlayer.getFieldPostion());
+
+                                    if (Main.CONSOLE_OUT_PUT) {
+                                        consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
+                                        consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Spieler nummer " + turnPlayer.getOrderNumber() + ", wurde bewegt auf die Feld Postion Nummer:");
+                                        consoleOutPutLine(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.BOLD, " " + turnPlayer.getFieldPostion());
+                                        consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
+                                    }
+                                } else {
+
+                                    try { gameBoard.movePlayer(turnPlayer, 40 - (turnPlayer.getFieldPostion() - 5)); } catch (PlayerNotFoundExceptions ignored) {}
+                                    turnPlayer.moveFieldPostion(40 - (turnPlayer.getFieldPostion() - 5));
+
+                                    if (Main.CONSOLE_OUT_PUT) {
+                                        consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
+                                        consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Spieler nummer " + turnPlayer.getOrderNumber() + ", wurde bewegt auf die Feld Postion Nummer:");
+                                        consoleOutPutLine(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.BOLD, " " + turnPlayer.getFieldPostion());
+                                        consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);
+                                    }
+                                }
+                            }
+                
+                            middleDisplayController.displayInfoDisplay(card.getMessage());
+                        
+                        }
+                        case -8 -> {
+                            turnPlayer.transferMoneyToBankAccount(-(playerList.size() * 1000));
+
+                            for (Player p : playerList) {
+                                p.transferMoneyToBankAccount(1000);
+                            }
+
+                            middleDisplayController.displayInfoDisplay(card.getMessage());
+                        }
                     }
+                } else {
+                    middleDisplayController.displayPayDisplay(card.getMessage(), card.getMoneyTransfer());
                 }
 
             } else {
@@ -389,10 +479,10 @@ public class Game {
 
                     switch (card.getMoneyTransfer()) {
                         case -1 -> {
-                            //Überprüfen
                             //Give player a free jail card
                             turnPlayer.addFreeJailCard();
                             middleDisplayController.displayInfoDisplay(card.getMessage());
+                            displayControllerOne.displayPlayers(playerList);
                         }
                         case -2 -> {
                             //Got to start
@@ -418,7 +508,7 @@ public class Game {
                         }
                         case -4 -> {
                             //Get from every player 1000
-                            turnPlayer.transferMoneyToBankAccount(playerInGame * 1000);
+                            turnPlayer.transferMoneyToBankAccount(playerList.size() * 1000);
 
                             for (Player p : playerList) {
                                 p.transferMoneyToBankAccount(-1000);
@@ -485,6 +575,62 @@ public class Game {
             middleDisplayController.displayPlayerIsInMinusDisplay();
         }
 
+    }
+
+    public void removePlayer() {
+        if (playerList.size() -1 != 1) {
+            
+            for (int i = 0; i < FIELDS.size(); i++) {
+                if (FIELDS.get(i) instanceof Street f) {
+                    if (f.getOwner() == turnPlayer) {
+                        if (f.getHouseNumber() > 0)
+                            BuildDisplay.setHousesRemain(BuildDisplay.getHousesRemain() + f.getHouseNumber());
+
+                        f.setOwner(null);
+                    }
+                    
+                } else if (FIELDS.get(i) instanceof Utilitie f) {
+                    if (f.getOwner() == turnPlayer)
+                        f.setOwner(null);
+                } if (FIELDS.get(i) instanceof Station f) {
+                    if (f.getOwner() == turnPlayer)
+                        f.setOwner(null);
+                }
+            }
+
+            setNextPlayer();
+            playerList.remove(turnPlayer);
+        
+            for (int i = 0, j = 1; i < playerList.size(); i++) {
+                if (playerList.get(i) != null) {
+        
+                    switch (j) {
+                        case 1 -> playerOne = playerList.get(i);
+                        case 2 -> playerTwo = playerList.get(i);
+                        case 3 -> playerThree = playerList.get(i);
+                        case 4 -> playerFour = playerList.get(i);
+                        case 5 -> playerFive = playerList.get(i);
+                    }
+                    j++;
+    
+                } else {
+                    switch (j) {
+                        case 1 -> playerOne = null;
+                        case 2 -> playerTwo = null;
+                        case 3 -> playerThree = null;
+                        case 4 -> playerFour = null;
+                        case 5 -> playerFive = null;
+                    }
+                }
+
+                middleDisplayController.removeDisplay();
+                try { gameBoard.removePlayerFromBoard(turnPlayer);} catch (PlayerNotFoundExceptions ignored) { }
+                turnFinish();
+            }
+
+        } else {
+            Main.showWinner(nextPlayer.getName());
+        }
     }
 
     public void transferMoney(int money) {
@@ -649,55 +795,48 @@ public class Game {
         HashMap<Integer, Field> s = new HashMap<>();
 
         s.put(0, new Corner(CornerTyp.START, 0));
-        s.put(1, new Street("Turmstrasse", 1200 ,80, new int[]{400, 1200, 3600, 6400}, 9000, 1000, 1000, Color.rgb(112, 40, 0), 0, 1));
+        s.put(1, new Street("MC-Donalds", 1200 ,80, new int[]{400, 1200, 3600, 6400}, 9000, 1000, 1000, Color.rgb(112, 40, 0), 0, 1));
         s.put(2, new GetCard(2));
-        s.put(3, new Street("Badstrasse", 1200 ,40, new int[]{200, 600, 1800, 3200}, 5000, 1000, 1000,  Color.rgb(112, 40, 0), 0, 3));
+        s.put(3, new Street("BurgerKing", 1200 ,40, new int[]{200, 600, 1800, 3200}, 5000, 1000, 1000,  Color.rgb(112, 40, 0), 0, 3));
         s.put(4, new PayExtra(200, ExtraFields.SPOTIFY_PREMIUM, 4));
         s.put(5, new Station("Südbahnhof", 5));
-        s.put(6, new Street("Chausseestrasse", 2000 ,120, new int[]{600, 1800, 5400, 8000}, 11000, 1000, 1000, Color.AQUA, 1, 6));
+        s.put(6, new Street("Hoppelweg", 2000 ,120, new int[]{600, 1800, 5400, 8000}, 11000, 1000, 1000, Color.rgb(56, 215, 255), 1, 6));
         s.put(7, new GetCard(GetCard.ChanceColors.GREEN, 7));
-        s.put(8, new Street("Elisenstrasse", 2000 ,120, new int[]{600, 1800, 5400, 8000}, 11000, 1000, 1000, Color.AQUA, 1, 8));
-        s.put(9, new Street("Poststrasse", 2400 ,160, new int[]{800, 2000, 6000, 9000}, 12000, 1000, 1000, Color.AQUA, 1, 9));
+        s.put(8, new Street("ZickZack Weg", 2000 ,120, new int[]{600, 1800, 5400, 8000}, 11000, 1000, 1000, Color.rgb(56, 215, 255), 1, 8));
+        s.put(9, new Street("Amongus Weg", 2400 ,160, new int[]{800, 2000, 6000, 9000}, 12000, 1000, 1000, Color.rgb(56, 215, 255), 1, 9));
         s.put(10, new Corner(CornerTyp.JAIL, 10));
-        s.put(11, new Street("Seestrasse", 2800 ,200, new int[]{1000, 3000, 9000, 12500}, 15000, 2000, 2000, Color.PURPLE, 2, 11));
-        s.put(12, new Utilitie("Elektrizitäts- Werk", 12));
-        s.put(13, new Street("Hafenstrasse", 2800 ,200, new int[]{1000, 3000, 9000, 12500}, 15000, 2000, 2000, Color.PURPLE, 2, 13));
-        s.put(14, new Street("Neue Strasse", 3200 ,240, new int[]{1200, 3600, 10000, 14000}, 18000, 2000, 2000, Color.PURPLE, 2, 14));
+        s.put(11, new Street("Nether-Strasse", 2800 ,200, new int[]{1000, 3000, 9000, 12500}, 15000, 2000, 2000, Color.rgb(201, 4, 185), 2, 11));
+        s.put(12, new Utilitie(buildLongText("Elektrizitäts-", "Werk"), 12));
+        s.put(13, new Street(buildLongText("Overworld", "Strasse"), 2800 ,200, new int[]{1000, 3000, 9000, 12500}, 15000, 2000, 2000, Color.rgb(201, 4, 185), 2, 13));
+        s.put(14, new Street("End-Strasse", 3200 ,240, new int[]{1200, 3600, 10000, 14000}, 18000, 2000, 2000, Color.rgb(201, 4, 185), 2, 14));
         s.put(15, new Station("Westbahnhof", 15));
-        s.put(16, new Street("Müncher Strasse", 3600 ,280, new int[]{1400, 4000, 11000, 15000}, 19000, 2000, 2000, Color.ORANGE, 3, 16));
-        s.put(17, new Street("Wiener Strasse", 3600 ,280, new int[]{1400, 4000, 11000, 15000}, 19000, 2000, 2000, Color.ORANGE, 3, 17));
+        s.put(16, new Street(buildLongText("Frankfuhrter", "Strasse"), 3600 ,280, new int[]{1400, 4000, 11000, 15000}, 19000, 2000, 2000, Color.rgb(255, 147, 31), 3, 16));
+        s.put(17, new Street(buildLongText("Remscheider", "Strasse"), 3600 ,280, new int[]{1400, 4000, 11000, 15000}, 19000, 2000, 2000, Color.rgb(255, 147, 31), 3, 17));
         s.put(18, new GetCard(18));
-        s.put(19, new Street("Berliner Strasse", 4000 ,320, new int[]{1600, 4400, 12000, 16000}, 20000, 2000, 2000, Color.ORANGE, 3, 19));
+        s.put(19, new Street(buildLongText("Duisburg", "Strasse"), 4000 ,320, new int[]{1600, 4400, 12000, 16000}, 20000, 2000, 2000, Color.rgb(255, 147, 31), 3, 19));
         s.put(20, new Corner(CornerTyp.FREE_PARKING, 20));
-        s.put(21, new Street("Theaterstrasse", 4400 ,360, new int[]{1800, 5000, 14000, 17500}, 21000, 3000, 3000, Color.RED, 4, 21));
-        s.put(22, new Street("Museumstrasse", 4400 ,360, new int[]{1800, 5000, 14000, 17500}, 21000, 3000, 3000, Color.RED, 4, 22));
+        s.put(21, new Street(buildLongText("Theo-Otto", "Theater Strasse"), 4400 ,360, new int[]{1800, 5000, 14000, 17500}, 21000, 3000, 3000, Color.rgb(255, 54, 54), 4, 21));
+        s.put(22, new Street(buildLongText("Cinestar", "Strasse"), 4400 ,360, new int[]{1800, 5000, 14000, 17500}, 21000, 3000, 3000, Color.rgb(255, 54, 54), 4, 22));
         s.put(23, new GetCard(GetCard.ChanceColors.BLUE, 23));
-        s.put(24, new Street("Opernplatz", 4800 ,400, new int[]{2000, 6000, 15000, 18500}, 22000, 3000, 3000, Color.RED, 4, 24));
-        s.put(25, new Station("Nordbahnhof", 25));
-        s.put(26, new Street("Lessingstrasse", 5200 ,480, new int[]{2200, 6600, 16000, 19500}, 23000, 3000, 3000, Color.YELLOW, 5, 26));
-        s.put(27, new Street("Schillerstrasse", 5200 ,480, new int[]{2200, 6600, 16000, 19500}, 23000, 3000, 3000, Color.YELLOW, 5, 27));
+        s.put(24, new Street(buildLongText("RemscheidHBF", "Strasse"), 4800 ,400, new int[]{2000, 6000, 15000, 18500}, 22000, 3000, 3000, Color.rgb(255, 54, 54), 4, 24));
+        s.put(25, new Station("Nordbahnohof", 25));
+        s.put(26, new Street(buildLongText("Samsung", "Strasse"), 5200 ,480, new int[]{2200, 6600, 16000, 19500}, 23000, 3000, 3000, Color.rgb(255, 230, 64), 5, 26));
+        s.put(27, new Street("Google Strasse", 5200 ,480, new int[]{2200, 6600, 16000, 19500}, 23000, 3000, 3000, Color.rgb(255, 230, 64), 5, 27));
         s.put(28, new Utilitie("Wasser- Werk", 28));
-        s.put(29, new Street("Goethestrasse", 5600 ,580, new int[]{2400, 7200, 17000, 20500}, 24000, 3000, 3000, Color.YELLOW, 5, 29));
+        s.put(29, new Street("Appel Strasse", 5600 ,580, new int[]{2400, 7200, 17000, 20500}, 24000, 3000, 3000, Color.rgb(255, 230, 64), 5, 29));
         s.put(30, new Corner(CornerTyp.GO_TO_JAIL, 30));
-        s.put(31, new Street("Rathausplatz", 6000 ,520, new int[]{2600, 7800, 18000, 22000}, 25500, 4000, 4000, Color.LIME, 6, 31));
-        s.put(32, new Street("Hauptstrasse", 6000 ,520, new int[]{2600, 7800, 18000, 22000}, 25500, 4000, 4000, Color.LIME, 6, 32));
+        s.put(31, new Street(buildLongText("Coolins-Hütte", "Strasse"), 6000 ,520, new int[]{2600, 7800, 18000, 22000}, 25500, 4000, 4000, Color.rgb(56, 204, 51), 6, 31));
+        s.put(32, new Street(buildLongText("Rafaels-Haus", "Strasse"), 6000 ,520, new int[]{2600, 7800, 18000, 22000}, 25500, 4000, 4000, Color.rgb(56, 204, 51), 6, 32));
         s.put(33, new GetCard(33));
-        s.put(34, new Street("Bahnhofstrasse", 6400 ,560, new int[]{3000, 9000, 20000, 24000}, 28000, 4000, 4000, Color.LIME, 6, 34));
+        s.put(34, new Street(buildLongText("Dennis-Haus", "Strasse"), 6400 ,560, new int[]{3000, 9000, 20000, 24000}, 28000, 4000, 4000, Color.rgb(56, 204, 51), 6, 34));
         s.put(35, new Station("Hauptbahnhof", 35));
         s.put(36, new GetCard(GetCard.ChanceColors.RED, 36));
-        s.put(37, new Street("Parkstrasse", 7000 ,700, new int[]{3500, 10000, 22000, 26000}, 30000, 4000, 4000, Color.DARKBLUE, 7, 37));
-        s.put(38, new PayExtra(200, ExtraFields.NAME_FOUR, 38));
-        s.put(39, new Street("Schlossallee", 8000 ,1000, new int[]{4000, 12000, 28000, 34000}, 40000, 4000, 4000, Color.DARKBLUE, 7, 39));
+        s.put(37, new Street("Döner 2.0", 7000 ,700, new int[]{3500, 10000, 22000, 26000}, 30000, 4000, 4000, Color.rgb(89, 109, 255), 7, 37));
+        s.put(38, new PayExtra(200, ExtraFields.HESSLER_SCHULDEN, 38));
+        s.put(39, new Street("Aldi", 8000 ,1000, new int[]{4000, 12000, 28000, 34000}, 40000, 4000, 4000, Color.rgb(89, 109, 255), 7, 39));
 
         return s;
     }
 
 
 }
-
-/* @// TODO: 21.03.2024
- * Hier werden die Sachen aufglisstet die das Spiel am Technischen noch können muss, nichts Grafisches.
- * 1. Nach 3 mal Pash ins Gefängnis
- * 2. Das Gameboard an sich ein biischen kleiner machen als die höhe des Fensters (Das heißt alle werte in dem einfach die Höhe anstat ein wert für die Gameboardgröße genommen wird ÄNDERN!!!)
- * ... (Hier stehen nur die Sachen die ich denke ich vergesse)
- */

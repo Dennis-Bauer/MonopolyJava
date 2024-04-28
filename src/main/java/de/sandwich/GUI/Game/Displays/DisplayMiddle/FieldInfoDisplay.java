@@ -27,33 +27,30 @@ import de.sandwich.Main;
 import de.sandwich.Enums.ProgramColor;
 import de.sandwich.Exceptions.WrongNodeException;
 
-public class StreetInfoDisplay extends Pane {
-
-    private final MiddleGameDisplayController rootDisplay;
+public class FieldInfoDisplay extends Pane {
 
     private final double WIDTH;
     private final double HEIGHT;
 
     private Pane infoBox = new Pane();
+    private StackPane removeButton;
 
-    public StreetInfoDisplay(double width, double height, MiddleGameDisplayController rootDisplay) {
+    public FieldInfoDisplay(double width, double height, MiddleGameDisplayController rootDisplay) {
         setId("StreetInfoDisplay");
         setMaxSize(width, height);
-
+        
         this.WIDTH = width;
         this.HEIGHT = height;
-        this.rootDisplay = rootDisplay;
+
+        removeButton = buildPlus("streetInfo_removeButton_", WIDTH * 0.01, WIDTH * 0.10, 45, WIDTH * 0.01, ProgramColor.CHANCEL_BUTTONS.getColor(), ProgramColor.SYMBOLE_COLOR.getColor(), 0, 0);
+        removeButton.setLayoutX(WIDTH - WIDTH * 0.08);
+
+        removeButton.setOnMouseClicked(mouseEvent -> rootDisplay.removeDisplay());
     }
 
     public void buildUtilitieDisplay(Utilitie utilitie) {
         if (!getChildren().isEmpty())
         getChildren().clear();
-
-        //Remove info
-        StackPane removeButton = buildPlus("streetInfo_removeButton_", WIDTH * 0.01, WIDTH * 0.10, 45, WIDTH * 0.01, ProgramColor.CHANCEL_BUTTONS.getColor(), ProgramColor.SYMBOLE_COLOR.getColor(), 0, 0);
-        removeButton.setLayoutX(WIDTH - WIDTH * 0.08);
-
-        removeButton.setOnMouseClicked(mouseEvent -> rootDisplay.removeDisplay());
 
         infoBox = getUtilitieInfoBox(utilitie, WIDTH, HEIGHT);
         infoBox.getChildren().add(removeButton);
@@ -65,12 +62,6 @@ public class StreetInfoDisplay extends Pane {
         if (!getChildren().isEmpty())
             getChildren().clear();
 
-        //Remove info
-        StackPane removeButton = buildPlus("streetInfo_removeButton_", WIDTH * 0.01, WIDTH * 0.10, 45, WIDTH * 0.01, ProgramColor.CHANCEL_BUTTONS.getColor(), ProgramColor.SYMBOLE_COLOR.getColor(), 0, 0);
-        removeButton.setLayoutX(WIDTH - WIDTH * 0.08);
-
-        removeButton.setOnMouseClicked(mouseEvent -> rootDisplay.removeDisplay());
-
         infoBox = getStationInfoBox(station, WIDTH, HEIGHT);
         infoBox.getChildren().add(removeButton);
         
@@ -81,24 +72,10 @@ public class StreetInfoDisplay extends Pane {
         if (!getChildren().isEmpty())
             getChildren().clear();
 
-        //Remove info
-        StackPane removeButton = buildPlus("streetInfo_removeButton_", WIDTH * 0.01, WIDTH * 0.10, 45, WIDTH * 0.01, ProgramColor.CHANCEL_BUTTONS.getColor(), ProgramColor.SYMBOLE_COLOR.getColor(), 0, 0);
-        removeButton.setLayoutX(WIDTH - WIDTH * 0.08);
-
-        removeButton.setOnMouseClicked(mouseEvent -> rootDisplay.removeDisplay());
-
         infoBox = getStreetInfoBox(street, WIDTH, HEIGHT);
         infoBox.getChildren().add(removeButton);
         
         getChildren().add(infoBox);
-    }
-
-    public double getWIDTH() {
-        return WIDTH;
-    }
-
-    public double getHEIGHT() {
-        return HEIGHT;
     }
 
     public static Pane getStreetInfoBox(Street street, double w, double h) {
@@ -108,9 +85,9 @@ public class StreetInfoDisplay extends Pane {
         box.setMaxSize(w, h);
 
         //Street name
-        Label name = buildLabel("streetInfo_Name", street.getName(), Font.font(Main.TEXT_FONT, FontWeight.BOLD, w * 0.125), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor());
+        Label name = buildLabel("streetInfo_Name", street.getName(), Font.font(Main.TEXT_FONT, FontWeight.BOLD, w * 0.1), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor());
         centeringChildInPane(name, box);
-        name.setLayoutY(h * 0.03);
+        name.setLayoutY(h * 0.02);
 
         //Fonts
         Font infoTextFont = Font.font(Main.TEXT_FONT, w * 0.08);
@@ -230,7 +207,7 @@ public class StreetInfoDisplay extends Pane {
 
         //Adding all nodes
         box.getChildren().addAll(
-            buildRectangle("streetInfo_Background", w, h, ProgramColor.BUILD_STREET_INFO.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), w * 0.02),
+            buildRectangle("streetInfo_Background", w, h, ProgramColor.FIELD_INFO_BACKGROUND.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), w * 0.02),
             buildRectangle("streetInfo_ColorIndicator", w, h * 0.17, street.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), w * 0.02),
             name,
             infoPropertyPrice,
@@ -318,7 +295,7 @@ public class StreetInfoDisplay extends Pane {
     
         //Adding all nodes
         box.getChildren().addAll(
-            buildRectangle("stationInfo_Background", w, h, ProgramColor.BUILD_STREET_INFO.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), w * 0.02),
+            buildRectangle("stationInfo_Background", w, h, ProgramColor.FIELD_INFO_BACKGROUND.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), w * 0.02),
             buildLine("stationInfo_separatingLine_Header|Rent", new Point2D(0.01, h * startLineY), new Point2D(w * 0.99, h * startLineY), w * 0.02, ProgramColor.BORDER_COLOR_DARK.getColor()),
             name,
             infoPropertyPrice,
@@ -351,9 +328,9 @@ public class StreetInfoDisplay extends Pane {
         box.setMaxSize(w, h);
 
         //Station name
-        Label name = buildLabel("utilitieInfo_Name", utilitie.getName(), Font.font(Main.TEXT_FONT, FontWeight.BOLD, w * 0.125), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor());
+        Label name = buildLabel("utilitieInfo_Name", utilitie.getName(), Font.font(Main.TEXT_FONT, FontWeight.BOLD, w * 0.1), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor());
         centeringChildInPane(name, box);
-        name.setLayoutY(h * 0.03);
+        name.setLayoutY(h * 0.02);
 
         //Fonts
         Font infoTextFont = Font.font(Main.TEXT_FONT, w * 0.075);
@@ -384,7 +361,7 @@ public class StreetInfoDisplay extends Pane {
     
         //Adding all nodes
         box.getChildren().addAll(
-            buildRectangle("stationInfo_Background", w, h, ProgramColor.BUILD_STREET_INFO.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), w * 0.02),
+            buildRectangle("stationInfo_Background", w, h, ProgramColor.FIELD_INFO_BACKGROUND.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), w * 0.02),
             name,
             buildLine("stationInfo_separatingLine_Header|Rent", new Point2D(0.01, h * startLineY), new Point2D(w * 0.99, h * startLineY), w * 0.02, ProgramColor.BORDER_COLOR_DARK.getColor()),
             textOne,
@@ -414,4 +391,13 @@ public class StreetInfoDisplay extends Pane {
             return houseRow;
         } else throw new IllegalArgumentException("You cannot create a row of houses with " + houseNumber + " houses");
     }
+
+    public double getWIDTH() {
+        return WIDTH;
+    }
+
+    public double getHEIGHT() {
+        return HEIGHT;
+    }
+
 }

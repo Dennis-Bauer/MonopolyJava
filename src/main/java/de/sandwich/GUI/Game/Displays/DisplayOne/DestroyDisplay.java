@@ -13,7 +13,7 @@ import de.sandwich.Enums.ProgramColor;
 import de.sandwich.Fields.Field;
 import de.sandwich.Fields.Street;
 import de.sandwich.GUI.Game.DisplayController.GameDisplayControllerOne;
-import de.sandwich.GUI.Game.Displays.DisplayMiddle.StreetInfoDisplay;
+import de.sandwich.GUI.Game.Displays.DisplayMiddle.FieldInfoDisplay;
 import javafx.animation.FadeTransition;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
@@ -29,8 +29,6 @@ public class DestroyDisplay extends Pane {
     private final double WIDTH;
     private final double HEIGHT;
 
-    private final GameDisplayControllerOne rootDisplay;
-
     private final Label errorMessage;
 
     private Pane playerPane = new Pane();
@@ -40,18 +38,17 @@ public class DestroyDisplay extends Pane {
     private Label buttonText;
 
     private Street activStreet = null;
-
     private Player activePlayer;
 
     public DestroyDisplay(double width, double height, GameDisplayControllerOne rootDisplay) {
         setId("gameScene_displayOne_DestroyDisplay");
+        setMaxSize(width, height);
 
         this.WIDTH = width;
         this.HEIGHT = height;
-        this.rootDisplay = rootDisplay;
 
-        streetInfo.setLayoutX(WIDTH / 2);
-        streetInfo.setLayoutY(HEIGHT * 0.05);
+        streetInfo.layoutXProperty().bind(widthProperty().divide(2));
+        streetInfo.layoutYProperty().bind(heightProperty().multiply(0.05));
 
         Rectangle buildDisplayButtonBackground = buildRectangle("gameScene_displayOne_destroyDisplay_toBuidlDisplayButton_Background", WIDTH * 0.25, HEIGHT * 0.10, ProgramColor.BUTTON_DISABLED.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), width * 0.008);
 
@@ -162,8 +159,11 @@ public class DestroyDisplay extends Pane {
 
         activePlayer = p;
 
-        Pane playerDisplay = GameDisplayControllerOne.buildPlayer(WIDTH * 0.38, HEIGHT * 0.60, ProgramColor.BANK_PLAYER_BACKGROUND.getColor(), p);
-        Rectangle[] streets = GameDisplayControllerOne.buildStreetInventar(WIDTH * 0.38, HEIGHT * 0.60, p);
+        final double DISPLAY_WIDTH = WIDTH * 0.38;
+        final double DISPLAY_HEIGHT = HEIGHT * 0.60;
+
+        Pane playerDisplay = GameDisplayControllerOne.buildPlayer(DISPLAY_WIDTH, DISPLAY_HEIGHT, ProgramColor.BANK_PLAYER_BACKGROUND.getColor(), p);
+        Rectangle[] streets = GameDisplayControllerOne.buildStreetInventar(DISPLAY_WIDTH, DISPLAY_HEIGHT, p);
         Pane streetDisplay = new Pane();
 
         buttonBackground.setFill(ProgramColor.BUTTON_DISABLED.getColor());
@@ -173,15 +173,13 @@ public class DestroyDisplay extends Pane {
         
         for (Rectangle sObject : streets) {
             streetDisplay.getChildren().add(sObject);
-            int fieldNumber = Integer.parseInt(sObject.getId().substring(12, 14));
+            final int F_NUMBER = Integer.parseInt(sObject.getId().substring(12, 14));
 
             sObject.setOnMouseClicked(mouseEvent -> {
 
-                if (Game.getFields().get(fieldNumber) instanceof Street street) {
+                if (Game.getFields().get(F_NUMBER) instanceof Street street) {
                     if (street.getOwner() == activePlayer) {
-                        
                         activStreet = street;
-
 
                         if (street.getHouseNumber() != 0) {
                             errorMessage.setVisible(false);
@@ -222,9 +220,8 @@ public class DestroyDisplay extends Pane {
     }
 
     private void setStreetDisplay(Street street) {
-
         streetInfo.getChildren().clear();
-        streetInfo.getChildren().add(StreetInfoDisplay.getStreetInfoBox(street, WIDTH * 0.25, HEIGHT * 0.50));
+        streetInfo.getChildren().add(FieldInfoDisplay.getStreetInfoBox(street, WIDTH * 0.25, HEIGHT * 0.50));
 
         streetInfo.setVisible(true);
 
@@ -233,7 +230,6 @@ public class DestroyDisplay extends Pane {
         transition.setFromValue(0);
         transition.setToValue(1);
         transition.play();
-
     }
     
 }

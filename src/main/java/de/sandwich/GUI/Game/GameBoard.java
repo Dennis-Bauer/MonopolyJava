@@ -47,7 +47,6 @@ public class GameBoard extends Pane {
 
     public GameBoard(double size, HashMap<Integer, Field> fields) {
 
-
         FONT_SIZE = ((size / MIDDLE_RECTANGLE_RATION) / 9) / 8;
         BORDER_WIDTH = ((size / MIDDLE_RECTANGLE_RATION) / 9) / 25;
         FIELD_HEIGHT = (size - size / MIDDLE_RECTANGLE_RATION) / 2;
@@ -93,6 +92,7 @@ public class GameBoard extends Pane {
 
                     playerFigures[i].setX(calculateXYPath(i, playerList.get(i).getFieldPostion()).getX());
                     playerFigures[i].setY(calculateXYPath(i, playerList.get(i).getFieldPostion()).getY());
+
                     if (Main.CONSOLE_OUT_PUT) {
                         consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Die Figur vom " + i + ". Spieler wurde auf diese Position gesetzt: ");
                         consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.BOLD, "[" + (calculateXYPath(i, playerList.get(i).getFieldPostion()).getX()) + "/" + (calculateXYPath(i, playerList.get(i).getFieldPostion()).getY()) + "]");
@@ -101,7 +101,6 @@ public class GameBoard extends Pane {
 
                     int orderNumber = playerList.get(i).getOrderNumber();
 
-                    //Maybe remove
                     playerFigures[i].layoutYProperty().addListener(new ChangeListener<Number>() {
                         @Override
                         public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -113,7 +112,6 @@ public class GameBoard extends Pane {
                         }
                     });
 
-                    //Maybe reomve
                     playerFigures[i].layoutXProperty().addListener(new ChangeListener<Number>() {
                         @Override
                         public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -136,6 +134,8 @@ public class GameBoard extends Pane {
 
     }
 
+    private final double JAIL_OFSET = 0.5;
+
     public void setPlayerInJail(Player p) throws PlayerNotFoundExceptions {
         int playerArrayPostion = 0;
         for (ImageView i: playerFigures) {
@@ -155,8 +155,8 @@ public class GameBoard extends Pane {
 
             transition.setOnFinished(actionEvent -> {
                 if (p.getFieldPostion() != 10) {
-                    playerFigures[pArrayPos].setLayoutX((calculateXYPath(0, 10).getX()) - (calculateXYPath(pArrayPos, p.getFieldPostion()).getX()) + FIELD_HEIGHT * 0.5);
-                    playerFigures[pArrayPos].setLayoutY((calculateXYPath(0, 10).getY()) - (calculateXYPath(pArrayPos, p.getFieldPostion()).getY()) + FIELD_HEIGHT * 0.5);
+                    playerFigures[pArrayPos].setLayoutX((calculateXYPath(0, 10).getX()) - (calculateXYPath(pArrayPos, p.getFieldPostion()).getX()) + FIELD_HEIGHT * JAIL_OFSET);
+                    playerFigures[pArrayPos].setLayoutY((calculateXYPath(0, 10).getY()) - (calculateXYPath(pArrayPos, p.getFieldPostion()).getY()) + FIELD_HEIGHT * JAIL_OFSET);
                     p.setInJail(true);
 
                     transition.setFromValue(0);
@@ -179,15 +179,21 @@ public class GameBoard extends Pane {
         if (!(playerArrayPostion > 4)) {
             playerMoveTransition = new TranslateTransition(Duration.seconds(0.3), playerFigures[playerArrayPostion]);
 
-            playerMoveTransition.setByX(-(FIELD_HEIGHT * 0.5) - (calculateXYPath(0, 10).getX() - calculateXYPath(playerArrayPostion, 10).getX()));
-            playerMoveTransition.setByY(-(FIELD_HEIGHT * 0.5) - (calculateXYPath(0, 10).getY() - calculateXYPath(playerArrayPostion, 10).getY()));
+            playerMoveTransition.setByX(-(FIELD_HEIGHT * JAIL_OFSET) - (calculateXYPath(0, 10).getX() - calculateXYPath(playerArrayPostion, 10).getX()));
+            playerMoveTransition.setByY(-(FIELD_HEIGHT * JAIL_OFSET) - (calculateXYPath(0, 10).getY() - calculateXYPath(playerArrayPostion, 10).getY()));
             
             playerMoveTransition.play();
         } else throw new PlayerNotFoundExceptions();
     }
 
+    //Seconds
+    private final double NORMAL_PLAYER_SPEED = 0.5; 
+    //If the player moves more than 10 steps at ones, he moves with this speed
+    private final double FAST_PLAYER_SPEED = 0.2;
+
     public void movePlayer(Player player, int steps) throws PlayerNotFoundExceptions {
         if (playerMoveTransition.getStatus() == Status.PAUSED || playerMoveTransition.getStatus() == Status.STOPPED || playerMoveTransition == null) {
+
             if (steps == 0) {
                 Main.getGameOperator().playerHasMoved();
             }
@@ -206,51 +212,102 @@ public class GameBoard extends Pane {
 
                 double seconds = 0;
                 if (steps > 10) 
-                    seconds = 0.25;
+                    seconds = FAST_PLAYER_SPEED;
                 else 
-                    seconds = 0.5;
+                    seconds = NORMAL_PLAYER_SPEED;
 
                 playerMoveTransition = new TranslateTransition(Duration.seconds(seconds), playerFigures[pArrayPos]);
-                playerMoveTransition.setByX((calculateXYPath(pArrayPos, startPostion + 1).getX()) - (calculateXYPath(pArrayPos, startPostion).getX()));
-                playerMoveTransition.setByY((calculateXYPath(pArrayPos, startPostion + 1).getY()) - (calculateXYPath(pArrayPos, startPostion).getY()));
-                playerMoveTransition.play();
-
-                System.out.println("Der Spieler wird jetzt bewegt. Er startet an der Position: " + startPostion);
 
                 AtomicInteger i = new AtomicInteger(1);
                 AtomicInteger step = new AtomicInteger();
 
-                playerMoveTransition.setOnFinished(event -> {
-                    if (!(i.get() >= steps)) {
-                        if ((startPostion + step.get()) >= 39)
-                            step.set(-(startPostion + 1));
-                        step.getAndIncrement();
+                if (steps > 0) {
+                    
+                    playerMoveTransition.setByX((calculateXYPath(pArrayPos, startPostion + 1).getX()) - (calculateXYPath(pArrayPos, startPostion).getX()));
+                    playerMoveTransition.setByY((calculateXYPath(pArrayPos, startPostion + 1).getY()) - (calculateXYPath(pArrayPos, startPostion).getY()));
 
-                        if ((startPostion + step.get() + 1) == 40) {
-                            playerMoveTransition.setByX(-((calculateXYPath(pArrayPos, startPostion + step.get()).getX()) - (calculateXYPath(pArrayPos, 0).getX())));
-                            playerMoveTransition.setByY(-((calculateXYPath(pArrayPos, startPostion + step.get()).getY()) - (calculateXYPath(pArrayPos, 0).getY())));
+                    playerMoveTransition.setOnFinished(event -> {
+                        if (!(i.get() >= steps)) {
+                            if ((startPostion + step.get()) >= 39)
+                                step.set(-(startPostion + 1));
+                            step.getAndIncrement();
+    
+                            if ((startPostion + step.get() + 1) == 40) {
+                                playerMoveTransition.setByX(-((calculateXYPath(pArrayPos, startPostion + step.get()).getX()) - (calculateXYPath(pArrayPos, 0).getX())));
+                                playerMoveTransition.setByY(-((calculateXYPath(pArrayPos, startPostion + step.get()).getY()) - (calculateXYPath(pArrayPos, 0).getY())));
+                                
+                            } else {
+                                playerMoveTransition.setByX(-((calculateXYPath(pArrayPos, startPostion + step.get()).getX()) - (calculateXYPath(pArrayPos, startPostion + step.get() + 1).getX())));
+                                playerMoveTransition.setByY(-((calculateXYPath(pArrayPos, startPostion + step.get()).getY()) - (calculateXYPath(pArrayPos, startPostion + step.get() + 1).getY())));
+                            }
                             
+                            playerMoveTransition.play();
+    
+    
+                            if (Main.CONSOLE_OUT_PUT) {
+                                consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Die Figur vom " + pArrayPos + ". Spieler wurde auf diese Position gesetzt: ");
+                                consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.BOLD, "[" + (calculateXYPath(pArrayPos, startPostion + step.get()).getX()) + "/" + (calculateXYPath(pArrayPos, startPostion +  step.get()).getY()) + "], Field[" + (startPostion + step.get() ) + "]");
+                                System.out.println();
+                            }
                         } else {
-                            playerMoveTransition.setByX(-((calculateXYPath(pArrayPos, startPostion + step.get()).getX()) - (calculateXYPath(pArrayPos, startPostion + step.get() + 1).getX())));
-                            playerMoveTransition.setByY(-((calculateXYPath(pArrayPos, startPostion + step.get()).getY()) - (calculateXYPath(pArrayPos, startPostion + step.get() + 1).getY())));
+                            playerMoveTransition.stop();
+                            Main.getGameOperator().playerHasMoved();
                         }
-                        
-                        playerMoveTransition.play();
+                        i.getAndIncrement();
+                    });
+                } else {
 
+                    playerMoveTransition.setByX((calculateXYPath(pArrayPos, startPostion - 1).getX()) - (calculateXYPath(pArrayPos, startPostion).getX()));
+                    playerMoveTransition.setByY((calculateXYPath(pArrayPos, startPostion - 1).getY()) - (calculateXYPath(pArrayPos, startPostion).getY()));
 
-                        if (Main.CONSOLE_OUT_PUT) {
-                            consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Die Figur vom " + pArrayPos + ". Spieler wurde auf diese Position gesetzt: ");
-                            consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.BOLD, "[" + (calculateXYPath(pArrayPos, player.getFieldPostion()).getX()) + "/" + (calculateXYPath(pArrayPos, player.getFieldPostion()).getY()) + "], Field[" + player.getFieldPostion() + "]");
-                            System.out.println();
+                    playerMoveTransition.setOnFinished(event -> {
+                        if (!(i.get() >= (steps * -1))) {
+                            if ((startPostion + step.get()) >= 39)
+                                step.set(-(startPostion + 1));
+                            step.getAndIncrement();
+    
+                            if ((startPostion + step.get() + 1) == 40) {
+                                playerMoveTransition.setByX(-((calculateXYPath(pArrayPos, startPostion - step.get()).getX()) - (calculateXYPath(pArrayPos, 0).getX())));
+                                playerMoveTransition.setByY(-((calculateXYPath(pArrayPos, startPostion - step.get()).getY()) - (calculateXYPath(pArrayPos, 0).getY())));
+                                
+                            } else {
+                                playerMoveTransition.setByX(-((calculateXYPath(pArrayPos, startPostion - step.get()).getX()) - (calculateXYPath(pArrayPos, startPostion - step.get() - 1).getX())));
+                                playerMoveTransition.setByY(-((calculateXYPath(pArrayPos, startPostion - step.get()).getY()) - (calculateXYPath(pArrayPos, startPostion - step.get() - 1).getY())));
+                            }
+                            
+                            playerMoveTransition.play();
+    
+    
+                            if (Main.CONSOLE_OUT_PUT) {
+                                consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.REGULAR, "Die Figur vom " + pArrayPos + ". Spieler wurde auf diese Position gesetzt: ");
+                                consoleOutPut(ConsoleUtilities.colors.GREEN, ConsoleUtilities.textStyle.BOLD, "[" + (calculateXYPath(pArrayPos, startPostion - step.get()).getX()) + "/" + (calculateXYPath(pArrayPos, startPostion - step.get()).getY()) + "], Field[" + (startPostion - step.get() ) + "]");
+                                System.out.println();
+                            }
+                        } else {
+                            playerMoveTransition.stop();
+                            Main.getGameOperator().playerHasMoved();
                         }
-                    } else {
-                        playerMoveTransition.stop();
-                        Main.getGameOperator().playerHasMoved();
-                    }
-                    i.getAndIncrement();
-                });
+                        i.getAndIncrement();
+                    });
+                }
+
+                playerMoveTransition.play();
+
             } else throw new PlayerNotFoundExceptions();
         } else throw new NullPointerException("The player can not move because he is moving!");
+    }
+
+    public void removePlayerFromBoard(Player player) throws PlayerNotFoundExceptions {
+        int playerArrayPostion = 0;
+        for (ImageView i: playerFigures) {
+            if (i.getImage() == player.getFigur().getFigureImage())
+                break;
+            else playerArrayPostion++;
+        }
+
+        if (!(playerArrayPostion > 4)) {
+            getChildren().remove(playerFigures[playerArrayPostion]);
+        } else throw new PlayerNotFoundExceptions();
     }
 
     public Point2D calculateXYPath(int playerOrderPostion, int setToPostion) {
@@ -436,6 +493,3 @@ public class GameBoard extends Pane {
     }
 }
 
-/*
-Die höhe einer Straße wird immer Größe des Feldes / 9 (9 Felder sind an jeder Seite (ohne die Ecken)) 
-*/

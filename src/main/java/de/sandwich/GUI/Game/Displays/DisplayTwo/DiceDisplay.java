@@ -25,7 +25,6 @@ import static de.sandwich.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOu
 
 public class DiceDisplay extends Pane {
 
-    //private final GameDisplayControllerTwo rootDisplay;
     private final Random rn = new Random();
     private NumberAnimationThread rowOneAnimation;
     private NumberAnimationThread rowTwoAnimation;
@@ -38,8 +37,6 @@ public class DiceDisplay extends Pane {
         setId("gameScene_DiceDisplay");
         setMaxSize(width, height);
 
-        //this.rootDisplay = rootDisplay;
-
         Pane numberField = new Pane();
         numberField.setId("gameScene_diceDisplay_Pane");
         numberField.setMaxSize(width * 0.80, height * 0.35);
@@ -50,7 +47,7 @@ public class DiceDisplay extends Pane {
         Polygon arrowOne = buildTriangle("gameScene_diceDisplay_NumberArrowOne", new Point2D(0, 0), new Point2D(width * 0.05, 0), new Point2D(width * 0.025, height * 0.05), ProgramColor.BORDER_COLOR_DARK.getColor(), null, numberBackground.getWidth() / 2 - width * 0.025, 0);
         Polygon arrowTwo = buildTriangle("gameScene_diceDisplay_NumberArrowTwo", new Point2D(0, height * 0.05), new Point2D(width * 0.05, height * 0.05), new Point2D(width * 0.025, 0), ProgramColor.BORDER_COLOR_DARK.getColor(), null, numberBackground.getWidth() / 2 - width * 0.025, numberBackground.getHeight() - height * 0.05);
 
-        Label numberRowOne = buildLabel("gameScene_diceDisplay_NumberRowOne", "1-2-3-4-5-6-1-2-3-4-5-6-1-2-3", new Font(Main.TEXT_FONT, width * 0.05), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, height * 0.025);
+        Label numberRowOne = buildLabel("gameScene_diceDisplay_NumberRowOne", "1-2-3-4-5-6-1-2-3-4-5-6-1-2-3", new Font(Main.TEXT_FONT, width * 0.05), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, height * 0.04);
         centeringChildInPane(numberRowOne, numberField);
 
         Label numberRowTwo = buildLabel("gameScene_diceDisplay_NumberRowTwo", "1-2-3-4-5-6-1-2-3-4-5-6-1-2-3", new Font(Main.TEXT_FONT, width * 0.05), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, numberBackground.getHeight() / 2);
@@ -62,12 +59,14 @@ public class DiceDisplay extends Pane {
         roleDiceButton.setLayoutX(width / 2 - (width * 0.80) / 2);
         roleDiceButton.setLayoutY(numberField.getLayoutY() + numberField.getMaxHeight() + height * 0.05);
 
-        Rectangle buttonBackground = buildRectangle("gameScene_roleDiceButton_Background", roleDiceButton.getMaxWidth(), roleDiceButton.getMaxHeight(), ProgramColor.DICE_ROLE_BUTTON.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), width * 0.0075);
         Label buttonText = buildLabel("gameScene_roleDiceButton_Text", "Würfel!", Font.font(Main.TEXT_FONT, FontWeight.BOLD, width * 0.05), TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor());
         centeringChildInPane(buttonText, roleDiceButton);
 
         numberField.getChildren().addAll(numberBackground, arrowOne, arrowTwo, numberRowOne, numberRowTwo);
-        roleDiceButton.getChildren().addAll(buttonBackground, buttonText);
+        roleDiceButton.getChildren().addAll(
+            buildRectangle("gameScene_roleDiceButton_Background", roleDiceButton.getMaxWidth(), roleDiceButton.getMaxHeight(), ProgramColor.DICE_ROLE_BUTTON.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), width * 0.0075),
+            buttonText
+        );
 
         //Starts the player's turn
         roleDiceButton.setOnMouseClicked(event -> {
@@ -85,7 +84,7 @@ public class DiceDisplay extends Pane {
                 diceNumbers[0] = rowOneAnimation.getLastNumber();
                 diceNumbers[1] = rowTwoAnimation.getLastNumber();
 
-                diceNumbers[0] = 1;
+                diceNumbers[0] = 7;
                 diceNumbers[1] = 0;
 
                 Main.getGameOperator().playerRolledDice(diceNumbers[0], diceNumbers[1]);

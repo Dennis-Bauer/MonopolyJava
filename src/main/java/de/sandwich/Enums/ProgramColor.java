@@ -50,7 +50,9 @@ public enum ProgramColor {
 
     //Trading display
     TRADING_ARROW(Color.rgb(186, 41, 41)),
-    TRADING_BUTTON_COLOR(Color.rgb(255, 0, 212)),
+    TRADING_BUTTON_COLOR(Color.rgb(75, 173, 75)),
+    TRADING_PLAYER_ONE_BACKGROUND(Color.rgb(56,182,255)),
+    TRADING_PLAYER_TWO_BACKGROUND(Color.rgb(186,41,41)),
 
     //Bank display
     BANK_PLAYER_BACKGROUND(Color.rgb(78, 138, 186)),
@@ -58,7 +60,7 @@ public enum ProgramColor {
     BANK_MORTGAGE_BUTTON_MINUS(Color.rgb(171, 34, 34)),
 
     //Build display
-    BUILD_STREET_INFO(Color.rgb(5, 106, 110)),
+    FIELD_INFO_BACKGROUND(Color.rgb(163, 209, 163)),
     BUILD_STREET_INFO_HOUSEINDICATOR(Color.rgb(255, 255, 255)),
 
     //Jail

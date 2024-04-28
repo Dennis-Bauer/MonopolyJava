@@ -42,19 +42,16 @@ public class BankDisplay extends Pane {
     private int mortgage = 0;
     private ArrayList<Integer> mortgageStreets = new ArrayList<>();
 
-
-    /*
-     * Muss noch hinzugefügt werden:
-     * Wenn Häuser oder ähnliches auf der Straße sind, kann keine Hyphothek genommen werden!
-     */
-
     public BankDisplay (double width, double height, GameDisplayControllerOne rootDisplay) {
         setId("gameScene_displayOne_BankDisplay");
         setMaxSize(width, height);
 
+        this.WIDTH = width;
+        this.HEIGHT = height;
+
         mortgageDisplay = buildLabel("gameScene_displayOne_bankDisplay_MortgageDisplay", mortgage + "€", Font.font(Main.TEXT_FONT, width * 0.05), TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor(), 0, 0);
-        centeringChildInPane(mortgageDisplay, rootDisplay);
         mortgageDisplay.setLayoutY(height * 0.80);
+        centeringChildInPane(mortgageDisplay, rootDisplay);
 
         button = createButton(width * 0.35, height * 0.08);
         button.setLayoutX(width / 2 - width * 0.175);
@@ -82,8 +79,6 @@ public class BankDisplay extends Pane {
         });
 
         getChildren().addAll(mortgageDisplay, button, playerPane);
-        this.WIDTH = width;
-        this.HEIGHT = height;
     }
 
     public void display(Player p) {
@@ -103,16 +98,16 @@ public class BankDisplay extends Pane {
 
         for (Rectangle sObject : streets) {
             streetDisplay.getChildren().add(sObject);
-            int fieldNumber = Integer.parseInt(sObject.getId().substring(12, 14));
+            final int F_NUMBER = Integer.parseInt(sObject.getId().substring(12, 14));
 
             Main.getGameOperator();
-            if (Game.getFields().get(fieldNumber) instanceof Street street) {
+            if (Game.getFields().get(F_NUMBER) instanceof Street street) {
                 if (street.getOwner() == activePlayer) {
                     if (street.isInBank()) {
                         sObject.setId(sObject.getId() + "M");
                             sObject.setStroke(ProgramColor.SELECT_COLOR.getColor());
             
-                            mortgageStreets.add(fieldNumber);
+                            mortgageStreets.add(F_NUMBER);
 
                             ScaleTransition scaleTransitionBig = new ScaleTransition(Duration.seconds(0.15), sObject);
                             scaleTransitionBig.setByX(sObject.getWidth() * 0.02);
@@ -130,8 +125,7 @@ public class BankDisplay extends Pane {
 
 
             sObject.setOnMouseClicked(mouseEvent -> {
-
-                if (Game.getFields().get(fieldNumber) instanceof Street street) {
+                if (Game.getFields().get(F_NUMBER) instanceof Street street) {
                     if (street.getOwner() == activePlayer) {
                         if (street.getHouseNumber() == 0) {
                             if (sObject.getId().endsWith("true")) {
@@ -140,7 +134,7 @@ public class BankDisplay extends Pane {
     
                                 Main.getGameOperator().getMiddleDisplayController().displayStreetInfoDisplay(street);
     
-                                mortgageStreets.add(fieldNumber);
+                                mortgageStreets.add(F_NUMBER);
     
                                 ScaleTransition scaleTransitionBig = new ScaleTransition(Duration.seconds(0.15), sObject);
                                 scaleTransitionBig.setByX(sObject.getWidth() * 0.02);
@@ -153,7 +147,7 @@ public class BankDisplay extends Pane {
     
                                 scaleTransitionBig.setOnFinished(actionEvent -> scaleTransitionSmall.play());
     
-                                if (Game.getFields().get(fieldNumber) instanceof Street s)
+                                if (Game.getFields().get(F_NUMBER) instanceof Street s)
                                     addMortgage(s.getSalePrice() / 2);
                                 else throw new WrongNodeException();
                             } else if (sObject.getId().endsWith("trueM")) {
@@ -162,7 +156,7 @@ public class BankDisplay extends Pane {
                                 Main.getGameOperator().getMiddleDisplayController().removeDisplay();
     
                                 if (!(mortgageStreets.size() <= 1))
-                                    mortgageStreets.remove(Integer.valueOf(fieldNumber));
+                                    mortgageStreets.remove(Integer.valueOf(F_NUMBER));
                                 else 
                                     mortgageStreets.clear();
     
@@ -173,7 +167,7 @@ public class BankDisplay extends Pane {
                                 scaleTransitionBig.setByY(-(sObject.getWidth() * 0.01));
                                 scaleTransitionBig.play();
     
-                                if (Game.getFields().get(fieldNumber) instanceof Street s)
+                                if (Game.getFields().get(F_NUMBER) instanceof Street s)
                                     addMortgage(-(s.getSalePrice() / 2));
                                 else throw new WrongNodeException();
                             }
@@ -196,8 +190,6 @@ public class BankDisplay extends Pane {
         mortgage = mortgage + x;
         mortgageDisplay.setText(mortgage + "€");
 
-        RuntimeException wrongNode = new IllegalArgumentException("Bank button has wrong nodes orders!");
-
         if (button.getChildren().get(0) instanceof Rectangle b) {
             if (mortgage < 0) {
                 b.setFill(ProgramColor.BANK_MORTGAGE_BUTTON_PLUS.getColor());
@@ -206,7 +198,7 @@ public class BankDisplay extends Pane {
             } else {
                 b.setFill(ProgramColor.BUTTON_DISABLED.getColor());
             }
-        } else throw wrongNode;
+        } else throw new IllegalArgumentException("The bank button has a wrong node order!");
 
         if (button.getChildren().get(1) instanceof Label t) {
             if (mortgage < 0) {

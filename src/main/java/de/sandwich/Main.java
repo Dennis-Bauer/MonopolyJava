@@ -1,25 +1,30 @@
 package de.sandwich;
 
 import de.sandwich.DennisUtilitiesPackage.Java.ConsoleUtilities;
-
+import de.sandwich.Enums.ProgramColor;
 import de.sandwich.GUI.Menu.StartMenu;
 
 
 import static de.sandwich.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPutLine;
+import static de.sandwich.DennisUtilitiesPackage.Java.JavaUtilities.buildLongText;
+import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildLabel;
 import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXUtilities.creatImage;
 import static de.sandwich.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPut;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 public class Main extends Application {
 
     //Important and final variables
-    public static final String TEXT_FONT = "Clear Sans";
+    public static final String TEXT_FONT = "Arial";
     public static final boolean CONSOLE_OUT_PUT = true;
     public static final String CONSOLE_OUT_PUT_LINEBREAK = "---------------";
-    public static final double WINDOW_WIDTH = 1200;
-    public static final double WINDOW_HEIGHT = 650;
+    public static final double WINDOW_WIDTH = 1800;
+    public static final double WINDOW_HEIGHT = 1000;
 
     //Game variables
     private static Game gameOperator;
@@ -27,7 +32,6 @@ public class Main extends Application {
     private static Stage primaryStage;
     @Override
     public void start(@SuppressWarnings("exports") Stage stage) {
-
         primaryStage = stage;
         stage.getIcons().add(creatImage("/de/sandwich/monopoly/icon.png"));
         stage.setTitle("-M---o-----n----o---p----o---l----y");
@@ -82,6 +86,15 @@ public class Main extends Application {
     @SuppressWarnings("exports")
     public static Stage getPrimaryStage() {
         return primaryStage;
+    }
+
+    public static void showWinner(String playerName) {
+        StackPane root = new StackPane(
+            buildLabel("winner_Name", buildLongText("Der Spieler", playerName, "hat gewonnen!!!"), Font.font(TEXT_FONT, FontWeight.BOLD, WINDOW_WIDTH * 0.05), null, ProgramColor.BORDER_COLOR_DARK.getColor())
+        );
+
+        Scene winnScene = new Scene(root);
+        primaryStage.setScene(winnScene);
     }
 }
 

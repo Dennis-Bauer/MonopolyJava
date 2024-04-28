@@ -3,7 +3,6 @@ package de.sandwich.GUI.Game.Displays.DisplayTwo;
 import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildLabel;
 import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildRectangle;
 import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.createImageView;
-import static de.sandwich.DennisUtilitiesPackage.Java.JavaUtilities.buildLongText;
 
 import de.sandwich.Main;
 import de.sandwich.Enums.ProgramColor;
@@ -21,33 +20,32 @@ import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXUtilities.centerin
 
 public class ActionDisplay extends Pane {
 
-    //private final GameDisplayControllerTwo rootDisplay;
 
     public ActionDisplay(double width, double height, GameDisplayControllerTwo rootDisplay) {
         setId("gameScene_TradingDisplay");
         setMaxSize(width, height);
 
-        //this.rootDisplay = rootDisplay;
+        final double MIDDLE_X = (width / 2) - (width * 0.25) / 2;
+        final double BUTTON_WIDTH = width * 0.25;
+        final double BUTTON_HEIGHT = height * 0.45;
+        final double Y = height * 0.30;
+        final double SPACE = width * 0.30;
 
-        double middleX = (width / 2) - (width * 0.25) / 2;
-        double y = height * 0.30;
-        double space = width * 0.30;
-
-        Pane bankButton = buildButton("Bank", width * 0.25, height * 0.45, "/de/sandwich/monopoly/aktionDisplay/bank.png", ProgramColor.ACTION_BANK_BUTTON.getColor(), "bank", middleX - space, y);
+        Pane bankButton = buildButton("Bank", BUTTON_WIDTH, BUTTON_HEIGHT, "/de/sandwich/monopoly/aktionDisplay/bank.png", ProgramColor.ACTION_BANK_BUTTON.getColor(), "bank", MIDDLE_X - SPACE, Y);
         bankButton.setOnMouseClicked(mouseEvent -> {
             Main.getGameOperator().getDisplayControllerOne().displayBankDisplay(Main.getGameOperator().getTurnPlayer());
             rootDisplay.displayReturnButton();
         });
 
-        Pane buildButton = buildButton(buildLongText("Bauen/", "Abbreißen"), width * 0.25, height * 0.45, "/de/sandwich/monopoly/aktionDisplay/build.png", ProgramColor.ACTION_BUILD_BUTTON.getColor(), "build", middleX, y);
+        Pane buildButton = buildButton("Bauen", BUTTON_WIDTH, BUTTON_HEIGHT, "/de/sandwich/monopoly/aktionDisplay/build.png", ProgramColor.ACTION_BUILD_BUTTON.getColor(), "build", MIDDLE_X, Y);
         buildButton.setOnMouseClicked(mouseEvent -> {
             Main.getGameOperator().getDisplayControllerOne().displayBuildDisplay((Main.getGameOperator().getTurnPlayer()));
             rootDisplay.displayReturnButton();
         });
 
-        Pane leaveButton = buildButton("Aufgeben", width * 0.25, height * 0.45, "/de/sandwich/monopoly/aktionDisplay/leave.png", ProgramColor.ACTION_LEAVE_BUTTON.getColor(), "leave", middleX + space, y);
+        Pane leaveButton = buildButton("Aufgeben", BUTTON_WIDTH, BUTTON_HEIGHT, "/de/sandwich/monopoly/aktionDisplay/leave.png", ProgramColor.ACTION_LEAVE_BUTTON.getColor(), "leave", MIDDLE_X + SPACE, Y);
         leaveButton.setOnMouseClicked(mouseEvent -> {
-
+            Main.getGameOperator().getMiddleDisplayController().displayLeaveDisplay();
         });
 
 

@@ -71,7 +71,7 @@ public class TradingDisplay extends Pane {
         AtomicInteger tradeOfferRight = new AtomicInteger();
 
         //Left
-        Pane playerTradeBoxLeft = buildPlayerTradeBox(PLAYER_BOX_WIDTH, PLAYER_BOX_HEIGHT, ProgramColor.PLAYER_TWO_BACKGROUND.getColor(), playerOne);
+        Pane playerTradeBoxLeft = buildPlayerTradeBox(PLAYER_BOX_WIDTH, PLAYER_BOX_HEIGHT, ProgramColor.TRADING_PLAYER_ONE_BACKGROUND.getColor(), playerOne);
         playerTradeBoxLeft.setLayoutX(WIDTH * 0.014);
         playerTradeBoxLeft.setLayoutY(HEIGHT * 0.20);
 
@@ -103,7 +103,7 @@ public class TradingDisplay extends Pane {
 
 
         //Right
-        Pane playerTradeBoxRight = buildPlayerTradeBox(WIDTH * 0.306, HEIGHT * 0.6035, ProgramColor.PLAYER_THREE_BACKGROUND.getColor(), playerTwo);
+        Pane playerTradeBoxRight = buildPlayerTradeBox(WIDTH * 0.306, HEIGHT * 0.6035, ProgramColor.TRADING_PLAYER_TWO_BACKGROUND.getColor(), playerTwo);
         playerTradeBoxRight.setLayoutX(WIDTH / 2 + WIDTH * 0.18);
         playerTradeBoxRight.setLayoutY(HEIGHT * 0.20);
 

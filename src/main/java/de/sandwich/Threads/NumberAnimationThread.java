@@ -6,11 +6,11 @@ import javafx.scene.control.Label;
 public class NumberAnimationThread extends Thread {
 
     private final int ANIMATION_SPEED = 20;
-    private int length;
     private final Label animationRow;
 
+    private int length = 0;
+
     public NumberAnimationThread(Label animationRow) {
-        length = 0;
         this.animationRow = animationRow;
     }
 

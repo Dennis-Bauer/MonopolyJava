@@ -76,11 +76,11 @@ public class InJailDisplay extends Pane {
 
         // Umformertieren!!!
         infoText.setText(
-                buildLongText("Leider kein Pash gewürfelt. Du",
-                        ("kannst noch " + activPlayer.getInJailRemain() + " Tage warten,"),
-                        "sonst musst du " + PAY_PRICE + "€ zahlen.",
-                        "Du kannst auch jetzt zahlen",
-                        "oder eine Frei-karte nutzen.")
+                buildLongText("Leider kein Pash gewürfelt.",
+                        ("Du kannst noch " + activPlayer.getInJailRemain() + " Tage"),
+                        "warten, sonst musst du ",
+                        PAY_PRICE + "€zahlen. Du kannst auch",
+                        " jetzt zahlen oder eine", " Frei-karte nutzen.")
         );
 
     }
