@@ -1,12 +1,8 @@
 package de.sandwich.Enums;
 
 import javafx.scene.paint.Color;
+
 public enum ProgramColor {
-
-    /*
-    Wenn du beschreibung machst mach mit Css nh
-     */
-
 
     //Menu
     MENU_THIRD_PLAYER(Color.rgb(126, 217, 87)),

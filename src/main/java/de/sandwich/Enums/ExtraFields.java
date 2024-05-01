@@ -4,18 +4,16 @@ import static de.sandwich.DennisUtilitiesPackage.Java.JavaUtilities.buildLongTex
 
 public enum ExtraFields {
 
-    SPOTIFY_PREMIUM(buildLongText("Es ist ende des Monats, dein", "dein Spotify Premium account", "muss wieder gezahlt werden!")),
-    HESSLER_SCHULDEN(buildLongText("Frau Hessler braucht immer", "noch das Geld vom klettern", "und sie hat dich aus gesucht", "zu zahlen!")),
-    NAME_THREE(buildLongText("Hier würde ein Text stehen,", "wenn ich mir was ausdenken", "könnte!")),
-    NAME_FOUR(buildLongText("Hier würde ein Text stehen,", "wenn ich mir was ausdenken", "könnte!"));
+    SPOTIFY_PREMIUM(buildLongText("Es ist ende des Monats, dein", "Spotify premium Account", "muss wieder gezahlt werden!")),
+    HESSLER_SCHULDEN(buildLongText("Frau Hessler braucht immer", "noch das Geld vom klettern", "und sie hat dich ausgesucht", "zu zahlen!"));
 
-    private final String message;
+    private final String MESSAGE;
 
     ExtraFields(String message) {
-        this.message = message;
+        this.MESSAGE = message;
     }
 
     public String getMessage() {
-        return message;
+        return MESSAGE;
     }
 }

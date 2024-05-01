@@ -34,12 +34,64 @@ public class Utilitie extends Field {
         this.NAME = name;
     }
 
+    private void setOwnerBoth() {
+        Main.getGameOperator();
+        HashMap<Integer, Field> fields = Game.getFields();
+
+        ownerHasBoth = false;
+        if (owner != null) {
+            for (int i = 0; i < fields.size(); i++) {
+                if (fields.get(i) instanceof Utilitie u) {
+                    if (u != this) {
+                        if (u.getOwner() == owner) {
+                            ownerHasBoth = true;
+                        }
+                    }
+                }
+            }
+            
+        }
+    }
+
     public void setOwner(Player p) {
         isOwned = p != null;
 
         this.owner = p;
 
         setOwnerBoth();
+    }
+
+    private Rectangle background;
+
+    @Override
+    public Pane buildField(double width, double height, double borderWidth, double fontSize) {
+        Pane field = new Pane();
+        field.setId("station_field");
+        field.setMaxSize(width, height);
+
+        background = buildRectangle("station_Background" ,width, height, ProgramColor.GAMEBOARD_COLOR.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), borderWidth);
+        Label header = buildLabel("station_Header", NAME, Font.font(Main.TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, height / 50);
+        Label priceIndicator = buildLabel("station_PriceIndicator", (PRICE + "€"), Font.font(Main.TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, 5 * (height / 6));
+
+        centeringChildInPane(header, field);
+        centeringChildInPane(priceIndicator, field);
+
+        field.getChildren().addAll(background, header, priceIndicator);
+
+        super.field = field;
+        return field;
+    }
+
+    public void highlightField() {
+        background.setStrokeWidth(background.getStrokeWidth() * 2);
+        background.setStroke(ProgramColor.BORDER_COLOR_LIGHT.getColor());
+
+        field.toFront();
+    }
+
+    public void removeHighlight() {
+        background.setStrokeWidth(background.getStrokeWidth() / 2);
+        background.setStroke(ProgramColor.BORDER_COLOR_DARK.getColor());
     }
 
     public Player getOwner() {
@@ -69,59 +121,4 @@ public class Utilitie extends Field {
     public boolean isOwned() {
         return isOwned;
     }
-
-    private void setOwnerBoth() {
-        Main.getGameOperator();
-        HashMap<Integer, Field> fields = Game.getFields();
-
-        ownerHasBoth = false;
-
-        if (owner != null) {
-            for (int i = 0; i < fields.size(); i++) {
-                if (fields.get(i) instanceof Utilitie u) {
-                    if (u != this) {
-                        if (u.getOwner() == owner) {
-                            ownerHasBoth = true;
-                        }
-                    }
-                }
-            }
-            
-        }
-    }
-
-    Rectangle background;
-
-    @Override
-    public Pane buildField(double width, double height, double borderWidth, double fontSize) {
-        Pane field = new Pane();
-        field.setId("station_field");
-        field.setMaxSize(width, height);
-
-        background = buildRectangle("station_Background" ,width, height, ProgramColor.GAMEBOARD_COLOR.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), borderWidth);
-        Label header = buildLabel("station_Header", NAME, Font.font(Main.TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, height / 50);
-        Label priceIndicator = buildLabel("station_PriceIndicator", (PRICE + "€"), Font.font(Main.TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, 5 * (height / 6));
-
-
-        centeringChildInPane(header, field);
-        centeringChildInPane(priceIndicator, field);
-
-        field.getChildren().addAll(background, header, priceIndicator);
-
-        super.field = field;
-        return field;
-    }
-
-    public void highlightField() {
-        background.setStrokeWidth(background.getStrokeWidth() * 2);
-        background.setStroke(ProgramColor.BORDER_COLOR_LIGHT.getColor());
-
-        field.toFront();
-    }
-
-    public void removeHighlight() {
-        background.setStrokeWidth(background.getStrokeWidth() / 2);
-        background.setStroke(ProgramColor.BORDER_COLOR_DARK.getColor());
-    }
-
 }

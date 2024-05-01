@@ -51,13 +51,9 @@ public class LeaveDisplay extends Pane {
 
         getChildren().addAll(infoText, yesButton, noButton);
 
-        yesButton.setOnMouseClicked(mouseEvent -> {
-            Main.getGameOperator().removePlayer();
-        });
+        yesButton.setOnMouseClicked(mouseEvent -> Main.getGameOperator().removePlayer());
 
-        noButton.setOnMouseClicked(mouseEvent -> {
-            rootDisplay.removeDisplay();
-        });
+        noButton.setOnMouseClicked(mouseEvent -> rootDisplay.removeDisplay());
 
     }
 }

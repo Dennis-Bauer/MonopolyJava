@@ -44,25 +44,26 @@ public class GameDisplayControllerTwo extends Pane {
     }
 
     public void displayDice() {
-        actionDisplay.setVisible(false);
-        returnDisplay.setVisible(false);
+        resetDisplay();
 
         diceDisplay.setVisible(true);
     }
 
     public void displayPlayerAction() {
-        diceDisplay.setVisible(false);
-        returnDisplay.setVisible(false);
+        resetDisplay();
 
         actionDisplay.setVisible(true);
     }
 
     public void displayReturnButton() {
-        diceDisplay.setVisible(false);
-        actionDisplay.setVisible(false);
+        resetDisplay();
 
         returnDisplay.setVisible(true);
+    }   
+
+    private void resetDisplay() {
+        diceDisplay.setVisible(false);
+        actionDisplay.setVisible(false);
+        returnDisplay.setVisible(false);
     }
-
-
 }

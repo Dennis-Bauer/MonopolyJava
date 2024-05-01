@@ -6,6 +6,7 @@ import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtiliti
 import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXUtilities.centeringChildInPane;
 
 import de.sandwich.Main;
+import de.sandwich.Player;
 import de.sandwich.Enums.ProgramColor;
 import de.sandwich.Fields.Station;
 import de.sandwich.GUI.Game.DisplayController.MiddleGameDisplayController;
@@ -19,6 +20,7 @@ public class BuyStationDisplay extends Pane {
 
     private final Label infoText;
     private final MiddleGameDisplayController rootDisplay;
+
     private Station displayedStation;
 
     public BuyStationDisplay(double width, double height, MiddleGameDisplayController rootDisplay) {
@@ -55,12 +57,18 @@ public class BuyStationDisplay extends Pane {
         getChildren().addAll(infoText, buyButton, refuseButton);
 
         buyButton.setOnMouseClicked(mouseEvent -> {
-            rootDisplay.removeDisplay();
             if (displayedStation != null) {
-                displayedStation.setOwner(Main.getGameOperator().getTurnPlayer());
-                Main.getGameOperator().getTurnPlayer().transferMoneyToBankAccount(-displayedStation.getPrice());
 
-                Main.getGameOperator().setVisibilityTurnFinButton(true);
+                Player p = Main.getGameOperator().getTurnPlayer();
+
+                if (p.getBankAccount() >= displayedStation.getPrice()) {
+                    displayedStation.setOwner(p);
+                    Main.getGameOperator().getTurnPlayer().transferMoneyToBankAccount(-displayedStation.getPrice());
+    
+                    rootDisplay.removeDisplay();
+
+                    Main.getGameOperator().setVisibilityTurnFinButton(true);
+                } else rootDisplay.errorAnimation();
             } else throw new NullPointerException("The station the player want to buy is null!");
         });
 
@@ -78,5 +86,3 @@ public class BuyStationDisplay extends Pane {
         displayedStation = s;
     }
 }
-
-

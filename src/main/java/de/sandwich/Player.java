@@ -4,9 +4,16 @@ import de.sandwich.DennisUtilitiesPackage.Java.ConsoleUtilities;
 import de.sandwich.Enums.Figuren;
 import de.sandwich.Exceptions.NumberIsToBigLowExceptions;
 import de.sandwich.Exceptions.PlayerNotFoundExceptions;
+import de.sandwich.Fields.Field;
+import de.sandwich.Fields.Station;
+import de.sandwich.Fields.Street;
+import de.sandwich.Fields.Utilitie;
+import de.sandwich.GUI.Game.Displays.DisplayOne.BuildDisplay;
 
 import static de.sandwich.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPut;
 import static de.sandwich.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPutLine;
+
+import java.util.HashMap;
 
 public class Player {
 
@@ -17,6 +24,7 @@ public class Player {
 
     //Game variables
     private boolean isInJail = false;
+    private boolean hasGivenUp = false;
     private int freeJailCards = 0;
     private int inJailRemain = 4;
     private int bankAccount;
@@ -71,6 +79,30 @@ public class Player {
         isInJail = false;
     }
 
+    public void giveUp() {
+        hasGivenUp = true;
+
+        Main.getGameOperator();
+        HashMap<Integer, Field> FIELDS = Game.getFields();
+
+        for (int i = 0; i < FIELDS.size(); i++) {
+                if (FIELDS.get(i) instanceof Street f) {
+                    if (f.getOwner() == this) {
+                        if (f.getHouseNumber() > 0)
+                            BuildDisplay.setHousesRemain(BuildDisplay.getHousesRemain() + f.getHouseNumber());
+                        f.setOwner(null);
+                    }
+                } else if (FIELDS.get(i) instanceof Utilitie f) {
+                    if (f.getOwner() == this)
+                        f.setOwner(null);
+                } if (FIELDS.get(i) instanceof Station f) {
+                    if (f.getOwner() == this)
+                        f.setOwner(null);
+                }
+            }
+
+    }
+
     public void moveFieldPostion(int postions) {
         fieldPostion = fieldPostion + postions;
         if (fieldPostion >= 40) {
@@ -119,6 +151,10 @@ public class Player {
 
     public boolean isInJail() {
         return isInJail;
+    }
+
+    public boolean hasGivenUp() {
+        return hasGivenUp;
     }
 
     @Override

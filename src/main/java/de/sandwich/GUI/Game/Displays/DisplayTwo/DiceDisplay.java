@@ -59,8 +59,9 @@ public class DiceDisplay extends Pane {
         roleDiceButton.setLayoutX(width / 2 - (width * 0.80) / 2);
         roleDiceButton.setLayoutY(numberField.getLayoutY() + numberField.getMaxHeight() + height * 0.05);
 
-        Label buttonText = buildLabel("gameScene_roleDiceButton_Text", "Würfel!", Font.font(Main.TEXT_FONT, FontWeight.BOLD, width * 0.05), TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor());
+        Label buttonText = buildLabel("gameScene_roleDiceButton_Text", "Würfeln!", Font.font(Main.TEXT_FONT, FontWeight.BOLD, width * 0.05), TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor());
         centeringChildInPane(buttonText, roleDiceButton);
+        buttonText.layoutYProperty().bind(roleDiceButton.heightProperty().divide(2).subtract(buttonText.heightProperty().divide(2)));
 
         numberField.getChildren().addAll(numberBackground, arrowOne, arrowTwo, numberRowOne, numberRowTwo);
         roleDiceButton.getChildren().addAll(
@@ -75,18 +76,15 @@ public class DiceDisplay extends Pane {
             rowTwoAnimation = new NumberAnimationThread(numberRowTwo);
 
             if (!rowOneAnimation.isAlive() && !rowTwoAnimation.isAlive() && !dicesLocked) {
-                rowOneAnimation.setLength(rn.nextInt(60 - 20 + 1) + 20);
-                rowTwoAnimation.setLength(rn.nextInt(60 - 20 + 1) + 20);
+                rowOneAnimation.setLength(rn.nextInt(90 - 20 + 1) + 20);
+                rowTwoAnimation.setLength(rn.nextInt(90 - 20 + 1) + 20);
 
                 rowOneAnimation.start();
                 rowTwoAnimation.start();
 
                 diceNumbers[0] = rowOneAnimation.getLastNumber();
                 diceNumbers[1] = rowTwoAnimation.getLastNumber();
-
-                diceNumbers[0] = 7;
-                diceNumbers[1] = 0;
-
+                
                 Main.getGameOperator().playerRolledDice(diceNumbers[0], diceNumbers[1]);
                 if (Main.CONSOLE_OUT_PUT) {
                     consoleOutPutLine(ConsoleUtilities.colors.WHITE, ConsoleUtilities.textStyle.REGULAR, Main.CONSOLE_OUT_PUT_LINEBREAK);

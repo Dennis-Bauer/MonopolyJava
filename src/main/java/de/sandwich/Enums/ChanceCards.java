@@ -6,7 +6,7 @@ public enum ChanceCards {
 
 
     //Extra
-    FREE_JAIL(buildLongText("Du bekommst eine", "Gefängnis frei Karte. Behalte", "sie und nutze sie", "beim nächsten mal."), -1),
+    FREE_JAIL(buildLongText("Du bekommst eine", "Gefängnis Freikarte. Behalte", "sie und nutze sie", "beim nächsten mal."), -1),
     GO_TO_JAIL("Du wurdest festgenommen!", -2),
     GO_3_BACK("Gehe 3 Felder zurück", -3),
     GO_TO_START("Rücke bis auf Los vor.", -4),
@@ -22,7 +22,7 @@ public enum ChanceCards {
     //Normal
     PAY_FINE(buildLongText("Zahle eine Strafe wegen zu", "langem Penis"), -200),
     EMO_PAY(buildLongText("Strafe für zu emo", "haftes benehmen."), -300),
-    BANK_MONEY_1(buildLongText("Deine Onlyfans", "Karriere leuft sehr gut."), 1000),
+    BANK_MONEY_1(buildLongText("Deine onlyfans", "Karriere leuft sehr gut."), 1000),
     BANK_MONEY_2(buildLongText("Du hast jemanden für", "Geld in seinem Auto gespert."), 3000);
 
     private final String MESSAGE;

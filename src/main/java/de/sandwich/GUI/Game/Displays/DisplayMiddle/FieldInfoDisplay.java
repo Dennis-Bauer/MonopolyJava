@@ -95,7 +95,7 @@ public class FieldInfoDisplay extends Pane {
 
         //Property price info
         Label infoPropertyPrice = buildLabel("streetInfo_info_PropertyPrice", "Grundstückswert:", infoTextFont, TextAlignment.RIGHT, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, h * 0.18);
-        Label propertyPrice = buildLabel("streetInfo_number_PropertyPrice", street.getSalePrice() + "€ ", infoFont, TextAlignment.LEFT, ProgramColor.TEXT_COLOR.getColor(), 0 ,h * 0.18);
+        Label propertyPrice = buildLabel("streetInfo_number_PropertyPrice", street.getPrice() + "€ ", infoFont, TextAlignment.LEFT, ProgramColor.TEXT_COLOR.getColor(), 0 ,h * 0.18);
         propertyPrice.layoutXProperty().bind(box.widthProperty().subtract(propertyPrice.widthProperty()));
 
         //Rent alone info
@@ -234,7 +234,6 @@ public class FieldInfoDisplay extends Pane {
         );
              
         return box;
-
     }
 
     public static Pane getStationInfoBox(Station station, double w, double h) {
@@ -283,7 +282,7 @@ public class FieldInfoDisplay extends Pane {
         centeringChildInPane(rentFour, box);
 
         //Rent this station info
-        Label infoRentThis = buildLabel("stationInfo_info_RentThis", "Dieser Bahnhof:", infoTextFont, TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, h * 0.86);
+        Label infoRentThis = buildLabel("stationInfo_info_RentThis", "Miete von hier:", infoTextFont, TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, h * 0.86);
         centeringChildInPane(infoRentThis, box);
         Label rentThis = buildLabel("stationInfo_number_RentFour", "---", infoFont, TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor(), 0, h * 0.91);
         centeringChildInPane(rentThis, box);
@@ -322,7 +321,7 @@ public class FieldInfoDisplay extends Pane {
     }
 
     public static Pane getUtilitieInfoBox(Utilitie utilitie, double w, double h) {
-        final double heightMultiplicator = 0.35;
+        final double HEIGHT_MULTIPLICATOR = 0.35;
 
         Pane box = new Pane();
         box.setMaxSize(w, h);
@@ -335,10 +334,10 @@ public class FieldInfoDisplay extends Pane {
         //Fonts
         Font infoTextFont = Font.font(Main.TEXT_FONT, w * 0.075);
 
-        Label textOne = buildLabel("utilitieInfo_info_MultiplicatorOne", buildLongText("Wenn der Besitzter nur einer", "der Werke besitzt, ist die Mite", "bei seinem Werk 80mal die", "Augenzahl der Würfel!"), infoTextFont, TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, h * 0.17);
+        Label textOne = buildLabel("utilitieInfo_info_MultiplicatorOne", buildLongText("Wenn der Besitzter nur einer", "der Werke besitzt, ist die Miete", "bei seinem Werk 80mal die", "Augenzahl der Würfel!"), infoTextFont, TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, h * 0.17);
         centeringChildInPane(textOne, box);
 
-        Label textTwo = buildLabel("utilitieInfo_info_MultiplicatorTwo", buildLongText("Wenn der Besitzter beide", "der Werke besitzt, ist die Mite", "bei beiden Werken 200mal die", "Augenzahl der Würfel!"), infoTextFont, TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, h * 0.52);
+        Label textTwo = buildLabel("utilitieInfo_info_MultiplicatorTwo", buildLongText("Wenn der Besitzter beide", "der Werke besitzt, ist die Miete", "bei beiden Werken 200mal die", "Augenzahl der Würfel!"), infoTextFont, TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, h * 0.52);
         centeringChildInPane(textTwo, box);
 
         if (utilitie.isOwned()) {
@@ -361,13 +360,13 @@ public class FieldInfoDisplay extends Pane {
     
         //Adding all nodes
         box.getChildren().addAll(
-            buildRectangle("stationInfo_Background", w, h, ProgramColor.FIELD_INFO_BACKGROUND.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), w * 0.02),
+            buildRectangle("utilitieInfo_Background", w, h, ProgramColor.FIELD_INFO_BACKGROUND.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), w * 0.02),
             name,
-            buildLine("stationInfo_separatingLine_Header|Rent", new Point2D(0.01, h * startLineY), new Point2D(w * 0.99, h * startLineY), w * 0.02, ProgramColor.BORDER_COLOR_DARK.getColor()),
+            buildLine("utilitieInfo_separatingLine_Header|TextOne", new Point2D(0.01, h * startLineY), new Point2D(w * 0.99, h * startLineY), w * 0.02, ProgramColor.BORDER_COLOR_DARK.getColor()),
             textOne,
-            buildLine("stationInfo_separatingLine_PropertyPrice|RentOneStation", new Point2D(0.01, h * (startLineY + heightMultiplicator)), new Point2D(w * 0.99, h * (startLineY + heightMultiplicator)), w * 0.02, ProgramColor.BORDER_COLOR_DARK.getColor()),
+            buildLine("utilitieInfo_separatingLine_TextOne|TextTwo", new Point2D(0.01, h * (startLineY + HEIGHT_MULTIPLICATOR)), new Point2D(w * 0.99, h * (startLineY + HEIGHT_MULTIPLICATOR)), w * 0.02, ProgramColor.BORDER_COLOR_DARK.getColor()),
             textTwo,
-            buildLine("stationInfo_separatingLine_RentOneStation|RentTwoStations", new Point2D(0.01, h * (startLineY + (heightMultiplicator * 2))), new Point2D(w * 0.99, h * (startLineY + (heightMultiplicator * 2))), w * 0.02, ProgramColor.BORDER_COLOR_DARK.getColor()),
+            buildLine("utilitieInfo_separatingLine_TextTwo|infoProperty", new Point2D(0.01, h * (startLineY + (HEIGHT_MULTIPLICATOR * 2))), new Point2D(w * 0.99, h * (startLineY + (HEIGHT_MULTIPLICATOR * 2))), w * 0.02, ProgramColor.BORDER_COLOR_DARK.getColor()),
             infoPropertyPrice,
             propertyPrice
         );  

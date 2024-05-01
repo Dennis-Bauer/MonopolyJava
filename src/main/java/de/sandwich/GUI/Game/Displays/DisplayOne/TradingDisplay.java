@@ -134,7 +134,7 @@ public class TradingDisplay extends Pane {
         setRightCash.getChildren().addAll(addRightCash, rightCashLabel, removeRightCash);
 
         //Trade button
-        StackPane tradeButton = new StackPane(buildLabel("gameScene_playerDisplay_tradingMenu_tradeButton_Text", "Traden", Font.font(Main.TEXT_FONT, FontWeight.BOLD, WIDTH * 0.024), TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor()));
+        StackPane tradeButton = new StackPane(buildLabel("gameScene_playerDisplay_tradingMenu_tradeButton_Text", "Handel abschließen!", Font.font(Main.TEXT_FONT, FontWeight.BOLD, WIDTH * 0.024), TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor()));
 
         Rectangle backgroundCancelButton = buildRectangle("gameScene_playerDisplay_tradingMenu_tradeButton_Background", WIDTH * 0.30, BUTTON_HEIGHT, ProgramColor.TRADING_BUTTON_COLOR.getColor(), true, ProgramColor.BORDER_COLOR_LIGHT.getColor(), BORDER_WIDTH);
         backgroundCancelButton.setArcWidth(backgroundCancelButton.getHeight());
@@ -244,6 +244,8 @@ public class TradingDisplay extends Pane {
 
     private void resetTrading() {
         getChildren().clear();
+
+        chosenFields.clear();
 
         //Header
         Label header = buildLabel("gameScene_playerDisplay_tradingMenu_Header", "Trading", Font.font(Main.TEXT_FONT, FontWeight.BOLD, WIDTH / 15), TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor());

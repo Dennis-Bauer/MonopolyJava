@@ -14,6 +14,7 @@ import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtiliti
 import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXUtilities.centeringChildInPane;
 
 import de.sandwich.Main;
+import de.sandwich.Player;
 import de.sandwich.Enums.ProgramColor;
 import de.sandwich.Fields.Street;
 
@@ -21,6 +22,7 @@ public class BuyStreetDisplay extends Pane {
 
     private final Label infoText;
     private final MiddleGameDisplayController rootDisplay;
+
     private Street displayedStreet;
 
     public BuyStreetDisplay(double width, double height, MiddleGameDisplayController rootDisplay) {
@@ -57,12 +59,18 @@ public class BuyStreetDisplay extends Pane {
         getChildren().addAll(infoText, buyButton, refuseButton);
 
         buyButton.setOnMouseClicked(mouseEvent -> {
-            rootDisplay.removeDisplay();
             if (displayedStreet != null) {
-                displayedStreet.setOwner(Main.getGameOperator().getTurnPlayer());
-                Main.getGameOperator().getTurnPlayer().transferMoneyToBankAccount(-displayedStreet.getSalePrice());
 
-                Main.getGameOperator().setVisibilityTurnFinButton(true);
+                Player p = Main.getGameOperator().getTurnPlayer();
+
+                if (p.getBankAccount() >= displayedStreet.getPrice()) {
+                    displayedStreet.setOwner(p);
+                    Main.getGameOperator().getTurnPlayer().transferMoneyToBankAccount(-displayedStreet.getPrice());
+    
+                    rootDisplay.removeDisplay();
+
+                    Main.getGameOperator().setVisibilityTurnFinButton(true);
+                } else rootDisplay.errorAnimation();
             } else throw new NullPointerException("The street the player want to buy is null!");
         });
 
@@ -74,7 +82,7 @@ public class BuyStreetDisplay extends Pane {
     }
 
     public void showStreet(Street s) {
-        infoText.setText(buildLongText(s.getName(), s.getSalePrice() + "€"));
+        infoText.setText(buildLongText(s.getName(), s.getPrice() + "€"));
         centeringChildInPane(infoText, rootDisplay);
 
         displayedStreet = s;

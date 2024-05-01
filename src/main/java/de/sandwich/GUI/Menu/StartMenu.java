@@ -177,12 +177,12 @@ public class StartMenu extends Pane{
                         consoleOutPutLine(ConsoleUtilities.colors.RED, ConsoleUtilities.textStyle.REGULAR, "FEHLER: 002");
                 }
             } else if (aktivPlayer == 1) {
-                errorMessage.setText("Fehler: Es muss mehr als ein Spieler Spielen!");
+                errorMessage.setText("Fehler: Es müssen mindestens 2 Spieler spielen!");
                 errorMessage.setVisible(true);
                 if (Main.CONSOLE_OUT_PUT)
                     consoleOutPutLine(ConsoleUtilities.colors.RED, ConsoleUtilities.textStyle.REGULAR, "FEHLER: 003");
             } else {
-                errorMessage.setText("Fehler: Es müssen Spieler erstellt werden damit das Spiel beginnen kann!");
+                errorMessage.setText("Fehler: Es müssen Spieler erstellt werden, damit das Spiel beginnen kann!");
                 errorMessage.setVisible(true);
             }
 

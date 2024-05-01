@@ -19,19 +19,19 @@ import javafx.scene.text.TextAlignment;
 
 public class Corner extends Field {
 
-    private final CornerTyp typ;
+    private final CornerTyp TYP;
 
     public Corner(CornerTyp typ, double postion) {
         super(postion);
-        this.typ = typ;
+        this.TYP = typ;
     }
 
     public CornerTyp getTyp() {
-        return typ;
+        return TYP;
     }
 
     public Pane buildCorner(double borderWidth, double fontSize, double size) {
-        switch (typ) {
+        switch (TYP) {
             case START -> {
                 return buildStart(borderWidth, fontSize, size);
             }
@@ -57,7 +57,7 @@ public class Corner extends Field {
 
         Rectangle background = buildRectangle("corner_start_Background", size, size, ProgramColor.GAMEBOARD_COLOR.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), borderWidth);
         ImageView arrow = createImageView("corner_start_Arrow" ,"/de/sandwich/monopoly/gameBoard/startArrow.png", size / 6, size / 1.25, (size -(size / 1.25)) / 2, (size -(size / 1.25)) / 2);
-        Label text = buildLabel("corner_start_Text", buildLongText("LOS", "Bekomme 4000", "beim drüber gehen"), Font.font(Main.TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor());
+        Label text = buildLabel("corner_start_Text", buildLongText("LOS", "Bekomme 4000,", "wenn du rüber gehst"), Font.font(Main.TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor());
 
         text.widthProperty().addListener((obs, oldVal, newVal) -> text.setTranslateX((size - newVal.doubleValue()) / 0.8));
         text.heightProperty().addListener((obs, oldVal, newVal) -> text.setTranslateY((newVal.doubleValue()) / 1.5));
@@ -134,5 +134,4 @@ public class Corner extends Field {
         super.field = field;
         return field;
     }
-
 }

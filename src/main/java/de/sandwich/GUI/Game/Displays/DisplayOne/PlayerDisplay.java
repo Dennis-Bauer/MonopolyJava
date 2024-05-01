@@ -65,9 +65,12 @@ public class PlayerDisplay extends Pane{
         display.setId("gameScene_playerDisplay_Players");
 
         //Sets the player figure images that displayed
-        for (int i = 0; i != players.size(); i++) {
-            if (players.get(i) != null)
+        for (int i = players.size() - 1; i >= 0; i--) {
+            if (players.get(i) == null || players.get(i).hasGivenUp()) {
+                players.remove(i);
+            } else {
                 playerOrderFigures[i].setImage(players.get(i).getFigur().getFigureImage());
+            }
         }
 
         arePlayerGenerated = true;

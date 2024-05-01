@@ -20,22 +20,14 @@ import javafx.scene.text.TextAlignment;
 
 public class PayExtra extends Field{
 
-    private final int price;
-    private final ExtraFields typ;
+    private final int PRICE;
+    private final ExtraFields TYP;
 
     public PayExtra(int price, ExtraFields typ, double postion) {
         super(postion);
-        this.price = price;
-        this.typ = typ;
-
-    }
-
-    public ExtraFields getTyp() {
-        return typ;
-    }
-
-    public int getPrice() {
-        return price;
+        
+        this.PRICE = price;
+        this.TYP = typ;
     }
 
     @Override
@@ -46,29 +38,21 @@ public class PayExtra extends Field{
 
         Rectangle background = buildRectangle("extraPay_Background" ,width, height, ProgramColor.GAMEBOARD_COLOR.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), borderWidth);
         Label header = buildLabel("extraPay_Header", "ERROR", Font.font(Main.TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, height / 10);
-        Label priceIndicator = buildLabel("station_PriceIndicator", (price + "€"), Font.font(Main.TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, 5 * (height / 6));
+        Label priceIndicator = buildLabel("station_PriceIndicator", (PRICE + "€"), Font.font(Main.TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, 5 * (height / 6));
 
 
         centeringChildInPane(header, field);
         centeringChildInPane(priceIndicator, field);
 
         ImageView picture = null;
-        switch (typ) {
+        switch (TYP) {
             case SPOTIFY_PREMIUM -> {
                 picture = createImageView("community_Image", "/de/sandwich/monopoly/gameBoard/spotify.png", width / 1.2, width / 1.2,(width - width / 1.15) / 2, height / 3);
-                header.setText(buildLongText("Spotify", "Premium Abo"));
+                header.setText(buildLongText("Spotify", "Premium-Abo"));
             }
             case HESSLER_SCHULDEN -> {
                 picture = createImageView("community_Image", "/de/sandwich/monopoly/gameBoard/hessler.png", width / 3.4, height / 2.3,(width - width / 3.3) / 2, height / 2.7);
                 header.setText(buildLongText("Freu Hessler", "Schulden ab", "bezahlen"));
-            }
-            case NAME_THREE -> {
-                picture = createImageView("community_Image", "/de/sandwich/monopoly/gameBoard/spotify.png", width / 1.2, width / 1.2,(width - width / 1.15) / 2, height / 3);
-                header.setText("NAME3");
-            }
-            case NAME_FOUR -> {
-                picture = createImageView("community_Image", "/de/sandwich/monopoly/gameBoard/spotify.png", width / 1.2, width / 1.2,(width - width / 1.15) / 2, height / 3);
-                header.setText("NAME4");
             }
         }
 
@@ -78,4 +62,11 @@ public class PayExtra extends Field{
         return field;
     }
 
+    public ExtraFields getTyp() {
+        return TYP;
+    }
+
+    public int getPrice() {
+        return PRICE;
+    }
 }

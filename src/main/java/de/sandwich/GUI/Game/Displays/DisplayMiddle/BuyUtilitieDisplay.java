@@ -6,6 +6,7 @@ import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtiliti
 import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXUtilities.centeringChildInPane;
 
 import de.sandwich.Main;
+import de.sandwich.Player;
 import de.sandwich.Enums.ProgramColor;
 import de.sandwich.Fields.Utilitie;
 import de.sandwich.GUI.Game.DisplayController.MiddleGameDisplayController;
@@ -19,6 +20,7 @@ public class BuyUtilitieDisplay extends Pane {
 
     private final Label infoText;
     private final MiddleGameDisplayController rootDisplay;
+
     private Utilitie displayedUtilitie;
 
     public BuyUtilitieDisplay(double width, double height, MiddleGameDisplayController rootDisplay) {
@@ -29,7 +31,6 @@ public class BuyUtilitieDisplay extends Pane {
 
         infoText = buildLabel("buyUtilitieDisplay_InfoText", buildLongText("NULL_UTILITIE", "NULL_MONEY"), Font.font(Main.TEXT_FONT, width * 0.10), TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor());
         centeringChildInPane(infoText, rootDisplay);
-
         double spaceEdge = width * 0.05;
 
         StackPane buyButton = new StackPane();
@@ -57,13 +58,16 @@ public class BuyUtilitieDisplay extends Pane {
         buyButton.setOnMouseClicked(mouseEvent -> {
             rootDisplay.removeDisplay();
             if (displayedUtilitie != null) {
-                displayedUtilitie.setOwner(Main.getGameOperator().getTurnPlayer());
-                
-                System.out.println("Die U ist Owned: " + displayedUtilitie.isOwned());
+                Player p = Main.getGameOperator().getTurnPlayer();
 
-                Main.getGameOperator().getTurnPlayer().transferMoneyToBankAccount(-displayedUtilitie.getPrice());
+                if (p.getBankAccount() >= displayedUtilitie.getPrice()) {
+                    displayedUtilitie.setOwner(p);
+                    Main.getGameOperator().getTurnPlayer().transferMoneyToBankAccount(-displayedUtilitie.getPrice());
 
-                Main.getGameOperator().setVisibilityTurnFinButton(true);
+                    rootDisplay.removeDisplay();
+
+                    Main.getGameOperator().setVisibilityTurnFinButton(true);
+                } else rootDisplay.errorAnimation();
             } else throw new NullPointerException("The utilitie the player want to buy is null!");
         });
 
@@ -81,5 +85,3 @@ public class BuyUtilitieDisplay extends Pane {
         displayedUtilitie = u;
     }
 }
-
-

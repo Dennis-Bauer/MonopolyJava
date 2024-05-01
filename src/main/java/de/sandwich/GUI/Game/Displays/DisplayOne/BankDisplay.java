@@ -148,7 +148,7 @@ public class BankDisplay extends Pane {
                                 scaleTransitionBig.setOnFinished(actionEvent -> scaleTransitionSmall.play());
     
                                 if (Game.getFields().get(F_NUMBER) instanceof Street s)
-                                    addMortgage(s.getSalePrice() / 2);
+                                    addMortgage(s.getPrice() / 2);
                                 else throw new WrongNodeException();
                             } else if (sObject.getId().endsWith("trueM")) {
                                 sObject.setId(sObject.getId().substring(0, sObject.getId().length() - 1));
@@ -168,11 +168,11 @@ public class BankDisplay extends Pane {
                                 scaleTransitionBig.play();
     
                                 if (Game.getFields().get(F_NUMBER) instanceof Street s)
-                                    addMortgage(-(s.getSalePrice() / 2));
+                                    addMortgage(-(s.getPrice() / 2));
                                 else throw new WrongNodeException();
                             }
                         } else {
-                            Main.getGameOperator().displayErrorMessage("Du kannst diese Straße nicht an die Bank verkaufen, weil da was drauf gebaut ist!");
+                            Main.getGameOperator().displayErrorMessage("Du kannst diese Straße nicht an die Bank verkaufen, weil was auf der Straße drauf gebaut ist!");
                         }
                     }
                 }

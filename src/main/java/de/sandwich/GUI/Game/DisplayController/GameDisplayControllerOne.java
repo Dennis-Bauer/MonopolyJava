@@ -39,13 +39,9 @@ import de.sandwich.GUI.Game.Displays.DisplayOne.TradingDisplay;
 public class GameDisplayControllerOne extends Pane {
 
     private final PlayerDisplay playerDisplay;
-
     private final TradingDisplay tradingDisplay;
-
     private final BankDisplay bankDisplay;
-
     private final BuildDisplay buildDisplay;
-
     private final DestroyDisplay destroyDisplay;
 
     private ArrayList<Player> lastPlayerSave;
@@ -71,7 +67,6 @@ public class GameDisplayControllerOne extends Pane {
         destroyDisplay.setVisible(false);
 
         getChildren().addAll(playerDisplay, tradingDisplay, bankDisplay, buildDisplay, destroyDisplay);
-
     }
 
     public void updateDisplay() throws PlayerNotFoundExceptions {
@@ -89,53 +84,51 @@ public class GameDisplayControllerOne extends Pane {
     }
 
     public void displayPlayers(ArrayList<Player> players) {
-        clearDisplay();
+        resetDisplay();
 
-        playerDisplay.setVisible(true);
-
-        playerDisplay.createPlayers(players);
         lastPlayerSave = players;
+        
+        playerDisplay.setVisible(true);
+        playerDisplay.createPlayers(players);
     }
 
     public void displayTradingMenu(Player playerOne, Player playerTwo) {
-        clearDisplay();
+        resetDisplay();
 
         tradingDisplay.setVisible(true);
-
         tradingDisplay.startTrading(playerOne, playerTwo);
     }
 
     public void displayPlayerDisplay() {
         if (playerDisplay.arePlayersGenerated() && !playerDisplay.isVisible()) {
-
-            clearDisplay();
+            resetDisplay();
 
             playerDisplay.setVisible(true);
         }
     }
 
     public void displayBankDisplay(Player p) {
-        clearDisplay();
+        resetDisplay();
 
         bankDisplay.display(p);
         bankDisplay.setVisible(true);
     }
 
     public void displayBuildDisplay(Player p) {
-        clearDisplay();
+        resetDisplay();
 
         buildDisplay.display(p);
         buildDisplay.setVisible(true);
     }
 
     public void displayDestroyDisplay(Player p) {
-        clearDisplay();
+        resetDisplay();
 
         destroyDisplay.display(p);
         destroyDisplay.setVisible(true);
     }
 
-    private void clearDisplay() {
+    private void resetDisplay() {
         bankDisplay.setVisible(false);
         tradingDisplay.setVisible(false);
         playerDisplay.setVisible(false);
@@ -291,5 +284,4 @@ public class GameDisplayControllerOne extends Pane {
         }
         return streetsR;
     }
-
 }

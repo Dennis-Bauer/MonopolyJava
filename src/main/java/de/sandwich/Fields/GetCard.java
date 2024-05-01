@@ -26,37 +26,37 @@ import javafx.scene.text.TextAlignment;
 public class GetCard extends Field{
 
 
-    private final boolean fieldIsChance;
-
-    private final ChanceColors color;
+    private final boolean IS_CHANCE;
+    private final ChanceColors COLOR;
 
     //Cards
-    private static final CommunityCards[] communityCards = CommunityCards.values();
+    private static final CommunityCards[] COMMUNITY_CARDS = CommunityCards.values();
     private static int communityCardPositon = 0;
-    private static final ChanceCards[] chanceCards = ChanceCards.values();
+
+    private static final ChanceCards[] CHANCE_CARDS = ChanceCards.values();
     private static int chanceCardPositon = 0;
 
     public GetCard(ChanceColors c, double position) {
         super(position);
-        this.color = c;
+        this.COLOR = c;
 
-        fieldIsChance = true;
+        IS_CHANCE = true;
     }
 
     public GetCard(double position) {
         super(position);
-        this.color = null;
+        this.COLOR = null;
 
-        fieldIsChance = false;
+        IS_CHANCE = false;
     }
 
     public boolean isFieldChance() {
-        return fieldIsChance;
+        return IS_CHANCE;
     }
 
     @Override
     public Pane buildField(double width, double height, double borderWidth, double fontSize) {
-        if (fieldIsChance)
+        if (IS_CHANCE)
             return buildGetChanceCard(width, height, borderWidth, fontSize);
         else
             return buildGetCommunityCard(width, height, borderWidth, fontSize);
@@ -71,7 +71,7 @@ public class GetCard extends Field{
         Label header = buildLabel("chance_Header", "Chance", Font.font(Main.TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, height / 50);
 
         Image i = null;
-        switch (Objects.requireNonNull(color)) {
+        switch (Objects.requireNonNull(COLOR)) {
             case RED ->
                     i = creatImage("/de/sandwich/monopoly/gameBoard/chanceRed.png");
             case BLUE ->
@@ -110,44 +110,38 @@ public class GetCard extends Field{
     public static void randomizeCards() {
         //Cards
         Random random = new Random();
-        for (int i = communityCards.length - 1; i > 0; i--) {
+        for (int i = COMMUNITY_CARDS.length - 1; i > 0; i--) {
             int index = random.nextInt(i + 1);
 
-            CommunityCards temp = communityCards[index];
-            communityCards[index] = communityCards[i];
-            communityCards[i] = temp;
+            CommunityCards temp = COMMUNITY_CARDS[index];
+            COMMUNITY_CARDS[index] = COMMUNITY_CARDS[i];
+            COMMUNITY_CARDS[i] = temp;
         }
         
-        for (int i = chanceCards.length - 1; i > 0; i--) {
+        for (int i = CHANCE_CARDS.length - 1; i > 0; i--) {
             int index = random.nextInt(i + 1);
 
-            ChanceCards temp = chanceCards[index];
-            chanceCards[index] = chanceCards[i];
-            chanceCards[i] = temp;
+            ChanceCards temp = CHANCE_CARDS[index];
+            CHANCE_CARDS[index] = CHANCE_CARDS[i];
+            CHANCE_CARDS[i] = temp;
         }
-
-        //4
-        chanceCards[0] = ChanceCards.BANK_MONEY_2;
-
     }
 
     public static CommunityCards getCommunityCard() {
-        
-        CommunityCards c = communityCards[communityCardPositon];
+        CommunityCards c = COMMUNITY_CARDS[communityCardPositon];
 
         communityCardPositon++;
-        if (communityCardPositon >= communityCards.length - 1)
+        if (communityCardPositon >= COMMUNITY_CARDS.length - 1)
             communityCardPositon = 0;
 
         return c;
     }
 
     public static ChanceCards getChanceCard() {
-        
-        ChanceCards c = chanceCards[chanceCardPositon];
+        ChanceCards c = CHANCE_CARDS[chanceCardPositon];
 
         chanceCardPositon++;
-        if (chanceCardPositon >= chanceCards.length - 1)
+        if (chanceCardPositon >= CHANCE_CARDS.length - 1)
             chanceCardPositon = 0;
 
         return c;
@@ -158,5 +152,4 @@ public class GetCard extends Field{
         GREEN,
         BLUE
     }
-
 }

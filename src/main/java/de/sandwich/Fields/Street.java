@@ -24,47 +24,42 @@ import javafx.scene.text.TextAlignment;
 
 public class Street extends Field{
 
-    //Field (Visual) values
-    private final Color color;
-
-    private boolean isInBank = false;
-
     //Street values
-    private final String name;
-    private final int salePrice;
-    private final int group;
-    private final int rent;
-    private final int[] rentHouses;
-    private final int rentHotel;
-    private final int housePrice;
-    private final int hotelPrice;
-
+    private final String NAME;
+    private final Color COLOR;
+    private final int PRICE;
+    private final int GROUP_ID;
+    private final int RENT;
+    private final int[] RENT_HOUSES;
+    private final int RENT_HOTEL;
+    private final int HOUSE_PRICE;
+    private final int HOTEL_PRICE;
 
     //Functional values
-    private int houseNumber = 0;
+    private int houseNumber = 2;
+    private boolean isInBank = false;
     private boolean ownerHasFullColor = false;
     private boolean isOwned;
     private Player owner;
 
-
     public Street(String name, int salePrice, int rent, int[] rentHouses, int rentHotel, int housePrice, int hotelPrice, Color color, int group, double position) {
         super(position);
-        this.name = name;
-        this.salePrice = salePrice;
-        this.group = group;
-        this.rent = rent;
+        this.NAME = name;
+        this.PRICE = salePrice;
+        this.GROUP_ID = group;
+        this.RENT = rent;
 
         if (rentHouses.length != 4)
             throw new IllegalArgumentException("Rents must be stated for 4 houses, Street" + name + "has not sensed this");
         else
-            this.rentHouses = rentHouses;
+            this.RENT_HOUSES = rentHouses;
 
-        this.rentHotel = rentHotel;
+        this.RENT_HOTEL = rentHotel;
 
-        this.housePrice = housePrice;
-        this.hotelPrice = hotelPrice;
+        this.HOUSE_PRICE = housePrice;
+        this.HOTEL_PRICE = hotelPrice;
 
-        this.color = color;
+        this.COLOR = color;
     }
 
     public void setOwner(Player owner) {
@@ -87,22 +82,22 @@ public class Street extends Field{
         field.setMaxSize(width, height);
 
         background = buildRectangle("street_Background" ,width, height, ProgramColor.GAMEBOARD_COLOR.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), borderWidth);
-        colorIndicator = buildRectangle("street_ColorIndicator" ,width, height/4, color, true, ProgramColor.BORDER_COLOR_DARK.getColor(), borderWidth);
-        Label nameIndicator =  buildLabel("street_NameIndicator", name, Font.font(Main.TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, height / 3);
-        Label priceIndicator = buildLabel("street_PriceIndicator", (salePrice + "€"), Font.font(Main.TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, 5 * (height / 6));
+        colorIndicator = buildRectangle("street_ColorIndicator" ,width, height/4, COLOR, true, ProgramColor.BORDER_COLOR_DARK.getColor(), borderWidth);
+        Label nameIndicator =  buildLabel("street_NameIndicator", NAME, Font.font(Main.TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, height / 3);
+        Label priceIndicator = buildLabel("street_PriceIndicator", (PRICE + "€"), Font.font(Main.TEXT_FONT, FontWeight.BOLD, fontSize), TextAlignment.CENTER, ProgramColor.BORDER_COLOR_DARK.getColor(), 0, 5 * (height / 6));
 
         centeringChildInPane(nameIndicator, field);
         centeringChildInPane(priceIndicator, field);
 
-        double hosueWidht = width * 0.18;
-        double houseHeight = height * 0.16;
-        double houseY = houseHeight / 2;
-        double houseSpacing = (width - (hosueWidht * 4)) / 5;
-        houses[0] = buildHouseSymbole(hosueWidht, houseHeight, houseSpacing, houseY);
-        houses[1] = buildHouseSymbole(hosueWidht, houseHeight, hosueWidht + (houseSpacing * 2), houseY);
-        houses[2] = buildHouseSymbole(hosueWidht, houseHeight, (hosueWidht * 2) + (houseSpacing * 3), houseY);
-        houses[3] = buildHouseSymbole(hosueWidht, houseHeight, (hosueWidht * 3) + (houseSpacing * 4), houseY);
-        hotel = buildHotelSymbole(hosueWidht, houseHeight, (width / 2) - (hosueWidht / 2), houseY);
+        final double HOUSE_W = width * 0.18;
+        final double HOUSE_H = height * 0.16;
+        final double HOUSE_Y = HOUSE_H / 2;
+        final double HOUSE_SPACING = (width - (HOUSE_W * 4)) / 5;
+        houses[0] = buildHouseSymbole(HOUSE_W, HOUSE_H, HOUSE_SPACING, HOUSE_Y);
+        houses[1] = buildHouseSymbole(HOUSE_W, HOUSE_H, HOUSE_W + (HOUSE_SPACING * 2), HOUSE_Y);
+        houses[2] = buildHouseSymbole(HOUSE_W, HOUSE_H, (HOUSE_W * 2) + (HOUSE_SPACING * 3), HOUSE_Y);
+        houses[3] = buildHouseSymbole(HOUSE_W, HOUSE_H, (HOUSE_W * 3) + (HOUSE_SPACING * 4), HOUSE_Y);
+        hotel = buildHotelSymbole(HOUSE_W, HOUSE_H, (width / 2) - (HOUSE_W / 2), HOUSE_Y);
 
         field.getChildren().addAll(background, colorIndicator, nameIndicator, priceIndicator, hotel);
 
@@ -119,14 +114,14 @@ public class Street extends Field{
     public void sellToTheBank() {
         if (!isInBank) {
             isInBank = true;
-            owner.transferMoneyToBankAccount(salePrice / 2);
+            owner.transferMoneyToBankAccount(PRICE / 2);
         }
     }
 
     public void purchaseFromBank() {
         if (isInBank) {
             isInBank = false;
-            owner.transferMoneyToBankAccount(-(salePrice / 2));
+            owner.transferMoneyToBankAccount(-(PRICE / 2));
         }
     }
 
@@ -190,19 +185,55 @@ public class Street extends Field{
 
     }
 
+    private void setOwnerHasFullColor(boolean ownerHasFullColor) {
+        this.ownerHasFullColor = ownerHasFullColor;
+    }
+
+    private boolean isFullColorGroup(Player owner) {
+        Main.getGameOperator();
+        HashMap<Integer, Field> fields = Game.getFields();
+
+        if (isOwned) {
+            for (int i = 0; i < fields.size(); i++) {
+                if (fields.get(i) instanceof Street s) {
+                    if (s != this) {
+                        if (s.getGroupId() == GROUP_ID) {
+                            if (s.isOwned) {
+                                if (s.getOwner() != owner) {
+                                    return false;
+                                }
+                            } else return false; 
+                        }
+                    }
+                }
+            }
+        } else return false;
+        
+
+        for (int i = 0; i < fields.size(); i++) {
+            if (fields.get(i) instanceof Street s) {
+                if (s.getGroupId() == GROUP_ID) {
+                    s.setOwnerHasFullColor(true);
+                }
+            }
+        }
+
+        return true;
+    }
+
     public int getPlayerRent() {
         if (ownerHasFullColor) {
             switch (houseNumber) {
-                case 0 -> {return rent * 2;}
-                case 1 -> {return rentHouses[0];}
-                case 2 -> {return rentHouses[1];}
-                case 3 -> {return rentHouses[2];}
-                case 4 -> {return rentHouses[3];}
-                case -1 -> {return rentHotel;}
+                case 0 -> {return RENT * 2;}
+                case 1 -> {return RENT_HOUSES[0];}
+                case 2 -> {return RENT_HOUSES[1];}
+                case 3 -> {return RENT_HOUSES[2];}
+                case 4 -> {return RENT_HOUSES[3];}
+                case -1 -> {return RENT_HOTEL;}
                 default -> throw new IllegalArgumentException("An unexpected number of houses were discovered");
             }
         } else {
-            return rent;
+            return RENT;
         }
     }
 
@@ -223,82 +254,43 @@ public class Street extends Field{
     }
 
     public Color getColor() {
-        return color;
+        return COLOR;
     }
 
-    public int getSalePrice() {
-        return salePrice;
+    public int getPrice() {
+        return PRICE;
     }
 
     public String getName() {
-        return name;
+        return NAME;
     }
 
     public int getRent() {
-        return rent;
+        return RENT;
     }
 
     public int[] getRentHouse() {
-        return rentHouses;
+        return RENT_HOUSES;
     }
 
     public int getRentHotel() {
-        return rentHotel;
+        return RENT_HOTEL;
     }
 
     public int getHousePrice() {
-        return housePrice;
+        return HOUSE_PRICE;
     }
 
     public int getHotelPrice() {
-        return hotelPrice;
+        return HOTEL_PRICE;
     }
 
-    public int getGroup() {
-        return group;
+    public int getGroupId() {
+        return GROUP_ID;
     }
 
     public boolean isInBank() {
         return isInBank;
-    }
-
-    public void setOwnerHasFullColor(boolean ownerHasFullColor) {
-        this.ownerHasFullColor = ownerHasFullColor;
-    }
-
-    private boolean isFullColorGroup(Player owner) {
-        Main.getGameOperator();
-        HashMap<Integer, Field> fields = Game.getFields();
-
-        if (isOwned) {
-            for (int i = 0; i < fields.size(); i++) {
-                if (fields.get(i) instanceof Street s) {
-                    if (s != this) {
-                        if (s.getGroup() == group) {
-                            if (s.isOwned) {
-                                if (s.getOwner() != owner) {
-                                    return false;
-                                }
-                            } else {
-                                return false;
-                            }
-                        }
-                    }
-                }
-            }
-        } else {
-            return false;
-        }
-
-        for (int i = 0; i < fields.size(); i++) {
-            if (fields.get(i) instanceof Street s) {
-                if (s.getGroup() == group) {
-                    s.setOwnerHasFullColor(true);
-                }
-            }
-        }
-
-        return true;
     }
 
     public static Pane buildHouseSymbole(double houseWidth, double houseHeight, double x, double y) {

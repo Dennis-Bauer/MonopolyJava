@@ -19,6 +19,4 @@ public abstract class Field {
     public double getPosition() {
         return POS;
     }
-
-
 }

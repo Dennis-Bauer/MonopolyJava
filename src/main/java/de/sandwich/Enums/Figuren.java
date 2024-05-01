@@ -17,14 +17,14 @@ public enum Figuren {
     OCTOPUS(creatImage("/de/sandwich/monopoly/figuren/octopus.png")),
     FROG(creatImage("/de/sandwich/monopoly/figuren/frog.png"));
 
-    private final Image figureImage;
+    private final Image FIGURE_IMAGE;
 
     Figuren(Image i) {
-        this.figureImage = i;
+        this.FIGURE_IMAGE = i;
     }
 
     public Image getFigureImage() {
-        return figureImage;
+        return FIGURE_IMAGE;
     }
 
 }

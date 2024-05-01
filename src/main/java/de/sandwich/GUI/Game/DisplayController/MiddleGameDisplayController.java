@@ -100,6 +100,8 @@ public class MiddleGameDisplayController extends Pane{
     public void displayBuyStreetDisplay(Street street) {
         resetDisplay();
 
+        Main.getGameOperator().setVisibilityTurnFinButton(false);
+
         buyStreetDisplay.showStreet(street);
         buyStreetDisplay.setVisible(true);
         enterAnimation(true);
@@ -108,15 +110,14 @@ public class MiddleGameDisplayController extends Pane{
     public void displayPayDisplay(String message, int price) {
         resetDisplay();
 
-        System.out.println("Das pay Display wird angezeigt");
+        Main.getGameOperator().setVisibilityTurnFinButton(false);
 
         buyStreetDisplay.setVisible(false);
 
         payDisplay.showPayScreen(message, price);
         payDisplay.setVisible(true);
         enterAnimation(true);
-    }
-    
+    } 
 
     public void displayUtilitieInfoDisplay(Utilitie utilitie) {
         if (!buyStreetDisplay.isVisible() && !payDisplay.isVisible() && !inJailDisplay.isVisible() && !buyStationDisplay.isVisible()) {
@@ -149,7 +150,6 @@ public class MiddleGameDisplayController extends Pane{
                     streetInfoDisplay.buildUtilitieDisplay(utilitie);
 
                     fadeTransition.play();
-
                     liveTransitions.remove(fadeTransition);
                 }
             });
@@ -264,14 +264,7 @@ public class MiddleGameDisplayController extends Pane{
                 fadeTransition.play();
 
                 liveTransitions.remove(fadeTransition);
-            } else {
-                //(Übersetzt mich noch) Hier werden die Würfel ausgeblendet
-                //passiert hier aus dem Grund weil wo anderes sie sonst sofort
-                //verschwinden würde, weil eigentlich verschwinden sie nach dem
-                //bewegen, was es im Gefängnis nicht gibt. So hat man hier noch
-                //die Zeit spanne der Transition
-                Main.getGameOperator().getDisplayControllerTwo().displayPlayerAction();
-            }
+            } else Main.getGameOperator().getDisplayControllerTwo().displayPlayerAction();
         });
     }
 
@@ -296,16 +289,22 @@ public class MiddleGameDisplayController extends Pane{
     public void displayBuyStationDisplay(Station station) {
         resetDisplay();
 
+        Main.getGameOperator().setVisibilityTurnFinButton(false);
+
         buyStationDisplay.showStation(station);
         buyStationDisplay.setVisible(true);
+
         enterAnimation(true);
     }
 
     public void displayBuyUtilitieDisplay(Utilitie utilitie) {
         resetDisplay();
 
+        Main.getGameOperator().setVisibilityTurnFinButton(false);
+
         buyUtilitieDisplay.showUtilitie(utilitie);
         buyUtilitieDisplay.setVisible(true);
+
         enterAnimation(true);
     }
 
@@ -361,7 +360,6 @@ public class MiddleGameDisplayController extends Pane{
     }
 
     public void errorAnimation() {
-
         if (!displayIsInErrorAnimation) {
             displayIsInErrorAnimation = true;
 
@@ -394,10 +392,7 @@ public class MiddleGameDisplayController extends Pane{
                 liveTransitions.remove(transitionNegativ);
                 displayIsInErrorAnimation = false;
             });
-    
-
         } 
-        
     }
 
     private void enterAnimation(boolean playWaitTransition) {
@@ -430,15 +425,14 @@ public class MiddleGameDisplayController extends Pane{
             liveTransitions.remove(fadeTransition);
             liveTransitions.remove(moveTransition);
         });
-
     }
 
     private void resetDisplay() {
         setVisible(false);
 
-        for (Transition transition : liveTransitions) {
+        for (Transition transition : liveTransitions)
             transition.stop();
-        }
+        
 
         displayIsInRemoveAnimation = false;
         displayIsInErrorAnimation = false;
@@ -460,5 +454,4 @@ public class MiddleGameDisplayController extends Pane{
         background.setWidth(NORMAL_WIDTH);
         background.setHeight(NORMAL_HEIGHT);
     }
-
 }

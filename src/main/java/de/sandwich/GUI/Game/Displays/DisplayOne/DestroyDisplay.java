@@ -96,7 +96,7 @@ public class DestroyDisplay extends Pane {
                 boolean playerCanDestroy = true;
                 for (int i = 0; i < fields.size(); i++) {
                     if (fields.get(i) instanceof Street s) {
-                        if (s.getGroup() == activStreet.getGroup()) {
+                        if (s.getGroupId() == activStreet.getGroupId()) {
                             if (s.getHouseNumber() > activStreet.getHouseNumber()) {
                                 playerCanDestroy = false;
                             } if (s.getHouseNumber() == -1 || activStreet.getHouseNumber() == -1) {
@@ -114,8 +114,11 @@ public class DestroyDisplay extends Pane {
                         errorMessage.setVisible(true);
                     } else if (activStreet.getHouseNumber() == -1) {
                         BuildDisplay.setHousesRemain(BuildDisplay.getHousesRemain() - 4);
+                        activStreet.getOwner().transferMoneyToBankAccount(activStreet.getHotelPrice());
                     } else {
                         BuildDisplay.setHousesRemain(BuildDisplay.getHousesRemain() + 1);
+                        activStreet.getOwner().transferMoneyToBankAccount(activStreet.getHousePrice());
+
                     }
 
                     activStreet.removeHouse();

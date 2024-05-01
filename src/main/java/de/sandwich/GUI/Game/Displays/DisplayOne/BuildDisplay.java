@@ -108,7 +108,7 @@ public class BuildDisplay extends Pane {
                 boolean playerCanBuild = true;
                 for (int i = 0; i < fields.size(); i++) {
                     if (fields.get(i) instanceof Street s) {
-                        if (s.getGroup() == activStreet.getGroup()) {
+                        if (s.getGroupId() == activStreet.getGroupId()) {
                             if (s.getHouseNumber() < activStreet.getHouseNumber()) {
                                 playerCanBuild = false;
                             } if (s.getHouseNumber() == -1 || activStreet.getHouseNumber() == -1) {
@@ -129,13 +129,13 @@ public class BuildDisplay extends Pane {
 
                                 activePlayer.transferMoneyToBankAccount(-(activStreet.getHousePrice()));
                             } else {
-                                errorMessage.setText("Es gibt keine Häuser mehr die zum Bauen genutzt werden können!");
+                                errorMessage.setText("Es gibt keine Häuser mehr, die zum Bauen genutzt werden können!");
 
                                 errorMessage.setVisible(true);
                             }
                         
                         } else {
-                            errorMessage.setText("Du hast nicht genug Geld um ein Haus zu bauen!");
+                            errorMessage.setText("Du hast nicht genug Geld, um ein Haus zu bauen!");
 
                             errorMessage.setVisible(true);
                         }
@@ -148,7 +148,7 @@ public class BuildDisplay extends Pane {
 
                             activePlayer.transferMoneyToBankAccount(-(activStreet.getHotelPrice()));
                         } else {
-                            errorMessage.setText("Du hast nicht genug Geld um ein Hotel zu bauen!");
+                            errorMessage.setText("Du hast nicht genug Geld, um ein Hotel zu bauen!");
 
                             errorMessage.setVisible(true);
                         }
@@ -158,17 +158,17 @@ public class BuildDisplay extends Pane {
 
                     if (activStreet.getHouseNumber() == 4) {
                         buttonBackground.setFill(ProgramColor.STREETS_HOTEL.getColor());
-                        buttonText.setText("Hotel Bauen");
+                        buttonText.setText("Hotel bauen");
                     } else if (activStreet.getHouseNumber() == -1) {
                         errorMessage.setVisible(false);
                         buttonBackground.setFill(ProgramColor.BUTTON_DISABLED.getColor());
                         buttonText.setText("---");
                     } else {
                         buttonBackground.setFill(ProgramColor.STREETS_HOUSE.getColor());
-                        buttonText.setText("Haus Bauen");
+                        buttonText.setText("Haus bauen");
                     }
                 } else {
-                    errorMessage.setText("Du kannst nur Bauen, wenn du auf der Farbgruppe überall gleich viel Gebaut hast!");
+                    errorMessage.setText("Du kannst nur bauen, wenn du auf der Farbgruppe überall gleich viel gebaut hast!");
 
                     errorMessage.setVisible(true);
                 }
@@ -219,10 +219,10 @@ public class BuildDisplay extends Pane {
 
                             if (street.getHouseNumber() == 4) {
                                 buttonBackground.setFill(ProgramColor.STREETS_HOTEL.getColor());
-                                buttonText.setText("Hotel Bauen");
+                                buttonText.setText("Hotel bauen");
                             } else {
                                 buttonBackground.setFill(ProgramColor.STREETS_HOUSE.getColor());
-                                buttonText.setText("Haus Bauen");
+                                buttonText.setText("Haus bauen");
                             }
                         } else {
                             errorMessage.setVisible(false);

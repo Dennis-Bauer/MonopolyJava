@@ -32,12 +32,11 @@ public class PayDisplay extends Pane {
         centeringChildInPane(text, rootDisplay);
         text.layoutYProperty().bind(heightProperty().multiply(0.30).subtract(text.heightProperty().divide(2)));
 
-
         StackPane payButton = new StackPane();
         payButton.setLayoutY(height * 0.60);
         payButton.setLayoutX(width / 2 - (width * 0.80) / 2);
 
-        buttonText = buildLabel("payDisplay_button_Text", "NULL_€ Zahlen", Font.font(Main.TEXT_FONT, width * 0.05), TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor());
+        buttonText = buildLabel("payDisplay_button_Text", "NULL_€ zahlen", Font.font(Main.TEXT_FONT, width * 0.05), TextAlignment.CENTER, ProgramColor.TEXT_COLOR.getColor());
         Rectangle buttonBackground = buildRectangle("payDisplay_button_Background", width * 0.80, height * 0.25, ProgramColor.CHANCEL_BUTTONS.getColor(), true, ProgramColor.BORDER_COLOR_DARK.getColor(), width * 0.01);
 
 
@@ -52,12 +51,16 @@ public class PayDisplay extends Pane {
                     player.transferMoneyToBankAccount(price);
                     Main.getGameOperator().transferMoney(price * -1);
                     rootDisplay.removeDisplay();
+
+                    Main.getGameOperator().setVisibilityTurnFinButton(true);
                 } else {
                     rootDisplay.errorAnimation();
                 }
             } else {
                 player.transferMoneyToBankAccount(price);
                 rootDisplay.removeDisplay();
+
+                Main.getGameOperator().setVisibilityTurnFinButton(true);
             }
         });
 

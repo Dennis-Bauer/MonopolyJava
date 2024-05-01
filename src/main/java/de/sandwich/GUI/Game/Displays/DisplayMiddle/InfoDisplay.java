@@ -19,7 +19,7 @@ public class InfoDisplay extends Pane {
     private final Label text;
 
     public InfoDisplay(double width, double height, MiddleGameDisplayController rootDisplay) {
-        setId("InfpDisplay");
+        setId("InfoDisplay");
         setMaxSize(width, height);
 
         this.rootDisplay = rootDisplay;
@@ -35,7 +35,10 @@ public class InfoDisplay extends Pane {
         returnButton.setLayoutY(height * 0.60);
         returnButton.setLayoutX(width / 2 - (width * 0.80) / 2);
 
-        returnButton.setOnMouseClicked(mouseEvent -> rootDisplay.removeDisplay());
+        returnButton.setOnMouseClicked(mouseEvent -> {
+            rootDisplay.removeDisplay();
+            Main.getGameOperator().setVisibilityTurnFinButton(true);
+        });
 
 
         getChildren().addAll(text, returnButton);

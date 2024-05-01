@@ -23,15 +23,13 @@ import static de.sandwich.DennisUtilitiesPackage.Java.JavaUtilities.buildLongTex
 public class InJailDisplay extends Pane {
 
     private final MiddleGameDisplayController rootDisplay;
-
-    private final double HEIGHT, WIDTH;
-
-    private final int PAY_PRICE = 1000;
-
-    private final Label infoText;
-
     private final Pane afterDicePane;
     private final Pane payPane;
+
+    private final double HEIGHT, WIDTH;
+    private final Label infoText;
+
+    private final int PAY_PRICE = 1000;
 
     private Player activPlayer;
 
@@ -74,15 +72,7 @@ public class InJailDisplay extends Pane {
             } else throw new WrongNodeException("useButton");
         } else throw new WrongNodeException("afterDicePane");
 
-        // Umformertieren!!!
-        infoText.setText(
-                buildLongText("Leider kein Pash gewürfelt.",
-                        ("Du kannst noch " + activPlayer.getInJailRemain() + " Tage"),
-                        "warten, sonst musst du ",
-                        PAY_PRICE + "€zahlen. Du kannst auch",
-                        " jetzt zahlen oder eine", " Frei-karte nutzen.")
-        );
-
+        infoText.setText(buildLongText("Leider kein Pash gewürfelt.", ("Du kannst noch " + activPlayer.getInJailRemain() + " Tage"), "warten, sonst musst du ",PAY_PRICE + "€ zahlen. Du kannst", "auch jetzt zahlen oder", "eine Frei-Karte nutzen."));
     }
 
     public void displayBeforDice(Player p) {
@@ -97,30 +87,10 @@ public class InJailDisplay extends Pane {
 
             DiceDisplay.lockeDices();
 
-            // Umformertieren!!!
-            infoText.setText(
-                buildLongText("Du bist leider zu lange",
-                        "im Gefängnis gewesen und",
-                        "musst jetzt " + PAY_PRICE + "€",
-                        "zahlen!"
-                        )
-            );
+            infoText.setText(buildLongText("Du bist leider zu lange", "im Gefängnis gewesen und", "musst jetzt " + PAY_PRICE + "€", "zahlen!"));
 
             payPane.setVisible(true);
-
-        } else {
-            // Umformertieren!!!
-            infoText.setText(
-                buildLongText("Du bist im Gefängins, du",
-                        "kannst jetzt dein Glück",
-                        "herausforderen und",
-                        "versuchen ein Pash zu",
-                        "würfeln. Falls du es",
-                        "schafst, kommst du sofort",
-                        "aus dem Gefängnis raus!")
-            );
-        }
-    
+        } else infoText.setText(buildLongText("Du bist im Gefängins, du", "kannst jetzt dein Glück", "herausforderen und", "versuchen ein Pash zu", "würfeln. Falls du es", "schaffst, kommst du sofort", "aus dem Gefängnis raus!"));
     }
 
     public double getHEIGHT() {
@@ -142,22 +112,12 @@ public class InJailDisplay extends Pane {
 
             if (activPlayer.getBankAccount() >= PAY_PRICE) {
                 activPlayer.transferMoneyToBankAccount(-(PAY_PRICE));
-
                 activPlayer.removePlayerFromJail();
 
                 rootDisplay.removeDisplay();
-
                 DiceDisplay.unlockDices();
-                
-            } else {
-                Main.getGameOperator().displayErrorMessage("Du brauchst mindestens " + PAY_PRICE + " auf deinem Bankaccount!");
-            }
-            
+            } else Main.getGameOperator().displayErrorMessage("Du brauchst mindestens " + PAY_PRICE + " auf deinem Bankaccount!");
         });
-
-        Pane p = new Pane(payButton);
-
-        p.setMaxSize(WIDTH, HEIGHT);
 
         return payButton;
     }
@@ -261,24 +221,10 @@ public class InJailDisplay extends Pane {
         });
 
         Pane p = new Pane();
-
         p.setMaxSize(WIDTH, HEIGHT);
-
         p.getChildren().addAll(payButton, useButton, refuseButton);
 
         return p;
     }
 
 }
-
-
-/*
- * 
- * Nicht vergessen Info:
- * 1. Der, ja ich will jetzt Kaufen buttonj Funktion
- * 2. Der, ok ich muss jetzt Kaufen button hinzufügen und funkton
- * 3. Aussehen, bzw Spieler position
- * 4. Karte nutzen 
- * 5. Karte anzeige(Mehr eine Funktion die durch die Karten kommt)
- * 
- */

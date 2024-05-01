@@ -155,9 +155,15 @@ public class GameBoard extends Pane {
 
             transition.setOnFinished(actionEvent -> {
                 if (p.getFieldPostion() != 10) {
-                    playerFigures[pArrayPos].setLayoutX((calculateXYPath(0, 10).getX()) - (calculateXYPath(pArrayPos, p.getFieldPostion()).getX()) + FIELD_HEIGHT * JAIL_OFSET);
-                    playerFigures[pArrayPos].setLayoutY((calculateXYPath(0, 10).getY()) - (calculateXYPath(pArrayPos, p.getFieldPostion()).getY()) + FIELD_HEIGHT * JAIL_OFSET);
+
+                    TranslateTransition moveTransition = new TranslateTransition(Duration.seconds(0.1), playerFigures[pArrayPos]);
+
+                    moveTransition.setByX((calculateXYPath(0, 10).getX()) - (calculateXYPath(pArrayPos, p.getFieldPostion()).getX()) + FIELD_HEIGHT * JAIL_OFSET);
+                    moveTransition.setByY((calculateXYPath(0, 10).getY()) - (calculateXYPath(pArrayPos, p.getFieldPostion()).getY()) + FIELD_HEIGHT * JAIL_OFSET);
+                    moveTransition.play();
+                    
                     p.setInJail(true);
+
 
                     transition.setFromValue(0);
                     transition.setToValue(1);
@@ -210,8 +216,10 @@ public class GameBoard extends Pane {
 
             if (!(playerArrayPostion > 4)) {
 
+                Main.getGameOperator().setVisibilityTurnFinButton(false);
+
                 double seconds = 0;
-                if (steps > 10) 
+                if (steps >= 10) 
                     seconds = FAST_PLAYER_SPEED;
                 else 
                     seconds = NORMAL_PLAYER_SPEED;
@@ -223,8 +231,13 @@ public class GameBoard extends Pane {
 
                 if (steps > 0) {
                     
-                    playerMoveTransition.setByX((calculateXYPath(pArrayPos, startPostion + 1).getX()) - (calculateXYPath(pArrayPos, startPostion).getX()));
-                    playerMoveTransition.setByY((calculateXYPath(pArrayPos, startPostion + 1).getY()) - (calculateXYPath(pArrayPos, startPostion).getY()));
+                    if (startPostion + 1 >= 40) {
+                        playerMoveTransition.setByX((calculateXYPath(pArrayPos, 0).getX()) - (calculateXYPath(pArrayPos, startPostion).getX()));
+                        playerMoveTransition.setByY((calculateXYPath(pArrayPos, 0).getY()) - (calculateXYPath(pArrayPos, startPostion).getY()));
+                    } else {
+                        playerMoveTransition.setByX((calculateXYPath(pArrayPos, startPostion + 1).getX()) - (calculateXYPath(pArrayPos, startPostion).getX()));
+                        playerMoveTransition.setByY((calculateXYPath(pArrayPos, startPostion + 1).getY()) - (calculateXYPath(pArrayPos, startPostion).getY()));
+                    }
 
                     playerMoveTransition.setOnFinished(event -> {
                         if (!(i.get() >= steps)) {
@@ -306,7 +319,7 @@ public class GameBoard extends Pane {
         }
 
         if (!(playerArrayPostion > 4)) {
-            getChildren().remove(playerFigures[playerArrayPostion]);
+            playerFigures[playerArrayPostion].setVisible(false);
         } else throw new PlayerNotFoundExceptions();
     }
 

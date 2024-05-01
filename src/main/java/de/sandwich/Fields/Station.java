@@ -62,8 +62,7 @@ public class Station extends Field {
         }
     }
 
-    private void countOwnersStations() {
-
+    public void countOwnersStations() {
         Main.getGameOperator();
         HashMap<Integer, Field> fields = Game.getFields();
 
@@ -72,44 +71,13 @@ public class Station extends Field {
         if (owner != null) {
             for (int i = 0; i < fields.size(); i++) {
                 if (fields.get(i) instanceof Station s) {
-                    if (s.getOwner() == owner) {
+                    if (s.getOwner() == owner && !s.isInBank) {
                         ownerStations++;
                     } 
                 }
             }
             
         }
-    }
-
-    public int getRent() {
-        switch (ownerStations) {
-            case 1: return RENT_ALONE;
-            case 2: return RENT_TWO;
-            case 3: return RENT_THREE;
-            case 4: return RENT_FOUR;
-            default: throw new IllegalArgumentException("An unexpected number of train stations were detected!");
-        }
-    }
-
-    public Player getOwner() {
-        return owner;
-    }
-
-    public int getOwnerStations() {
-        countOwnersStations();
-        return ownerStations;
-    }
-
-    public String getName() {
-        return NAME;
-    }
-
-    public int getPrice() {
-        return PRICE;
-    }
-
-    public boolean isOwned() {
-        return isOwned;
     }
 
     private Rectangle background;
@@ -147,4 +115,35 @@ public class Station extends Field {
         background.setStroke(ProgramColor.BORDER_COLOR_DARK.getColor());
     }
 
+    public int getRent() {
+        countOwnersStations();
+        switch (ownerStations) {
+            case 1: return RENT_ALONE;
+            case 2: return RENT_TWO;
+            case 3: return RENT_THREE;
+            case 4: return RENT_FOUR;
+            default: throw new IllegalArgumentException("An unexpected number of train stations were detected!");
+        }
+    }
+
+    public Player getOwner() {
+        return owner;
+    }
+
+    public int getOwnerStations() {
+        countOwnersStations();
+        return ownerStations;
+    }
+
+    public String getName() {
+        return NAME;
+    }
+
+    public int getPrice() {
+        return PRICE;
+    }
+
+    public boolean isOwned() {
+        return isOwned;
+    }
 }
