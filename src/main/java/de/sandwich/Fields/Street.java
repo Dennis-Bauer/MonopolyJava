@@ -11,8 +11,6 @@ import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtiliti
 
 import java.util.HashMap;
 
-import javax.xml.validation.Validator;
-
 import de.sandwich.Game;
 import de.sandwich.Main;
 import javafx.geometry.Point2D;
