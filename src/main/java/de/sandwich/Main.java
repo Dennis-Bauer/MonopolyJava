@@ -2,6 +2,7 @@ package de.sandwich;
 
 import de.sandwich.DennisUtilitiesPackage.Java.ConsoleUtilities;
 import de.sandwich.Enums.ProgramColor;
+import de.sandwich.Enums.Values;
 import de.sandwich.GUI.Menu.StartMenu;
 
 import static de.sandwich.DennisUtilitiesPackage.Java.ConsoleUtilities.consoleOutPutLine;
@@ -57,8 +58,8 @@ public class Main extends Application {
     public static final String TEXT_FONT = "Arial";
     public static final boolean CONSOLE_OUT_PUT = true;
     public static final String CONSOLE_OUT_PUT_LINEBREAK = "---------------";
-    public static final double WINDOW_WIDTH = 1800;
-    public static final double WINDOW_HEIGHT = 1000;
+    public static final double WINDOW_WIDTH = Values.MAIN_WINDOW_WIDTH.getValue();
+    public static final double WINDOW_HEIGHT = Values.MAIN_WINDOW_HEIGHT.getValue();
 
     //Game variables
     private static Game gameOperator;

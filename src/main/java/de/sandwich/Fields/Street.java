@@ -2,6 +2,7 @@ package de.sandwich.Fields;
 
 import de.sandwich.Player;
 import de.sandwich.Enums.ProgramColor;
+import de.sandwich.Enums.Values;
 
 import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildLabel;
 import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildRectangle;
@@ -9,6 +10,8 @@ import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXUtilities.centerin
 import static de.sandwich.DennisUtilitiesPackage.JavaFX.JavaFXConstructorUtilities.buildTriangle;
 
 import java.util.HashMap;
+
+import javax.xml.validation.Validator;
 
 import de.sandwich.Game;
 import de.sandwich.Main;
@@ -36,7 +39,7 @@ public class Street extends Field{
     private final int HOTEL_PRICE;
 
     //Functional values
-    private int houseNumber = 2;
+    private int houseNumber = Values.STREET_HOUSES_START.getValue();
     private boolean isInBank = false;
     private boolean ownerHasFullColor = false;
     private boolean isOwned;

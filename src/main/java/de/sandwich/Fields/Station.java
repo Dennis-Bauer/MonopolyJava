@@ -11,6 +11,7 @@ import de.sandwich.Game;
 import de.sandwich.Main;
 import de.sandwich.Player;
 import de.sandwich.Enums.ProgramColor;
+import de.sandwich.Enums.Values;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -29,11 +30,11 @@ public class Station extends Field {
     private Player owner;
 
     //Standard Variables
-    public final int PRICE = 400;
-    public final int RENT_ALONE = 500;
-    public final int RENT_TWO = 1000;
-    public final int RENT_THREE = 2000;
-    public final int RENT_FOUR = 4000;
+    public final int PRICE = Values.STATION_PRICE.getValue();
+    public final int RENT_ALONE = Values.STATION_RENTALONE.getValue();
+    public final int RENT_TWO = Values.STATION_RENTTWO.getValue();
+    public final int RENT_THREE = Values.STATION_RENTTHREE.getValue();
+    public final int RENT_FOUR = Values.STATION_RENTFOUR.getValue();
 
     public Station(String name, double postion) {
         super(postion);

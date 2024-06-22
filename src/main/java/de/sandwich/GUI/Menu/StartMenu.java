@@ -34,10 +34,11 @@ import de.sandwich.Player;
 import de.sandwich.DennisUtilitiesPackage.Java.ConsoleUtilities;
 import de.sandwich.Enums.Figuren;
 import de.sandwich.Enums.ProgramColor;
+import de.sandwich.Enums.Values;
 
 public class StartMenu extends Pane{
 
-    private final double CLOUD_SPEED = 100; //Seconds
+    private final double CLOUD_SPEED = Values.MENU_CLOUD_SPEED.getValue(); //Seconds
 
     private final double WIDTH, HEIGHT;
 

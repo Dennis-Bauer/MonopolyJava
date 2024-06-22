@@ -10,6 +10,7 @@ import de.sandwich.Game;
 import de.sandwich.Main;
 import de.sandwich.Player;
 import de.sandwich.Enums.ProgramColor;
+import de.sandwich.Enums.Values;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
@@ -20,9 +21,9 @@ import javafx.scene.text.TextAlignment;
 public class Utilitie extends Field {
 
     private final String NAME;
-    private final int PRICE = 3000;
-    private final int MULTIPLICATOR_ONE = 80;
-    private final int MULTIPLICATOR_TWO = 200;
+    private final int PRICE = Values.UTILITIE_PRICE.getValue();
+    private final int MULTIPLICATOR_ONE = Values.UTILITIE_MULTIPLICATOR_ONE.getValue();
+    private final int MULTIPLICATOR_TWO = Values.UTILITIE_MULTIPLICATOR_TWO.getValue();
 
     private Player owner;
     private boolean isOwned = false;

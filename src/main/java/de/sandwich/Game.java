@@ -22,6 +22,7 @@ import de.sandwich.Enums.CommunityCards;
 import de.sandwich.Enums.CornerTyp;
 import de.sandwich.Enums.ExtraFields;
 import de.sandwich.Enums.ProgramColor;
+import de.sandwich.Enums.Values;
 import de.sandwich.Exceptions.PlayerNotFoundExceptions;
 import de.sandwich.Exceptions.ToManyPlayersExceptions;
 import de.sandwich.Exceptions.WrongNodeException;
@@ -68,7 +69,7 @@ public class Game {
     private final Pane ROOT;
 
     //Game variables
-    private int freeParkingMoney = 0;
+    private int freeParkingMoney = Values.START_FREEPARKING_MONEY.getValue();
     private int pashRow = 0;
 
     private Player turnPlayer;

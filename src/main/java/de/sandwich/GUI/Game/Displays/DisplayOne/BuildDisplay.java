@@ -11,6 +11,7 @@ import de.sandwich.Game;
 import de.sandwich.Main;
 import de.sandwich.Player;
 import de.sandwich.Enums.ProgramColor;
+import de.sandwich.Enums.Values;
 import de.sandwich.Fields.Field;
 import de.sandwich.Fields.Street;
 import de.sandwich.GUI.Game.DisplayController.GameDisplayControllerOne;
@@ -27,7 +28,7 @@ import javafx.util.Duration;
 
 public class BuildDisplay extends Pane {
 
-    private static int housesRemain = 32; //Default 32
+    private static int housesRemain = Values.HOUSES_NUMBER.getValue(); //Default 32
 
     private final double WIDTH;
     private final double HEIGHT;

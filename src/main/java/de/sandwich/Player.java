@@ -2,6 +2,7 @@ package de.sandwich;
 
 import de.sandwich.DennisUtilitiesPackage.Java.ConsoleUtilities;
 import de.sandwich.Enums.Figuren;
+import de.sandwich.Enums.Values;
 import de.sandwich.Exceptions.NumberIsToBigLowExceptions;
 import de.sandwich.Exceptions.PlayerNotFoundExceptions;
 import de.sandwich.Fields.Field;
@@ -25,8 +26,8 @@ public class Player {
     //Game variables
     private boolean isInJail = false;
     private boolean hasGivenUp = false;
-    private int freeJailCards = 0;
-    private int inJailRemain = 4;
+    private int freeJailCards = Values.PLAYER_FREEJAILCARDS_START.getValue();
+    private int inJailRemain = Values.PLAYER_ROUNDS_IN_JAIL.getValue();
     private int bankAccount;
     private int fieldPostion;
 
@@ -36,8 +37,8 @@ public class Player {
         this.orderNumber = orderNumber;
 
         //Start account
-        bankAccount = 30000; //Default 3000
-        fieldPostion = 0;
+        bankAccount = Values.PLAYER_START_BANKACCOUNT.getValue();
+        fieldPostion = Values.PLAYER_START_POSTION.getValue();
     }
 
     public void transferMoneyToBankAccount(int transferNumber) {
